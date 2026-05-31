@@ -1,0 +1,25 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package age.of.civilizations2.jakowski.lukasz.GameValues;
+
+public class GV_ArmyRecruit {
+    public int COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT = 5;
+    public float COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT_CONSCRIPT_EXTRA = 2.0f;
+    public float COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT_MERCENARIES_EXTRA = 3.0f;
+    public int NUM_OF_MERCENARIES_ARMIES = 6;
+    public float RECRUIT_HAPPINESS_CHANGE_MODIFIER = 0.1375f;
+    public float RECRUIT_ECONOMY_CHANGE_MODIFIER = 0.125f;
+    public float RECRUIT_ECONOMY_CHANGE_CAPITAL_MODIFIER = 0.11f;
+    public int RECRUIT_ECONOMY_CHANGE_RANDOM_1000 = 75;
+    public float RECRUIT_DEVELOPMENT_CHANGE_MODIFIER = 0.0425f;
+    public float RECRUIT_DEVELOPMENT_CHANGE_CAPITAL_MODIFIER = 0.0325f;
+    public int RECRUIT_DEVELOPMENT_CHANGE_RANDOM_1000 = 42;
+    public float RECRUIT_ARMY_PROVINCE_LOST_RETURN_PERC_GOLD = 0.725f;
+    public float RECRUIT_ARMY_DEFAULT_SLIDER_PERC_OF_MAX = 1.0f;
+    public int VOLUNTEER_ARMY_SEND_RESET_AFTER_X_TURNS = 10;
+    public int RECRUIT_ARMY_BASE_TURNS = 15;
+    public int RECRUIT_ARMY_TECH_07_09_TURNS = 6;
+    public int RECRUIT_ARMY_TECH_OVER_09_TURNS = 4;
+}
+

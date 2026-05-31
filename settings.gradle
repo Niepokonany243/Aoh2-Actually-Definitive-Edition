@@ -1,0 +1,5 @@
+include ':core', ':desktop', ':android'
+
+project(':core').projectDir = new File(settingsDir, 'output/core')
+project(':desktop').projectDir = new File(settingsDir, 'output/desktop')
+project(':android').projectDir = new File(settingsDir, 'output/android')

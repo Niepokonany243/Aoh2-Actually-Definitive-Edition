@@ -1,0 +1,15 @@
+{
+lAlliances: []
+lRelations: []
+lPacts: []
+lVassals: [
+	{
+		iCivID: 97
+		iCivLordID: 19
+	}
+]
+lMilitaryAccess: []
+lDefensivePacts: []
+lGuarantee: []
+lTruces: []
+}

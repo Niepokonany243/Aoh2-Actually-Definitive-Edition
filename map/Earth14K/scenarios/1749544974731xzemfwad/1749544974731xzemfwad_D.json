@@ -1,0 +1,51 @@
+{
+lAlliances: []
+lRelations: []
+lPacts: []
+lVassals: [
+	{
+		iCivID: 113
+		iCivLordID: 35
+	}
+	{
+		iCivID: 114
+		iCivLordID: 100
+	}
+	{
+		iCivID: 115
+		iCivLordID: 100
+	}
+	{
+		iCivID: 116
+		iCivLordID: 103
+	}
+	{
+		iCivID: 117
+		iCivLordID: 103
+	}
+	{
+		iCivID: 118
+		iCivLordID: 103
+	}
+	{
+		iCivID: 119
+		iCivLordID: 103
+	}
+	{
+		iCivID: 120
+		iCivLordID: 103
+	}
+	{
+		iCivID: 121
+		iCivLordID: 103
+	}
+	{
+		iCivID: 237
+		iCivLordID: 236
+	}
+]
+lMilitaryAccess: []
+lDefensivePacts: []
+lGuarantee: []
+lTruces: []
+}

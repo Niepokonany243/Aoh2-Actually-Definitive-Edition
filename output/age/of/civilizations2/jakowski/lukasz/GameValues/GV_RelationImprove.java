@@ -1,0 +1,19 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package age.of.civilizations2.jakowski.lukasz.GameValues;
+
+public class GV_RelationImprove {
+    public int COST_OFFER_IMPROVE_RELATIONS_DIPLOMACY_POINTS = 5;
+    public int IMPROVE_RELATIONS_MAX_NUM_OF_TURNS = 100;
+    public float IMPROVE_RELATIONS_BASE = 0.8425f;
+    public int IMPROVE_RELATIONS_RANDOM_100 = 121;
+    public float IMPROVE_RELATIONS_MIN_GAIN = 0.125f;
+    public float IMPROVE_RELATIONS_RELATION_MAX_EFFECTIVE = 145.0f;
+    public float IMPROVE_RELATIONS_RANK_SCORE_MIN_RATIO = 0.325f;
+    public float IMPROVE_RELATIONS_RANK_SCORE_MAX_RATIO = 1.0f;
+    public float IMPROVE_RELATIONS_RECIPROCITY_MODIFIER = 0.9175f;
+    public float IMPROVE_RELATIONS_WITH_VASSAL_TURNS_MIN = 10.0f;
+    public float IMPROVE_RELATIONS_WITH_VASSAL_TURNSLIMIT = 25.0f;
+}
+

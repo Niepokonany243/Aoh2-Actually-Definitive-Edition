@@ -1,0 +1,88 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        google()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+        maven { url "https://jitpack.io" }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.4.2'
+    }
+}
+
+allprojects {
+    apply plugin: "eclipse"
+
+    version = '1.0'
+    ext {
+        appName = "AoH2"
+        gdxVersion = '1.11.0'
+        roboVMVersion = '2.3.16'
+        box2DLightsVersion = '1.5'
+        ashleyVersion = '1.7.4'
+        aiVersion = '1.8.2'
+        gdxControllersVersion = '2.2.1'
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        google()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://jitpack.io" }
+    }
+}
+
+project(':core') {
+    apply plugin: 'java-library'
+    sourceSets {
+        main {
+            java {
+                srcDirs = ['../']
+                include 'age/**'
+                include 'aoc/**'
+                include 'space/**'
+                exclude 'aoc/kingdoms/lukasz/jakowski/desktop/**'
+                exclude 'aoc/kingdoms/lukasz/jakowski/android/**'
+                exclude 'com/**'
+                exclude 'org/**'
+                exclude 'javazoom/**'
+            }
+        }
+    }
+    dependencies {
+        api "com.badlogicgames.gdx:gdx:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        api "com.code-disaster.steamworks4j:steamworks4j:1.9.0"
+        api "space.earlygrey:shapedrawer:2.6.0"
+        api "javazoom:jlayer:1.0.1"
+    }
+}
+
+project(':desktop') {
+    apply plugin: 'application'
+    mainClassName = 'aoc.kingdoms.lukasz.jakowski.desktop.DesktopLauncher'
+    sourceSets {
+        main {
+            java {
+                srcDirs = ['../']
+                include 'aoc/kingdoms/lukasz/jakowski/desktop/**'
+            }
+        }
+    }
+    dependencies {
+        implementation project(':core')
+
+        implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+        implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        implementation "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+        implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+    }
+}
+
+project(':android') {
+    // Android configuration would go here if needed
+}

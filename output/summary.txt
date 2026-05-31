@@ -1,0 +1,122 @@
+Summary for game.jar
+Decompiled with CFR 0.152
+
+
+age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle.AIPlaystyle
+----------------------------
+
+diplomacyActions_DeclareWar(int )
+  Unable to fully structure code
+respondToMessages(int )
+  Unable to fully structure code
+
+
+age.of.civilizations2.jakowski.lukasz.CFG
+----------------------------
+
+dialog_True()
+  Exception : org.benf.cfr.reader.util.ConfusedCFRException: Tried to end blocks [0[TRYBLOCK]], but top level block is 19[SWITCH]
+
+
+age.of.civilizations2.jakowski.lukasz.Core.Core
+----------------------------
+
+createScenarioRemoveCivilization(int )
+  Unable to fully structure code
+
+
+age.of.civilizations2.jakowski.lukasz.EventTemplatesMGR
+----------------------------
+
+loadEventTemplates()
+  Unable to fully structure code
+
+
+age.of.civilizations2.jakowski.lukasz.Graphs.Graph2.Graph2
+----------------------------
+
+loadData(int )
+  Unable to fully structure code
+
+
+age.of.civilizations2.jakowski.lukasz.IdeologiesManager
+----------------------------
+
+loadIdeologies()
+  Unable to fully structure code
+
+
+age.of.civilizations2.jakowski.lukasz.MapA.Challenge.ChallengesManager
+----------------------------
+
+loadChallenges()
+  Unable to fully structure code
+
+
+age.of.civilizations2.jakowski.lukasz.PalletOfCivsColors_Data
+----------------------------
+
+saveData()
+  Exception : org.benf.cfr.reader.util.ConfusedCFRException: Tried to end blocks [3[TRYBLOCK]], but top level block is 18[CATCHBLOCK]
+
+
+com.badlogic.gdx.graphics.g3d.loader.ObjLoader
+----------------------------
+
+loadModelData(com.badlogic.gdx.files.FileHandle boolean )
+  Unable to fully structure code
+
+
+com.badlogic.gdx.maps.tiled.BaseTmxMapLoader
+----------------------------
+
+loadTileSet(com.badlogic.gdx.utils.XmlReader$Element com.badlogic.gdx.files.FileHandle com.badlogic.gdx.maps.ImageResolver )
+  Unable to fully structure code
+
+
+com.badlogic.gdx.utils.JsonReader
+----------------------------
+
+parse(char[] int int )
+  Unable to fully structure code
+
+
+com.badlogic.gdx.utils.XmlReader
+----------------------------
+
+parse(char[] int int )
+  Unable to fully structure code
+
+
+com.badlogic.gdx.utils.compression.lzma.Encoder
+----------------------------
+
+GetOptimum(int )
+  Unable to fully structure code
+
+
+org.lwjgl.opengl.GL
+----------------------------
+
+createCapabilities(boolean )
+  Unable to fully structure code
+createCapabilitiesWGLDummy()
+  Loose catch block
+
+
+org.lwjgl.system.macosx.MacOSXLibraryBundle
+----------------------------
+
+getWithIdentifier(java.lang.String )
+  Loose catch block
+create(java.lang.String )
+  Loose catch block
+
+
+com.jcraft.jorbis.Drft
+----------------------------
+
+dradfg(int int int int float[] float[] float[] float[] float[] float[] int )
+  Unable to fully structure code
+dradbg(int int int int float[] float[] float[] float[] float[] float[] int )
+  Unable to fully structure code

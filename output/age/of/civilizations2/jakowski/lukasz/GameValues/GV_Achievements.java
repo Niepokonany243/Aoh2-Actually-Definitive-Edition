@@ -1,0 +1,10 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package age.of.civilizations2.jakowski.lukasz.GameValues;
+
+public class GV_Achievements {
+    public String[] FROM_CIV_TAG = new String[]{"adri3", "pol2", "afri", "alpi3", "anda3", "arab", "gatr3", "baby", "gboh3", "cary3", "carr", "argg3", "cau3", "plai3", "dalm2", "danu3", "eagl3", "evil3", "east2", "jauu3", "sarr3", "eunn", "frc", "gaja3", "frak3", "ger", "est", "ghav", "durr", "cent", "nirr3", "grc", "grea3", "hans3", "iber", "lech3", "inca", "indo3", "ita", "jap", "jur", "keis3", "kek", "gmag3", "int", "ire", "glat3", "rivi3", "sok", "lati", "leva3", "glux3", "lot", "mad", "magy3", "gmaj3", "mara", "meko3", "mex2", "mone3", "nand3", "nors", "pizz3", "occa", "mya", "ira", "red3", "ratt", "rash", "mal", "spqr", "cono3", "rom", "rus2", "gsca3", "swab", "swi", "uni", "gbul3", "uso", "somi3", "gsg3"};
+    public String[] FROM_ACHIEVEMENT_TAG = new String[]{"ADRIATIC_IMPERIUM", "COMMONWEALTH", "AFRICAN_UNION", "ALIPINE_IMPERIUM", "ANDALUCIA", "ARABIA", "AUSTRIAN_REICH", "BABYLON", "BOHEMIAN_EMPIRE", "CARPATHIAN_EMPIRE", "CARTHAGE", "CATALAN_IMPERIUM", "CAUCASIAN_EMPIRE", "CONFED_PLAINS", "DALMATIA", "DUNUBIAN", "EAGLE_UNION", "EVIL_SCOTLAND", "EASTERN_ROMAN", "EMPIRE_JAUNPUR", "SARDINES", "THE_EU", "FRANCONIA", "GAJAPATI", "GALLIAN", "GERMAN_EMPIRE", "ESTONIA", "GHAZNA", "DURRANI", "CENTRAL_AMERICA", "NIGER_EMPIRE", "GRAN_COLOMBIA", "GREATER_ASIA_CO", "HANSEATIC", "IBERIAN_UNION", "LICHITOW", "INCA_EMPIRE", "INDOCHINA_EMPIRE", "ITALY", "JAPAN", "JERUSALEM", "KAISERREICH", "KEKISTAN", "MAGHREB", "INTERMARIUM", "K_IRELAND", "LATIN_AMERICAN_UNION", "K_RIVIERA", "KOREAN_EMPIRE", "LATIN_EMPIRE", "LEVANT_EMPIRE", "LUXEMBOURG_EMPIRE", "LOTHARINGIA", "MADAGASCAR", "MAGYAR_EMPIRE", "MAJAPAHIT_E", "MARATHA_E", "MEKONG_EMPIRE", "MEXICAN_EMPIRE", "MONGOL_EMPIRE", "NANDA_EMPIRE", "NORTH_SEA_EMPIRE", "PIZZA_EMPIRE", "OCCITANIA", "PAGAN_EMPIRE", "PERSIAN_EMPIRE", "RED_SEA_EMPIRE", "RATTANAKOSIN", "RASHIDUN", "MALAYSIA", "ROME_E", "R_CONOSUR", "K_ROMANIA", "RUSSIAN_EMPIRE", "SCANDINAVIA", "SWABIA", "SWITZERLAND", "UNITED_KINGDOM", "TSAR_BULGARIA", "US_OCEANIA", "SOMALI_EMPIRE", "S_GERMAN_CONF"};
+}
+

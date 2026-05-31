@@ -1,0 +1,90 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package age.of.civilizations2.jakowski.lukasz;
+
+import java.io.Serializable;
+
+public class CivPersonality
+implements Serializable {
+    private static final long serialVersionUID = 0L;
+    public float TAXATION_LEVEL = 0.95f;
+    public float USE_OF_BUDGET_FOR_SPENDINGS = 1.0f;
+    public float TREASURY_RESERVE = 10.0f;
+    public float TREASURY_RESERVE_MODIFIER = 0.1f;
+    public float GOODS_EXTRA_PERC_OF_BUDGET = 0.25f;
+    public float INVESTMENTS_EXTRA_PERC_OF_BUDGET = 0.25f;
+    public float RESEARCH_PERC_OF_BUDGET = 0.2f;
+    public float MIN_DIFFERENCE_IN_DEVELOPMENT_TO_TECHNOLOGY = 0.75f;
+    public float MIN_MILITARY_SPENDINGS = 0.1f;
+    public float MIN_MILITARY_SPENDINGS_WAR = 0.1f;
+    public float MIN_RESEARCH_SPENDINGS = -1.0f;
+    public float MIN_MILITARY_SPENDINGS_WAR_MODIFIER = 1.1f;
+    public float MIN_MILITARY_SPENDINGS_RECRUIT_AT_WAR = 0.9f;
+    public float MIN_MILITARY_SPENDINGS_NOT_BORDERING_WITH_ENEMY = 0.6f;
+    public int MIN_HAPPINESS_FOR_CIV = 65;
+    public int REGROUP_AT_PEACE_MAX_PROVINCES = 10;
+    public float POTENTIAL_POPULATION = 27.5f;
+    public float POTENTIAL_ECONOMY = 27.5f;
+    public float DANGER_EXTRA_KEY_REGION = 1.75f;
+    public float DANGER_EXTRA_PER_OWN_PROVINCE = 0.1f;
+    public float DANGER_PERC_OF_UNITS = 0.1f;
+    public int WAR_CLOSE_REGION_PROVINCES = 5;
+    public float WAR_CLOSE_REGION_EXTRA_SCORE = 1.25f;
+    public float MIN_PROVINCE_STABILITY = 0.9f;
+    public float ASSIMILATE_PERC_DISTANCE_SCORE = 0.33f;
+    public float ASSIMILATE_PERC_LOW_STABILITY_SCORE = 0.33f;
+    public float ASSIMILATE_PERC_POPULATION_SCORE = 0.33f;
+    public float MIN_PROVINCE_HAPPINESS_RUN_FESTIVAL = 0.7f;
+    public float BUILD_STABILITY_SCORE = 0.65f;
+    public float BUILD_DANGER_SCORE = 0.5f;
+    public float BUILD_FORT = 0.5f;
+    public float BUILD_TOWER = 0.5f;
+    public float BUILD_PORT = 0.5f;
+    public float BUILD_FARM = 0.5f;
+    public float BUILD_WORKSHOP = 0.5f;
+    public float BUILD_WORKSHOP_POP_SCORE = 0.5f;
+    public float BUILD_WORKSHOP_ECO_SCORE = 0.5f;
+    public float BUILD_MARKET = 0.5f;
+    public float BUILD_MARKET_POP_SCORE = 0.5f;
+    public float BUILD_MARKET_ECO_SCORE = 0.5f;
+    public float BUILD_LIBRARY = 0.5f;
+    public float BUILD_ARMOURY = 0.5f;
+    public float BUILD_ARMOURY_RECRUITABLE_SCORE = 0.5f;
+    public float BUILD_SUPPLYLINE = 0.5f;
+    public float BUILD_INVEST = 0.5f;
+    public float BUILD_INVEST_DEVELOPMENT = 0.5f;
+    public float BUILD_INVEST_POP_SCORE = 0.5f;
+    public float BUILD_INVEST_DEVELOPMENT_SCORE = 0.5f;
+    public float BUILD_INVEST_POP_ECO_DIFFERENCE_SCORE = 0.5f;
+    public int BUILD_RESERVE_RAND = 10;
+    public int BUILD_INVEST_SECOND_INVEST_MAX_PERC = 30;
+    public int BUILD_INVEST_SECOND_INVEST_CHANCE = 20;
+    public float COLONIZATION_SEA = 20.0f;
+    public float COLONIZATION_OWN_PROVINCES = 20.0f;
+    public float COLONIZATION_GROWTH_RATE = 20.0f;
+    public float COLONIZATION_DISTANCE = 20.0f;
+    public float VALUABLE_POTENTIAL = 1.0f;
+    public float VALUABLE_POTENTIAL_MODIFIED_OWN_LOST_PROVINCE = 1.0f;
+    public float VALUABLE_DANGER = 1.0f;
+    public float VALUABLE_REGION_NUM_OF_PROVINCES = 0.4f;
+    public float VALUABLE_REGION_POTENTIAL = 0.4f;
+    public float VALUABLE_NUM_OF_UNITS = 0.825f;
+    public float VALUABLE_NUM_OF_UNITS_RECRUITMENT = 0.0f;
+    public int VALUABLE_RECRUIT_FROM_FAR_AWAY_CHANCE = 0;
+    public float WAR_POTENTIAL = 1.0f;
+    public float WAR_DANGER = 1.0f;
+    public float WAR_NUM_OF_UNITS = 0.825f;
+    public float WAR_REGION_NUM_OF_PROVINCES = 0.4f;
+    public float WAR_REGION_POTENTIAL = 0.4f;
+    public float WAR_ATTACK_SCORE_ARMY = 0.45f;
+    public float WAR_ATTACK_SCORE_POTENTIAL = 0.525f;
+    public float WAR_ATTACK_SCORE_WAS_CONQUERED = 0.4f;
+    public int WAR_REGROUP_SPLIT_MIN = 1;
+    public int WAR_REGROUP_SPLIT_EXTRA = 1;
+    public float WAR_ATTACK_NAVAL_DISTANCE = 0.4f;
+    public float WAR_ATTACK_NAVAL_DISTANCE_NEW = 0.275f;
+    public float WAR_ATTACK_DISTANCE = 0.4f;
+    public float AI_CIV_AGGRESSION = 1.0f;
+}
+

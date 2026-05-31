@@ -1,0 +1,18 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package age.of.civilizations2.jakowski.lukasz.GameValues;
+
+public class GV_Propaganda {
+    public int PROPAGANDA_COST_GOLD_BASE = 115;
+    public float PROPAGANDA_COST_GOLD_COST_OF_FESTIVAL_MODIFIER = 2.95f;
+    public float PROPAGANDA_COST_GOLD_DISTANCE_MODIFIER = 1.75f;
+    public int PROPAGANDA_COST_DIPLOMACY = 6;
+    public int SELECT_PROVINCES_LIMIT_IN_MENU = 20;
+    public int PROPAGANDA_TURNS = 21;
+    public float PROPAGANDA_PERC_OF_FESTIVAL_HAPPINESS = 0.825f;
+    public float PROPAGANDA_PERC_OF_FESTIVAL_HAPPINESS_NEIGH_PROVINCES = 0.325f;
+    public float INCREASE_REV_RISK_IF_HAPPINESS_BELOW = 0.1f;
+    public int INCREASE_REV_RISK_IF_HAPPINESS_BELOW_BY_VALUE_PER_TURN_RANDOM_1000 = 75;
+}
+

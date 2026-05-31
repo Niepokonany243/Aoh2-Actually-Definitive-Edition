@@ -1,0 +1,38 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package age.of.civilizations2.jakowski.lukasz.GameValues;
+
+public class GV_Difficulty {
+    public String BEGINNER_NAME = "Beginner";
+    public String NORMAL_NAME = "Normal";
+    public String HARD_NAME = "Hard";
+    public String EXTREME_NAME = "Legendary";
+    public String LEGENDARY_NAME = "Extreme";
+    public float MOVEMENT_POINTS_MODIFIER_PLAYER_BEGINNER = 1.5f;
+    public float MOVEMENT_POINTS_MODIFIER_PLAYER_NORMAL = 1.1f;
+    public float MOVEMENT_POINTS_MODIFIER_PLAYER_HARD = 1.0f;
+    public float MOVEMENT_POINTS_MODIFIER_PLAYER_EXTREME = 0.85f;
+    public float MOVEMENT_POINTS_MODIFIER_PLAYER_LEGENDARY = 0.7f;
+    public float MOVEMENT_POINTS_MODIFIER_NON_PLAYER_BEGINNER = 0.8f;
+    public float MOVEMENT_POINTS_MODIFIER_NON_PLAYER_NORMAL = 1.0f;
+    public float MOVEMENT_POINTS_MODIFIER_NON_PLAYER_HARD = 1.1f;
+    public float MOVEMENT_POINTS_MODIFIER_NON_PLAYER_EXTREME = 1.25f;
+    public float MOVEMENT_POINTS_MODIFIER_NON_PLAYER_LEGENDARY = 1.5f;
+    public float TAX_INCOME_MODIFIER_PLAYER_BEGINNER = 1.75f;
+    public float TAX_INCOME_MODIFIER_PLAYER_NORMAL = 1.025f;
+    public float TAX_INCOME_MODIFIER_PLAYER_HARD = 0.975f;
+    public float TAX_INCOME_MODIFIER_PLAYER_EXTREME = 0.85f;
+    public float TAX_INCOME_MODIFIER_PLAYER_LEGENDARY = 0.65f;
+    public float TAX_INCOME_MODIFIER_NON_PLAYER_BEGINNER = 0.925f;
+    public float TAX_INCOME_MODIFIER_NON_PLAYER_NORMAL = 1.0f;
+    public float TAX_INCOME_MODIFIER_NON_PLAYER_HARD = 1.05f;
+    public float TAX_INCOME_MODIFIER_NON_PLAYER_EXTREME = 1.25f;
+    public float TAX_INCOME_MODIFIER_NON_PLAYER_LEGENDARY = 1.5f;
+    public float ACCEPTABLE_TAXATION_NON_PLAYER_BEGINNER = -0.04f;
+    public float ACCEPTABLE_TAXATION_NON_PLAYER_NORMAL = 0.0f;
+    public float ACCEPTABLE_TAXATION_NON_PLAYER_HARD = 0.02f;
+    public float ACCEPTABLE_TAXATION_NON_PLAYER_EXTREME = 0.05f;
+    public float ACCEPTABLE_TAXATION_NON_PLAYER_LEGENDARY = 0.15f;
+}
+

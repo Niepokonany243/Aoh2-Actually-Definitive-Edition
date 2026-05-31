@@ -1,0 +1,21 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package age.of.civilizations2.jakowski.lukasz.GameValues;
+
+public class GV_Research {
+    public int POINTS_REQUIRED_PER_LEVEL_BASE = 625;
+    public float POINTS_REQUIRED_PER_LEVEL_PER_PROVINCE = 52.455f;
+    public float POINTS_REQUIRED_STARTING_POPULATION_MODIFIER = 0.712f;
+    public float POINTS_REQUIRED_TECH_LEVEL_BASE = 0.01f;
+    public float POINTS_REQUIRED_TECH_LEVEL_BASE_MODIFIER = 0.288f;
+    public float POINTS_REQUIRED_POWER_BASE = 0.7463f;
+    public float POINTS_REQUIRED_POWER_TECH_MODIFIER = 0.285f;
+    public float POINTS_REQUIRED_POWER_NUMERATOR_TECH_LEVEL_MULTIPLIER = 1.087f;
+    public float POINTS_REQUIRED_POWER_TECH_LEVEL_DIVISOR = 8.619f;
+    public float BASE_TRIBAL_RESEARCH_GAIN_MIN = 0.00113f;
+    public int BASE_TRIBAL_RESEARCH_GAIN_RANDOM_10000 = 545;
+    public float TRIBAL_RESEARCH_SCALING_FACTOR_TECH_BASE = 0.325f;
+    public float TRIBAL_RESEARCH_SCALING_FACTOR_TECH_MODIFIER = 0.675f;
+}
+

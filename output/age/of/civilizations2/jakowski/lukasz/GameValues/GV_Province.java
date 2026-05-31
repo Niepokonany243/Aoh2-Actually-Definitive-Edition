@@ -1,0 +1,23 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package age.of.civilizations2.jakowski.lukasz.GameValues;
+
+public class GV_Province {
+    public int MIN_POPULATION_IN_PROVINCE = 100;
+    public float MIN_POPULATION_IN_PROVINCE_WASTELAND_MODIFIER = 5.75f;
+    public int MIN_ECONOMY_IN_PROVINCE = 50;
+    public float MIN_ECONOMY_IN_PROVINCE_WASTELAND_MODIFIER = 4.75f;
+    public int TURNS_BETWEEN_RETURNING_PEACEFUL_OCCUPIED_PROVINCES = 20;
+    public float STARTING_BUILDING_WATCHTOWER_TECH_REQUIRED = 1.04f;
+    public float STARTING_BUILDING_FORT_TECH_REQUIRED = 0.96f;
+    public float STARTING_BUILDING_PORT_TECH_REQUIRED = 0.95f;
+    public int STARTING_BUILDING_FARM_RANDOM_1000 = 78;
+    public int STARTING_BUILDING_MARKET_RANDOM_1000 = 84;
+    public int STARTING_BUILDING_WORKSHOP_RANDOM_1000 = 124;
+    public int STARTING_BUILDING_LIBRARY_RANDOM_1000 = 52;
+    public int NEUTRAL_ARMY_UPDATE_CHANCE_100 = 76;
+    public int NEUTRAL_ARMY_UPDATE_BASE = -3;
+    public int NEUTRAL_ARMY_UPDATE_RANDOM = 13;
+}
+

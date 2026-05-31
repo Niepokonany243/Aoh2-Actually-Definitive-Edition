@@ -1,0 +1,15 @@
+{
+	SUPPLY_NAMES: [ "", "SupplyCamp", "SupplyDepot", "SupplyBase", "SupplyCenter", "SupplyHub" ],
+
+	SUPPLY_BUILD_COST: [ 0, 0.01675, 0.0335, 0.05025, 0.067, 0.08375 ],
+	SUPPLY_BUILD_MOVEMENT_COST: [ 0, 14, 22, 30, 38, 46 ],
+
+	SUPPLY_TECH_LEVEL: [ 0.0, 0.3, 0.6, 0.9, 1.2, 1.5 ],
+
+	SUPPLY_CONSTRUCTION: [ 0, 3, 5, 7, 9, 11 ],
+
+	SUPPLY_BONUS: [ 0, 0.13, 0.26, 0.39, 0.52, 0.65 ],
+
+	SUPPLY_EXTRA_COST_PER_SUPPLY: 0.0115,
+	SUPPLY_COST_DEVELOPMENT_MODIFIER: 0.3,
+}

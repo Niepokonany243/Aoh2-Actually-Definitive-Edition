@@ -1,0 +1,1482 @@
+[
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "uni_m",
+	"name": "United Kingdom",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "ire_r",
+	"name": "Ireland",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "lux_n",
+	"name": "Luxembourg",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "bel_n",
+	"name": "Belgium",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "net_n",
+	"name": "Netherlands",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "ger_f",
+	"name": "Germany",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "atr_q",
+	"name": "Austria",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "swi_q",
+	"name": "Switzerland",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "lic_m",
+	"name": "Liechtenstein",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "czsl_q",
+	"name": "Czechoslovakia",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "hun_p",
+	"name": "Hungary",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "pol3_p",
+	"name": "Poland",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "fcd_q",
+	"name": "Danzig",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "lit_q",
+	"name": "Lithuania",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "fra_q",
+	"name": "France",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "and_m",
+	"name": "Andorra",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "moc_m",
+	"name": "Monaco",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "san_m",
+	"name": "San Marino",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "ita_f",
+	"name": "Italy",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "yugo_q",
+	"name": "Yugoslavia",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "por_q",
+	"name": "Portugal",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "spa_r",
+	"name": "Spain",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "irq_q",
+	"name": "Iraq",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "swe_n",
+	"name": "Sweden",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "nor_n",
+	"name": "Norway",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "fin_m",
+	"name": "Finland",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "lat_q",
+	"name": "Latvia",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "est_q",
+	"name": "Estonia",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "rus_c",
+	"name": "Soviet Union",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "tann_c",
+	"name": "Tannu Tuva",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "den_m",
+	"name": "Denmark",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "usa_p",
+	"name": "United States",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "dox_n",
+	"name": "Dominion of Canada",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "mex_q",
+	"name": "Mexico",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "cub_r",
+	"name": "Cuba",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "hai_q",
+	"name": "Haiti",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "ddo_q",
+	"name": "Dominica",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "gua_r",
+	"name": "Guatemala",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "els_r",
+	"name": "El Salvador",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "hou_r",
+	"name": "Honduras",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "nic_r",
+	"name": "Nicaragua",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "cor_r",
+	"name": "Costa Rica",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "pan_r",
+	"name": "Panama",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "uru_r",
+	"name": "Uruguay",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "bra_q",
+	"name": "Brazil",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "par_a",
+	"name": "Paraguay",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "bol_r",
+	"name": "Bolivia",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "per_q",
+	"name": "Peru",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "chl_q",
+	"name": "Chile",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "arg_r",
+	"name": "Argentina",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "ecu_r",
+	"name": "Ecuador",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "col_r",
+	"name": "Colombia",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "ven_q",
+	"name": "Venezuela",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "soa_m",
+	"name": "Union of South Africa",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "gre_m",
+	"name": "Greece",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "alb_q",
+	"name": "Albania",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "bul_m2",
+	"name": "Bulgaria",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "tur_q",
+	"name": "Türkiye",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "rom_m",
+	"name": "Romania",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "ira_p",
+	"name": "Iran",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "yem_m",
+	"name": "Yemen",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "oma2_m2",
+	"name": "Oman",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "eth_m",
+	"name": "Abyssinia",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "sau_m",
+	"name": "Saudi Arabia",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "afg_a",
+	"name": "Afghanistan",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "brra_n",
+	"name": "British Raj",
+	"autoset": true,
+	"setpop": 703000000,
+	"seteco": 2500000
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "bhu_m",
+	"name": "Bhutan",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "nep_m",
+	"name": "Nepal",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "mon_c",
+	"name": "Mongolia",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "jap_m",
+	"name": "Japan",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "man_q",
+	"name": "Manchukuo",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "meng_a",
+	"name": "Mengjiang",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "sqy_a",
+	"name": "Shanxi",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "chi_c",
+	"name": "China",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "qin_f",
+	"name": "China",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "guag_w",
+	"name": "Guangxi",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "tha2_m",
+	"name": "Siam",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "max_n",
+	"name": "Malaya",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "duin_m",
+	"name": "Dutch East Indies",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "phi_r",
+	"name": "Philippines",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "nez_m",
+	"name": "New Zealand",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "aus_n",
+	"name": "Australia",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "yucl_q",
+	"name": "Yunnan",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "tib_o",
+	"name": "Tibet",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "xib_q",
+	"name": "Xibei San Ma",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "xij_q",
+	"name": "Xinjiang",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "uba2_q",
+	"name": "Ubangi-Shari",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "con2_q",
+	"name": "Congo",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "conb_q",
+	"name": "Belgian Congo",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "rwa_t",
+	"name": "Rwanda",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "buu_p",
+	"name": "Burundi",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "gab2_q",
+	"name": "Gabon",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "cam2_q",
+	"name": "Cameroun",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "cha2_q",
+	"name": "Chad",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "nig3_q",
+	"name": "Niger",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "daho3_q",
+	"name": "Dahomey",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "togf_q",
+	"name": "Togoland",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "ivo3_q",
+	"name": "Ivory Coast",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "gui3_q",
+	"name": "Guinea",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "seg3_q",
+	"name": "Senegal",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "sufr_q",
+	"name": "Sudan",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "mau3_q",
+	"name": "Mauritania",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "moro2_q",
+	"name": "Morocco",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "tun2_q",
+	"name": "Tunisia",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "fral_q",
+	"name": "Algeria",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "mad2_q",
+	"name": "Madagascar",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "may_r",
+	"name": "Mayotte",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "com_p",
+	"name": "Comoros",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "ssz_p",
+	"name": "Seychelles",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "reu_q",
+	"name": "Réunion",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "syr_q",
+	"name": "Syria",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "ttra_q",
+	"name": "Transjordan",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "pal_q",
+	"name": "Palestine",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "tmau_q",
+	"name": "Mauritius",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "gam2_n",
+	"name": "Gambia",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "pgui_q",
+	"name": "Guinea",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "tsie_n",
+	"name": "Sierra Leone",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "lii_p",
+	"name": "Liberia",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "golc_n",
+	"name": "Gold Coast",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "nige3_n",
+	"name": "Nigeria",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "camb_n",
+	"name": "Cameroon",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "sao_q",
+	"name": "Sao Tomé and Príncipe",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "ango2_q",
+	"name": "Angola",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "soab_n",
+	"name": "South West Africa",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "sww_n",
+	"name": "Swaziland",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "basu2_n",
+	"name": "Basutoland",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "tbuch_n",
+	"name": "Bechuanaland",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "tsor_n",
+	"name": "Southern Rhodesia",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "trho_n",
+	"name": "Northern Rhodesia",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "moza2_q",
+	"name": "Mozambique",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "maw2_n",
+	"name": "Nyasaland",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "tang_n",
+	"name": "Tanganyika",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "tken_n",
+	"name": "Kenya",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "tuga_n",
+	"name": "Uganda",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "aneg_n",
+	"name": "Anglo-Egyptian Sudan",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "egy_n",
+	"name": "Egypt",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "somb_n",
+	"name": "Somaliland",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "ilib_f",
+	"name": "Libya",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "ieri_f",
+	"name": "Eritrea",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "dji2_p",
+	"name": "Djibouti",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "isom_f",
+	"name": "Somaliland",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "tcyp_n",
+	"name": "Cyprus",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "tmal_n",
+	"name": "Malta",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "tcey_n",
+	"name": "Ceylon",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "ad2_n",
+	"name": "Aden",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "kuw_n",
+	"name": "Kuwait",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "stru_n",
+	"name": "Trucial States",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "tbur_n",
+	"name": "Burma",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "infro_p",
+	"name": "French Indochina",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "newf_n",
+	"name": "Newfoundland",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "ptim2_q",
+	"name": "Timor",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "pue_p",
+	"name": "Puerto Rico",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "bau_n",
+	"name": "Bahamas",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "brr_n",
+	"name": "Bermuda",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "jami2_n",
+	"name": "Jamaica",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "bei_r",
+	"name": "Belize",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "trra_n",
+	"name": "Travancore",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "myso_n",
+	"name": "Mysore",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "hyb_m",
+	"name": "Hyderabad",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "bass_m",
+	"name": "Bastar",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "tnag_n",
+	"name": "Nagpur",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "bunh_n",
+	"name": "Bundelkhand",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "ori_n",
+	"name": "Orissa",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "tawa_n",
+	"name": "Awadh",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "tind_n",
+	"name": "Indore",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "tbho_n",
+	"name": "Bhopal",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "gwal_n",
+	"name": "Gwalior",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "mew_m",
+	"name": "Mewar",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "tija_m",
+	"name": "Jaipur",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "tbik_m",
+	"name": "Bikaner",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "jai_m",
+	"name": "Jaisalmer",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "tjod_n",
+	"name": "Jodhpur",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "tku_n",
+	"name": "Kutch",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "tbar_n",
+	"name": "Baroda",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "balu_m",
+	"name": "Baluchistan",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "saha2_a",
+	"name": "Sahara",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "spgu_a",
+	"name": "Guinea",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "guu2_n",
+	"name": "Guiana",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "gui2_m",
+	"name": "Guiana",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "frg_p",
+	"name": "French Guiana",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "amon3_w",
+	"name": "Impostoria",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "anta_s",
+	"name": "Antarctica",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "kir_r",
+	"name": "Kiribati",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "tok_q",
+	"name": "Tokelau",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+},
+{
+	"class": "age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON$CivilizationAIPopEco",
+	"tag": "sam_r",
+	"name": "Samoa",
+	"autoset": false,
+	"setpop": 0,
+	"seteco": 0
+}
+]

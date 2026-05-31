@@ -1,0 +1,44 @@
+# Large debug/dump files
+*.hprof
+*.log
+hs_err_pid*
+
+# Gradle
+.gradle/
+build/
+gradle/
+gradlew
+gradlew.bat
+*.jar
+*.class
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.project
+.classpath
+*.sublime-*
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Game user settings
+settings/
+saves/
+logs/
+
+# JRE
+jre/
+
+# Game jars / decompilers
+game.jar.bak
+procyon.jar
+cfr.jar
+
+# Gradle wrapper binary
+gradle/wrapper/

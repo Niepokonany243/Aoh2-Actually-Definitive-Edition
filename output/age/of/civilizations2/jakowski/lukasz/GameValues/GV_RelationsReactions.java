@@ -1,0 +1,18 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package age.of.civilizations2.jakowski.lukasz.GameValues;
+
+public class GV_RelationsReactions {
+    public int DECLARE_WAR_REACTIONS_CHANGE = 35;
+    public int DECLARE_WAR_RELATIONS_CHANGE_VASSALS_REACTIONS = 5;
+    public int DECLARE_WAR_RELATIONS_CHANGE_VASSALS_REACTIONS_RANDOM = 5;
+    public int INSULT_WORLD_REACTION_MAX = 30;
+    public int INSULT_WORLD_REACTION_RELATION_MODIFIER_DIVISOR = 3;
+    public float WORLD_REACTION_DISTANCE_LIMIT = 0.375f;
+    public float WORLD_REACTION_DISTANCE_BASE_IMPACT_DIVISOR = 20.0f;
+    public float WORLD_REACTION_RELATION_SCALING_DIVISOR = 5.0f;
+    public float WORLD_REACTION_DISTANCE_MULTIPLIER = 1.35f;
+    public float WORLD_REACTION_MAX_CHANGE = 25.0f;
+}
+

@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="PC (Actually Definitive Edition)" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="aoc.kingdoms.lukasz.jakowski.desktop.DesktopLauncher" />
+    <module name="Aoh2_Actually_Definitive_Edition.desktop.main" />
+    <option name="VM_PARAMETERS" value="-Xms1G -Xmx4G -Dfile.encoding=UTF-8" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

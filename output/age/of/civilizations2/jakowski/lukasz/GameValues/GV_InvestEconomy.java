@@ -1,0 +1,23 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package age.of.civilizations2.jakowski.lukasz.GameValues;
+
+public class GV_InvestEconomy {
+    public int INVEST_ECO_COST_MOVEMENT_POINTS = 12;
+    public int INVEST_ECO_NUM_OF_TURNS = 10;
+    public float INVEST_ECO_MAX_GOLD_FINAL_MODIFIER = 81.0f;
+    public float INVEST_ECO_MAX_GOLD_ECONOMY_MODIFIER = 0.325f;
+    public float INVEST_ECO_MAX_GOLD_POPULATION_MODIFIER = 0.265f;
+    public float INVEST_ECO_MAX_GOLD_DEVELOPMENT_BASE = 0.65f;
+    public float INVEST_ECO_MAX_GOLD_DEVELOPMENT_MODIFIER = 0.35f;
+    public float INVEST_ECO_MAX_GOLD_DEVELOPMENT_LIMIT = 1.0f;
+    public int INVEST_ECONOMY_MIN_INCREASE_PER_TURN = 1;
+    public float INVEST_ECO_GAIN_PER_GOLD_DIVIDE = 42.0f;
+    public float INVEST_ECO_GAIN_PER_GOLD_DEVELOPMENT_BASE = 0.775f;
+    public float INVEST_ECO_GAIN_PER_GOLD_DEVELOPMENT_MODIFIER = 0.115f;
+    public float INVEST_ECO_GAIN_PER_GOLD_DEVELOPMENT_MULTIPLY = 1.55f;
+    public float INVEST_ECO_GAIN_PER_GOLD_ECO_GROWTH_RATE_BASE = 0.275f;
+    public float INVEST_ECO_GAIN_PER_GOLD_ECO_GROWTH_RATE_MODIFIER = 0.575f;
+}
+

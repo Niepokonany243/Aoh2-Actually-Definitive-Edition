@@ -1,0 +1,22 @@
+{
+"sCivTag": "aac",
+"iR": 252,
+"iG": 221,
+"sr_GameData": {
+	"sSRTAG": "2",
+	"lColors": [
+		{
+			"fR": 0.9882353,
+			"fG": 0.8666667
+		},
+		{},
+		{
+			"fR": 0.7823529,
+			"fG": 0.08513841,
+			"fB": 0.08513841
+		}
+	]
+},
+"iReligionID": 1,
+"description": "ll"
+}

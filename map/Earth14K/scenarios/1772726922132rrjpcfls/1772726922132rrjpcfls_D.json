@@ -1,0 +1,431 @@
+{
+lAlliances: []
+lRelations: []
+lPacts: []
+lVassals: [
+	{
+		iCivID: 33
+		iCivLordID: 1
+	}
+	{
+		iCivID: 54
+		iCivLordID: 1
+	}
+	{
+		iCivID: 62
+		iCivLordID: 1
+	}
+	{
+		iCivID: 66
+		iCivLordID: 1
+	}
+	{
+		iCivID: 68
+		iCivLordID: 1
+	}
+	{
+		iCivID: 71
+		iCivLordID: 70
+	}
+	{
+		iCivID: 72
+		iCivLordID: 70
+	}
+	{
+		iCivID: 78
+		iCivLordID: 1
+	}
+	{
+		iCivID: 79
+		iCivLordID: 5
+	}
+	{
+		iCivID: 80
+		iCivLordID: 32
+	}
+	{
+		iCivID: 81
+		iCivLordID: 1
+	}
+	{
+		iCivID: 82
+		iCivLordID: 1
+	}
+	{
+		iCivID: 87
+		iCivLordID: 15
+	}
+	{
+		iCivID: 88
+		iCivLordID: 15
+	}
+	{
+		iCivID: 89
+		iCivLordID: 4
+	}
+	{
+		iCivID: 90
+		iCivLordID: 4
+	}
+	{
+		iCivID: 91
+		iCivLordID: 4
+	}
+	{
+		iCivID: 92
+		iCivLordID: 15
+	}
+	{
+		iCivID: 93
+		iCivLordID: 15
+	}
+	{
+		iCivID: 94
+		iCivLordID: 15
+	}
+	{
+		iCivID: 95
+		iCivLordID: 15
+	}
+	{
+		iCivID: 96
+		iCivLordID: 15
+	}
+	{
+		iCivID: 97
+		iCivLordID: 15
+	}
+	{
+		iCivID: 98
+		iCivLordID: 15
+	}
+	{
+		iCivID: 99
+		iCivLordID: 15
+	}
+	{
+		iCivID: 100
+		iCivLordID: 15
+	}
+	{
+		iCivID: 101
+		iCivLordID: 15
+	}
+	{
+		iCivID: 102
+		iCivLordID: 15
+	}
+	{
+		iCivID: 103
+		iCivLordID: 15
+	}
+	{
+		iCivID: 104
+		iCivLordID: 15
+	}
+	{
+		iCivID: 105
+		iCivLordID: 15
+	}
+	{
+		iCivID: 106
+		iCivLordID: 15
+	}
+	{
+		iCivID: 107
+		iCivLordID: 15
+	}
+	{
+		iCivID: 108
+		iCivLordID: 15
+	}
+	{
+		iCivID: 109
+		iCivLordID: 1
+	}
+	{
+		iCivID: 110
+		iCivLordID: 15
+	}
+	{
+		iCivID: 111
+		iCivLordID: 15
+	}
+	{
+		iCivID: 112
+		iCivLordID: 1
+	}
+	{
+		iCivID: 113
+		iCivLordID: 1
+	}
+	{
+		iCivID: 114
+		iCivLordID: 1
+	}
+	{
+		iCivID: 115
+		iCivLordID: 1
+	}
+	{
+		iCivID: 116
+		iCivLordID: 21
+	}
+	{
+		iCivID: 117
+		iCivLordID: 1
+	}
+	{
+		iCivID: 119
+		iCivLordID: 1
+	}
+	{
+		iCivID: 120
+		iCivLordID: 1
+	}
+	{
+		iCivID: 121
+		iCivLordID: 1
+	}
+	{
+		iCivID: 122
+		iCivLordID: 21
+	}
+	{
+		iCivID: 123
+		iCivLordID: 21
+	}
+	{
+		iCivID: 124
+		iCivLordID: 1
+	}
+	{
+		iCivID: 125
+		iCivLordID: 1
+	}
+	{
+		iCivID: 126
+		iCivLordID: 1
+	}
+	{
+		iCivID: 127
+		iCivLordID: 1
+	}
+	{
+		iCivID: 128
+		iCivLordID: 1
+	}
+	{
+		iCivID: 129
+		iCivLordID: 1
+	}
+	{
+		iCivID: 130
+		iCivLordID: 21
+	}
+	{
+		iCivID: 131
+		iCivLordID: 1
+	}
+	{
+		iCivID: 132
+		iCivLordID: 1
+	}
+	{
+		iCivID: 133
+		iCivLordID: 1
+	}
+	{
+		iCivID: 134
+		iCivLordID: 1
+	}
+	{
+		iCivID: 135
+		iCivLordID: 1
+	}
+	{
+		iCivID: 136
+		iCivLordID: 1
+	}
+	{
+		iCivID: 137
+		iCivLordID: 1
+	}
+	{
+		iCivID: 138
+		iCivLordID: 19
+	}
+	{
+		iCivID: 139
+		iCivLordID: 19
+	}
+	{
+		iCivID: 140
+		iCivLordID: 15
+	}
+	{
+		iCivID: 141
+		iCivLordID: 19
+	}
+	{
+		iCivID: 142
+		iCivLordID: 1
+	}
+	{
+		iCivID: 143
+		iCivLordID: 1
+	}
+	{
+		iCivID: 144
+		iCivLordID: 1
+	}
+	{
+		iCivID: 145
+		iCivLordID: 1
+	}
+	{
+		iCivID: 146
+		iCivLordID: 1
+	}
+	{
+		iCivID: 147
+		iCivLordID: 1
+	}
+	{
+		iCivID: 148
+		iCivLordID: 1
+	}
+	{
+		iCivID: 149
+		iCivLordID: 15
+	}
+	{
+		iCivID: 150
+		iCivLordID: 1
+	}
+	{
+		iCivID: 151
+		iCivLordID: 21
+	}
+	{
+		iCivID: 152
+		iCivLordID: 32
+	}
+	{
+		iCivID: 153
+		iCivLordID: 1
+	}
+	{
+		iCivID: 154
+		iCivLordID: 1
+	}
+	{
+		iCivID: 155
+		iCivLordID: 1
+	}
+	{
+		iCivID: 156
+		iCivLordID: 1
+	}
+	{
+		iCivID: 157
+		iCivLordID: 1
+	}
+	{
+		iCivID: 158
+		iCivLordID: 1
+	}
+	{
+		iCivID: 159
+		iCivLordID: 1
+	}
+	{
+		iCivID: 160
+		iCivLordID: 1
+	}
+	{
+		iCivID: 161
+		iCivLordID: 1
+	}
+	{
+		iCivID: 162
+		iCivLordID: 1
+	}
+	{
+		iCivID: 163
+		iCivLordID: 1
+	}
+	{
+		iCivID: 164
+		iCivLordID: 1
+	}
+	{
+		iCivID: 165
+		iCivLordID: 1
+	}
+	{
+		iCivID: 166
+		iCivLordID: 1
+	}
+	{
+		iCivID: 167
+		iCivLordID: 1
+	}
+	{
+		iCivID: 168
+		iCivLordID: 1
+	}
+	{
+		iCivID: 169
+		iCivLordID: 1
+	}
+	{
+		iCivID: 170
+		iCivLordID: 1
+	}
+	{
+		iCivID: 171
+		iCivLordID: 1
+	}
+	{
+		iCivID: 172
+		iCivLordID: 1
+	}
+	{
+		iCivID: 173
+		iCivLordID: 1
+	}
+	{
+		iCivID: 174
+		iCivLordID: 1
+	}
+	{
+		iCivID: 175
+		iCivLordID: 1
+	}
+	{
+		iCivID: 176
+		iCivLordID: 22
+	}
+	{
+		iCivID: 177
+		iCivLordID: 22
+	}
+	{
+		iCivID: 178
+		iCivLordID: 1
+	}
+	{
+		iCivID: 179
+		iCivLordID: 5
+	}
+	{
+		iCivID: 180
+		iCivLordID: 15
+	}
+]
+lMilitaryAccess: []
+lDefensivePacts: []
+lGuarantee: []
+lTruces: []
+}

@@ -1,0 +1,30 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package org.lwjgl.opengl;
+
+import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GLCapabilities;
+import org.lwjgl.system.Checks;
+import org.lwjgl.system.NativeType;
+
+public class NVClipSpaceWScaling {
+    public static final int GL_VIEWPORT_POSITION_W_SCALE_NV = 37756;
+    public static final int GL_VIEWPORT_POSITION_W_SCALE_X_COEFF = 37757;
+    public static final int GL_VIEWPORT_POSITION_W_SCALE_Y_COEFF = 37758;
+
+    protected NVClipSpaceWScaling() {
+        throw new UnsupportedOperationException();
+    }
+
+    static boolean isAvailable(GLCapabilities caps) {
+        return Checks.checkFunctions(caps.glViewportPositionWScaleNV);
+    }
+
+    public static native void glViewportPositionWScaleNV(@NativeType(value="GLuint") int var0, @NativeType(value="GLfloat") float var1, @NativeType(value="GLfloat") float var2);
+
+    static {
+        GL.initialize();
+    }
+}
+

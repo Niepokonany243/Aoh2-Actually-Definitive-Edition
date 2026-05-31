@@ -1,0 +1,34 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
+package age.of.civilizations2.jakowski.lukasz.GameValues.AI;
+
+public class GV_AI_Rivals {
+    public boolean USE_NEW_RIVALS_SYSTEM = true;
+    public int RIVALS_LIMIT = 3;
+    public int NUM_OF_RIVALS_TO_CHOOSE_FROM = 13;
+    public float RIVALS_SCORE_MIN = 0.425f;
+    public float RIVALS_SCORE_DISTANCE = 0.675f;
+    public float AI_RIVALS_SCORE_RELATION = 0.5f;
+    public int UPDATE_RIVALRY_END_EVERY_X_TURNS = 10;
+    public int END_OF_RIVALRY_AFTER_EXTRA_TURNS_BASE = 99;
+    public int END_OF_RIVALRY_AFTER_EXTRA_TURNS_RANDOM = 66;
+    public int RESUME_LOOKING_FOR_ENEMY_AT_TURN_ID = 38;
+    public int RESUME_LOOKING_FOR_ENEMY_AT_TURN_ID_RANDOM = 26;
+    public float OLD_RIVALS_BUDGET_MODIFIER = 1.85f;
+    public int OLD_RIVALS_BUDGET_MODIFIER_RANDOM_1000 = 475;
+    public float OLD_RIVALS_CIV_SIZE_MODIFIER = 0.625f;
+    public int OLD_RIVALS_CIV_SIZE_MODIFIER_RANDOM_1000 = 525;
+    public float OLD_RIVALS_DISTANCE_MODIFIER = 0.2825f;
+    public float OLD_RIVALS_DISTANCE_RANK_MODIFIER = 0.1475f;
+    public int OLD_RIVALS_BUDGET_MODIFIER_2_SMALL_CIV_PROVINCES_BELOW = 5;
+    public float OLD_RIVALS_BUDGET_MODIFIER_2_SMALL_CIV = 0.925f;
+    public int OLD_RIVALS_BUDGET_MODIFIER_2_SMALL_CIV_RANDOM_100 = 15;
+    public float OLD_RIVALS_BUDGET_MODIFIER_2 = 0.775f;
+    public int OLD_RIVALS_BUDGET_MODIFIER_2_RANDOM_100 = 625;
+    public float OLD_RIVALS_RANGE_AGGRESSION_BASE = 0.25f;
+    public int OLD_RIVALS_RANGE_AGGRESSION_RANDOM_100 = 350;
+    public float OLD_RIVALS_DISTANCE_BONUS = 0.2675f;
+    public float OLD_RIVALS_RELATIONS_MODIFIER = 0.115f;
+}
+

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PromptTemplates">
+    <option name="prompts">
+      <list>
+        <PromptTemplate>
+          <option name="enabled" value="true" />
+          <option name="name" value="Importan" />
+          <option name="text" value="Be fast, direct. You work only inside output directory. After doing hcnages compiel project via &quot;cmd /c &quot;javac -cp compiled;game.jar -d compiled @full_compile_list.txt&quot; [or more if i ask] When you analyse codebase, do not read few, limit tool calls and time via reading in one call full context. No token limits. You do not have right to any commands for decompiling or removing stuff, reading jsut outline or msall amoutn of file, changing anything to int, you can only hcnage int to long, not opposite. For changing something to something, when you don't know where, instead reading each file jsut search with no limit of results.&#10;&#10;Note: You have to implement full logic, every smallest detail, the task is not done untill you implement it fully, you have be sure that it&quot;s fully implemented with every detail." />
+        </PromptTemplate>
+      </list>
+    </option>
+  </component>
+</project>

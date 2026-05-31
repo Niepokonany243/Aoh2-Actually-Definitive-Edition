@@ -1,0 +1,340 @@
+Prussia
+Denmark
+Anhalt
+Mecklenburg
+Mecklenburg-Schwerin
+Great Britain
+Schleswig
+Holstein
+Lübeck
+Hamburg
+Bremen
+Belgium
+Netherlands
+Luxembourg
+Lippe
+Schaumburg-Lippe
+Oldenburg
+Hanover
+Bavaria
+Saxony
+Saxe-Weimar
+Schwarzburg
+Saxe-Meiningen
+Brunswick
+Hesse-Kassel
+Frankfurt
+Nassau
+Baden
+Württemberg
+Hohenzollern
+Waldeck
+Hesse
+Cracow
+Austrian Empire
+Moldavia
+Wallachia
+Serbia
+Montenegro
+Greece
+Ionian Islands
+Ottoman Empire
+Egypt
+Hejaz
+Russian Empire
+Finland
+Sweden
+Norway
+Spain
+Portugal
+Morocco
+France
+Monaco
+Sardinia
+Parma
+Lucca
+Modena
+Papal States
+San Marino
+Tuscany
+Two Sicilies
+Tunisia
+United States
+Mexico
+Brazil
+Riograndense Republic
+Uruguay
+Paraguay
+Argentina
+Bolivia
+Para
+Travancore
+Ceylon
+Mysore
+British Raj
+Hyderabad
+Bastar
+Sindh
+Jaisalmer
+Jodhpur
+Bikaner
+Jaipur
+Mewar
+Indore
+Baroda
+Kutch
+Bhopal
+Gwalior
+Bundelkhand
+Awadh
+Orissa
+Nagpur
+Sikh Empire
+Tibet
+Afghanistan
+Switzerland
+Liechtenstein
+Venezuela
+Cuba
+Central America
+Miskito
+New Granada
+Ecuador
+Guiana
+Guiana
+French Guiana
+British Columbia
+Absaroka
+Niitsitapi
+Selis
+Pannakwati
+Nimiipuu
+Apache
+Navajo
+Ute
+Arapaho
+Comanche
+Pawnee
+Sioux
+Upper Canada
+Hudson Bay Company
+Russian American Company
+Athabaskan
+Indian Territory
+Texas
+Nova Scotia
+New Brunswick
+Lower Canada
+Newfoundland
+Igbo
+Benin
+Sokoto
+Duala
+Bamum
+Oyo
+Borgu
+Dahomey
+Ewe
+Liberia
+Kru
+Anyi
+Baule
+Kabadougou
+Mandinka
+Kong
+Futa Jallon
+Susu
+Sierra Leone
+Kaabu
+Gambia
+Jolof
+Futa Toro
+Trarza
+Kaarta
+Segou
+Massina
+Mossi
+Ashanti
+Adagh
+Oualata
+Sahrawi
+Tuat
+Kel Ahaggar
+Tripolitania
+Guarani
+North Peru
+Iquicha
+South Peru
+Mapuche
+Tehuelche
+Chile
+Falkland Islands
+South Georgia and the South Sandwich Islands
+Cape of Good Hope
+Zulu
+Transvaal
+Oranje
+Imerina
+Réunion
+Mauritius
+Serer
+Cayor
+Bundu
+Air
+Wadai
+Bornu
+Gobir
+Bagirmi
+Mozambique
+Kongo
+Teke
+Loango
+Yaka
+Angola
+Kasanje
+Chokwe
+Lunda
+Kuba
+Luba
+Majeerteen
+Mahra
+Warsangali
+Nejd
+Shammar
+Oman
+Trucial States
+Bahrain
+Qatar
+Persia
+Circassia
+Qing
+Korea
+Japan
+Kishi Zhuz
+Orta Zhuz
+Khiva
+Kokand
+Bukhara
+Azal
+Lahej
+Kathiri
+Maravi
+Hehe
+Kikuyu
+Masai
+Buganda
+Bunyoro
+Ankole
+Rwanda
+Burundi
+Karagwe
+Nyamwezi
+Gogo
+Sangu
+Bemba
+Maseko
+Mashona
+Manica
+Matabele
+Geledi
+Gaza
+Basuto
+Tswana
+Nama
+Hereroland
+Ovimbundu
+Barotse
+Kazembe
+Hemba
+Lega
+Mangbetu
+Azande
+Dar Fertit
+Dar al Kuti
+Darfur
+Acholi
+Dinka
+Nuer
+Toposa
+Turkana
+Borana
+Harar
+Kaffa
+Isaaq
+Aussa
+Shewa
+Fang
+Bobangi
+Bangala
+Welega
+Gojjam
+Begemder
+Tigray
+Wello
+Maldives
+Kalat
+Makran
+Fiji
+Tonga
+Kingdom of Hawaii
+Vanuatu
+New South Wales
+Tasmania
+Kaurna
+South Australia
+Western Australia
+Wati
+Mirning
+Noongar
+United Tribes
+Ngati Toa
+Ngai Tahu
+Papua
+Tidore
+Sulawesi
+Dutch East Indies
+Siak
+Singapore
+Macau
+Hong Kong
+Dai Nam
+Cambodia
+Champasak
+Luang Phrabang
+Siam
+Chiang Mai
+Philippines
+Maguindanao
+Sulu
+Burma
+Sikkim
+Bhutan
+Nepal
+Aceh
+Selangor
+Perak
+Johor
+Brunei
+Bulungan
+Kutai
+Banjar
+Sintang
+Pontianak
+Sambas
+Jambi
+Sakhalin
+Haiti
+Bermuda
+Andorra
+Jamaica
+Cayman Islands
+Puerto Rico
+Malta
+Algeria
+Antarctica
+Palau
+Micronesia
+Marshall Islands
+Nauru
+Kiribati
+Zombie Horde
