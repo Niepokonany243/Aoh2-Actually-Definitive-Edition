@@ -4701,6 +4701,22 @@ lbl94:
     }
 
     public final void drawProvincesArmy_SetUpArmy(SpriteBatch oSB, float nScale) {
+        int saved_ARMY_HEIGHT = CFG.ARMY_HEIGHT;
+        int saved_ARMY_BG_EXTRA_WIDTH = CFG.ARMY_BG_EXTRA_WIDTH;
+        int saved_ARMY_BG_EXTRA_HEIGHT = CFG.ARMY_BG_EXTRA_HEIGHT;
+        int saved_ARMY_FLAG_PADDING_X = CFG.ARMY_FLAG_PADDING_X;
+        int saved_ARMY_FLAG_PADDING_Y = CFG.ARMY_FLAG_PADDING_Y;
+        int saved_ARMY_FLAG_WIDTH = CFG.ARMY_FLAG_WIDTH;
+        int saved_ARMY_FLAG_HEIGHT = CFG.ARMY_FLAG_HEIGHT;
+        float sizeScale = CFG.settingsGD.getArmyIconFactor() * Math.min(nScale, 1.0f);
+        CFG.armyDrawScale = sizeScale;
+        CFG.ARMY_HEIGHT = Math.max(1, (int)((float)saved_ARMY_HEIGHT * sizeScale));
+        CFG.ARMY_BG_EXTRA_WIDTH = Math.max(1, (int)((float)saved_ARMY_BG_EXTRA_WIDTH * sizeScale));
+        CFG.ARMY_BG_EXTRA_HEIGHT = Math.max(1, (int)((float)saved_ARMY_BG_EXTRA_HEIGHT * sizeScale));
+        CFG.ARMY_FLAG_PADDING_X = Math.max(1, (int)((float)saved_ARMY_FLAG_PADDING_X * sizeScale));
+        CFG.ARMY_FLAG_PADDING_Y = Math.max(1, (int)((float)saved_ARMY_FLAG_PADDING_Y * sizeScale));
+        CFG.ARMY_FLAG_WIDTH = Math.max(1, (int)((float)saved_ARMY_FLAG_WIDTH * sizeScale));
+        CFG.ARMY_FLAG_HEIGHT = Math.max(1, (int)((float)saved_ARMY_FLAG_HEIGHT * sizeScale));
         int i;
         for (i = 0; i < CFG.NUM_OF_SEA_PROVINCES_IN_VIEW; ++i) {
             this.getProv(this.getPSVI(i)).drawArmy_SetUpArmy_Sea(oSB, nScale);
@@ -4708,6 +4724,14 @@ lbl94:
         for (i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
             this.getProv(this.getPIV(i)).drawArmy_SetUpArmy(oSB, nScale);
         }
+        CFG.ARMY_HEIGHT = saved_ARMY_HEIGHT;
+        CFG.ARMY_BG_EXTRA_WIDTH = saved_ARMY_BG_EXTRA_WIDTH;
+        CFG.ARMY_BG_EXTRA_HEIGHT = saved_ARMY_BG_EXTRA_HEIGHT;
+        CFG.ARMY_FLAG_PADDING_X = saved_ARMY_FLAG_PADDING_X;
+        CFG.ARMY_FLAG_PADDING_Y = saved_ARMY_FLAG_PADDING_Y;
+        CFG.ARMY_FLAG_WIDTH = saved_ARMY_FLAG_WIDTH;
+        CFG.ARMY_FLAG_HEIGHT = saved_ARMY_FLAG_HEIGHT;
+        CFG.armyDrawScale = 1.0f;
         oSB.setColor(Color.WHITE);
     }
 

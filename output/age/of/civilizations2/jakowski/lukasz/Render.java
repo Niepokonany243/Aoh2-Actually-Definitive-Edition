@@ -642,7 +642,9 @@ public class Render {
                     if (!DISABLE_CITIES) {
                         CFG.core.drawCities_OnlyCapitals_Images_FogOfWarDiscovery(oSB, CFG.map.getMpS().getCurrSc());
                     }
-                    CFG.core.drawProvincesArmy(oSB, CFG.map.getMpS().getCurrSc());
+                    if (CFG.map.getMpS().getCurrSc() >= 1.0f) {
+                        CFG.core.drawProvincesArmy(oSB, CFG.map.getMpS().getCurrSc());
+                    }
                 } else if (CFG.map.getMpS().getCurrSc() < 1.0f && !DISABLE_CITIES) {
                     CFG.core.drawCities_OnlyCapitals_Images_FogOfWarDiscovery(oSB, CFG.map.getMpS().getCurrSc());
                 }
@@ -689,7 +691,9 @@ public class Render {
                     if (!DISABLE_CITIES) {
                         CFG.core.drawCities_OnlyCapitals_Images(oSB, CFG.map.getMpS().getCurrSc());
                     }
-                    CFG.core.drawProvincesArmy(oSB, CFG.map.getMpS().getCurrSc());
+                    if (CFG.map.getMpS().getCurrSc() >= 1.0f) {
+                        CFG.core.drawProvincesArmy(oSB, CFG.map.getMpS().getCurrSc());
+                    }
                 } else if (CFG.map.getMpS().getCurrSc() < 1.0f && !DISABLE_CITIES) {
                     CFG.core.drawCities_OnlyCapitals_Images(oSB, CFG.map.getMpS().getCurrSc());
                 }

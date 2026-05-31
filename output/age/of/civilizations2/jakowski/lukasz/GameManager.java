@@ -577,6 +577,9 @@ public class GameManager {
         if (CFG.gameAction.getControlledArmySizeInProvince(nProvinceID, nCivID) <= 0L) {
             return false;
         }
+        if (CFG.settingsGD.ANNEXATION_DELAY && CFG.core.getProv(nProvinceID).getOccupationTurnsLeft() > 0) {
+            return false;
+        }
         for (int i = 0; i < CFG.core.getProv(nProvinceID).getPop().getNatsSize(); ++i) {
             if (CFG.core.getProv(nProvinceID).getPop().getPopulationID(i) > 0) {
                 return true;
@@ -602,7 +605,6 @@ public class GameManager {
         long armyLoss = Math.max(1L, nArmy / 200L);
         province.updateArmy4(armyCivID, Math.max(0L, province.getArmyCivID1(armyCivID) - armyLoss));
         CFG.core.getCiv(nCivID).newGenocideOperation(nProvinceID, targetCivID, nArmy, targetPop);
-        CFG.toastM.addM("Genocide started: 4 turns remaining", CFG.COLOR_NEGATIVE_2);
         return targetPop;
     }
 

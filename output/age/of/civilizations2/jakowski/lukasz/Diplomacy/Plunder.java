@@ -41,7 +41,7 @@ public class Plunder {
     }
 
     public static final long plunder_Population(int nCivID, int nProvinceID, long nArmy) {
-        return (long)(Math.min((float)nArmy * (GameValues.gvPlunder.PLUNDER_POP_LOSS_BASE_RATIO_ARMY + (float)CFG.oR.nextInt(GameValues.gvPlunder.PLUNDER_POP_LOSS_RANDOM_RATIO_10000_ARMY) / 10000.0f), (float)CFG.core.getProv(nProvinceID).getPop().getPops() * GameValues.gvPlunder.PLUNDER_POP_LOSS_BASE_RATIO_POPULATION) * CFG.PLUNDER_MODIFIER);
+        return Math.min(nArmy * 3L, Math.max(0L, CFG.core.getProv(nProvinceID).getPop().getPops()));
     }
 
     public static final void plunderProvince(int iCivID, int nProvinceID, long nArmy) {
