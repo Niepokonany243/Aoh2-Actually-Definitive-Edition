@@ -59,15 +59,15 @@ implements Serializable {
     public boolean SHOW_COMBAT_MOVEMENT = true;
     public boolean SHOW_BATTLE_REPORT = false;
     public boolean BETTER_UI = true;
-    public boolean DISABLE_INFLATION = false;
-    public boolean MISSILES = false;
+    public boolean DISABLE_INFLATION = true;
+    public boolean MISSILES = true;
     public boolean ANNEXATION_DELAY = true;
     public int ANNEXATION_DELAY_TURNS = 5;
     public boolean AIR_DEFENCE_SYSTEMS = true;
     public boolean BAT_PLUS = true;
     public float BAT_PLUS_BREAKTHROUGH_RATIO = 5.0f;
     public int UI_THEME = 0; 
-    public boolean EXPERIMENTAL_BATTLE_SYSTEM = false;
+    public boolean EXPERIMENTAL_BATTLE_SYSTEM = true;
     public boolean CAPITAL_FLAGS_HIGH = true;
     public boolean ANDROID_LOAD_MAP_OVERLAYS = false;
     public int SHIPS_ON_MAP = 10;
@@ -85,10 +85,10 @@ implements Serializable {
     public float BORDER_EXTRA_THICKNESS = 0.0f;
     public Color_GameData borderStraight = new Color_GameData(0.04f, 0.04f, 0.04f);
     public Color_GameData borderDashed = new Color_GameData(0.0f, 0.0f, 0.0f);
-    public boolean AI_GROUP_UNITS = true;
-    public boolean DISABLE_AI_INVESTING = false;
-    public int ARMY_VISIBILITY_RANGE = 1; 
-    public int ARMY_ICON_SCALE = 3; 
+    public boolean AI_GROUP_UNITS = false;
+    public boolean DISABLE_AI_INVESTING = true;
+    public int ARMY_VISIBILITY_RANGE = 3; 
+    public int ARMY_ICON_SCALE = 1; 
 
     public final float getArmyIconFactor() {
         switch (this.ARMY_ICON_SCALE) {

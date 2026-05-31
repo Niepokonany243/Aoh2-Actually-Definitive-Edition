@@ -6170,6 +6170,14 @@ public class CFG {
                     menus.getDialogMenu().getMenuElem(3).setTextE(lang.get("SaveScenario") + "? (Custom JSON)");
                     break;
                 }
+                case DISABLE_EXPERIMENTAL_BATTLE: {
+                    menus.getDialogMenu().getMenuElem(3).setTextE("Disable Experimental Battle System? This will revert to vanilla combat and disable Smart Bat+.");
+                    break;
+                }
+                case DISABLE_BAT_PLUS: {
+                    menus.getDialogMenu().getMenuElem(3).setTextE("Disable Smart Bat+?");
+                    break;
+                }
             }
         }
         catch (IndexOutOfBoundsException ex) {
@@ -7300,6 +7308,19 @@ public class CFG {
                     final SFXManager sfxManager5 = CFG.SFXManager;
                     final SFXManager sfxManager6 = CFG.SFXManager;
                     sfxManager5.playSound(age.of.civilizations2.jakowski.lukasz.SFXManager.SFX_WAR2);
+                    return;
+                }
+                case DISABLE_EXPERIMENTAL_BATTLE: {
+                    CFG.settingsGD.EXPERIMENTAL_BATTLE_SYSTEM = false;
+                    CFG.settingsGD.BAT_PLUS = false;
+                    CFG.saveSettings();
+                    CFG.menus.setMenuID(View.eSETTINGS);
+                    return;
+                }
+                case DISABLE_BAT_PLUS: {
+                    CFG.settingsGD.BAT_PLUS = false;
+                    CFG.saveSettings();
+                    CFG.menus.setMenuID(View.eSETTINGS);
                     return;
                 }
                 default: {}
