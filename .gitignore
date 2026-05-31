@@ -44,3 +44,8 @@ cfr.jar
 
 # Gradle wrapper binary
 gradle/wrapper/
+
+# Never ignore source/game/map/output — these are the repo
+!/output/
+!/game/
+!/map/
