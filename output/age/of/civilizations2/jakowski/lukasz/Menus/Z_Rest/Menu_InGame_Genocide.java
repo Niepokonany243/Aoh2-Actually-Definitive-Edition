@@ -140,10 +140,10 @@ extends Menu {
                 nData.add(new ME_Hover_2Type_Space());
                 nElements.add(new MEHover_2E(nData));
                 nData.clear();
-                nData.add(new ME_Hover_2Type_TextDesc("Takes 4 turns. Army is vastly stronger than population."));
+                nData.add(new ME_Hover_2Type_TextDesc("Multi-turn battle: army power vs population resistance."));
                 nElements.add(new MEHover_2E(nData));
                 nData.clear();
-                nData.add(new ME_Hover_2Type_TextDesc("Minimal army losses. Province happiness and stability will decrease.", CFG.COLOR_NEGATIVE_2));
+                nData.add(new ME_Hover_2Type_TextDesc("Army takes casualties if outmatched. Province happiness and stability will decrease.", CFG.COLOR_NEGATIVE_2));
                 nElements.add(new MEHover_2E(nData));
                 nData.clear();
                 this.menuElemHover = new ME_Hover_v2(nElements);

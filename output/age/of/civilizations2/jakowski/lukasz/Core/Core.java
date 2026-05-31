@@ -6967,7 +6967,6 @@ lbl94:
             if (this.getCiv(i).getCapitalProvID() < 0 || this.getProv(this.getCiv(i).getCapitalProvID()).getCivId() != i || !this.getProv(this.getCiv(i).getCapitalProvID()).getDrawProv()) continue;
             this.drawProvinceFlag_Capital(oSB, this.getCiv(i).getCapitalProvID(), CFG.COLOR_ARMYBG, CFG.COLOR_ARMY_TEXT, nScale);
         }
-        this.drawSeaProvinceArmy(oSB, nScale);
     }
 
     public final void drawAllCivilizations_Flag_InCapitals_WithCrown_Timeline(SpriteBatch oSB, float nScale) {
@@ -6996,7 +6995,6 @@ lbl94:
             if (this.getCiv(i).getCapitalProvID() < 0 || !this.getPlayer(CFG.PLAYER_TURN_ID).getMetProv(this.getCiv(i).getCapitalProvID()) || this.getProv(this.getCiv(i).getCapitalProvID()).getCivId() != i || !this.getProv(this.getCiv(i).getCapitalProvID()).getDrawProv()) continue;
             this.drawProvinceFlag_Capital(oSB, this.getCiv(i).getCapitalProvID(), CFG.COLOR_ARMYBG, CFG.COLOR_ARMY_TEXT, nScale);
         }
-        this.drawSeaProvinceArmy(oSB, nScale);
     }
 
     public final void drawAllCivilizations_Name_Flag_InCapitals_AvailableCivs(SpriteBatch oSB, float nScale) {

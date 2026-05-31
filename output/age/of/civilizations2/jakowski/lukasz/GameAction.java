@@ -3469,6 +3469,9 @@ public class GameAction {
     }
 
     public final boolean moveArmyAction(int fromProvinceID, int toProvinceID, long nNumOfUnits, int iCivID, boolean regroupMode, boolean buildLine) {
+        if (GameManager.isGenocideActive(iCivID, fromProvinceID) || CFG.core.getCiv(iCivID).isPlundred(fromProvinceID)) {
+            return false;
+        }
         synchronized (CFG.core) {
             try {
                 Civilization civ = CFG.core.getCiv(iCivID);

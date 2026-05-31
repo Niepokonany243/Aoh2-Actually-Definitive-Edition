@@ -165,6 +165,7 @@ public class GameValues {
     public static GV_RelationDecrease gvRelationDecrease = new GV_RelationDecrease();
     public static GV_RelationImprove gvRelationImprove = new GV_RelationImprove();
     public static GV_Plunder gvPlunder = new GV_Plunder();
+    public static GV_Genocide gvGenocide = new GV_Genocide();
     public static GV_Government gvGovernment = new GV_Government();
     public static GV_Relations gvRelations = new GV_Relations();
     public static GV_Update gvUpdate = new GV_Update();

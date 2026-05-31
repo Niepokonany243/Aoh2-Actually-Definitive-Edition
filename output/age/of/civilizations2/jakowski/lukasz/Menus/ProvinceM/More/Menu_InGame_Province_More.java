@@ -28,6 +28,7 @@ import age.of.civilizations2.jakowski.lukasz.GameValues.GameValues;
 import age.of.civilizations2.jakowski.lukasz.IMGManager;
 import age.of.civilizations2.jakowski.lukasz.Images;
 import age.of.civilizations2.jakowski.lukasz.MapA.BuildingsManager;
+import age.of.civilizations2.jakowski.lukasz.Province;
 import age.of.civilizations2.jakowski.lukasz.Province_Claims;
 import age.of.civilizations2.jakowski.lukasz.Province_Core;
 import age.of.civilizations2.jakowski.lukasz.View;
@@ -262,7 +263,7 @@ extends Menu {
                         nElements.add(new MEHover_2E(nData));
                         nData.clear();
                     }
-                    nData.add(new ME_Hover_2Type_TextDesc("Population being eliminated in this province.", CFG.COLOR_NEGATIVE_2));
+                    nData.add(new ME_Hover_2Type_TextDesc("Population being eliminated. Army suffers casualties each turn.", CFG.COLOR_NEGATIVE_2));
                     nElements.add(new MEHover_2E(nData));
                     nData.clear();
                     this.menuElemHover = new ME_Hover_v2(nElements);
@@ -1391,15 +1392,17 @@ extends Menu {
                 public void buildElemHover() {
                     ArrayList<MEHover_2E> nElements = new ArrayList<MEHover_2E>();
                     ArrayList<ME_Hover_2Type> nData = new ArrayList<ME_Hover_2Type>();
-                    if (CFG.core.getProv(BuildingsManager.iBuildInProvinceID).isOccupied()) {
-                        if (CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getName().length() > 0) {
-                            nData.add(new ME_Hover_2Type_Flag_Big(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getTrueOwnerOfProv()));
+                    Province p = CFG.core.getProv(BuildingsManager.iBuildInProvinceID);
+                    boolean inAnnexDelay = CFG.settingsGD.ANNEXATION_DELAY && p.getOccupationTurnsLeft() > 0;
+                    if (p.isOccupied() && !inAnnexDelay) {
+                        if (p.getName().length() > 0) {
+                            nData.add(new ME_Hover_2Type_Flag_Big(p.getTrueOwnerOfProv()));
                             nData.add(new ME_Hover_2Type_Text_Big(CFG.lang.get("Plunder") + ": ", CFG.COLOR_HOVER_TITLE));
-                            nData.add(new ME_Hover_2Type_Text_Big(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getName()));
+                            nData.add(new ME_Hover_2Type_Text_Big(p.getName()));
                             nElements.add(new MEHover_2E(nData));
                             nData.clear();
                         } else {
-                            nData.add(new ME_Hover_2Type_Flag_Big(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getTrueOwnerOfProv()));
+                            nData.add(new ME_Hover_2Type_Flag_Big(p.getTrueOwnerOfProv()));
                             nData.add(new ME_Hover_2Type_Text_Big(CFG.lang.get("Plunder"), CFG.COLOR_HOVER_TITLE));
                             nElements.add(new MEHover_2E(nData));
                             nData.clear();
@@ -1408,12 +1411,16 @@ extends Menu {
                         nElements.add(new MEHover_2E(nData));
                         nData.clear();
                         nData.add(new ME_Hover_2Type_Text(CFG.lang.get("OccupiedProvince")));
-                        nData.add(new ME_Hover_2Type_Image(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).isOccupied() ? Images.iconTrue : Images.iconFalse, CFG.PADD, 0));
+                        nData.add(new ME_Hover_2Type_Image(p.isOccupied() ? Images.iconTrue : Images.iconFalse, CFG.PADD, 0));
                         nElements.add(new MEHover_2E(nData));
                         nData.clear();
                         nData.add(new ME_Hover_2Type_Text(CFG.lang.get("Cost") + ": "));
                         nData.add(new ME_Hover_2Type_Text("" + (float)CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).getIdeology()).COST_OF_PLUNDER / 10.0f, CFG.COLOR_MOVEMENT));
                         nData.add(new ME_Hover_2Type_Image(Images.topMovementPoints, CFG.PADD, 0));
+                        nElements.add(new MEHover_2E(nData));
+                        nData.clear();
+                    } else if (inAnnexDelay) {
+                        nData.add(new ME_Hover_2Type_Text("Plunder not available during annexation period", CFG.COLOR_NEGATIVE_2));
                         nElements.add(new MEHover_2E(nData));
                         nData.clear();
                     } else {
@@ -1426,7 +1433,9 @@ extends Menu {
 
                 @Override
                 public boolean getIsClickable() {
-                    return CFG.core.getProv(BuildingsManager.iBuildInProvinceID).isOccupied();
+                    Province p = CFG.core.getProv(BuildingsManager.iBuildInProvinceID);
+                    if (CFG.settingsGD.ANNEXATION_DELAY && p.getOccupationTurnsLeft() > 0) return false;
+                    return p.isOccupied() && p.getCivId() != CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId() && p.getTrueOwnerOfProv() != CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId();
                 }
             });
             ((MenuElemUI)menuElements.get(menuElements.size() - 1)).setCurr(++row % 2);

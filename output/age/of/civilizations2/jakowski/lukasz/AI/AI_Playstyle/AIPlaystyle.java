@@ -3597,7 +3597,10 @@ public class AIPlaystyle {
     }
 
     public final boolean plunderProvince(int n, int n2) {
-        if (CFG.core.getProv(n2).isOccupied() && !CFG.core.getProv(n2).getCores().getHaveACore(n) && (float)CFG.core.getProv(n2).getArmyCivID1(n) < (float)CFG.core.getCiv(n).getNumberOfUnits() * 0.235f && CFG.core.getCiv((int)n).civGD.iPlunder_LastTurnID <= GameCalendar.TURNID) {
+        if (CFG.settingsGD.ANNEXATION_DELAY && CFG.core.getProv(n2).getOccupationTurnsLeft() > 0) {
+            return false;
+        }
+        if (CFG.core.getProv(n2).isOccupied() && !CFG.core.getProv(n2).getCores().getHaveACore(n) && CFG.core.getProv(n2).getCivId() != n && CFG.core.getProv(n2).getTrueOwnerOfProv() != n && (float)CFG.core.getProv(n2).getArmyCivID1(n) < (float)CFG.core.getCiv(n).getNumberOfUnits() * 0.235f && CFG.core.getCiv((int)n).civGD.iPlunder_LastTurnID <= GameCalendar.TURNID) {
             int n4 = (int)this.getRegroupArmy_NumOfUnits(n, n2);
             if ((float)n4 / Plunder.plunderEfficiency_RequiredMAX(n, n2) > 0.45f && CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)n).getIdeology()).COST_OF_PLUNDER <= CFG.core.getCiv(n).getMovemPoints()) {
                 if ((float)CFG.oAI.getAIStyle((int)CFG.core.getCiv((int)n).getAIStyleID()).PERSONALITY_PLUNDER_MIN + (float)CFG.oR.nextInt(CFG.oAI.getAIStyle((int)CFG.core.getCiv((int)n).getAIStyleID()).PERSONALITY_PLUNDER_RANDOM) / 1000.0f > (float)CFG.oR.nextInt(1000) / 1000.0f) {

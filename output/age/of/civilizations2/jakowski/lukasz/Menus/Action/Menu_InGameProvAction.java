@@ -29,6 +29,7 @@ import age.of.civilizations2.jakowski.lukasz.MenuE_HoverP.ME_Hover_v2;
 import age.of.civilizations2.jakowski.lukasz.Menus.Civilization.Menu_InGame_Civ;
 import age.of.civilizations2.jakowski.lukasz.Menus.Civilization.Menu_InGame_Civ_Decisions;
 import age.of.civilizations2.jakowski.lukasz.Menus.ProvinceM.More.Menu_InGame_Province_More;
+import age.of.civilizations2.jakowski.lukasz.Province;
 import age.of.civilizations2.jakowski.lukasz.Menus.ZRest.Menu_InGame_2;
 import age.of.civilizations2.jakowski.lukasz.Menus.Z_Rest.Menu_InGame_Genocide;
 import age.of.civilizations2.jakowski.lukasz.Menus.Z_Rest.Menu_InGame_Plunder;
@@ -107,7 +108,7 @@ extends Menu {
             @Override
             public boolean getIsClickable() {
                 try {
-                    return super.getIsClickable() && !GameManager.isGenocideActive(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId(), CFG.core.getActiveProvID());
+                    return super.getIsClickable() && !GameManager.isGenocideActive(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId(), CFG.core.getActiveProvID()) && !CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).isPlundred(CFG.core.getActiveProvID());
                 }
                 catch (Exception ex) {
                     return super.getIsClickable();
@@ -493,7 +494,7 @@ extends Menu {
             @Override
             public boolean getIsClickable() {
                 try {
-                    return super.getIsClickable() && !GameManager.isGenocideActive(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId(), CFG.core.getActiveProvID());
+                    return super.getIsClickable() && !GameManager.isGenocideActive(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId(), CFG.core.getActiveProvID()) && !CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).isPlundred(CFG.core.getActiveProvID());
                 }
                 catch (Exception ex) {
                     return super.getIsClickable();
@@ -736,7 +737,9 @@ extends Menu {
             @Override
             public boolean getVisibleE() {
                 try {
-                    return CFG.core.getProv(CFG.core.getActiveProvID()).isOccupied();
+                    Province p = CFG.core.getProv(CFG.core.getActiveProvID());
+                    if (CFG.settingsGD.ANNEXATION_DELAY && p.getOccupationTurnsLeft() > 0) return false;
+                    return p.isOccupied() && p.getCivId() != CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId() && p.getTrueOwnerOfProv() != CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId();
                 }
                 catch (Exception ex) {
                     return false;
@@ -762,15 +765,16 @@ extends Menu {
                 try {
                     ArrayList<MEHover_2E> nElements = new ArrayList<MEHover_2E>();
                     ArrayList<ME_Hover_2Type> nData = new ArrayList<ME_Hover_2Type>();
-                    if (CFG.core.getProv(CFG.core.getActiveProvID()).isOccupied()) {
-                        if (CFG.core.getProv(CFG.core.getActiveProvID()).getName().length() > 0) {
-                            nData.add(new ME_Hover_2Type_Flag_Big(CFG.core.getProv(CFG.core.getActiveProvID()).getTrueOwnerOfProv()));
+                    Province p = CFG.core.getProv(CFG.core.getActiveProvID());
+                    if (p.isOccupied() && !(CFG.settingsGD.ANNEXATION_DELAY && p.getOccupationTurnsLeft() > 0)) {
+                        if (p.getName().length() > 0) {
+                            nData.add(new ME_Hover_2Type_Flag_Big(p.getTrueOwnerOfProv()));
                             nData.add(new ME_Hover_2Type_Text_Big(CFG.lang.get("Plunder") + ": ", CFG.COLOR_HOVER_TITLE));
-                            nData.add(new ME_Hover_2Type_Text_Big(CFG.core.getProv(CFG.core.getActiveProvID()).getName()));
+                            nData.add(new ME_Hover_2Type_Text_Big(p.getName()));
                             nElements.add(new MEHover_2E(nData));
                             nData.clear();
                         } else {
-                            nData.add(new ME_Hover_2Type_Flag_Big(CFG.core.getProv(CFG.core.getActiveProvID()).getTrueOwnerOfProv()));
+                            nData.add(new ME_Hover_2Type_Flag_Big(p.getTrueOwnerOfProv()));
                             nData.add(new ME_Hover_2Type_Text_Big(CFG.lang.get("Plunder"), CFG.COLOR_HOVER_TITLE));
                             nElements.add(new MEHover_2E(nData));
                             nData.clear();
@@ -779,7 +783,7 @@ extends Menu {
                         nElements.add(new MEHover_2E(nData));
                         nData.clear();
                         nData.add(new ME_Hover_2Type_Text(CFG.lang.get("OccupiedProvince")));
-                        nData.add(new ME_Hover_2Type_Image(CFG.core.getProv(CFG.core.getActiveProvID()).isOccupied() ? Images.iconTrue : Images.iconFalse, CFG.PADD, 0));
+                        nData.add(new ME_Hover_2Type_Image(p.isOccupied() ? Images.iconTrue : Images.iconFalse, CFG.PADD, 0));
                         nElements.add(new MEHover_2E(nData));
                         nData.clear();
                         nData.add(new ME_Hover_2Type_Text(CFG.lang.get("Cost") + ": "));
@@ -788,7 +792,7 @@ extends Menu {
                         nElements.add(new MEHover_2E(nData));
                         nData.clear();
                     } else {
-                        nData.add(new ME_Hover_2Type_Text(CFG.lang.get("OnlyOccupiedProvinceCanBePlundered"), CFG.COLOR_NEGATIVE_2));
+                        nData.add(new ME_Hover_2Type_Text("Plunder not available during annexation period", CFG.COLOR_NEGATIVE_2));
                         nElements.add(new MEHover_2E(nData));
                         nData.clear();
                     }
@@ -842,10 +846,10 @@ extends Menu {
                     nData.add(new ME_Hover_2Type_Space());
                     nElements.add(new MEHover_2E(nData));
                     nData.clear();
-                    nData.add(new ME_Hover_2Type_TextDesc("Choose a population and commit army to kill it."));
+                    nData.add(new ME_Hover_2Type_TextDesc("Commit army to eliminate a population group. Battle-like multi-turn operation."));
                     nElements.add(new MEHover_2E(nData));
                     nData.clear();
-                    nData.add(new ME_Hover_2Type_TextDesc("Can target any nationality in provinces where you control an army.", CFG.COLOR_NEGATIVE_2));
+                    nData.add(new ME_Hover_2Type_TextDesc("Army takes casualties if outmatched by population size.", CFG.COLOR_NEGATIVE_2));
                     nElements.add(new MEHover_2E(nData));
                     nData.clear();
                     this.menuElemHover = new ME_Hover_v2(nElements);
@@ -897,8 +901,14 @@ extends Menu {
 
     public static final void clickMove() {
         Core.LYC();
-        if (GameManager.isGenocideActive(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId(), CFG.core.getActiveProvID())) {
+        int cID = CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId();
+        int pID = CFG.core.getActiveProvID();
+        if (GameManager.isGenocideActive(cID, pID)) {
             CFG.toastM.addM("Cannot move army while genocide is active!", CFG.COLOR_NEGATIVE_2);
+            return;
+        }
+        if (CFG.core.getCiv(cID).isPlundred(pID)) {
+            CFG.toastM.addM("Cannot move army while plundering!", CFG.COLOR_NEGATIVE_2);
             return;
         }
         if (CFG.gameAction.isMovingArmyFromProvince(CFG.core.getActiveProvID(), CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId())) {
@@ -1066,8 +1076,14 @@ extends Menu {
     }
 
     public static final void clickMoveTo() {
-        if (GameManager.isGenocideActive(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId(), CFG.core.getActiveProvID())) {
+        int cID = CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId();
+        int pID = CFG.core.getActiveProvID();
+        if (GameManager.isGenocideActive(cID, pID)) {
             CFG.toastM.addM("Cannot move army while genocide is active!", CFG.COLOR_NEGATIVE_2);
+            return;
+        }
+        if (CFG.core.getCiv(cID).isPlundred(pID)) {
+            CFG.toastM.addM("Cannot move army while plundering!", CFG.COLOR_NEGATIVE_2);
             return;
         }
         if (CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getMovemPoints() < CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).getIdeology()).COST_OF_MOVE_OWN_PROVINCE) {

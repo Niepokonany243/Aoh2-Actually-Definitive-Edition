@@ -3,6 +3,7 @@ package age.of.civilizations2.jakowski.lukasz.Diplomacy;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
 import age.of.civilizations2.jakowski.lukasz.GameCalendar;
+import age.of.civilizations2.jakowski.lukasz.GameManager;
 import age.of.civilizations2.jakowski.lukasz.GameValues.GameValues;
 import age.of.civilizations2.jakowski.lukasz.Messages.Province.Message_Plunder;
 import age.of.civilizations2.jakowski.lukasz.Messages.Province.Message_Plunder_Plundred;
@@ -51,6 +52,12 @@ public class Plunder {
         if (nProvinceID < 0 || !CFG.core.getProv(nProvinceID).isOccupied() || CFG.core.getProv(nProvinceID).getSeaProv()) {
             return;
         }
+        if (CFG.settingsGD.ANNEXATION_DELAY && CFG.core.getProv(nProvinceID).getOccupationTurnsLeft() > 0) {
+            return;
+        }
+        if (CFG.core.getProv(nProvinceID).getCivId() == iCivID || CFG.core.getProv(nProvinceID).getTrueOwnerOfProv() == iCivID) {
+            return;
+        }
         long currPlunderArmy = 0L;
         for (int i = 0; i < CFG.core.getCiv(iCivID).getMoveUnitsPlunderSize(); ++i) {
             if (CFG.core.getCiv(iCivID).getMoveUnitsPlunder(i).getFromProvinceID() != nProvinceID) continue;
@@ -78,6 +85,12 @@ public class Plunder {
 
     public static final void plunder(int iCivID, int nProvinceID, long nArmy) {
         if (CFG.core.getProv(nProvinceID).getTrueOwnerOfProv() == iCivID) {
+            return;
+        }
+        if (CFG.settingsGD.ANNEXATION_DELAY && CFG.core.getProv(nProvinceID).getOccupationTurnsLeft() > 0) {
+            return;
+        }
+        if (CFG.core.getProv(nProvinceID).getCivId() == iCivID) {
             return;
         }
         long nTreasury = Plunder.plunderTreasuryIncome(iCivID, nProvinceID, nArmy);

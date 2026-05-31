@@ -7955,8 +7955,8 @@ public class CFG {
         NUKES_REQUIRED_TECH_LVL = 0.75f;
         PLUNDER_MODIFIER = 1.0f;
         AI_PLUNDER_ENABLED = true;
-        PLUNDER_CHANCE = 0.2f;
-        GENOCIDE_CHANCE = 0.2f;
+        PLUNDER_CHANCE = 0.0f;
+        GENOCIDE_CHANCE = 0.0f;
         AI_GENOCIDE_ENABLED = true;
         VASSALS_CAN_DECLARE_INDEPENDENCE = true;
         ASSIMILATION_COST_MODIFIER = 1.0f;

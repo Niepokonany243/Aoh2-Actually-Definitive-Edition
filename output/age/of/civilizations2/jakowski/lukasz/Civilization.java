@@ -959,7 +959,7 @@ public class Civilization {
         return false;
     }
 
-    public final void newGenocideOperation(int nProvinceID, int targetCivID, long nArmy, long totalPopToRemove) {
+    public final void newGenocideOperation(int nProvinceID, int targetCivID, long nArmy, long totalPopToRemove, float effectivePower, float resistancePower, long currentArmy) {
         if (this.genocideOperations == null) {
             this.genocideOperations = new ArrayList<GenocideOperation>();
             this.genocideOperationsSize = 0;
@@ -970,7 +970,11 @@ public class Civilization {
             this.genocideOperationsSize = this.genocideOperations.size();
             break;
         }
-        this.genocideOperations.add(new GenocideOperation(this.getCivId(), nProvinceID, targetCivID, nArmy, totalPopToRemove, 4));
+        float ratio = resistancePower > 0.0f ? effectivePower / resistancePower : 10.0f;
+        ratio = Math.max(GameValues.gvGenocide.POWER_MIN_RATIO, Math.min(GameValues.gvGenocide.POWER_MAX_RATIO, ratio));
+        int turns = (int)Math.ceil((float)GameValues.gvGenocide.TURNS_BASE / Math.max(0.25f, Math.min(4.0f, ratio)));
+        if (turns < 1) turns = 1;
+        this.genocideOperations.add(new GenocideOperation(this.getCivId(), nProvinceID, targetCivID, nArmy, totalPopToRemove, turns, effectivePower, resistancePower, currentArmy));
         this.genocideOperationsSize = this.genocideOperations.size();
     }
 

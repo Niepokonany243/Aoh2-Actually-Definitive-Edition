@@ -45,8 +45,8 @@ implements Serializable {
     public float MOVEMENT_POINTS_MAX_MODIFIER;
     public int DIPLOMACY_POINTS_EXTRA;
     public boolean AI_PLUNDER_ENABLED;
-    public float PLUNDER_CHANCE = 0.2f;
-    public float GENOCIDE_CHANCE = 0.2f;
+    public float PLUNDER_CHANCE = 0.0f;
+    public float GENOCIDE_CHANCE = 0.0f;
     public boolean AI_GENOCIDE_ENABLED = true;
     public int WAR_CANT_BE_DECLARED_IN_FIRST_X_TURNS;
     public float PEACE_TREATY_VICTORY_POINTS_MODIFIER;

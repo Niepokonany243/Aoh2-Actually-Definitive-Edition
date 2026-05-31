@@ -602,9 +602,13 @@ public class GameManager {
             return 0L;
         }
         int armyCivID = CFG.gameAction.getControlledArmyCivIDInProvince(nProvinceID, nCivID);
-        long armyLoss = Math.max(1L, nArmy / 200L);
-        province.updateArmy4(armyCivID, Math.max(0L, province.getArmyCivID1(armyCivID) - armyLoss));
-        CFG.core.getCiv(nCivID).newGenocideOperation(nProvinceID, targetCivID, nArmy, targetPop);
+        long provArmy = CFG.core.getProv(nProvinceID).getArmyCivID1(armyCivID);
+        long usedArmy = Math.min(nArmy, provArmy);
+        float effectivePower = (float)usedArmy * (1.0f + GameValues.gvGenocide.POWER_RATIO_MODIFIER * Math.max(0.0f, (float)targetPop / Math.max(1.0f, (float)usedArmy)));
+        float resistancePower = Math.max(1.0f, (float)targetPop * GameValues.gvGenocide.RESISTANCE_MODIFIER);
+        long minArmyLoss = Math.max(1L, usedArmy / 200L);
+        province.updateArmy4(armyCivID, Math.max(0L, provArmy - minArmyLoss));
+        CFG.core.getCiv(nCivID).newGenocideOperation(nProvinceID, targetCivID, usedArmy, targetPop, effectivePower, resistancePower, usedArmy - minArmyLoss);
         return targetPop;
     }
 
@@ -623,20 +627,49 @@ public class GameManager {
                 civ.removeGenocideOperation(i--);
                 continue;
             }
-            long tempPopulationBefore = province.getPop().getPops();
-            long removedPop = Math.min(remainingTargetPop, Math.max(1L, op.getTotalPopToRemove() / 4L));
+            int armyCivID = CFG.gameAction.getControlledArmyCivIDInProvince(op.getProvinceID(), nCivID);
+            long currentProvArmy = province.getArmyCivID1(armyCivID);
+            long currentArmy = Math.min(op.getCurrentArmy(), currentProvArmy);
+            if (currentArmy <= 0L) {
+                civ.removeGenocideOperation(i--);
+                continue;
+            }
+            float effectivePower = (float)currentArmy * (1.0f + GameValues.gvGenocide.POWER_RATIO_MODIFIER * Math.max(0.0f, (float)remainingTargetPop / Math.max(1.0f, (float)currentArmy)));
+            float resistancePower = Math.max(1.0f, (float)remainingTargetPop * GameValues.gvGenocide.RESISTANCE_MODIFIER);
+            float powerRatio = effectivePower / Math.max(1.0f, resistancePower);
+            powerRatio = Math.max(GameValues.gvGenocide.POWER_MIN_RATIO, Math.min(GameValues.gvGenocide.POWER_MAX_RATIO, powerRatio));
+            long armyLoss;
+            long removedPop;
+            if (powerRatio >= 1.0f) {
+                float removalRate = GameValues.gvGenocide.POP_REMOVAL_RATE_BASE * Math.min(2.0f, powerRatio);
+                removedPop = Math.min(remainingTargetPop, Math.max(1L, (long)Math.ceil((float)remainingTargetPop * removalRate)));
+                float lossRate = GameValues.gvGenocide.ARMY_LOSS_RATE_BASE / Math.max(0.5f, powerRatio);
+                armyLoss = Math.max(1L, Math.min(currentArmy, (long)Math.ceil((float)currentArmy * lossRate)));
+            } else {
+                float ratio = resistancePower / Math.max(1.0f, effectivePower);
+                float lossRate = Math.min(GameValues.gvGenocide.ARMY_LOSS_RATE_MAX, GameValues.gvGenocide.ARMY_LOSS_RATE_BASE / Math.max(0.3f, ratio));
+                armyLoss = Math.max(1L, Math.min(currentArmy, (long)Math.ceil((float)currentArmy * lossRate)));
+                removedPop = Math.max(1L, (long)Math.ceil((float)remainingTargetPop * GameValues.gvGenocide.POP_REMOVAL_RATE_BASE * powerRatio));
+            }
+            removedPop = Math.min(remainingTargetPop, removedPop);
             province.getPop().setPopulationOfCivID(op.getTargetCivID(), remainingTargetPop - removedPop);
+            long newArmy = Math.max(0L, currentArmy - armyLoss);
+            province.updateArmy4(armyCivID, Math.max(0L, currentProvArmy - armyLoss));
+            CFG.core.getCiv(nCivID).setNumberOfUnits(CFG.core.getCiv(nCivID).getNumberOfUnits() - armyLoss);
+            op.setCurrentArmy(newArmy);
+            op.setEffectivePower(effectivePower);
+            op.setResistancePower(resistancePower);
             float removedShare = Math.min(1.0f, (float)removedPop / (float)Math.max(1L, province.getPop().getPops()));
             province.setHappi(province.getHappi() - 0.02f - removedShare * 0.05f);
             province.setRevRisk(province.getRevRisk() + 0.01f + removedShare * 0.05f);
+            long tempPopulationBefore = province.getPop().getPops() + removedPop;
             int tempWarID = CFG.core.getWarID(nCivID, province.getTrueOwnerOfProv());
             if (tempWarID >= 0) {
                 CFG.core.updateWarStatistics(tempWarID, nCivID, province.getTrueOwnerOfProv(), Math.max(tempPopulationBefore - province.getPop().getPops(), 0L), 0L);
             }
             op.setTurnsRemaining(op.getTurnsRemaining() - 1);
-            if (op.getTurnsRemaining() <= 0) {
+            if (op.getTurnsRemaining() <= 0 || newArmy <= 0L) {
                 civ.removeGenocideOperation(i--);
-                continue;
             }
         }
     }
