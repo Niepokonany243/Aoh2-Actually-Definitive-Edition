@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -65,7 +63,7 @@ extends Event_Outcome {
     @Override
     public void outcomeAction() {
         if (this.getCivID() < 0 || this.getCivID() >= CFG.core.getCivsSize() || this.getCivID2() < 0 || this.getCivID2() < CFG.core.getCivsSize()) {
-            // empty if block
+            
         }
     }
 

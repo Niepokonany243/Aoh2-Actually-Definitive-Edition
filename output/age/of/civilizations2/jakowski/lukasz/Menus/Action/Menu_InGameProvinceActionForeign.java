@@ -50,7 +50,7 @@ public class Menu_InGameProvinceActionForeign extends Menu {
         ArrayList<MenuElemUI> menuElements = new ArrayList<MenuElemUI>();
         int btnStep = CFG.BUTTON_W + CFG.PADD;
         
-        // 0: Invest
+        
         menuElements.add(new Button_GameInvestForeign(null, -1, CFG.PADD + 0 * btnStep, CFG.PADD, true, Images.investF1){
             public String sKey = "1";
             public int iKeyWidth;
@@ -71,7 +71,7 @@ public class Menu_InGameProvinceActionForeign extends Menu {
             public void actionElem(int iID) { Menu_InGameProvinceActionForeign.investForeign(); }
         });
 
-        // 1: Build
+        
         menuElements.add(new Button_GameInvestForeign(null, -1, CFG.PADD + 1 * btnStep, CFG.PADD, true, Images.investB1){
             public String sKey = "2";
             public int iKeyWidth;
@@ -92,7 +92,7 @@ public class Menu_InGameProvinceActionForeign extends Menu {
             public void actionElem(int iID) { Menu_InGameProvinceActionForeign.buildForeign(); }
         });
 
-        // 2: Strike (Missile)
+        
         menuElements.add(new Button_GameNuke(null, -1, CFG.PADD + 2 * btnStep, CFG.PADD, true){
             public String sKey = "S";
             @Override
@@ -119,7 +119,7 @@ public class Menu_InGameProvinceActionForeign extends Menu {
             }
         });
 
-        // 3: Nuke
+        
         menuElements.add(new Button_GameNuke(null, -1, CFG.PADD + 3 * btnStep, CFG.PADD, true){
             public String sKey = "U";
             @Override
@@ -128,7 +128,7 @@ public class Menu_InGameProvinceActionForeign extends Menu {
             public void actionElem(int iID) { Menu_InGameProvinceActionForeign.useNuke(); }
         });
 
-        // 4: Attack
+        
         menuElements.add(new Button_Game(null, -1, CFG.PADD + 4 * btnStep, CFG.PADD, true){
             public String sKey = "Y";
             @Override

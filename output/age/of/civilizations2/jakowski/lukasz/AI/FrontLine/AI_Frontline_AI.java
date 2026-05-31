@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.AI.FrontLine;
 
 import age.of.civilizations2.jakowski.lukasz.AI.FrontLine.AI_Frontline;

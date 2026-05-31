@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.HistoryLog;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -101,7 +99,7 @@ public class HistoryManager {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
     }

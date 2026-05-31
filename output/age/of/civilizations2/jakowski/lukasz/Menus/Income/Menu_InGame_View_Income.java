@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Income;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -107,7 +105,7 @@ extends Menu {
                         IMGManager.getIMG(imgID).draw(oSB, this.getPosXE() + this.getWidthE() - CFG.PADD - IMGManager.getIMG(imgID).getWidth() + iTranslateX, this.getPosY() + this.getHeightE() - CFG.PADD - IMGManager.getIMG(imgID).getHeight() + iTranslateY);
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                     oSB.setColor(Color.WHITE);
                 }
@@ -213,7 +211,7 @@ extends Menu {
                     IMGManager.getIMG(Images.flagRectSmall).drawO(oSB, nPosX + CFG.PADD * 2 + iTranslateX, nPosY - this.getHeightT() + this.getHeightT() / 2 + 1 - CFG.CIV_FLAG_HEIGHT / 2);
                 }
                 catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                    // empty catch block
+                    
                 }
                 Renderer.drawText(oSB, CFG.FONT_BOLD_SMALL, this.getText(), nPosX + nWidth / 2 - this.getTextWidth() / 2 + iTranslateX, nPosY - this.getHeightT() + this.getHeightT() / 2 + 1 - this.getTextHeight() / 2, Color.WHITE);
             }

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle;
 
 import age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle.AIPlaystyle;
@@ -21,7 +19,7 @@ extends AIPlaystyle {
         for (int i = 0; i < CFG.core.getCiv(nCivID).getNumOfProvs(); ++i) {
             int provID = CFG.core.getCiv(nCivID).getProvID(i);
             if (!((float)CFG.core.getProv(provID).getArmyID(0) < (float)CFG.core.getGameScenars().getScenario_StartingPopulation() * 0.15f * CFG.core.getProv(provID).getGrowthRate_Pop()) || CFG.oR.nextInt(100) >= 24) {
-                // empty
+                
             } else {
                 CFG.core.getProv(provID).updateArmy4(CFG.core.getProv(provID).getArmyID(0) + (long)Math.max(CFG.oR.nextInt(18), (int)((float)CFG.core.getProv(provID).getArmyID(0) * (0.0125f + (float)CFG.oR.nextInt(78) / 1000.0f))));
             }
@@ -33,15 +31,7 @@ extends AIPlaystyle {
                 }
             }
         }
-        /* 
-        for (Integer neighID : neighbors) {
-            if (CFG.core.getProv(neighID).getCivId() != nCivID) {
-                if (CFG.core.getProv(neighID).getRevRisk() < 0.7f) {
-                    CFG.core.getProv(neighID).setRevRisk(Math.min(0.7f, CFG.core.getProv(neighID).getRevRisk() + 0.1f));
-                }
-            }
-        }
-        */
+        
         this.tryRegroupArmy(nCivID);
     }
 

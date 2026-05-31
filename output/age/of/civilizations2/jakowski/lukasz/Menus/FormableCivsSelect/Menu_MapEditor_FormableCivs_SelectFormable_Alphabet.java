@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.FormableCivsSelect;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Classic.Button_Classic_Active;
@@ -88,7 +86,7 @@ extends Menu {
             tagsSPLITED_ADDEDLength = tagsSPLITED_ADDED.length;
         }
         catch (GdxRuntimeException tempFileTADDED) {
-            // empty catch block
+            
         }
         FileHandle tempFileT = FileManager.loadFile("game/civilizations/Age_of_Civilizations");
         String tempT = tempFileT.readString();
@@ -101,7 +99,7 @@ extends Menu {
             tagsSPLITED_ED = tempT_ED.split(";");
         }
         catch (GdxRuntimeException tempFileT_ED) {
-            // empty catch block
+            
         }
         this.lCharacters = new ArrayList<Character>();
         int iSize = tagsSPLITED.length;

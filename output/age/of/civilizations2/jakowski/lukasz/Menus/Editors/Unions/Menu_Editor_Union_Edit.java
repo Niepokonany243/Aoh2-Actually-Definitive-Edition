@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Editors.Unions;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Classic.Button_Classic;
@@ -75,7 +73,7 @@ extends Menu {
                 CFG.unionsManager.createUnion_Data.lCivsTags.remove(iID / 2);
             }
             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                // empty catch block
+                
             }
             CFG.menus.setMenuID(View.eEDITOR_UNIONS_EDIT);
         }

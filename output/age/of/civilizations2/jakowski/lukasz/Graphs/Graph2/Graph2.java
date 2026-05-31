@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Graphs.Graph2;
 
 import age.of.civilizations2.jakowski.lukasz.Button.MenuElemUI;
@@ -143,9 +141,7 @@ extends MenuElemUI {
         this.iDataSize = this.lData.size();
     }
 
-    /*
-     * Unable to fully structure code
-     */
+    
     protected void loadData(int i) {
         int nStartTurnID;
         List<Long> tempPoints;
@@ -285,7 +281,7 @@ extends MenuElemUI {
                     }
                     if (this.graphType != GraphType.RELIGION_POPULATION) break block77;
 lbl148:
-                    // 3 sources
+                    
 
                     try {
                         for (a = 1; a < CFG.core.getCivsSize(); ++a) {
@@ -325,7 +321,7 @@ lbl148:
                 }
                 if (this.graphType != GraphType.GOVERNMENT_POPULATION) break block79;
 lbl186:
-                // 3 sources
+                
 
                 try {
                     for (a = 1; a < CFG.core.getCivsSize(); ++a) {

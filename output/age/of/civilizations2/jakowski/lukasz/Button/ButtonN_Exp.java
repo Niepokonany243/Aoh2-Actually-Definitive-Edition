@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button;
 
 import age.of.civilizations2.jakowski.lukasz.Button.ButtonM;
@@ -76,7 +74,7 @@ extends ButtonM {
             Renderer.drawTextWithShadow(oSB, this.fontID, this.getTextE(), this.getPosXE() - this.getTextWidthU() - CFG.PADD * 2 + this.getWidthE() + iTranslateX, this.getPosY() + this.getHeightE() / 2 - this.getTextHeight() / 2 + iTranslateY, this.getColorE(isActive));
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

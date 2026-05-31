@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.CreateVassal.Info;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -202,7 +200,7 @@ extends Menu {
                     CFG.createVassalData.playAsVassal = this.getMenuElem(iID).getCheckboxSt();
                 }
                 catch (NullPointerException nullPointerException) {
-                    // empty catch block
+                    
                 }
                 return;
             }

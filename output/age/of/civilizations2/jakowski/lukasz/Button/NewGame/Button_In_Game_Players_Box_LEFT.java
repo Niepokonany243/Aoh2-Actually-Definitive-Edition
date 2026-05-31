@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button.NewGame;
 
 import age.of.civilizations2.jakowski.lukasz.Button.NewGame.Button_InGameBox;
@@ -54,7 +52,7 @@ extends Button_InGameBox {
                 Renderer.drawText(oSB, this.fontID, CFG.core.getPlayer(this.iPlayerID).getCivId() < 0 ? CFG.RANDOM_CIVILIZATION : CFG.core.getCiv(CFG.core.getPlayer(this.iPlayerID).getCivId()).getCivName(), this.getPosXE() + IMGManager.getIMG(Images.flagRect2).getWidth() + CFG.PADD * 3 + iTranslateX, this.getPosY() + this.getHeightE() / 2 - CFG.TEXT_HEIGHT_DEFAULT / 2 + iTranslateY, this.getColorE(isActive));
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             try {
                 oSB.flush();
@@ -63,7 +61,7 @@ extends Button_InGameBox {
             catch (Exception exception) {}
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

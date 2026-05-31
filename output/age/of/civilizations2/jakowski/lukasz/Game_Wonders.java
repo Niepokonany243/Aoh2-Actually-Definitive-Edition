@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -23,7 +21,7 @@ public class Game_Wonders {
             }
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
         return nMountains;
     }

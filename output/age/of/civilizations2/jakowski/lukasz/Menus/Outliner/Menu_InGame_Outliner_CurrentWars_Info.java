@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Outliner;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Flag.Button_Flag_JustFrame;
@@ -57,7 +55,7 @@ extends Menu {
             tempMaxTextW = (int)CFG.glyphLay.width;
         }
         catch (NullPointerException nullPointerException) {
-            // empty catch block
+            
         }
         int tMenuWidth = IMGManager.getIMG(Images.diploWar).getWidth() / 2 + CFG.PADD + CFG.CIV_FLAG_WIDTH + CFG.PADD + tempMaxTextW + CFG.PADD;
         int tPosY = 0;

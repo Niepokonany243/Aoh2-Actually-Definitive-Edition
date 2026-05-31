@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button.Stats;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Stats.Button_Stats_Flag;
@@ -69,7 +67,7 @@ extends Button_Stats_Flag {
             ScissorStack.popScissors();
         }
         catch (IllegalStateException illegalStateException) {
-            // empty catch block
+            
         }
     }
 
@@ -88,7 +86,7 @@ extends Button_Stats_Flag {
             this.menuElemHover = new ME_Hover_v2(nElements);
         }
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            // empty catch block
+            
         }
     }
 }

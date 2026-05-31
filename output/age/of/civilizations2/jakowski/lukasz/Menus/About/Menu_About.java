@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.About;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -578,7 +576,7 @@ extends Menu {
             this.sF.clear();
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

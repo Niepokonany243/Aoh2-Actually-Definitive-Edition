@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Messages.Info;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -68,7 +66,7 @@ extends Message {
         catch (NullPointerException nullPointerException) {
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

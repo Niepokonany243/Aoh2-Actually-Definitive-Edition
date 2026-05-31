@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.ZRest;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Button_Report_Armies;
@@ -68,7 +66,7 @@ extends Menu {
             tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE() + CFG.PADD;
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         menuElements.add(new Button_Report_ProvinceLosses(CFG.PADD * 2, tY, tempWidth - CFG.PADD * 4, CFG.reportData.iPopulationLosses, CFG.reportData.iEconomyLosses){
 
@@ -163,7 +161,7 @@ extends Menu {
                     IMGManager.getIMG(Images.battle).drawO(oSB, nPosX + nWidth / 2 - this.getTextWidth() / 2 - CFG.PADD - IMGManager.getIMG(Images.battle).getWidth() + iTranslateX, nPosY - this.getHeightT() + this.getHeightT() / 2 - IMGManager.getIMG(Images.battle).getHeight() / 2);
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
                 Renderer.drawTextWithShadow(oSB, CFG.FONT_BOLD_SMALL, this.getText(), nPosX + nWidth / 2 - this.getTextWidth() / 2 + iTranslateX, nPosY - this.getHeightT() + this.getHeightT() / 2 - this.getTextHeight() / 2, Color.WHITE);
             }
@@ -204,7 +202,7 @@ extends Menu {
                 ScissorStack.popScissors();
             }
             catch (IllegalStateException illegalStateException) {
-                // empty catch block
+                
             }
         }
         this.endClipM(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);

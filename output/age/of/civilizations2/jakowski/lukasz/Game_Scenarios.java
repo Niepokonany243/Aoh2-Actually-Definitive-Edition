@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -263,7 +261,7 @@ public class Game_Scenarios {
                 }
             }
             catch (GdxRuntimeException tempFileT2) {
-                // empty catch block
+                
             }
         }
         if (CFG.core.getScenarioID() == -1) {
@@ -354,7 +352,7 @@ public class Game_Scenarios {
                 tagsSPLITED_ED = tempT_ED.split(";");
             }
             catch (GdxRuntimeException tempFileT_ED) {
-                // empty catch block
+                
             }
             ArrayList<String> nCivsTags = new ArrayList<String>();
             int iSize = tagsSPLITED.length;
@@ -385,7 +383,7 @@ public class Game_Scenarios {
                 }
             }
             catch (Exception i2) {
-                // empty catch block
+                
             }
             try {
                 String tempTag = null;
@@ -445,7 +443,7 @@ public class Game_Scenarios {
                 tagsSPLITED_ED = tempT_ED.split(";");
             }
             catch (GdxRuntimeException tempFileT_ED) {
-                // empty catch block
+                
             }
             ArrayList<String> nCivsTags = new ArrayList<String>();
             ArrayList<RandomGame_AoCMode> civsToAdd = new ArrayList<RandomGame_AoCMode>();
@@ -484,7 +482,7 @@ public class Game_Scenarios {
                     continue;
                 }
                 catch (Exception civData) {
-                    // empty catch block
+                    
                 }
             }
             ArrayList<Integer> lPossibleCapitals = new ArrayList<Integer>();
@@ -504,7 +502,7 @@ public class Game_Scenarios {
                     continue;
                 }
                 catch (GdxRuntimeException ex) {
-                    // empty catch block
+                    
                 }
             }
             if (lPossibleCapitals.size() < 100) {
@@ -652,7 +650,7 @@ public class Game_Scenarios {
             
             CFG.LOG("[loadCivilizations] nEditor=" + nEditor + " scenarioID=" + CFG.core.getScenarioID() + " tag=" + this.lScenarios_TagsList.get(CFG.core.getScenarioID()));
             
-            // 1. Try Custom JSON first (most complete format)
+            
             String tagID = this.lScenarios_TagsList.get(CFG.core.getScenarioID());
             String customPath = "map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tagID + "/" + tagID + "_CUSTOM.json";
             FileHandle customFileWrite = Gdx.files.local(customPath);
@@ -705,7 +703,7 @@ public class Game_Scenarios {
                         if (loadedCustomUseCustomProvinceData) {
                             int naturalProvinceCount = 0;
                             int fixedProvinceCount = 0;
-                            // Initialize province owners from custom data. natural=true keeps vanilla pop/eco generation.
+                            
                             loadedCustomProvinceData = new Scenario_GameData_Province2();
                             loadedCustomProvinceData.lProvinceOwners = new ArrayList<Integer>();
                             loadedCustomProvinceData.lProvincePopulation = new ArrayList<Long>();
@@ -757,7 +755,7 @@ public class Game_Scenarios {
                 CFG.LOG("[loadCivilizations] Custom JSON NOT FOUND at " + customPath);
             }
             
-            // 2. Try Standard JSON
+            
             CFG.LOG("[loadCivilizations] tempScenarioGameData=" + tempScenarioGameData + " jsonFile.exists=" + jsonFile.exists() + " jsonPath=" + jsonFile.path());
             if (tempScenarioGameData == null && jsonFile.exists()) {
                 try {
@@ -768,7 +766,7 @@ public class Game_Scenarios {
                 }
             }
             
-            // 3. Try Binary
+            
             CFG.LOG("[loadCivilizations] after JSON tempScenarioGameData=" + tempScenarioGameData + " file.exists=" + file.exists() + " filePath=" + file.path());
             if (tempScenarioGameData == null && file.exists()) {
                 try {
@@ -983,7 +981,7 @@ public class Game_Scenarios {
             Object var3_4 = null;
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         this.buildProvincePopulationAndEconomy(true, nEditor);
     }
@@ -1131,7 +1129,7 @@ public class Game_Scenarios {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -1220,7 +1218,7 @@ public class Game_Scenarios {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -1323,7 +1321,7 @@ public class Game_Scenarios {
         catch (IOException iOException) {
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         GameManager.buildFriendlyCivs();
     }
@@ -1392,14 +1390,14 @@ public class Game_Scenarios {
                         continue;
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                 }
             }
             catch (Exception exception) {}
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -1643,7 +1641,7 @@ public class Game_Scenarios {
                         continue;
                     }
                     catch (Exception j) {
-                        // empty catch block
+                        
                     }
                 }
             }
@@ -1712,7 +1710,7 @@ public class Game_Scenarios {
                 }
             }
         }
-        // --- Custom target population/economy rescaling pass ---
+        
         for (i = 1; i < CFG.core.getCivsSize(); ++i) {
             try {
                 Civilization civ = CFG.core.getCiv(i);
@@ -1721,13 +1719,13 @@ public class Game_Scenarios {
                 long tgtEco = civ.civGD.targetEconomy;
                 if (tgtPop <= 0L && tgtEco <= 0L) continue;
                 
-                // If we loaded custom province data, we might not want to rescale it based on targets 
-                // UNLESS the user wants targets to always be applied.
-                // The prompt says "give ai json and it can edit eg. real population economies etc."
-                // If they edit the JSON real population, they probably don't want it overwritten by targets.
+                
+                
+                
+                
                 if (this.civHasFixedCustomProvinceData(civ)) { CFG.LOG("[buildProvincePopulation] SKIP rescaling pass - fixed custom province data present for civ=" + civ.getCivTag()); continue; }
 
-                // Sum current totals across all owned provinces
+                
                 long currentPop = 0;
                 long currentEco = 0;
                 for (int j = 0; j < civ.getNumOfProvs(); ++j) {
@@ -1737,7 +1735,7 @@ public class Game_Scenarios {
                     currentPop += p.getPop().getPops();
                     currentEco += p.getEco();
                 }
-                // Rescale population
+                
                 if (tgtPop > 0 && currentPop > 0) {
                     float popScale = (float) tgtPop / (float) currentPop;
                     for (int j = 0; j < civ.getNumOfProvs(); ++j) {
@@ -1748,7 +1746,7 @@ public class Game_Scenarios {
                         p.getPop().setPopulationOfCivID(civ.getCivId(), newPop);
                     }
                 }
-                // Rescale economy
+                
                 if (tgtEco > 0 && currentEco > 0) {
                     float ecoScale = (float) tgtEco / (float) currentEco;
                     for (int j = 0; j < civ.getNumOfProvs(); ++j) {
@@ -1763,7 +1761,7 @@ public class Game_Scenarios {
                 CFG.exceptionStack(ex);
             }
         }
-        // --- End rescaling pass ---
+        
         CFG.province_CoresGD = null;
         Core.addSimpleTask(new Core.SimpleTask("updateCitiesAll"){
 
@@ -1909,7 +1907,7 @@ public class Game_Scenarios {
             this.lScenarios_CivNum.set(i, nNumCivs);
         }
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            // empty catch block
+            
         }
     }
 
@@ -1923,7 +1921,7 @@ public class Game_Scenarios {
             this.lScenarios_Names.set(i, nName);
         }
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            // empty catch block
+            
         }
     }
 
@@ -1941,7 +1939,7 @@ public class Game_Scenarios {
             this.lScenarios_Authors.set(i, nAuthor);
         }
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            // empty catch block
+            
         }
     }
 
@@ -1958,7 +1956,7 @@ public class Game_Scenarios {
             this.lScenarios_Age.set(i, nAge);
         }
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            // empty catch block
+            
         }
     }
 
@@ -1979,7 +1977,7 @@ public class Game_Scenarios {
             this.lScenarios_Day.set(i, nDay);
         }
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            // empty catch block
+            
         }
     }
 
@@ -1988,7 +1986,7 @@ public class Game_Scenarios {
             this.lScenarios_Month.set(i, nMonth);
         }
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            // empty catch block
+            
         }
     }
 
@@ -1997,7 +1995,7 @@ public class Game_Scenarios {
             this.lScenarios_Year.set(i, nYear);
         }
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            // empty catch block
+            
         }
     }
 

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Load;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Classic.Button_Classic_Description;
@@ -161,7 +159,7 @@ extends Menu {
             }
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
         this.initMenu(null, Menu_Main.getMenuPosX_Default(), 0, tempMenuWidth, CFG.GAMEHEIGHT - CFG.BUTTON_H - CFG.PADD, menuElements);
         this.updateLang();

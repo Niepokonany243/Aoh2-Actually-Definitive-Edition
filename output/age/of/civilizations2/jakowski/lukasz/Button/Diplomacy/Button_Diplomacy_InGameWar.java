@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button.Diplomacy;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Diplomacy.ButtonDiplomacy;
@@ -29,7 +27,7 @@ extends ButtonDiplomacy {
                     CFG.core.setActiveProvID(CFG.core.getCiv(CFG.getActiveCivInfoId()).getCapitalProvID());
                 }
                 catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                    // empty catch block
+                    
                 }
                 CFG.updateActiveCivilizationInfoInGame();
                 if (CFG.mapModesManager.getActiveMapModeID() == MapModesManager.VIEW_DIPLOMACY_MODE) {

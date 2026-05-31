@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -82,7 +80,7 @@ implements Serializable {
             this.lImproveRelations.remove(i);
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -96,7 +94,7 @@ implements Serializable {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

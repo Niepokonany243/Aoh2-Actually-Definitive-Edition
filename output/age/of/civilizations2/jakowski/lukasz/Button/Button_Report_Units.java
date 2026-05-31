@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button;
 
 import age.of.civilizations2.jakowski.lukasz.Button.ButtonM;
@@ -118,7 +116,7 @@ extends ButtonM {
             }
         }
         catch (Exception ex) {
-            // empty catch block
+            
         }
         nData.add(new ME_Hover_2Type_Text_Big(CFG.lang.get("Attackers") + ""));
         nData.add(new ME_Hover_2Type_Image_Big(Images.diploArmy, CFG.PADD, CFG.PADD));
@@ -134,7 +132,7 @@ extends ButtonM {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         nElements.add(new MEHover_2E(nData));
         nData.clear();

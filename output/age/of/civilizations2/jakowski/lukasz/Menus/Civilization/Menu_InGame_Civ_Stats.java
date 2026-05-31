@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Civilization;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -186,7 +184,7 @@ extends Menu {
                     this.menuElemHover = new ME_Hover_v2(nElements);
                 }
                 catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                    // empty catch block
+                    
                 }
             }
         });
@@ -364,7 +362,7 @@ extends Menu {
             this.getMenuElem(6).setPosX((int)((float)IMGManager.getIMG(Images.noLeader).getWidth() * fScale + (float)(CFG.PADD * 2)));
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -424,7 +422,7 @@ extends Menu {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         CFG.drawRect_InfoBox_Left(oSB, this.getPosX() + this.getMenuElem(10).getPosXE() - CFG.PADD + iTranslateX, this.getMenuPosY() + this.getMenuElem(10).getPosY() - CFG.PADD + iTranslateY, this.getMenuElem(7).getPosXE() + this.getMenuElem(7).getWidthE() - this.getMenuElem(10).getPosXE() + CFG.PADD * 2, this.getMenuElem(10).getHeightE() + CFG.PADD * 2);
         this.drawMenuM(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -25,7 +23,7 @@ public class Game_Cities {
             }
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
         try {
             citiesData = this.readCities("cities_1.json");
@@ -35,7 +33,7 @@ public class Game_Cities {
             }
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
         try {
             citiesData = this.readCities("cities_2.json");
@@ -45,7 +43,7 @@ public class Game_Cities {
             }
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
         try {
             citiesData = this.readCities("cities_3.json");
@@ -55,7 +53,7 @@ public class Game_Cities {
             }
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
         try {
             citiesData = this.readCities("cities_4.json");
@@ -65,7 +63,7 @@ public class Game_Cities {
             }
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
         return nCities;
     }

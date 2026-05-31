@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.TextB.Texts;
 
 import age.of.civilizations2.jakowski.lukasz.IMGManager;

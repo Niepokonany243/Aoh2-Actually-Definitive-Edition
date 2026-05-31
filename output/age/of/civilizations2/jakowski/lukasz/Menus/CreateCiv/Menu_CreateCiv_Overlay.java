@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.CreateCiv;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -91,7 +89,7 @@ extends Menu {
             this.updateScale();
         }
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            // empty catch block
+            
         }
     }
 

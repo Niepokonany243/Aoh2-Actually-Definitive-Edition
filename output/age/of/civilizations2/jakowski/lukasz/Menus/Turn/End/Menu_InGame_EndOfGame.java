@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Turn.End;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Button_Transparent;

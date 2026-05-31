@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Connections;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Game.Button_Game;
@@ -59,7 +57,7 @@ extends Menu {
             CFG.toastM.addM(" --" + CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 + " - " + CFG.core.getActiveProvID() + "-- ");
         }
         catch (IllegalArgumentException illegalArgumentException) {
-            // empty catch block
+            
         }
     }
 }

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Save;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -556,7 +554,7 @@ public class SaveGameManager {
                 }
             }
             catch (Exception exrz) {
-                // empty catch block
+                
             }
             String tempTagsNew = "";
             for (int j = 0; j < tSplted.length; ++j) {
@@ -575,7 +573,7 @@ public class SaveGameManager {
                         Gdx.files.external("saves/games/" + CFG.map.getFileActiveMapPath() + "Age_of_Civilizations").delete();
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                 }
             }

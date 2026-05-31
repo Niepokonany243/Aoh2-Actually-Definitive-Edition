@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Options;
 
 import age.of.civilizations2.jakowski.lukasz.BetterUI_Manager;
@@ -93,7 +91,7 @@ extends Menu {
                 continue;
             }
             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                // empty catch block
+                
             }
         }
         menuElements.add(new Button_CNG_Options2(null, -1, 0, tempElemH, tempW, tempElemH, true));

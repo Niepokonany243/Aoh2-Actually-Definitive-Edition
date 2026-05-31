@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.RandomGame;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -81,12 +79,12 @@ extends Menu {
                     continue;
                 }
                 catch (IOException iOException) {
-                    // empty catch block
+                    
                 }
             }
         }
         catch (GdxRuntimeException tagsSPLITED) {
-            // empty catch block
+            
         }
         menuElements.add(new Button_CNG_Options(null, -1, 0, ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getPosY() + ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE(), tempW, tempElemH, true));
         for (int i = 1; i < menuElements.size() - 1; ++i) {
@@ -233,7 +231,7 @@ extends Menu {
             catch (IOException fileData) {
             }
             catch (IndexOutOfBoundsException fileData) {
-                // empty catch block
+                
             }
             CFG.core.buildWastelandLevels();
             ArrayList<String> tMess = new ArrayList<String>();

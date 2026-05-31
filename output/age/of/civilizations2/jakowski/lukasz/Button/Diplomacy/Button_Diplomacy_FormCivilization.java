@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button.Diplomacy;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -127,9 +125,7 @@ extends ButtonM {
         };
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     @Override
     public void drawTextE(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive) {
         int posX = this.getPosXE() + (ButtonDiplomacy.iDiploWidth - IMGManager.getIMG(Images.flagRect2).getWidth()) / 2 + iTranslateX;
@@ -166,7 +162,7 @@ extends ButtonM {
             ScissorStack.popScissors();
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

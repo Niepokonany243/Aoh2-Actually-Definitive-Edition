@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -141,7 +139,7 @@ public class ReligionManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         return new ME_Hover_v2(nElements);
     }
@@ -196,7 +194,7 @@ public class ReligionManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         return new ME_Hover_v2(nElements);
     }

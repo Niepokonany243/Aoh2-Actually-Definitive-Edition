@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -70,7 +68,7 @@ public class MapScale {
                 this.definedScalesLength = MapScale.defScales.definedScale_Default;
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
     }
@@ -266,7 +264,7 @@ public class MapScale {
                     }
                 }
                 catch (Exception i2) {
-                    // empty catch block
+                    
                 }
             }
             newMapScale = this.getDefinedScale();
@@ -282,7 +280,7 @@ public class MapScale {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
         if (newMapScale != this.fCurrScale && newMapScale >= MINSCALE - 0.05f) {

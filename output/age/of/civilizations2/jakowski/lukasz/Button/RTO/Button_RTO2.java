@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button.RTO;
 
 import age.of.civilizations2.jakowski.lukasz.Button.RTO.Button_RTO;

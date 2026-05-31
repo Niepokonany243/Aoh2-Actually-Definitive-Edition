@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.ArmyS;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Game.Button_Game;
@@ -115,7 +113,7 @@ extends Menu {
                     Gdx.files.external("map/" + CFG.map.getFileActiveMapPath() + "army_boxes/" + CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).delete();
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
             }
         }

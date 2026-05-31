@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Assign;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Button_Transparent;
@@ -120,7 +118,7 @@ extends Menu {
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
         }
         catch (NullPointerException nullPointerException) {
-            // empty catch block
+            
         }
         this.endClipM(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);
         oSB.setColor(new Color(0.0f, 0.0f, 0.0f, 0.6f));
@@ -227,7 +225,7 @@ extends Menu {
             this.lCivsTags.clear();
         }
         catch (NullPointerException nullPointerException) {
-            // empty catch block
+            
         }
     }
 }

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button.Flag;
 
 import age.of.civilizations2.jakowski.lukasz.Button.ButtonM;
@@ -44,7 +42,7 @@ extends ButtonM {
             IMGManager.getIMG(Images.sliderGradient).drawO(oSB, this.getPosXE() + this.getWidthE() + iTranslateX, this.getPosY() + IMGManager.getIMG(Images.topFlagFrame).getHeight() - 1 - IMGManager.getIMG(Images.sliderGradient).getHeight() + iTranslateY, (int)((float)CFG.PADD * 1.25f), 1);
         }
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            // empty catch block
+            
         }
         oSB.setColor(Color.WHITE);
     }

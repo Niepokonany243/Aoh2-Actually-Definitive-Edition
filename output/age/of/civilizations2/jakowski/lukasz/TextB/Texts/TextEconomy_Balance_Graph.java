@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.TextB.Texts;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -78,7 +76,7 @@ extends Text {
             this.graph2.drawE(oSB, this.getPosXE() + this.getWidthE() - this.graph2.getWidthE() + iTranslateX, this.getPosY() + CFG.PADD + iTranslateY, isActive, scrollableY);
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         IMGManager.getIMG(Images.topGold()).draw(oSB, this.getPosXE() + CFG.PADD + CFG.PADD / 2 + this.iText2W + CFG.PADD + this.getTextWidthU() + iTranslateX, this.getPosY() + this.getHeightE() / 2 - (int)((float)IMGManager.getIMG(Images.topGold()).getHeight() * this.getImageScale()) / 2 + iTranslateY, (int)((float)IMGManager.getIMG(Images.topGold()).getWidth() * this.getImageScale()), (int)((float)IMGManager.getIMG(Images.topGold()).getHeight() * this.getImageScale()));
         Renderer.drawTextWithShadow(oSB, this.fontID, this.sText2, this.getPosXE() + CFG.PADD + CFG.PADD / 2 + iTranslateX, this.getPosY() + this.getHeightE() / 2 - this.getTextHeight() / 2 + iTranslateY, this.getColor(isActive));

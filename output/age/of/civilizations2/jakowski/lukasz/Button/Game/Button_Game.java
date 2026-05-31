@@ -45,7 +45,7 @@ extends ButtonM {
             }
             Images.pix.draw(oSB, this.getPosXE() + iTranslateX, this.getPosY() + iTranslateY, this.getWidthE(), this.getHeightE());
 
-            // Full borders like the map button
+            
             BetterUI_Manager.drawBetterButtonBorder(oSB, this.getPosXE() + iTranslateX, this.getPosY() + iTranslateY, this.getWidthE(), this.getHeightE(), this.getIsHovered(), isActive, this.getIsClickable());
             
             oSB.setColor(Color.WHITE);

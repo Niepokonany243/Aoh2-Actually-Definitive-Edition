@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Invest;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Build.Button_Build_Invest;
@@ -454,7 +452,7 @@ extends Menu {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

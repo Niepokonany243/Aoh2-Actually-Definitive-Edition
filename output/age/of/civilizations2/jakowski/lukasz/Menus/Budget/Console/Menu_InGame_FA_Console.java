@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Budget.Console;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -77,7 +75,7 @@ extends Menu {
             ScissorStack.popScissors();
         }
         catch (IllegalStateException e) {
-            // empty catch block
+            
         }
         CFG.fontMain.get(0).getData().setScale(1.0f);
         if (Commands.lFlagsParty.size() > 0) {

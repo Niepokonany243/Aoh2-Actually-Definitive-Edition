@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.AI.AI_WarPreparations;
@@ -35,7 +33,7 @@ implements Serializable {
                 CFG.core.getCiv((int)onCivID).uFOL = true;
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
     }

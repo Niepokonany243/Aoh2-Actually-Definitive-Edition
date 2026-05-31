@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Messages;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Button_PrepareForWar;
@@ -215,7 +213,7 @@ extends Menu {
                 }
             }
             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                // empty catch block
+                
             }
             this.setVisibleM(false);
             return;

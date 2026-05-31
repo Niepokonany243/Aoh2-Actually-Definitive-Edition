@@ -24,7 +24,7 @@ public class ProvinceMesh {
     
     private static final int VERTICES_PER_PROVINCE = 4;
     private static final int INDICES_PER_PROVINCE = 6;
-    private static final int COMPONENTS_PER_VERTEX = 5; // x, y, u, v, provinceID
+    private static final int COMPONENTS_PER_VERTEX = 5; 
     public static boolean needsUpdate = true;
 
     public static void init() {
@@ -52,38 +52,38 @@ public class ProvinceMesh {
             float x2 = x1 + (int)(region.getRegionWidth() * CFG.map.getMpB().getMapExtraScale());
             float y2 = -p.getMiY4();
             
-            // Note: coordinates in drawing seem to involve MpC.getPY() and other offsets.
-            // We might need to adjust these or handle them in the shader.
-            // Current drawLandProv uses:
-            // x = iTranslateProvincePosX + miX * mapSc3
-            // y = -(MpC.getPY() + miY * mapSc3 + regionHeight * mapExtraScale)
             
-            // We'll store local coordinates (relative to map 0,0) and pass iTranslateProvincePosX as a uniform or draw offset.
+            
+            
+            
+            
+            
+            
 
             int vOff = i * VERTICES_PER_PROVINCE * COMPONENTS_PER_VERTEX;
             
-            // Bottom Left
+            
             vertices[vOff] = p.getMiX2();
             vertices[vOff + 1] = -(p.getMiY4() + (int)(region.getRegionHeight() * CFG.map.getMpB().getMapExtraScale()));
             vertices[vOff + 2] = region.getU();
             vertices[vOff + 3] = region.getV2();
             vertices[vOff + 4] = i;
 
-            // Top Left
+            
             vertices[vOff + 5] = p.getMiX2();
             vertices[vOff + 6] = -p.getMiY4();
             vertices[vOff + 7] = region.getU();
             vertices[vOff + 8] = region.getV();
             vertices[vOff + 9] = i;
 
-            // Top Right
+            
             vertices[vOff + 10] = p.getMiX2() + (int)(region.getRegionWidth() * CFG.map.getMpB().getMapExtraScale());
             vertices[vOff + 11] = -p.getMiY4();
             vertices[vOff + 12] = region.getU2();
             vertices[vOff + 13] = region.getV();
             vertices[vOff + 14] = i;
 
-            // Bottom Right
+            
             vertices[vOff + 15] = p.getMiX2() + (int)(region.getRegionWidth() * CFG.map.getMpB().getMapExtraScale());
             vertices[vOff + 16] = -(p.getMiY4() + (int)(region.getRegionHeight() * CFG.map.getMpB().getMapExtraScale()));
             vertices[vOff + 17] = region.getU2();
@@ -169,7 +169,7 @@ public class ProvinceMesh {
             Civilization civ = CFG.core.getCiv(civID);
             float alpha = (civID == 0) ? 0.039215688f : (float)CFG.settingsGD.PROV_ALPHA / 255.0f;
             
-            // Handle animation if needed, but for now just use current owner color
+            
             colorPixmap.setColor(civ.colorFloat[0], civ.colorFloat[1], civ.colorFloat[2], alpha);
         }
         colorPixmap.drawPixel(provinceID, 0);
@@ -190,7 +190,7 @@ public class ProvinceMesh {
     public static void draw(SpriteBatch oSB) {
         if (!initialized) return;
         
-        // Finalize SpriteBatch if active
+        
         boolean wasDrawing = oSB.isDrawing();
         if (wasDrawing) oSB.end();
         

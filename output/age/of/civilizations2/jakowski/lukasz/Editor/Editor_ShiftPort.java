@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Editor;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -17,9 +15,7 @@ public class Editor_ShiftPort
 extends Editor {
     private int iDiff = 1;
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     @Override
     public void keyDown(int keycode) {
         block29: {

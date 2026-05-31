@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button;
 
 import age.of.civilizations2.jakowski.lukasz.Button.ButtonM;
@@ -31,9 +29,7 @@ extends ButtonM {
         CFG.fontArmy.getData().setScale(1.0f);
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     @Override
     public void setTextE(String sText) {
         this.sText = sText;

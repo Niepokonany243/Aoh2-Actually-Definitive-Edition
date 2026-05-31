@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Vassal.Rebels;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Diplomacy.ChangeGov.Button_Diplomacy_ChangeGovernment2;

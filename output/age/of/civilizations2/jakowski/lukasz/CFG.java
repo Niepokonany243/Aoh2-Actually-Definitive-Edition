@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.AI.AI;
@@ -1757,7 +1755,7 @@ public class CFG {
         if (id <= 0) {
             id = MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID;
         }
-        // Ensure we never return the player's own ID as the target
+        
         if (id == core.getPlayer(PLAYER_TURN_ID).getCivId()) {
             id = -1;
         }
@@ -1795,7 +1793,7 @@ public class CFG {
                     }
                 }
                 catch (Exception tGenerateID) {
-                    // empty catch block
+                    
                 }
                 if (CFG.core.getCiv((int)CFG.activeCivInfoId).civGD.leaderData == null || CFG.core.getCiv((int)CFG.activeCivInfoId).civGD.leaderData.getImage().length() <= 0 || loadedLeader.equals(CFG.core.getCiv((int)CFG.activeCivInfoId).civGD.leaderData.getImage())) break block13;
                 leaderFrameID = 0;
@@ -2265,7 +2263,7 @@ public class CFG {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         return sOut;
     }
@@ -2281,7 +2279,7 @@ public class CFG {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         return sOut;
     }
@@ -2316,7 +2314,7 @@ public class CFG {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         return sOut;
     }
@@ -2332,7 +2330,7 @@ public class CFG {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         return sOut;
     }
@@ -2447,18 +2445,18 @@ public class CFG {
         if (settingsGD != null && settingsGD.BETTER_UI) {
             Color primary = BetterUI_Manager.getPrimaryColor();
             
-            // Solid Progress Bar Background
+            
             oSB.setColor(0.0f, 0.0f, 0.0f, 0.8f);
             Images.pix.draw(oSB, nPosX, nPosY, nWidth, nHeight);
             
-            // Full Frame Solid Border for Progress Bar - No pulse, just elegant
-            oSB.setColor(primary.r, primary.g, primary.b, 1.0f);
-            Images.pix.draw(oSB, nPosX, nPosY, nWidth, 2); // Top
-            Images.pix.draw(oSB, nPosX, nPosY + nHeight - 2, nWidth, 2); // Bottom
-            Images.pix.draw(oSB, nPosX, nPosY, 2, nHeight); // Left
-            Images.pix.draw(oSB, nPosX + nWidth - 2, nPosY, 2, nHeight); // Right
             
-            // Actual Progress filler
+            oSB.setColor(primary.r, primary.g, primary.b, 1.0f);
+            Images.pix.draw(oSB, nPosX, nPosY, nWidth, 2); 
+            Images.pix.draw(oSB, nPosX, nPosY + nHeight - 2, nWidth, 2); 
+            Images.pix.draw(oSB, nPosX, nPosY, 2, nHeight); 
+            Images.pix.draw(oSB, nPosX + nWidth - 2, nPosY, 2, nHeight); 
+            
+            
             oSB.setColor(primary.r, primary.g, primary.b, 0.7f);
             Images.pix.draw(oSB, nPosX + 4, nPosY + 4, (int)((nWidth - 8) * nProgress), nHeight - 8);
 
@@ -2895,7 +2893,7 @@ public class CFG {
         catch (ClassNotFoundException classNotFoundException) {
         }
         catch (IOException iOException) {
-            // empty catch block
+            
         }
         CFG.initEditdiplomacyColors_GameData();
     }
@@ -3567,9 +3565,7 @@ public class CFG {
         catch (Exception exception) {}
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     public static final void drawTextWithShadowRotated(SpriteBatch oSB, String sText, int nPosX, int nPosY, Color color, float rotate) {
         Matrix4 oldTransformMatrix = oSB.getTransformMatrix().cpy();
         try {
@@ -3593,9 +3589,7 @@ public class CFG {
         }
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     public static final void drawTextRotated(SpriteBatch oSB, String sText, int nPosX, int nPosY, Color color, float rotate) {
         Matrix4 oldTransformMatrix = oSB.getTransformMatrix().cpy();
         try {
@@ -3617,9 +3611,7 @@ public class CFG {
         }
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     public static final void drawTextRotatedBorder(SpriteBatch oSB, String sText, int nPosX, int nPosY, Color color, float rotate) {
         Matrix4 oldTransformMatrix = oSB.getTransformMatrix().cpy();
         try {
@@ -3654,7 +3646,7 @@ public class CFG {
             fontArmy.draw((Batch)oSB, sText, (float)nPosX, (float)(-nPosY));
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         finally {
             fontArmy.getData().setScale(oldScaleX, oldScaleY);
@@ -3896,7 +3888,7 @@ public class CFG {
                                 }
                             }
                             catch (Exception exception) {
-                                // empty catch block
+                                
                             }
                             keyboardSave.action();
                         }
@@ -4021,7 +4013,7 @@ public class CFG {
                             menus.setVisible_InGame_MapModes_ResetTime(true);
                         }
                         catch (Exception exception) {
-                            // empty catch block
+                            
                         }
                     }
                 }
@@ -4057,7 +4049,7 @@ public class CFG {
                             menus.rebuildInGame_Rank();
                         }
                         catch (Exception exception) {
-                            // empty catch block
+                            
                         }
                     }
                 }
@@ -4097,7 +4089,7 @@ public class CFG {
                             }
                         }
                         catch (Exception exception) {
-                            // empty catch block
+                            
                         }
                         Keyboard.changeProvinceNameMode = -1;
                     }
@@ -5249,7 +5241,7 @@ public class CFG {
                     core.buildCivilizationRegions(this.id);
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
             }
         });
@@ -5259,7 +5251,7 @@ public class CFG {
             }
         }
         catch (Exception i5) {
-            // empty catch block
+            
         }
         for (i2 = 0; i2 < core.getCiv(nCivB).getArmyInAnotherProvinceSize(); ++i2) {
             core.getProv(core.getCiv(nCivB).getArmyInAnotherProviP(i2)).updateArmy4(nCivA, core.getProv(core.getCiv(nCivB).getArmyInAnotherProviP(i2)).getArmyCivID1(nCivA) + core.getProv(core.getCiv(nCivB).getArmyInAnotherProviP(i2)).getArmyCivID1(nCivB));
@@ -5328,7 +5320,7 @@ public class CFG {
                 }
             }
             catch (Exception i6) {
-                // empty catch block
+                
             }
         }
         for (i = 0; i < core.getCiv(nCivB).getLoansSize(); ++i) {
@@ -5405,7 +5397,7 @@ public class CFG {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         historyManager.addHistoryLog(new HistoryLog_Union(nCivA));
     }
@@ -5450,7 +5442,7 @@ public class CFG {
                     }
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
             }
         }
@@ -5624,7 +5616,7 @@ public class CFG {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         return Images.rank3;
     }

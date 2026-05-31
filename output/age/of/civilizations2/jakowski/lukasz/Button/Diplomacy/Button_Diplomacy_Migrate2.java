@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button.Diplomacy;
 
 import age.of.civilizations2.jakowski.lukasz.Button.ButtonM;
@@ -99,14 +97,14 @@ extends ButtonM {
             Renderer.drawText(oSB, this.fontID, this.sToProvinceID, this.getPosXE() + ButtonDiplomacy.iDiploWidth + this.getTextWidthU() + iTranslateX, this.getPosY() + this.getHeightE() / 2 - this.getTextHeight() / 2 + iTranslateY, CFG.COLOR_TEXT_NUM_OF_PROVINCES);
         }
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            // empty catch block
+            
         }
         try {
             oSB.flush();
             ScissorStack.popScissors();
         }
         catch (IllegalStateException illegalStateException) {
-            // empty catch block
+            
         }
     }
 

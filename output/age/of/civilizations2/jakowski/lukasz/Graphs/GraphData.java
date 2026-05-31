@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Graphs;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -71,7 +69,7 @@ public class GraphData {
             ScissorStack.popScissors();
         }
         catch (IllegalStateException illegalStateException) {
-            // empty catch block
+            
         }
     }
 

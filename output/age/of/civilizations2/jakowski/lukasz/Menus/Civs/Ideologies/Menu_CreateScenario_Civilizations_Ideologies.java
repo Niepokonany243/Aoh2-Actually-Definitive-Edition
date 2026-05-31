@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Civs.Ideologies;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Game.Button_Game_Ideology;
@@ -85,7 +83,7 @@ extends Menu {
                 }
             }
             catch (GdxRuntimeException gdxRuntimeException) {
-                // empty catch block
+                
             }
         }
         ACTIVE_GOV_TYPE_ID = -1;
@@ -149,7 +147,7 @@ extends Menu {
                                 isDone = true;
                             }
                             catch (Exception exception) {
-                                // empty catch block
+                                
                             }
                         }
                         if (isDone) break block14;
@@ -225,7 +223,7 @@ extends Menu {
                 this.sCivsTag = null;
             }
             catch (NullPointerException nullPointerException) {
-                // empty catch block
+                
             }
         }
         super.setVisibleM(visible);

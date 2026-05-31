@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Achievements;
 
 import age.of.civilizations2.jakowski.lukasz.Button.MenuElemUI;
@@ -53,7 +51,7 @@ extends Menu {
                     continue;
                 }
                 catch (Exception tempData) {
-                    // empty catch block
+                    
                 }
             }
             while (!sortedStatsDataIDs.isEmpty()) {
@@ -89,7 +87,7 @@ extends Menu {
                     continue;
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
             }
         }

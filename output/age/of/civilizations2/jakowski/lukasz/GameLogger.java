@@ -24,13 +24,13 @@ public class GameLogger {
                 logFile = Gdx.files.local("logs/game.log");
             }
 
-            // Create directories if they don't exist
+            
             if (!logFile.parent().exists()) {
                 logFile.parent().mkdirs();
             }
 
-            // Create custom PrintStream that writes to both original and file
-            // Use append = false to clear on restart
+            
+            
             final OutputStream fileOut = logFile.write(false);
             
             PrintStream dualOut = new PrintStream(new OutputStream() {
@@ -89,10 +89,10 @@ public class GameLogger {
 
     private static void requestAndroidPermissions() {
         try {
-            // Use reflection to request permissions if supported (LibGDX 1.10.0+)
+            
             String[] permissions = {"android.permission.WRITE_EXTERNAL_STORAGE", "android.permission.READ_EXTERNAL_STORAGE"};
             
-            // Try to find the requestPermissions method
+            
             Method requestMethod = null;
             for (Method m : Gdx.app.getClass().getMethods()) {
                 if (m.getName().equals("requestPermissions") && m.getParameterTypes().length == 2) {
@@ -104,7 +104,7 @@ public class GameLogger {
             if (requestMethod != null) {
                 Class<?> listenerClass = requestMethod.getParameterTypes()[1];
                 
-                // Create a dynamic proxy for the PermissionListener interface
+                
                 Object listenerProxy = Proxy.newProxyInstance(
                     listenerClass.getClassLoader(),
                     new Class<?>[]{listenerClass},

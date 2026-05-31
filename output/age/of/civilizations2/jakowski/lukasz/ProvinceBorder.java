@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -78,7 +76,7 @@ public class ProvinceBorder {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             if (this.getIsWastelandBorder()) {
                 this.drawProvBorder = this.getIsCivilizationBorder() ? (CFG.map.getMapProvBorder(CFG.map.getActiveMapIDN()) ? new DrawProvBorder(){
@@ -122,7 +120,7 @@ public class ProvinceBorder {
             }
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -171,7 +169,7 @@ public class ProvinceBorder {
             }
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -192,7 +190,7 @@ public class ProvinceBorder {
             };
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -215,7 +213,7 @@ public class ProvinceBorder {
             };
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -238,7 +236,7 @@ public class ProvinceBorder {
             };
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -261,7 +259,7 @@ public class ProvinceBorder {
             };
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -284,7 +282,7 @@ public class ProvinceBorder {
             };
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -307,7 +305,7 @@ public class ProvinceBorder {
             };
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -323,7 +321,7 @@ public class ProvinceBorder {
             };
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -342,7 +340,7 @@ public class ProvinceBorder {
             };
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -358,7 +356,7 @@ public class ProvinceBorder {
             };
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -374,7 +372,7 @@ public class ProvinceBorder {
             };
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -389,7 +387,7 @@ public class ProvinceBorder {
             };
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -405,7 +403,7 @@ public class ProvinceBorder {
             };
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -428,7 +426,7 @@ public class ProvinceBorder {
             };
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -447,7 +445,7 @@ public class ProvinceBorder {
             };
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -463,7 +461,7 @@ public class ProvinceBorder {
             };
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -479,7 +477,7 @@ public class ProvinceBorder {
             };
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -494,7 +492,7 @@ public class ProvinceBorder {
             };
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -532,8 +530,8 @@ public class ProvinceBorder {
     }
 
     public final void drawStraightBorder(SpriteBatch oSB, int nTranslateProvincePosX) {
-        // Renderer.shapeDrawer.setColor(oSB.getColor());
-        // Renderer.shapeDrawer.path2(this.nPath, lineWidth, joinType, true, nTranslateProvincePosX, mapCordsPosY);
+        
+        
     }
 
     public final void drawStraightBorder_PercWidth(SpriteBatch oSB, float fPercent, int nTranslateProvincePosX) {

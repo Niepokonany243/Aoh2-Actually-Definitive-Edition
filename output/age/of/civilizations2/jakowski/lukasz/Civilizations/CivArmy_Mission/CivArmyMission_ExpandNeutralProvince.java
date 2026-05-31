@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Civilizations.CivArmy_Mission;
 
 import age.of.civilizations2.jakowski.lukasz.AI.AI_NeighProvinces;
@@ -34,9 +32,7 @@ extends CivArmyMission {
         this.action(nCivID);
     }
 
-    /*
-     * Enabled aggressive block sorting
-     */
+    
     @Override
     public boolean action(int nCivID) {
         int i;

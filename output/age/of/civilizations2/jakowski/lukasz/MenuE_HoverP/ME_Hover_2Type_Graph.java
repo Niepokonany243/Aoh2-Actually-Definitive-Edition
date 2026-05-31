@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.MenuE_HoverP;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -59,7 +57,7 @@ implements ME_Hover_2Type {
             this.graph2.drawE(oSB, nPosX, nPosY + CFG.PADD, false, false);
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -69,7 +67,7 @@ implements ME_Hover_2Type {
             this.graph2.drawE(oSB, nPosX, nPosY + CFG.PADD, false, false);
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Graphs;
 
 import age.of.civilizations2.jakowski.lukasz.Button.MenuElemUI;
@@ -79,9 +77,7 @@ extends MenuElemUI {
         this.drawGraph(oSB, iTranslateX, iTranslateY, isActive, scrollableY, this.getPosXE(), this.getPosY(), this.getWidth_PercStrings(super.getWidthE()), this.getHeight_Perc(), CFG.graphCircleDraw.getWidth());
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     public final void drawGraph(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive, boolean scrollableY, int nPosX, int nPosY, int nWidth, int nHeight, int nWidth_LEFT) {
         CFG.graphCircleDraw.draw(oSB, nPosX + iTranslateX, nPosY + iTranslateY, this.lData, isActive || this.getIsHovered());
         if (this.isDescriptionActive || this.hideAnimation) {
@@ -136,7 +132,7 @@ extends MenuElemUI {
                 ScissorStack.popScissors();
             }
             catch (IllegalStateException illegalStateException) {
-                // empty catch block
+                
             }
         }
     }

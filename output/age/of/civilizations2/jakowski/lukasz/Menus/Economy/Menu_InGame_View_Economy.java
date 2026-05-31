@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Economy;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -183,7 +181,7 @@ extends Menu {
                         this.menuElemHover = new ME_Hover_v2(nElements);
                     }
                     catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                        // empty catch block
+                        
                     }
                 }
             });

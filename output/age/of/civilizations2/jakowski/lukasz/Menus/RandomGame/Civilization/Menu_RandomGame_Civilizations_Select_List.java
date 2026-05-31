@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.RandomGame.Civilization;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Classic.Button_Classic;
@@ -45,7 +43,7 @@ extends Menu {
             tagsSPLITED_ED = tempT_ED.split(";");
         }
         catch (GdxRuntimeException tempFileT_ED) {
-            // empty catch block
+            
         }
         this.lCivsTags = new ArrayList<String>();
         ArrayList<String> lTempNames = new ArrayList<String>();
@@ -293,7 +291,7 @@ extends Menu {
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
         }
         catch (NullPointerException nullPointerException) {
-            // empty catch block
+            
         }
         super.endClipM(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);
     }

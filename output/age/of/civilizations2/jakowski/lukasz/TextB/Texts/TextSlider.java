@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.TextB.Texts;
 
 import age.of.civilizations2.jakowski.lukasz.Button.MenuElemUI;
@@ -96,7 +94,7 @@ extends MenuElemUI {
             ScissorStack.popScissors();
         }
         catch (IllegalStateException illegalStateException) {
-            // empty catch block
+            
         }
         if (this.scrollModeY) {
             if (Math.abs(this.fScrollNewMenuPosY) > 1.0f) {

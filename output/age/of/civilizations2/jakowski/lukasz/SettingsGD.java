@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.Color_GameData;
@@ -68,7 +66,7 @@ implements Serializable {
     public boolean AIR_DEFENCE_SYSTEMS = true;
     public boolean BAT_PLUS = true;
     public float BAT_PLUS_BREAKTHROUGH_RATIO = 5.0f;
-    public int UI_THEME = 0; // 0: Dark/Cyan, 1: Purple, 2: Red
+    public int UI_THEME = 0; 
     public boolean EXPERIMENTAL_BATTLE_SYSTEM = false;
     public boolean CAPITAL_FLAGS_HIGH = true;
     public boolean ANDROID_LOAD_MAP_OVERLAYS = false;
@@ -89,8 +87,8 @@ implements Serializable {
     public Color_GameData borderDashed = new Color_GameData(0.0f, 0.0f, 0.0f);
     public boolean AI_GROUP_UNITS = true;
     public boolean DISABLE_AI_INVESTING = false;
-    public int ARMY_VISIBILITY_RANGE = 1; // 0: Close, 1: Medium, 2: Far, 3: Very Far, 4: Very Far+
-    public int ARMY_ICON_SCALE = 3; // 0: 0.25x, 1: 0.5x, 2: 0.75x, 3: 1.0x (Default)
+    public int ARMY_VISIBILITY_RANGE = 1; 
+    public int ARMY_ICON_SCALE = 3; 
 
     public final float getArmyIconFactor() {
         switch (this.ARMY_ICON_SCALE) {

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Leaders;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Classic.Button_Classic_Active;
@@ -113,7 +111,7 @@ extends Menu {
                     }
                 }
                 catch (Exception ex) {
-                    // empty catch block
+                    
                 }
                 if (CFG.leaderGameData.getLeaderOfCiv().getName().length() <= 0) continue;
                 for (int a = 0; a < this.lCharacters.size(); ++a) {
@@ -158,7 +156,7 @@ extends Menu {
             }
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
         this.initMenu(null, 0, CFG.BUTTON_H * 3 / 4, CFG.GAMEWIDTH, CFG.BUTTON_H + CFG.PADD * 2, menuElements, true, false);
         this.updateLang();

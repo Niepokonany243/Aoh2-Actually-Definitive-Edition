@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -208,7 +206,7 @@ public class Map {
                         }
                     }
                     catch (Exception tempFileT) {
-                        // empty catch block
+                        
                     }
                     CFG.map.setMapScale(tempActiveMapData.iActiveMapID, activeMapScale);
                     CFG.map.setActiveMapIDN(tempActiveMapData.iActiveMapID);
@@ -237,14 +235,14 @@ public class Map {
                         }
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                     CFG.map.setMapScale(tempActiveMapData.iActiveMapID, activeMapScale);
                     CFG.map.setActiveMapIDN(tempActiveMapData.iActiveMapID);
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
     }

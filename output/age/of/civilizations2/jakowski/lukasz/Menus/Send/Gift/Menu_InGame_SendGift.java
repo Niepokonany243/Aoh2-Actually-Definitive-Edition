@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Send.Gift;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Flag.Button_Flag_JustFrame;

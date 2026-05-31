@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Graphs;
 
 import age.of.civilizations2.jakowski.lukasz.Button.MenuElemUI;
@@ -174,7 +172,7 @@ extends MenuElemUI {
                 IMGManager.getIMG(Images.pix255).drawO(oSB, this.getPosXE() + (int)((float)CFG.TEXT_HEIGHT_DEFAULT * 0.7f) + CFG.PADD * 2 + this.lPointsPosX.get(this.iDescOfTurnID) + iTranslateX, (int)((float)(this.getPosY() - this.iFixPosY + this.getHeightE() - ((int)((float)CFG.TEXT_HEIGHT_DEFAULT * 0.7f) + CFG.PADD * 2)) - (float)(this.getHeightE() - ((int)((float)CFG.TEXT_HEIGHT_DEFAULT * 0.7f) + CFG.PADD * 2)) * (100.0f * (float)this.lData.get(this.iBestDescDataID).getPointY(this.iDescOfTurnID - this.lData.get(this.iBestDescDataID).getBeginTurnID())) / (float)(this.iMaxPoint - this.getMinPoint()) / 100.0f) + iTranslateY, 1, -((int)((float)(this.getHeightE() - ((int)((float)CFG.TEXT_HEIGHT_DEFAULT * 0.7f) + CFG.PADD * 2)) * (100.0f * (float)this.lData.get(this.iWorstDescDataID).getPointY(this.iDescOfTurnID - this.lData.get(this.iWorstDescDataID).getBeginTurnID())) / (float)(this.iMaxPoint - this.getMinPoint()) / 100.0f + (float)(this.getHeightE() - ((int)((float)CFG.TEXT_HEIGHT_DEFAULT * 0.7f) + CFG.PADD * 2)) * (100.0f * (float)this.lData.get(this.iBestDescDataID).getPointY(this.iDescOfTurnID - this.lData.get(this.iBestDescDataID).getBeginTurnID())) / (float)(this.iMaxPoint - this.getMinPoint()) / 100.0f)));
             }
             catch (ArithmeticException ex) {
-                // empty catch block
+                
             }
             if (this.getMinPoint() < 0L && this.iMaxPoint > 0L) {
                 oSB.setColor(GRAPH_LINES_COLOR);
@@ -186,7 +184,7 @@ extends MenuElemUI {
                     CFG.drawTextDefault(oSB, "0", this.getPosXE() + ((int)((float)CFG.TEXT_HEIGHT_DEFAULT * 0.7f) + CFG.PADD * 2) + 1 + (int)(2.0f * CFG.GUI_SCALE) + iTranslateX, this.getPosY() - (int)(2.0f * CFG.GUI_SCALE) - (int)((float)CFG.TEXT_HEIGHT_DEFAULT * POINTS_TEXT_SCALE) - this.iFixPosY + this.iZeroPosY - 1 + iTranslateY, DATA_COLOR);
                 }
                 catch (Exception ex) {
-                    // empty catch block
+                    
                 }
                 CFG.fontMain.get(0).getData().setScale(1.0f);
             }
@@ -217,7 +215,7 @@ extends MenuElemUI {
                 }
             }
             catch (ArithmeticException i) {
-                // empty catch block
+                
             }
             oSB.setColor(GRAPH_BORDERS_COLOR);
             IMGManager.getIMG(Images.pix255).drawO(oSB, this.getPosXE() + ((int)((float)CFG.TEXT_HEIGHT_DEFAULT * 0.7f) + CFG.PADD * 2) + 1 + iTranslateX, this.getPosY() + 1 + iTranslateY, CFG.PADD - 1);
@@ -230,7 +228,7 @@ extends MenuElemUI {
                 CFG.drawTextDefault(oSB, this.bDecimal == 0 ? "" + (int)this.fAvaragePoint : "" + (int)this.fAvaragePoint + "." + (this.lessThanTen ? "0" + this.bDecimal : Byte.valueOf(this.bDecimal)), this.getPosXE() + ((int)((float)CFG.TEXT_HEIGHT_DEFAULT * 0.7f) + CFG.PADD * 2) + 1 + (int)(2.0f * CFG.GUI_SCALE) + iTranslateX, this.getPosY() - (int)(2.0f * CFG.GUI_SCALE) - (int)((float)CFG.TEXT_HEIGHT_DEFAULT * POINTS_TEXT_SCALE) - this.iFixPosY + this.iAvaragePosY - 1 + iTranslateY, DATA_COLOR);
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             oSB.setColor(Color.WHITE);
             try {
@@ -314,7 +312,7 @@ extends MenuElemUI {
                 IMGManager.getIMG(Images.flagRectSmall).drawO(oSB, this.getPosXE() + this.getGraphWidth() - (int)(2.0f * CFG.GUI_SCALE) * 2 - this.iWorstDescDataTextWidth - CFG.CIV_FLAG_WIDTH + iTranslateX, (int)((float)(this.getPosY() - this.iFixPosY + this.getHeightE() - ((int)((float)CFG.TEXT_HEIGHT_DEFAULT * 0.7f) + CFG.PADD * 2)) - (float)(this.getHeightE() - ((int)((float)CFG.TEXT_HEIGHT_DEFAULT * 0.7f) + CFG.PADD * 2)) * (100.0f * (float)this.lData.get(this.iWorstDescDataID).getPointY(this.iDescOfTurnID - this.lData.get(this.iWorstDescDataID).getBeginTurnID())) / (float)(this.iMaxPoint - this.getMinPoint()) / 100.0f + (float)((int)(2.0f * CFG.GUI_SCALE)) + (float)((int)((float)CFG.TEXT_HEIGHT_DEFAULT * POINTS_TEXT_SCALE) / 2) - (float)(CFG.CIV_FLAG_HEIGHT / 2)) + iTranslateY);
             }
             catch (ArithmeticException ex) {
-                // empty catch block
+                
             }
         }
         CFG.fontMain.get(0).getData().setScale(1.0f);
@@ -374,7 +372,7 @@ extends MenuElemUI {
             ScissorStack.popScissors();
         }
         catch (IllegalStateException illegalStateException) {
-            // empty catch block
+            
         }
         oSB.setColor(Color.WHITE);
     }
@@ -534,7 +532,7 @@ extends MenuElemUI {
             this.iBestDescDataTextWidth = (int)CFG.glyphLay.width;
         }
         catch (Exception i) {
-            // empty catch block
+            
         }
         CFG.fontMain.get(0).getData().setScale(1.0f);
         int tempRealTurnID = 1;
@@ -620,7 +618,7 @@ extends MenuElemUI {
             this.iMaxTextWidth = (int)CFG.glyphLay.width;
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         CFG.fontMain.get(0).getData().setScale(1.0f);
         this.updateDescInfo();

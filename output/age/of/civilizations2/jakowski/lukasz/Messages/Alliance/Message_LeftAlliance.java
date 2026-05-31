@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Messages.Alliance;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -44,7 +42,7 @@ extends Message {
                 CFG.menus.rebuildMenu_InGame_InfoboxSmallFlags(CFG.core.getCiv(this.fromCivID).getCivName() + " " + CFG.lang.get("CivAIsNoLongerAMemberOf") + " " + CFG.core.getAlliance((int)this.iValue).getAllianceName(), iCivID, this.fromCivID, Images.infoDiplomacy);
             }
             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                // empty catch block
+                
             }
         }
     }
@@ -58,7 +56,7 @@ extends Message {
                 CFG.menus.rebuildMenu_InGame_InfoboxSmallFlags(CFG.core.getCiv(this.fromCivID).getCivName() + " " + CFG.lang.get("CivAIsNoLongerAMemberOf") + " " + CFG.core.getAlliance((int)this.iValue).getAllianceName(), iCivID, this.fromCivID, Images.infoDiplomacy);
             }
             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                // empty catch block
+                
             }
         }
     }

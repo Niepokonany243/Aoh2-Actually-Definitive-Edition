@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -150,7 +148,7 @@ public class EventsManager {
                 this.events.lEvents.get(i).setWasFired(!this.events.lEvents.get(i).getRepeatable());
             }
             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                // empty catch block
+                
             }
         }
     }
@@ -180,7 +178,7 @@ public class EventsManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

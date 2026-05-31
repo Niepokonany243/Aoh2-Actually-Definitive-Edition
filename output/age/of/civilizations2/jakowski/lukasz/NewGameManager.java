@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -109,7 +107,7 @@ public class NewGameManager {
             }
         }
         catch (Exception i3) {
-            // empty catch block
+            
         }
         this.build_StartingBuildings();
         for (i = 1; i < CFG.core.getCivsSize(); ++i) {
@@ -544,9 +542,7 @@ public class NewGameManager {
         return tID;
     }
 
-    /*
-     * Enabled aggressive block sorting
-     */
+    
     public final void randomFill() {
         ArrayList<Integer> lLandProvinces = new ArrayList<Integer>();
         ArrayList<Integer> lWas = new ArrayList<Integer>();
@@ -674,7 +670,7 @@ public class NewGameManager {
                         }
                     }
                     catch (GdxRuntimeException tempFileT22a) {
-                        // empty catch block
+                        
                     }
                     try {
                         tempFileT22 = Gdx.files.internal("map/" + CFG.map.getFileActiveMapPath() + "formable_civs/" + "Age_of_Civilizations");
@@ -687,7 +683,7 @@ public class NewGameManager {
                         }
                     }
                     catch (GdxRuntimeException tempFileT23) {
-                        // empty catch block
+                        
                     }
                     try {
                         tempFileT = Gdx.files.local("map/" + CFG.map.getFileActiveMapPath() + "formable_civs/" + "Age_of_Civilizations");
@@ -718,7 +714,7 @@ public class NewGameManager {
                 }
             }
             catch (GdxRuntimeException tempFileT) {
-                // empty catch block
+                
             }
         }
         for (int i = tempTags.size() - 1; i >= 0; --i) {
@@ -753,7 +749,7 @@ public class NewGameManager {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.formableCivs_GameData.clearProvinces();
             CFG.formableCivs_GameData = null;
@@ -784,7 +780,7 @@ public class NewGameManager {
                         }
                     }
                     catch (GdxRuntimeException tempFileT22b) {
-                        // empty catch block
+                        
                     }
                     try {
                         tempFileT22 = Gdx.files.internal("map/" + CFG.map.getFileActiveMapPath() + "formable_civs/" + "Age_of_Civilizations");
@@ -797,7 +793,7 @@ public class NewGameManager {
                         }
                     }
                     catch (GdxRuntimeException tempFileT23) {
-                        // empty catch block
+                        
                     }
                     try {
                         tempFileT = Gdx.files.local("map/" + CFG.map.getFileActiveMapPath() + "formable_civs/" + "Age_of_Civilizations");
@@ -828,7 +824,7 @@ public class NewGameManager {
                 }
             }
             catch (GdxRuntimeException tempFileT) {
-                // empty catch block
+                
             }
         }
         CFG.core.getCiv(nCivID).clearTagsCanForm();
@@ -852,7 +848,7 @@ public class NewGameManager {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.formableCivs_GameData.clearProvinces();
             CFG.formableCivs_GameData = null;

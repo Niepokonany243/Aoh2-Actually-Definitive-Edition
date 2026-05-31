@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.MapA.Mode;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -1073,7 +1071,7 @@ public class MapModesManager {
             @Override
             public void drawRendererMapDetails(SpriteBatch oSB) {
                 if (Render.drawInGame_MapDetails()) {
-                    // empty if block
+                    
                 }
             }
         } : new Render.Renderer(){
@@ -1113,7 +1111,7 @@ public class MapModesManager {
             @Override
             public void drawRendererMapDetails(SpriteBatch oSB) {
                 if (Render.drawInGame_MapDetails()) {
-                    // empty if block
+                    
                 }
             }
         }, CFG.FOG_OF_WAR == 2 ? new RenderProvince.DrawProvinces(){
@@ -1157,10 +1155,7 @@ public class MapModesManager {
         });
         VIEW_ALLIANCES_MODE = this.addViewToTheGame(new MapMode(){
 
-            /*
-             * Enabled force condition propagation
-             * Lifted jumps to return sites
-             */
+            
             @Override
             public ME_Hover getProvinceInformation() {
                 try {
@@ -1254,7 +1249,7 @@ public class MapModesManager {
             @Override
             public void drawRendererMapDetails(SpriteBatch oSB) {
                 if (Render.drawInGame_MapDetails()) {
-                    // empty if block
+                    
                 }
             }
         } : new Render.Renderer(){
@@ -1291,7 +1286,7 @@ public class MapModesManager {
             @Override
             public void drawRendererMapDetails(SpriteBatch oSB) {
                 if (Render.drawInGame_MapDetails()) {
-                    // empty if block
+                    
                 }
             }
         }, CFG.FOG_OF_WAR == 2 ? new RenderProvince.DrawProvinces(){
@@ -1323,10 +1318,7 @@ public class MapModesManager {
         });
         VIEW_SUPPLIES_MODE = this.addViewToTheGame(new MapMode(){
 
-            /*
-             * Enabled force condition propagation
-             * Lifted jumps to return sites
-             */
+            
             @Override
             public ME_Hover getProvinceInformation() {
                 try {
@@ -1624,7 +1616,7 @@ nData.add(new ME_Hover_2Type_Text("" + (int)(fQ * 100.0f) + "%", fQ > 0.6f ? CFG
             @Override
             public void drawRendererMapDetails(SpriteBatch oSB) {
                 if (Render.drawInGame_MapDetails()) {
-                    // empty if block
+                    
                 }
             }
         } : new Render.Renderer(){
@@ -1658,7 +1650,7 @@ nData.add(new ME_Hover_2Type_Text("" + (int)(fQ * 100.0f) + "%", fQ > 0.6f ? CFG
             @Override
             public void drawRendererMapDetails(SpriteBatch oSB) {
                 if (Render.drawInGame_MapDetails()) {
-                    // empty if block
+                    
                 }
             }
         }, CFG.FOG_OF_WAR == 2 ? new RenderProvince.DrawProvinces(){
@@ -2323,7 +2315,7 @@ nData.add(new ME_Hover_2Type_Text("" + (int)(fQ * 100.0f) + "%", fQ > 0.6f ? CFG
             @Override
             public void drawRendererMapDetails(SpriteBatch oSB) {
                 if (Render.drawInGame_MapDetails()) {
-                    // empty if block
+                    
                 }
             }
         } : new Render.Renderer(){
@@ -2359,7 +2351,7 @@ nData.add(new ME_Hover_2Type_Text("" + (int)(fQ * 100.0f) + "%", fQ > 0.6f ? CFG
             @Override
             public void drawRendererMapDetails(SpriteBatch oSB) {
                 if (Render.drawInGame_MapDetails()) {
-                    // empty if block
+                    
                 }
             }
         }, CFG.FOG_OF_WAR == 2 ? new RenderProvince.DrawProvinces(){
@@ -2503,7 +2495,7 @@ nData.add(new ME_Hover_2Type_Text("" + (int)(fQ * 100.0f) + "%", fQ > 0.6f ? CFG
             @Override
             public void drawRendererMapDetails(SpriteBatch oSB) {
                 if (Render.drawInGame_MapDetails()) {
-                    // empty if block
+                    
                 }
             }
         } : new Render.Renderer(){
@@ -2538,7 +2530,7 @@ nData.add(new ME_Hover_2Type_Text("" + (int)(fQ * 100.0f) + "%", fQ > 0.6f ? CFG
             @Override
             public void drawRendererMapDetails(SpriteBatch oSB) {
                 if (Render.drawInGame_MapDetails()) {
-                    // empty if block
+                    
                 }
             }
         }, CFG.FOG_OF_WAR == 2 ? new RenderProvince.DrawProvinces(){
@@ -3302,7 +3294,7 @@ nData.add(new ME_Hover_2Type_Text("" + (int)(fQ * 100.0f) + "%", fQ > 0.6f ? CFG
             @Override
             public void drawRendererMapDetails(SpriteBatch oSB) {
                 if (Render.drawInGame_MapDetails()) {
-                    // empty if block
+                    
                 }
             }
         } : new Render.Renderer(){
@@ -3337,7 +3329,7 @@ nData.add(new ME_Hover_2Type_Text("" + (int)(fQ * 100.0f) + "%", fQ > 0.6f ? CFG
             @Override
             public void drawRendererMapDetails(SpriteBatch oSB) {
                 if (Render.drawInGame_MapDetails()) {
-                    // empty if block
+                    
                 }
             }
         }, CFG.FOG_OF_WAR == 2 ? new RenderProvince.DrawProvinces(){
@@ -3879,7 +3871,7 @@ nData.add(new ME_Hover_2Type_Text("" + (int)(fQ * 100.0f) + "%", fQ > 0.6f ? CFG
                             }
                         }
                         catch (Exception exception) {
-                            // empty catch block
+                            
                         }
                         if (BuildingsManager.getFarm_GrowthRateBonus(CFG.core.getProv(CFG.menus.getHoveredProvinceID()).getLvlOfFarm()) > 0.0f) {
                             nData.add(new ME_Hover_2Type_Text(CFG.lang.get("Farm") + ": "));
@@ -4995,10 +4987,7 @@ nData.add(new ME_Hover_2Type_Text("" + (int)(fQ * 100.0f) + "%", fQ > 0.6f ? CFG
         });
         VIEW_ARMY_MODE = this.addViewToTheGame(new MapMode(){
 
-            /*
-             * Enabled force condition propagation
-             * Lifted jumps to return sites
-             */
+            
             @Override
             public ME_Hover getProvinceInformation() {
                 try {
@@ -5511,7 +5500,7 @@ nData.add(new ME_Hover_2Type_Text("" + (int)(fQ * 100.0f) + "%", fQ > 0.6f ? CFG
                         return new ME_Hover_v2(nElements);
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                 }
                 return null;
@@ -5668,7 +5657,7 @@ nData.add(new ME_Hover_2Type_Text("" + (int)(fQ * 100.0f) + "%", fQ > 0.6f ? CFG
                         return new ME_Hover_v2(nElements);
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                 }
                 return null;
@@ -5825,7 +5814,7 @@ nData.add(new ME_Hover_2Type_Text("" + (int)(fQ * 100.0f) + "%", fQ > 0.6f ? CFG
                         return new ME_Hover_v2(nElements);
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                 }
                 return null;
@@ -6691,10 +6680,7 @@ nData.add(new ME_Hover_2Type_Text("" + (int)(fQ * 100.0f) + "%", fQ > 0.6f ? CFG
         });
         VIEW_DISEASES_MODE = this.addViewToTheGame(new MapMode(){
 
-            /*
-             * Enabled force condition propagation
-             * Lifted jumps to return sites
-             */
+            
             @Override
             public ME_Hover getProvinceInformation() {
                 try {
@@ -7669,7 +7655,7 @@ nData.add(new ME_Hover_2Type_Text("" + (int)(fQ * 100.0f) + "%", fQ > 0.6f ? CFG
                         return new ME_Hover_v2(nElements);
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                 }
                 return null;
@@ -7829,7 +7815,7 @@ nData.add(new ME_Hover_2Type_Text("" + (int)(fQ * 100.0f) + "%", fQ > 0.6f ? CFG
                         return new ME_Hover_v2(nElements);
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                 }
                 return null;
@@ -7989,7 +7975,7 @@ nData.add(new ME_Hover_2Type_Text("" + (int)(fQ * 100.0f) + "%", fQ > 0.6f ? CFG
                         return new ME_Hover_v2(nElements);
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                 }
                 return null;
@@ -8149,7 +8135,7 @@ nData.add(new ME_Hover_2Type_Text("" + (int)(fQ * 100.0f) + "%", fQ > 0.6f ? CFG
                         return new ME_Hover_v2(nElements);
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                 }
                 return null;
@@ -8309,7 +8295,7 @@ nData.add(new ME_Hover_2Type_Text("" + (int)(fQ * 100.0f) + "%", fQ > 0.6f ? CFG
                         return new ME_Hover_v2(nElements);
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                 }
                 return null;
@@ -8469,7 +8455,7 @@ nData.add(new ME_Hover_2Type_Text("" + (int)(fQ * 100.0f) + "%", fQ > 0.6f ? CFG
                         return new ME_Hover_v2(nElements);
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                 }
                 return null;
@@ -8628,7 +8614,7 @@ nData.add(new ME_Hover_2Type_Text("" + (int)(fQ * 100.0f) + "%", fQ > 0.6f ? CFG
                         return new ME_Hover_v2(nElements);
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                 }
                 return null;

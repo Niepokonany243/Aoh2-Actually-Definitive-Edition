@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Z_Other.ST;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -64,10 +62,7 @@ public class sUM {
         }
     }
 
-    /*
-     * Enabled force condition propagation
-     * Lifted jumps to return sites
-     */
+    
     public static void createItem(String modFolder) {
         try {
             String fileContent;
@@ -175,7 +170,7 @@ public class sUM {
             sUFS = sUF.size();
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         sUM.readModsTurnedOff();
     }
@@ -231,7 +226,7 @@ public class sUM {
             sUI.storeStats();
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

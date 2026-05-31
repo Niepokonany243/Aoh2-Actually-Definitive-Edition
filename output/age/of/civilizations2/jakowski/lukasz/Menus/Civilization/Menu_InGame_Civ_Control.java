@@ -128,7 +128,7 @@ public class Menu_InGame_Civ_Control extends Menu {
         });
         tY += CFG.BUTTON_H + CFG.PADD;
 
-        // Spending sliders use 0-100% of income. 0 clears the override and lets AI decide.
+        
         final int[] spendingIncome = new int[]{Math.max(1, (int)CFG.gameUpdate.getIncome(civID))};
 
         int goodsTarget = civ.civGD.sandboxGoodsSpendTarget > 0.0f ? Math.max(0, Math.min(100, (int)(civ.civGD.sandboxGoodsSpendTarget * 100.0f))) : 0;

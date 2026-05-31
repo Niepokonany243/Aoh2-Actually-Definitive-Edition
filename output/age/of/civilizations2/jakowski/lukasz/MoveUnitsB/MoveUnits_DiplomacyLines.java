@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.MoveUnitsB;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -79,13 +77,13 @@ public class MoveUnits_DiplomacyLines {
                     }
                 }
                 this.ColorLine2 = CFG.getColorStep(this.mainColor, this.mainColor2, (int)(this.fMovingPercentage * 100.0f), 100, 0.4f);
-                // Renderer.shapeDrawer.setColor(new Color(this.ColorLine2.r, this.ColorLine2.g, this.ColorLine2.b, 0.4f));
-                // Renderer.shapeDrawer.path(nPath, 2.75f * (0.25f + 0.75f * this.fMovingPercentage) * this.widthPercentage, JoinType.SMOOTH, true);
+                
+                
                 if (this.fMovingPercentage > 0.99f && CFG.core.getProv(this.lRoute.get(this.lRoute.size() - 1)).getDrawProv()) {
-                    // Renderer.shapeDrawer.setColor(new Color(this.ColorLine2.r, this.ColorLine2.g, this.ColorLine2.b, 0.45f * this.widthPercentage));
-                    // Renderer.shapeDrawer.filledCircle((this.vPoints[this.vPoints.length - 1].x + (float)CFG.core.getProv(this.lRoute.get(this.lRoute.size() - 1)).getTranslateProvPosX()) * nScale, (this.vPoints[this.vPoints.length - 1].y - (float)CFG.map.getMpC().getPY()) * nScale, 12.0f * nScale * this.fMovingPercentage * this.widthPercentage);
-                    // Renderer.shapeDrawer.setColor(new Color(this.ColorLine2.r, this.ColorLine2.g, this.ColorLine2.b, 0.6f * this.widthPercentage));
-                    // Renderer.shapeDrawer.circle((this.vPoints[this.vPoints.length - 1].x + (float)CFG.core.getProv(this.lRoute.get(this.lRoute.size() - 1)).getTranslateProvPosX()) * nScale, (this.vPoints[this.vPoints.length - 1].y - (float)CFG.map.getMpC().getPY()) * nScale, 16.0f * nScale * this.fMovingPercentage * this.widthPercentage, 2.0f * nScale);
+                    
+                    
+                    
+                    
                 }
             }
             catch (Exception ex) {

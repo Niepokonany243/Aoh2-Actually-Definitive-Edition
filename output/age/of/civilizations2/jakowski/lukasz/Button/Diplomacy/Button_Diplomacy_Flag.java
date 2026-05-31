@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button.Diplomacy;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -188,7 +186,7 @@ extends ButtonStats {
     public void setVisibleE(boolean isVisible) {
         super.setVisibleE(isVisible);
         if (!isVisible) {
-            // empty if block
+            
         }
     }
 

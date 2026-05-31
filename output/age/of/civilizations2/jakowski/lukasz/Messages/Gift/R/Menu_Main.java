@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Messages.Gift.R;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Classic.Button_Classic;
@@ -42,8 +40,7 @@ extends Menu {
     public int iTitleOffset = 0;
     public long lTime = 0L;
     public int ANIMATION_TIME = 1250;
-    public static float ICONS_ALPHA_PC = 0.15f;
-    public static float ICONS_ALPHA = 0.1f;
+
     public static final float LOGO_APLHA_DEFAULT = 0.95f;
     public static SparksAnimation sparksAnimation = new SparksAnimation();
     public static boolean RATE_THE_GAME = false;
@@ -85,8 +82,24 @@ extends Menu {
         menuElements.add(new Button_Classic_LR_Main(null, -1, buttonX, tempH + CFG.BUTTON_H * 4 + CFG.PADD * 4, buttonW, CFG.BUTTON_H, true){
 
             @Override
-            public void actionElem(int iID) {
-                CFG.setDialogType(DialogType.START_TUTORIAL);
+            public void buildElemHover() {
+                ArrayList<MEHover_2E> nElements = new ArrayList<MEHover_2E>();
+                ArrayList<ME_Hover_2Type> nData = new ArrayList<ME_Hover_2Type>();
+                nData.add(new ME_Hover_2Type_Text(CFG.lang.get("JoinDiscord"), CFG.COLOR_HOVER_TITLE));
+                nElements.add(new MEHover_2E(nData));
+                nData.clear();
+                this.menuElemHover = new ME_Hover_v2(nElements);
+            }
+
+            @Override
+            public void drawButtonBGE(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive) {
+                super.drawButtonBGE(oSB, iTranslateX, iTranslateY, isActive);
+                int sS = CFG.BUTTON_H / 4;
+                int sX = this.getPosXE() + CFG.PADD / 2 + iTranslateX;
+                int sY = this.getPosY() + iTranslateY;
+                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.8f));
+                CFG.fontMain.get(0).draw(oSB, "*", sX, sY + sS);
+                oSB.setColor(Color.WHITE);
             }
         });
         if (nMN == 306 || nMN == 278 || nMN == 550) {
@@ -202,305 +215,7 @@ extends Menu {
                 ((MenuElemUI)menuElements.get(i)).setPosY(((MenuElemUI)menuElements.get(i)).getPosY() - tRebuildPosY + CFG.PADD * 4);
             }
         }
-        menuElements.add(new Button_Classic(null, -1, CFG.GAMEWIDTH - CFG.BUTTON_H, CFG.GAMEHEIGHT - CFG.BUTTON_H, CFG.BUTTON_H, CFG.BUTTON_H, true){
 
-            @Override
-            public void drawButtonBGE(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive) {
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, ICONS_ALPHA));
-                int imgID = Images.logo_steam;
-                if (Menu_Main.this.lTime + (long)Menu_Main.this.ANIMATION_TIME > System.currentTimeMillis()) {
-                    float t = (float)(System.currentTimeMillis() - Menu_Main.this.lTime) / (float)Menu_Main.this.ANIMATION_TIME;
-                    if (t > 1.0f) {
-                        t = 1.0f;
-                    }
-                    if (t < 0.0f) {
-                        t = 0.0f;
-                    }
-                    t = 1.0f - (float)Math.pow(1.0f - t, 6.0);
-                    float extraH = (float)IMGManager.getIMG(Images.logo_steam).getWidth() * 0.5f;
-                    float offsetY = extraH - extraH * t;
-                    float drawX = (float)this.getPosXE() + (float)this.getWidthE() / 2.0f - (float)IMGManager.getIMG(imgID).getWidth() / 2.0f + offsetY + (float)iTranslateX;
-                    float drawY = (float)this.getPosY() + (float)this.getHeightE() / 2.0f - (float)IMGManager.getIMG(imgID).getHeight() / 2.0f + (float)iTranslateY;
-                    IMGManager.getIMG(imgID).draw(oSB, (int)drawX, (int)drawY);
-                } else {
-                    IMGManager.getIMG(imgID).drawO(oSB, this.getPosXE() + this.getWidthE() / 2 - IMGManager.getIMG(imgID).getWidth() / 2 + iTranslateX, this.getPosY() + this.getHeightE() / 2 - IMGManager.getIMG(imgID).getHeight() / 2 + iTranslateY);
-                }
-                oSB.setColor(Color.WHITE);
-            }
-
-            @Override
-            public void buildElemHover() {
-                ArrayList<MEHover_2E> nElements = new ArrayList<MEHover_2E>();
-                ArrayList<ME_Hover_2Type> nData = new ArrayList<ME_Hover_2Type>();
-                nData.add(new ME_Hover_2Type_Text("https://store.steampowered.com/app/3381680/Age_of_History_II_Definitive_Edition/", CFG.COLOR_NEUTRAL));
-                nElements.add(new MEHover_2E(nData));
-                nData.clear();
-                this.menuElemHover = new ME_Hover_v2(nElements);
-            }
-
-            @Override
-            public void actionElemPPM() {
-                Menu_SK.goBack = View.eMAINMENU;
-                CFG.menus.setMenuID(View.eSK);
-                CFG.map.getMpS().setNewCurrentScaleByButton2(0.175f);
-            }
-
-            @Override
-            public void drawMEH2(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive) {
-                if (this.menuElemHover != null) {
-                    this.menuElemHover.drawAlwaysOverM(oSB, Touch.getMousePosX(), this.getPosY());
-                }
-            }
-        });
-        menuElements.add(new Button_Classic(null, -1, CFG.GAMEWIDTH - CFG.BUTTON_H, CFG.GAMEHEIGHT - CFG.BUTTON_H * 2, CFG.BUTTON_H, CFG.BUTTON_H, true){
-
-            @Override
-            public void drawButtonBGE(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive) {
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, ICONS_ALPHA));
-                if (Menu_Main.this.lTime + (long)Menu_Main.this.ANIMATION_TIME > System.currentTimeMillis()) {
-                    float t = (float)(System.currentTimeMillis() - Menu_Main.this.lTime) / (float)Menu_Main.this.ANIMATION_TIME;
-                    if (t > 1.0f) {
-                        t = 1.0f;
-                    }
-                    if (t < 0.0f) {
-                        t = 0.0f;
-                    }
-                    t = 1.0f - (float)Math.pow(1.0f - t, 6.0);
-                    float extraH = (float)IMGManager.getIMG(Images.logo_steam).getWidth() * 0.5f;
-                    float offsetY = extraH - extraH * t;
-                    float drawX = (float)this.getPosXE() + (float)this.getWidthE() / 2.0f - (float)IMGManager.getIMG(Images.logo_android).getWidth() / 2.0f + offsetY + (float)iTranslateX;
-                    float drawY = (float)this.getPosY() + (float)this.getHeightE() / 2.0f - (float)IMGManager.getIMG(Images.logo_android).getHeight() / 2.0f + (float)iTranslateY;
-                    IMGManager.getIMG(Images.logo_android).draw(oSB, (int)drawX, (int)drawY);
-                } else {
-                    IMGManager.getIMG(Images.logo_android).drawO(oSB, this.getPosXE() + this.getWidthE() / 2 - IMGManager.getIMG(Images.logo_android).getWidth() / 2 + iTranslateX, this.getPosY() + this.getHeightE() / 2 - IMGManager.getIMG(Images.logo_android).getHeight() / 2 + iTranslateY);
-                }
-                oSB.setColor(Color.WHITE);
-            }
-
-            @Override
-            public void buildElemHover() {
-                ArrayList<MEHover_2E> nElements = new ArrayList<MEHover_2E>();
-                ArrayList<ME_Hover_2Type> nData = new ArrayList<ME_Hover_2Type>();
-                nData.add(new ME_Hover_2Type_Text("https://play.google.com/store/apps/details?id=age.of.history2.definitive.lukasz.jakowski", CFG.COLOR_NEUTRAL));
-                nElements.add(new MEHover_2E(nData));
-                nData.clear();
-                this.menuElemHover = new ME_Hover_v2(nElements);
-            }
-
-            @Override
-            public void actionElemPPM() {
-                Menu_SK.goBack = View.eMAINMENU;
-                CFG.menus.setMenuID(View.eSK);
-                CFG.map.getMpS().setNewCurrentScaleByButton2(0.175f);
-            }
-
-            @Override
-            public void drawMEH2(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive) {
-                if (this.menuElemHover != null) {
-                    this.menuElemHover.drawAlwaysOverM(oSB, Touch.getMousePosX(), this.getPosY());
-                }
-            }
-        });
-        menuElements.add(new Button_Classic(null, -1, CFG.GAMEWIDTH - CFG.BUTTON_H, CFG.GAMEHEIGHT - CFG.BUTTON_H * 3, CFG.BUTTON_H, CFG.BUTTON_H, true){
-
-            @Override
-            public void drawButtonBGE(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive) {
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, ICONS_ALPHA));
-                int imgID = Images.logo_app;
-                if (Menu_Main.this.lTime + (long)Menu_Main.this.ANIMATION_TIME > System.currentTimeMillis()) {
-                    float t = (float)(System.currentTimeMillis() - Menu_Main.this.lTime) / (float)Menu_Main.this.ANIMATION_TIME;
-                    if (t > 1.0f) {
-                        t = 1.0f;
-                    }
-                    if (t < 0.0f) {
-                        t = 0.0f;
-                    }
-                    t = 1.0f - (float)Math.pow(1.0f - t, 6.0);
-                    float extraH = (float)IMGManager.getIMG(Images.logo_steam).getWidth() * 0.5f;
-                    float offsetY = extraH - extraH * t;
-                    float drawX = (float)this.getPosXE() + (float)this.getWidthE() / 2.0f - (float)IMGManager.getIMG(imgID).getWidth() / 2.0f + offsetY + (float)iTranslateX;
-                    float drawY = (float)this.getPosY() + (float)this.getHeightE() / 2.0f - (float)IMGManager.getIMG(imgID).getHeight() / 2.0f + (float)iTranslateY;
-                    IMGManager.getIMG(imgID).draw(oSB, (int)drawX, (int)drawY);
-                } else {
-                    IMGManager.getIMG(imgID).drawO(oSB, this.getPosXE() + this.getWidthE() / 2 - IMGManager.getIMG(imgID).getWidth() / 2 + iTranslateX, this.getPosY() + this.getHeightE() / 2 - IMGManager.getIMG(imgID).getHeight() / 2 + iTranslateY);
-                }
-                oSB.setColor(Color.WHITE);
-            }
-
-            @Override
-            public void drawMEH2(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive) {
-                if (this.menuElemHover != null) {
-                    this.menuElemHover.drawAlwaysOverM(oSB, Touch.getMousePosX(), this.getPosY());
-                }
-            }
-
-            @Override
-            public void actionElemPPM() {
-                Menu_SK.goBack = View.eMAINMENU;
-                CFG.menus.setMenuID(View.eSK);
-                CFG.map.getMpS().setNewCurrentScaleByButton2(0.175f);
-            }
-
-            @Override
-            public void buildElemHover() {
-                ArrayList<MEHover_2E> nElements = new ArrayList<MEHover_2E>();
-                ArrayList<ME_Hover_2Type> nData = new ArrayList<ME_Hover_2Type>();
-                nData.add(new ME_Hover_2Type_Text("https://apps.apple.com/us/app/age-of-history-2-definitive/id6759263202", CFG.COLOR_NEUTRAL));
-                nElements.add(new MEHover_2E(nData));
-                nData.clear();
-                this.menuElemHover = new ME_Hover_v2(nElements);
-            }
-        });
-        menuElements.add(new Button_Classic(null, -1, CFG.GAMEWIDTH - CFG.BUTTON_H, CFG.GAMEHEIGHT - CFG.BUTTON_H * 4, CFG.BUTTON_H, CFG.BUTTON_H, true){
-
-            @Override
-            public void drawButtonBGE(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive) {
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, ICONS_ALPHA));
-                int imgID = Images.logo_fb;
-                if (Menu_Main.this.lTime + (long)Menu_Main.this.ANIMATION_TIME > System.currentTimeMillis()) {
-                    float t = (float)(System.currentTimeMillis() - Menu_Main.this.lTime) / (float)Menu_Main.this.ANIMATION_TIME;
-                    if (t > 1.0f) {
-                        t = 1.0f;
-                    }
-                    if (t < 0.0f) {
-                        t = 0.0f;
-                    }
-                    t = 1.0f - (float)Math.pow(1.0f - t, 6.0);
-                    float extraH = (float)IMGManager.getIMG(Images.logo_steam).getWidth() * 0.5f;
-                    float offsetY = extraH - extraH * t;
-                    float drawX = (float)this.getPosXE() + (float)this.getWidthE() / 2.0f - (float)IMGManager.getIMG(imgID).getWidth() / 2.0f + offsetY + (float)iTranslateX;
-                    float drawY = (float)this.getPosY() + (float)this.getHeightE() / 2.0f - (float)IMGManager.getIMG(imgID).getHeight() / 2.0f + (float)iTranslateY;
-                    IMGManager.getIMG(imgID).draw(oSB, (int)drawX, (int)drawY);
-                } else {
-                    IMGManager.getIMG(imgID).drawO(oSB, this.getPosXE() + this.getWidthE() / 2 - IMGManager.getIMG(imgID).getWidth() / 2 + iTranslateX, this.getPosY() + this.getHeightE() / 2 - IMGManager.getIMG(imgID).getHeight() / 2 + iTranslateY);
-                }
-                oSB.setColor(Color.WHITE);
-            }
-
-            @Override
-            public void buildElemHover() {
-                ArrayList<MEHover_2E> nElements = new ArrayList<MEHover_2E>();
-                ArrayList<ME_Hover_2Type> nData = new ArrayList<ME_Hover_2Type>();
-                nData.add(new ME_Hover_2Type_Text("https://facebook.com/AgeofCivilizationsJakowski/", CFG.COLOR_NEUTRAL));
-                nElements.add(new MEHover_2E(nData));
-                nData.clear();
-                this.menuElemHover = new ME_Hover_v2(nElements);
-            }
-
-            @Override
-            public void actionElemPPM() {
-                Menu_SK.goBack = View.eMAINMENU;
-                CFG.menus.setMenuID(View.eSK);
-                CFG.map.getMpS().setNewCurrentScaleByButton2(0.175f);
-            }
-
-            @Override
-            public void drawMEH2(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive) {
-                if (this.menuElemHover != null) {
-                    this.menuElemHover.drawAlwaysOverM(oSB, Touch.getMousePosX(), this.getPosY());
-                }
-            }
-        });
-        menuElements.add(new Button_Classic(null, -1, CFG.GAMEWIDTH - CFG.BUTTON_H, CFG.GAMEHEIGHT - CFG.BUTTON_H * 5, CFG.BUTTON_H, CFG.BUTTON_H, true){
-
-            @Override
-            public void drawButtonBGE(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive) {
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, ICONS_ALPHA));
-                int imgID = Images.logo_twit;
-                if (Menu_Main.this.lTime + (long)Menu_Main.this.ANIMATION_TIME > System.currentTimeMillis()) {
-                    float t = (float)(System.currentTimeMillis() - Menu_Main.this.lTime) / (float)Menu_Main.this.ANIMATION_TIME;
-                    if (t > 1.0f) {
-                        t = 1.0f;
-                    }
-                    if (t < 0.0f) {
-                        t = 0.0f;
-                    }
-                    t = 1.0f - (float)Math.pow(1.0f - t, 6.0);
-                    float extraH = (float)IMGManager.getIMG(Images.logo_steam).getWidth() * 0.5f;
-                    float offsetY = extraH - extraH * t;
-                    float drawX = (float)this.getPosXE() + (float)this.getWidthE() / 2.0f - (float)IMGManager.getIMG(imgID).getWidth() / 2.0f + offsetY + (float)iTranslateX;
-                    float drawY = (float)this.getPosY() + (float)this.getHeightE() / 2.0f - (float)IMGManager.getIMG(imgID).getHeight() / 2.0f + (float)iTranslateY;
-                    IMGManager.getIMG(imgID).draw(oSB, (int)drawX, (int)drawY);
-                } else {
-                    IMGManager.getIMG(imgID).drawO(oSB, this.getPosXE() + this.getWidthE() / 2 - IMGManager.getIMG(imgID).getWidth() / 2 + iTranslateX, this.getPosY() + this.getHeightE() / 2 - IMGManager.getIMG(imgID).getHeight() / 2 + iTranslateY);
-                }
-                oSB.setColor(Color.WHITE);
-            }
-
-            @Override
-            public void buildElemHover() {
-                ArrayList<MEHover_2E> nElements = new ArrayList<MEHover_2E>();
-                ArrayList<ME_Hover_2Type> nData = new ArrayList<ME_Hover_2Type>();
-                nData.add(new ME_Hover_2Type_Text("https://twitter.com/jakowskidev", CFG.COLOR_NEUTRAL));
-                nElements.add(new MEHover_2E(nData));
-                nData.clear();
-                this.menuElemHover = new ME_Hover_v2(nElements);
-            }
-
-            @Override
-            public void actionElemPPM() {
-                Menu_SK.goBack = View.eMAINMENU;
-                CFG.menus.setMenuID(View.eSK);
-                CFG.map.getMpS().setNewCurrentScaleByButton2(0.175f);
-            }
-
-            @Override
-            public void drawMEH2(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive) {
-                if (this.menuElemHover != null) {
-                    this.menuElemHover.drawAlwaysOverM(oSB, Touch.getMousePosX(), this.getPosY());
-                }
-            }
-        });
-        menuElements.add(new Button_Classic(null, -1, CFG.GAMEWIDTH - CFG.BUTTON_H, CFG.GAMEHEIGHT - CFG.BUTTON_H * 6, CFG.BUTTON_H, CFG.BUTTON_H, true){
-
-            @Override
-            public void drawButtonBGE(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive) {
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, ICONS_ALPHA));
-                int imgID = Images.logo_yt;
-                if (Menu_Main.this.lTime + (long)Menu_Main.this.ANIMATION_TIME > System.currentTimeMillis()) {
-                    float t = (float)(System.currentTimeMillis() - Menu_Main.this.lTime) / (float)Menu_Main.this.ANIMATION_TIME;
-                    if (t > 1.0f) {
-                        t = 1.0f;
-                    }
-                    if (t < 0.0f) {
-                        t = 0.0f;
-                    }
-                    t = 1.0f - (float)Math.pow(1.0f - t, 6.0);
-                    float extraH = (float)IMGManager.getIMG(Images.logo_steam).getWidth() * 0.5f;
-                    float offsetY = extraH - extraH * t;
-                    float drawX = (float)this.getPosXE() + (float)this.getWidthE() / 2.0f - (float)IMGManager.getIMG(imgID).getWidth() / 2.0f + offsetY + (float)iTranslateX;
-                    float drawY = (float)this.getPosY() + (float)this.getHeightE() / 2.0f - (float)IMGManager.getIMG(imgID).getHeight() / 2.0f + (float)iTranslateY;
-                    IMGManager.getIMG(imgID).draw(oSB, (int)drawX, (int)drawY);
-                } else {
-                    IMGManager.getIMG(imgID).drawO(oSB, this.getPosXE() + this.getWidthE() / 2 - IMGManager.getIMG(imgID).getWidth() / 2 + iTranslateX, this.getPosY() + this.getHeightE() / 2 - IMGManager.getIMG(imgID).getHeight() / 2 + iTranslateY);
-                }
-                oSB.setColor(Color.WHITE);
-            }
-
-            @Override
-            public void buildElemHover() {
-                ArrayList<MEHover_2E> nElements = new ArrayList<MEHover_2E>();
-                ArrayList<ME_Hover_2Type> nData = new ArrayList<ME_Hover_2Type>();
-                nData.add(new ME_Hover_2Type_Text("https://www.YouTube.com/user/jakowskiuki", CFG.COLOR_NEUTRAL));
-                nElements.add(new MEHover_2E(nData));
-                nData.clear();
-                this.menuElemHover = new ME_Hover_v2(nElements);
-            }
-
-            @Override
-            public void actionElemPPM() {
-                Menu_SK.goBack = View.eMAINMENU;
-                CFG.menus.setMenuID(View.eSK);
-                CFG.map.getMpS().setNewCurrentScaleByButton2(0.175f);
-            }
-
-            @Override
-            public void drawMEH2(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive) {
-                if (this.menuElemHover != null) {
-                    this.menuElemHover.drawAlwaysOverM(oSB, Touch.getMousePosX(), this.getPosY());
-                }
-            }
-        });
         this.initMenu(null, 0, 0, CFG.GAMEWIDTH, CFG.GAMEHEIGHT, menuElements);
         this.updateLang();
         this.iTitleOffset = CFG.XXXHDPI ? 7 : (CFG.XXHDPI ? 7 : (CFG.XHDPI ? 7 : 7));
@@ -531,7 +246,7 @@ extends Menu {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
     }
@@ -541,7 +256,7 @@ extends Menu {
         this.getMenuElem(0).setTextE(CFG.lang.get("Games"));
         this.getMenuElem(1).setTextE(CFG.lang.get("Editor"));
         this.getMenuElem(3).setTextE(CFG.lang.get("Settings"));
-        this.getMenuElem(4).setTextE(CFG.lang.get("Tutorial"));
+        this.getMenuElem(4).setTextE(CFG.lang.get("Community"));
         this.getMenuElem(2).setTextE(CFG.lang.get("MapType") + ": " + CFG.map.getMapName_Just(CFG.map.getActiveMapIDN()));
         this.getMenuElem(5).setTextE(CFG.lang.get("ExitGame"));
         CFG.sTOTAL = CFG.lang.get("Total");
@@ -606,7 +321,7 @@ extends Menu {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         oSB.setColor(new Color(0.0f, 0.0f, 0.0f, 0.6f));
         IMGManager.getIMG(Images.gradient).drawO(oSB, iTranslateX, -IMGManager.getIMG(Images.gradient).getHeight() + iTranslateY, CFG.GAMEWIDTH, CFG.PADD * 3);
@@ -664,10 +379,6 @@ extends Menu {
                 CFG.menus.setMenuID(View.eSETTINGS);
                 break;
             }
-            case 4: {
-                this.getMenuElem(iID).actionElem(iID);
-                return;
-            }
             case 2: {
                 CFG.backToMenu = View.eMAINMENU;
                 CFG.menus.setMenuID(View.eSELECT_MAP_TYPE);
@@ -678,43 +389,14 @@ extends Menu {
                 CFG.map.getMpS().setNewCurrentScaleByButton2(0.175f);
                 return;
             }
+            case 4: {
+                CFG.GO_TO_LINK = "https://discord.gg/MpuFrKAYtK";
+                CFG.setDialogType(DialogType.GO_TO_LINK);
+                CFG.menus.getDialogMenu().getMenuElem(3).setTextE(CFG.lang.get("Open") + " " + CFG.lang.get("Community") + "?");
+                return;
+            }
             case 5: {
                 CFG.setDialogType(DialogType.EXIT_GAME);
-                return;
-            }
-            case 7: {
-                CFG.GO_TO_LINK = "https://store.steampowered.com/app/3381680/Age_of_History_II_Definitive_Edition/";
-                CFG.setDialogType(DialogType.GO_TO_LINK);
-                return;
-            }
-            case 8: {
-                CFG.GO_TO_LINK = "https://play.google.com/store/apps/details?id=age.of.history2.definitive.lukasz.jakowski";
-                CFG.setDialogType(DialogType.GO_TO_LINK);
-                return;
-            }
-            case 9: {
-                CFG.GO_TO_LINK = "https://apps.apple.com/us/app/age-of-history-2-definitive/id6759263202";
-                CFG.setDialogType(DialogType.GO_TO_LINK);
-                return;
-            }
-            case 10: {
-                CFG.GO_TO_LINK = "https://www.facebook.com/AgeofCivilizationsJakowski/";
-                CFG.setDialogType(DialogType.GO_TO_LINK);
-                return;
-            }
-            case 11: {
-                CFG.GO_TO_LINK = "https://twitter.com/jakowskidev";
-                CFG.setDialogType(DialogType.GO_TO_LINK);
-                return;
-            }
-            case 12: {
-                CFG.GO_TO_LINK = "https://www.youtube.com/user/jakowskiuki";
-                CFG.setDialogType(DialogType.GO_TO_LINK);
-                return;
-            }
-            case 13: {
-                CFG.GO_TO_LINK = "https://store.steampowered.com/app/2772750/Age_of_History_3/";
-                CFG.setDialogType(DialogType.GO_TO_LINK);
                 return;
             }
         }

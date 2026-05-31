@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Wasteland;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Game.Button_Game_Checkbox;

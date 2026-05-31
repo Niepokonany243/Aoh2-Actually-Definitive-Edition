@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.ZRest;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Button_Transparent;
@@ -116,7 +114,7 @@ extends Menu {
                         CFG.eventsManager.getEvent((int)Menu_InGame_Event.EVENT_ID).lDecisions.get(this.getCurr()).executeDecision();
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                     Menu_InGame_Event2.this.setVisibleM(false);
                     CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).runNextEvent2();
@@ -141,7 +139,7 @@ extends Menu {
                         }
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                     nData.add(new ME_Hover_2Type_Space());
                     nElements.add(new MEHover_2E(nData));
@@ -203,7 +201,7 @@ extends Menu {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         oSB.setColor(Color.WHITE);
         this.drawMenuM(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);

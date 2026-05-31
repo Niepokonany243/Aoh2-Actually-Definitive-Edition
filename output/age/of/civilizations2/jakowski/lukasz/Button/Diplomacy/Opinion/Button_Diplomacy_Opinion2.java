@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button.Diplomacy.Opinion;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Diplomacy.Opinion.Button_Diplomacy_Opinion;

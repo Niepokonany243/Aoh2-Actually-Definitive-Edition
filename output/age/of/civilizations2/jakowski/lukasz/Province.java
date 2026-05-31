@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.Achievement_Data;
@@ -3652,7 +3650,7 @@ public class Province {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -3870,7 +3868,7 @@ public class Province {
                 }
             }
             catch (Exception ex) {
-                // empty catch block
+                
             }
             if (oldCivID != this.getCivId() && CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)oldCivID).getIdeology()).REVOLUTIONARY) {
                 if (CFG.core.getCiv(oldCivID).getNumOfProvs() == 0) {
@@ -3950,7 +3948,7 @@ public class Province {
                     CFG.core.getCiv(this.getCivId()).getCivRegion(this.getCivRegionID()).setSeaAccess_HavePort(true);
                 }
                 catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                    // empty catch block
+                    
                 }
             }
         }
@@ -4203,8 +4201,8 @@ public class Province {
     }
 
         public final void updateOccupationTurns() {
-        // Only counts down the timer — does NOT auto-annex.
-        // Occupation stays occupation until the player manually annexes via peace/diplomacy.
+        
+        
         if (this.getOccupationTurnsLeft() > 0) {
             this.setOccupationTurnsLeft(this.getOccupationTurnsLeft() - 1);
         }
@@ -4329,7 +4327,7 @@ public class Province {
                     }
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
                 this.resetArmiesAll(0);
                 this.setCivId(this.getTrueOwnerOfProv(), false, true);

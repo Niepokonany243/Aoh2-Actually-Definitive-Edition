@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.AI.AI_Build;
 
 import age.of.civilizations2.jakowski.lukasz.AI.AI_Build.AI_Build;
@@ -36,7 +34,7 @@ extends AI_Build {
                         continue;
                     }
                     catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                        // empty catch block
+                        
                     }
                 }
             }

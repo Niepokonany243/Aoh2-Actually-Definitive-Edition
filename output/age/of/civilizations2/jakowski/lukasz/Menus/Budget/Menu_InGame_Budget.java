@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Budget;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -464,7 +462,7 @@ extends Menu {
                     }
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
@@ -545,7 +543,7 @@ extends Menu {
                     }
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
@@ -1114,7 +1112,7 @@ extends Menu {
                     IMGManager.getIMG(imgID).draw(oSB, this.getPosXE() + this.getWidthE() - CFG.PADD - IMGManager.getIMG(imgID).getWidth() + iTranslateX, this.getPosY() + this.getHeightE() - CFG.PADD - IMGManager.getIMG(imgID).getHeight() + iTranslateY);
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
                 oSB.setColor(Color.WHITE);
             }
@@ -1165,7 +1163,7 @@ extends Menu {
                     IMGManager.getIMG(imgID).draw(oSB, this.getPosXE() + this.getWidthE() - CFG.PADD - IMGManager.getIMG(imgID).getWidth() + iTranslateX, this.getPosY() + this.getHeightE() - CFG.PADD - IMGManager.getIMG(imgID).getHeight() + iTranslateY);
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
                 oSB.setColor(Color.WHITE);
             }

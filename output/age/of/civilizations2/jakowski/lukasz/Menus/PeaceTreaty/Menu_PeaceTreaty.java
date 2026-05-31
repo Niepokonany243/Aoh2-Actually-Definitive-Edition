@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.PeaceTreaty;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Button_Casualties;
@@ -124,7 +122,7 @@ extends Menu {
             }
         }
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            // empty catch block
+            
         }
         if (tempProvinceID >= 0 && CFG.core.getProv(tempProvinceID).getName().length() > 0) {
             tempCityName = " - " + CFG.core.getProv(tempProvinceID).getName();

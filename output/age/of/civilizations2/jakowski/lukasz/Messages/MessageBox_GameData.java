@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Messages;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -78,7 +76,7 @@ implements Serializable {
             this.iMessagesSize = this.lMessages.size();
         }
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            // empty catch block
+            
         }
     }
 
@@ -90,7 +88,7 @@ implements Serializable {
             }
         }
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            // empty catch block
+            
         }
     }
 

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button.Game;
 
 import age.of.civilizations2.jakowski.lukasz.BetterUI_Manager;
@@ -42,7 +40,7 @@ extends Button_Game {
             }
             Images.pix.draw(oSB, this.getPosXE() + iTranslateX, this.getPosY() + iTranslateY, this.getWidthE(), this.getHeightE());
 
-            // Use the centralized border drawing logic for perfect map-style borders
+            
             BetterUI_Manager.drawBetterButtonBorder(oSB, this.getPosXE() + iTranslateX, this.getPosY() + iTranslateY, this.getWidthE(), this.getHeightE(), this.getIsHovered(), isActive, this.getIsClickable());
 
             if (this.getIsHovered() || isActive) {

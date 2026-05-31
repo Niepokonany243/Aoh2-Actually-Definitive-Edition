@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.LeadersM;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Classic.Button_Classic;
@@ -84,7 +82,7 @@ extends Menu {
                         catch (ClassNotFoundException ex) {
                         }
                         catch (IOException ex) {
-                            // empty catch block
+                            
                         }
                         if (CFG.leaderGameData.getLeaderOfCiv().getName().toLowerCase().indexOf(CFG.sSearch.toLowerCase()) < 0) continue;
                         lTempNames.add(CFG.leaderGameData.getLeaderOfCiv().getName());
@@ -167,7 +165,7 @@ extends Menu {
                     catch (ClassNotFoundException classNotFoundException) {
                     }
                     catch (IOException iOException) {
-                        // empty catch block
+                        
                     }
                     if (CFG.leaderGameData.getLeaderOfCiv().getName().charAt(0) != CFG.chosenAlphabetCharachter.charAt(0)) continue;
                     lTempNames.add(CFG.leaderGameData.getLeaderOfCiv().getName());
@@ -192,7 +190,7 @@ extends Menu {
                 }
             }
             catch (GdxRuntimeException gdxRuntimeException) {
-                // empty catch block
+                
             }
         }
         this.initMenu(null, 0, CFG.BUTTON_H * 3 / 4 + CFG.BUTTON_H + CFG.PADD, CFG.GAMEWIDTH, CFG.GAMEHEIGHT - CFG.BUTTON_H * 3 / 4 - CFG.BUTTON_H - CFG.PADD - (CFG.BUTTON_H + CFG.PADD), menuElements);
@@ -268,7 +266,7 @@ extends Menu {
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
         }
         catch (NullPointerException nullPointerException) {
-            // empty catch block
+            
         }
         super.endClipM(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);
     }
@@ -311,7 +309,7 @@ extends Menu {
             catch (ClassNotFoundException ex) {
             }
             catch (IOException ex) {
-                // empty catch block
+                
             }
             GameCalendar.currDay = CFG.leaderGameData.getLeaderOfCiv().getDay();
             GameCalendar.currMonth = CFG.leaderGameData.getLeaderOfCiv().getMonth();
@@ -332,7 +330,7 @@ extends Menu {
             catch (ClassNotFoundException classNotFoundException) {
             }
             catch (IOException iOException) {
-                // empty catch block
+                
             }
             if (CFG.leaderGameData.getLeaderOfCiv().getWiki().length() > 0) {
                 try {

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.CreateVassal.MapModes;
 
 import age.of.civilizations2.jakowski.lukasz.Button.GameN.Options.Button_Opt_MapModes;
@@ -105,7 +103,7 @@ extends Menu {
                 ScissorStack.popScissors();
             }
             catch (IllegalStateException illegalStateException) {
-                // empty catch block
+                
             }
             super.endClipM(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);
         } else {

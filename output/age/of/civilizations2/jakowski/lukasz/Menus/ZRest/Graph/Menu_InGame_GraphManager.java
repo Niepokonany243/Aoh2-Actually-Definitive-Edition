@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.ZRest.Graph;
 
 import age.of.civilizations2.jakowski.lukasz.Button.MenuElemUI;
@@ -178,7 +176,7 @@ public class Menu_InGame_GraphManager {
                         }
                     }
                     catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                        // empty catch block
+                        
                     }
                 }
             });
@@ -233,7 +231,7 @@ public class Menu_InGame_GraphManager {
                         }
                     }
                     catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                        // empty catch block
+                        
                     }
                 }
             });

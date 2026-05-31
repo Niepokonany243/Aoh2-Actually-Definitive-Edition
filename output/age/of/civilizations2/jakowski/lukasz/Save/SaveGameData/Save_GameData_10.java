@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Save.SaveGameData;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;

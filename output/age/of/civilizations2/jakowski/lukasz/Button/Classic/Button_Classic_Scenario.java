@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button.Classic;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Classic.Button_Classic;
@@ -45,7 +43,7 @@ extends Button_Classic {
             Menu_ChooseScenario.preview.get(this.iScenarioID).draw(oSB, this.getPosXE() + iTranslateX, this.getPosY() + 1 + iTranslateY, Menu_ChooseScenario.previewW, Menu_ChooseScenario.previewH);
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         if (this.getIsHovered()) {
             Menu_ChooseScenario.iFHR = this.iScenarioID;

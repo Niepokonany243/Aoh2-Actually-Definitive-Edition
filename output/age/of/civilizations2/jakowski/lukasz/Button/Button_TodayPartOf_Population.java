@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button;
 
 import age.of.civilizations2.jakowski.lukasz.Button.ButtonM;
@@ -84,7 +82,7 @@ extends ButtonM {
                 nData.clear();
             }
             catch (NullPointerException nullPointerException) {
-                // empty catch block
+                
             }
             nData.add(new ME_Hover_2Type_Space());
             nElements.add(new MEHover_2E(nData));

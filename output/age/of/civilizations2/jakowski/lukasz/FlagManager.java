@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -160,7 +158,7 @@ public class FlagManager {
             ScissorStack.popScissors();
         }
         catch (IllegalStateException illegalStateException) {
-            // empty catch block
+            
         }
     }
 
@@ -181,7 +179,7 @@ public class FlagManager {
         String pathFlag = pathCiv + "_FD";
 
         try {
-            // Try JSON for Civ
+            
             FileHandle fileJsonCiv = Gdx.files.local(pathCiv + ".json");
             if (fileJsonCiv.exists()) {
                 CFG.editorCivilization_GameData = json.fromJson(Civilization_GameData3.class, fileJsonCiv.readString("UTF-8"));
@@ -192,7 +190,7 @@ public class FlagManager {
                 }
             }
 
-            // Try JSON for Flag
+            
             FileHandle fileJsonFlag = Gdx.files.local(pathFlag + ".json");
             if (fileJsonFlag.exists()) {
                 this.flagEdit = json.fromJson(Flag_GameData.class, fileJsonFlag.readString("UTF-8"));
@@ -203,7 +201,7 @@ public class FlagManager {
                 }
             }
 
-            // Fallback to binary if still null
+            
             if (CFG.editorCivilization_GameData == null) {
                 file = Gdx.files.local(pathCiv).exists() ? Gdx.files.local(pathCiv) : FileManager.loadFile(pathCiv);
                 if (file.exists()) {
@@ -420,7 +418,7 @@ public class FlagManager {
             }
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -445,7 +443,7 @@ public class FlagManager {
             }
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -480,7 +478,7 @@ public class FlagManager {
             tempFlagImage.getTexture().getTextureData().prepare();
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
         PixmapIO.writePNG(FileManager.getSaveType("game/civilizations_editor/" + CFG.EDITOR_ACTIVE_GAMEDATA_TAG + "/" + CFG.EDITOR_ACTIVE_GAMEDATA_TAG + "_FLH.png"), tempFlagImage.getTexture().getTextureData().consumePixmap());
         oSB.setColor(Color.BLACK);
@@ -495,7 +493,7 @@ public class FlagManager {
             ScissorStack.popScissors();
         }
         catch (IllegalStateException illegalStateException) {
-            // empty catch block
+            
         }
         oSB.end();
         oSB.begin();
@@ -506,14 +504,14 @@ public class FlagManager {
                 tempFlagImage22.getTexture().getTextureData().prepare();
             }
             catch (GdxRuntimeException gdxRuntimeException) {
-                // empty catch block
+                
             }
             PixmapIO.writePNG(FileManager.getSaveType("game/civilizations_editor/" + CFG.EDITOR_ACTIVE_GAMEDATA_TAG + "/" + CFG.EDITOR_ACTIVE_GAMEDATA_TAG + "_FLH.png"), tempFlagImage22.getTexture().getTextureData().consumePixmap());
             tempFlagImage22.getTexture().dispose();
             tempFlagImage22 = null;
         }
         catch (GdxRuntimeException ex1) {
-            // empty catch block
+            
         }
         tempImage.drawO(oSB, 0, -tempImage.getHeight(), 27, 18);
         try {
@@ -521,7 +519,7 @@ public class FlagManager {
             ScissorStack.popScissors();
         }
         catch (IllegalStateException ex2) {
-            // empty catch block
+            
         }
         oSB.end();
         oSB.begin();
@@ -532,14 +530,14 @@ public class FlagManager {
                 tempFlagImage22.getTexture().getTextureData().prepare();
             }
             catch (GdxRuntimeException gdxRuntimeException) {
-                // empty catch block
+                
             }
             PixmapIO.writePNG(FileManager.getSaveType("game/civilizations_editor/" + CFG.EDITOR_ACTIVE_GAMEDATA_TAG + "/" + CFG.EDITOR_ACTIVE_GAMEDATA_TAG + "_FL.png"), tempFlagImage22.getTexture().getTextureData().consumePixmap());
             tempFlagImage22.getTexture().dispose();
             tempFlagImage22 = null;
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
         oSB.setColor(Color.BLACK);
         IMGManager.getIMG(Images.pix255).drawO(oSB, 0, -IMGManager.getIMG(Images.pix255).getHeight(), 154, 100);

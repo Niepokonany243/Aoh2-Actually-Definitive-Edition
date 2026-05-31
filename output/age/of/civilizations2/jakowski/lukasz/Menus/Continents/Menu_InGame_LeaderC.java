@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Continents;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Diplomacy.Action.Button_DiplomacyAction;
@@ -226,7 +224,7 @@ extends Menu {
                     name = Menu_InGame_LeaderC.this.getMenuElem(2).getTextE();
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
                 if (name.length() == 0) {
                     CFG.toastM.addM(CFG.lang.get("Name") + ": " + CFG.lang.get("Error"), CFG.COLOR_NEGATIVE_2);

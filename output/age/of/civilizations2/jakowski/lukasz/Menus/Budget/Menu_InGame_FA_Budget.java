@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Budget;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -376,7 +374,7 @@ extends Menu {
                     }
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
@@ -457,7 +455,7 @@ extends Menu {
                     }
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }

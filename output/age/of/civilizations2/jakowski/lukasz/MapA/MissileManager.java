@@ -17,7 +17,7 @@ public class MissileManager {
 
     public static long calculateMissileCost(int civID, int tier) {
         long taxation = CFG.core.getCiv(civID).incomeTaxation;
-        long baseCost = (long)((float)taxation * 0.5f); // 50% of taxation
+        long baseCost = (long)((float)taxation * 0.5f); 
         if (baseCost < 100) baseCost = 100; 
         
         if (tier == 2) return baseCost * 10;
@@ -55,11 +55,11 @@ public class MissileManager {
             if (civ.civGD.missilesConstruction == null) civ.civGD.missilesConstruction = new java.util.ArrayList<>();
             
             if (tier == 3) {
-                civ.civGD.missilesConstruction.add(200 + 35); // Tier 3, 5 turns (3*10 + 5)
+                civ.civGD.missilesConstruction.add(200 + 35); 
             } else if (tier == 2) {
-                civ.civGD.missilesConstruction.add(100 + 22); // Tier 2, 2 turns (2*10 + 2)
+                civ.civGD.missilesConstruction.add(100 + 22); 
             } else {
-                civ.civGD.missilesConstruction.add(11); // Tier 1, 1 turn (1*10 + 1)
+                civ.civGD.missilesConstruction.add(11); 
             }
 
             if (civ.getIsPlayer()) {
@@ -155,7 +155,7 @@ public class MissileManager {
             return;
         }
         
-        // Range Check
+        
         int startProv = attacker.getCapitalProvID();
         if (startProv < 0) startProv = attacker.getProvID(0);
         
@@ -184,7 +184,7 @@ public class MissileManager {
             }
         }
         
-        // Sort targets by score (eco + pop) descending
+        
         java.util.Collections.sort(targets, new java.util.Comparator<Integer>() {
             @Override
             public int compare(Integer a, Integer b) {
@@ -234,7 +234,7 @@ public class MissileManager {
             civ.civGD.iMissiles--;
         }
         
-        // Default city interception bonus based on development
+        
         float devInterceptionChance = 0.0f;
         if (prov.getDeveLvl() >= 0.4f) {
             devInterceptionChance = 0.5f;
@@ -242,7 +242,7 @@ public class MissileManager {
             else if (tier == 3) devInterceptionChance = 0.1f;
         }
 
-        // Air Defense check
+        
         float protectionChance = 0.0f;
         int interceptions = turnInterceptions.getOrDefault(provinceID, 0);
         if (prov.provGD.iAirDefense > 0) {
@@ -253,12 +253,12 @@ public class MissileManager {
         if (finalChance < 0.05f && (protectionChance > 0 || devInterceptionChance > 0)) finalChance = 0.05f; 
         
         if (CFG.oR.nextFloat() < finalChance) {
-            // Intercepted!
+            
             turnInterceptions.put(provinceID, interceptions + 1);
             return -1;
         }
         
-        // Stats before
+        
         float powerMult = 1.0f;
         if (tier == 2) powerMult = 10.0f;
         else if (tier == 3) powerMult = 25.0f;
@@ -271,11 +271,11 @@ public class MissileManager {
         prov.setEco(Math.max(0, prov.getEco() - ecoLost));
         prov.getPop().setPopulationOfCivID(prov.getCivId(), Math.max(0, prov.getPop().getPopulationOfCivID(prov.getCivId()) - popLost));
         
-        // Unrest
+        
         prov.provGD.fRevolutionaryRisk = Math.min(1.0f, prov.provGD.fRevolutionaryRisk + 0.08f * powerMult);
         prov.provGD.fHappiness = Math.max(0.0f, prov.provGD.fHappiness - 0.04f * powerMult);
         
-        // Building destruction
+        
         if (prov.provGD.iFort > 0) prov.provGD.iFort -= (int)powerMult;
         if (prov.provGD.iPort > 0) prov.provGD.iPort -= (int)powerMult;
         if (prov.provGD.iWorkshop > 0) prov.provGD.iWorkshop -= (int)powerMult;
@@ -288,16 +288,16 @@ public class MissileManager {
         if (prov.provGD.iMarket < 0) prov.provGD.iMarket = 0;
         if (prov.provGD.iFarm < 0) prov.provGD.iFarm = 0;
 
-        // Visuals and Sound
-        Renderer.addMissileFlash(provinceID); // Simple performance friendly effect
+        
+        Renderer.addMissileFlash(provinceID); 
         CFG.SFXManager.playSound(SFXManager.SFX_NUKE);
         
-        // Notifications
+        
         if (CFG.core.getCiv(prov.getCivId()).getIsPlayer()) {
             CFG.core.getCiv(prov.getCivId()).getCivDiploGD().messageBox.addMessage(new Message_Missile_Strike(civID, provinceID, popLost, ecoLost, unitsKilled));
         }
         
-        // Casualty recording
+        
         try {
             for (int wi = 0; wi < CFG.core.getWarsSize(); wi++) {
                 age.of.civilizations2.jakowski.lukasz.War_GameData war = CFG.core.getWar(wi);

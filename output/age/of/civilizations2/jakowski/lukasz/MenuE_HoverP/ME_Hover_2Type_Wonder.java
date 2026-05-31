@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.MenuE_HoverP;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -41,7 +39,7 @@ implements ME_Hover_2Type {
             CFG.core.getProv((int)this.iProvinceID).getWonder((int)this.iWonderID).nImage.drawO(oSB, nPosX + this.offsetLeft, nPosY + CFG.PADD - CFG.core.getProv((int)this.iProvinceID).getWonder((int)this.iWonderID).nImage.getHeight() + CFG.TEXT_HEIGHT_DEFAULT / 2 - (int)((float)CFG.core.getProv((int)this.iProvinceID).getWonder((int)this.iWonderID).nImage.getHeight() * this.getImageScale() / 2.0f), (int)((float)CFG.core.getProv((int)this.iProvinceID).getWonder((int)this.iWonderID).nImage.getWidth() * this.getImageScale()), (int)((float)CFG.core.getProv((int)this.iProvinceID).getWonder((int)this.iWonderID).nImage.getHeight() * this.getImageScale()));
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -52,7 +50,7 @@ implements ME_Hover_2Type {
             CFG.core.getProv((int)this.iProvinceID).getWonder((int)this.iWonderID).nImage.drawO(oSB, nPosX + this.offsetLeft, nPosY + CFG.PADD - CFG.core.getProv((int)this.iProvinceID).getWonder((int)this.iWonderID).nImage.getHeight() + CFG.TEXT_HEIGHT_DEFAULT / 2 - (int)((float)CFG.core.getProv((int)this.iProvinceID).getWonder((int)this.iWonderID).nImage.getHeight() * this.getImageScale() / 2.0f), (int)((float)CFG.core.getProv((int)this.iProvinceID).getWonder((int)this.iWonderID).nImage.getWidth() * this.getImageScale()), (int)((float)CFG.core.getProv((int)this.iProvinceID).getWonder((int)this.iWonderID).nImage.getHeight() * this.getImageScale()));
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

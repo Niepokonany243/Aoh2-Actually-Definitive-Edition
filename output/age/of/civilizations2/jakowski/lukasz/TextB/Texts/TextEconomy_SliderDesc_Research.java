@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.TextB.Texts;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -110,7 +108,7 @@ extends Text {
             percText = " [+" + CFG.getPrecision2((float)iMin / (float)TechManager.getResearchNextLevel(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()) * 100.0f, 100) + "%]";
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         this.sText_Spendings = " + " + CFG.getNumberWthSpaces("" + iMin) + percText;
         this.colorSpendings = iMin <= 0 ? CFG.COLOR_NEUTRAL : CFG.COLOR_RESEARCH;

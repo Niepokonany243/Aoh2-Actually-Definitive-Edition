@@ -13,7 +13,9 @@ gradlew.bat
 *.class
 
 # IDE
+.junie/
 .idea/
+local.properties
 *.iml
 *.ipr
 *.iws

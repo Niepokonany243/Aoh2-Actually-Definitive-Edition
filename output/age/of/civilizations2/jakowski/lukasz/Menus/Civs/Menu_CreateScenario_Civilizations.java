@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Civs;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Game.Button_Game;
@@ -277,7 +275,7 @@ extends Menu_CreateScenario {
                             CFG.core.getProv(CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).getCapitalProvID()).getCit(0).setCityLevel(CFG.getEditorCityLevel(1));
                         }
                         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                            // empty catch block
+                            
                         }
                         CFG.core.getProv(CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).getCapitalProvID()).setIsCapital(false);
                     }
@@ -288,7 +286,7 @@ extends Menu_CreateScenario {
                         CFG.core.getProv(CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).getCapitalProvID()).getCit(0).setCityLevel(CFG.getEditorCityLevel(0));
                     }
                     catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                        // empty catch block
+                        
                     }
                     CFG.updateCreateScenario_Civilizations();
                     CFG.toastM.addM(CFG.lang.get("Capital") + ": " + CFG.core.getProv(CFG.core.getActiveProvID()).getName());

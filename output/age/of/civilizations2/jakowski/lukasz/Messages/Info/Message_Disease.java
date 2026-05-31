@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Messages.Info;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -65,7 +63,7 @@ extends Message {
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
         }
         catch (NullPointerException nullPointerException) {
-            // empty catch block
+            
         }
         return CFG.lang.get("Plague");
     }
@@ -77,7 +75,7 @@ extends Message {
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
         }
         catch (NullPointerException nullPointerException) {
-            // empty catch block
+            
         }
         return 0;
     }

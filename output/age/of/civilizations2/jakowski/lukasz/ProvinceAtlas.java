@@ -18,7 +18,7 @@ public class ProvinceAtlas {
         if (packer != null) {
             packer.dispose();
         }
-        // Use 2048x2048 pages for maximum compatibility.
+        
         packer = new PixmapPacker(2048, 2048, Pixmap.Format.RGBA8888, 2, true);
         provinceRegions.clear();
         initialized = true;

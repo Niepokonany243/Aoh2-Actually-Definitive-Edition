@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Core;
 
 import age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle.AIPlaystyle;
@@ -1172,9 +1170,7 @@ public class Core {
         }
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     public final void saveProvince_Info_GameData(int nProvinceID) {
         Province_GameData2 tempGameData;
         block17: {
@@ -1227,9 +1223,7 @@ public class Core {
         province_Info_GameData = null;
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     public final void saveProvince_Info_GameData_SHIFTXY(int nProvinceID) {
         Province_GameData2 tempGameData;
         block15: {
@@ -1623,9 +1617,7 @@ public class Core {
         return CFG.core.getCiv((int)nCivID).fAverageDevelopment;
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     public final void build_PreDefinedCivsBorders(int nCivID) {
         block37: {
             if ("ran".equals(CFG.core.getCiv(nCivID).getCivTag()) || this.getCiv(nCivID).getNumOfProvs() < 2) {
@@ -1963,7 +1955,7 @@ public class Core {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             tempSavedGame = null;
             this.lCivs.clear();
@@ -2470,7 +2462,7 @@ public class Core {
                         }
                     }
                     catch (GdxRuntimeException tagsSPLITED2) {
-                        // empty catch block
+                        
                     }
                     try {
                         FileHandle tempFileT = FileManager.loadFile("game/leaders/Age_of_Civilizations");
@@ -2595,7 +2587,7 @@ public class Core {
                 }
             }
             catch (Exception j) {
-                // empty catch block
+                
             }
             CFG.leaderGameData = null;
         }
@@ -2662,7 +2654,7 @@ public class Core {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
     }
@@ -3343,7 +3335,7 @@ public class Core {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -3662,7 +3654,7 @@ public class Core {
                         CFG.core.buildCivilizationRegions(this.id);
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                 }
             });
@@ -3674,7 +3666,7 @@ public class Core {
                         CFG.core.buildCivilizationRegions(this.id);
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                 }
             });
@@ -3759,9 +3751,7 @@ public class Core {
         return true;
     }
 
-    /*
-     * Unable to fully structure code
-     */
+    
     public final void createScenarioRemoveCivilization(int nRemoveCivID) {
         int i;
         int j;
@@ -3779,7 +3769,7 @@ public class Core {
             CFG.removeCreateScenario_TechnologyLevelsByContinents_Civ(nRemoveCivID - 1);
         }
         catch (Exception var2_2) {
-            // empty catch block
+            
         }
         try {
             if (this.lCivs.get(nRemoveCivID).getAlliance() > 0) {
@@ -3789,7 +3779,7 @@ public class Core {
             }
         }
         catch (Exception var2_3) {
-            // empty catch block
+            
         }
         try {
             for (i = 1; i < this.getAlliancesSize(); ++i) {
@@ -3797,7 +3787,7 @@ public class Core {
             }
         }
         catch (Exception ex) {
-            // empty catch block
+            
         }
         try {
             for (i = 1; i < this.getCivsSize(); ++i) {
@@ -3805,7 +3795,7 @@ public class Core {
             }
         }
         catch (Exception ex) {
-            // empty catch block
+            
         }
         try {
             for (i = 1; i < nRemoveCivID; ++i) {
@@ -3813,7 +3803,7 @@ public class Core {
             }
         }
         catch (Exception ex) {
-            // empty catch block
+            
         }
         try {
             block23: for (i = 0; i < CFG.core.getProvinSize(); ++i) {
@@ -3843,13 +3833,13 @@ public class Core {
             }
         }
         catch (Exception ex) {
-            // empty catch block
+            
         }
         try {
             CFG.hreMgr.getHRE().updateHRE_AfterRemoveCivilization(nRemoveCivID);
         }
         catch (Exception ex) {
-            // empty catch block
+            
         }
         this.lCivs.remove(nRemoveCivID);
         this.iCivsSize = this.lCivs.size();
@@ -3869,11 +3859,11 @@ public class Core {
             }
         }
         catch (Exception ex) {
-            // empty catch block
+            
         }
         CFG.eventsManager.updateEventsAfterRemoveCiv(nRemoveCivID);
 lbl94:
-        // 3 sources
+        
 
         try {
             for (i = 0; i < this.iProvincesSize; ++i) {
@@ -3910,7 +3900,7 @@ lbl94:
             }
         }
         catch (Exception ex) {
-            // empty catch block
+            
         }
         try {
             CFG.province_CoresGD.updateAfterRemove(nRemoveCivID);
@@ -3924,7 +3914,7 @@ lbl94:
             }
         }
         catch (Exception var2_19) {
-            // empty catch block
+            
         }
     }
 
@@ -4026,7 +4016,7 @@ lbl94:
             }
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
         this.buildCitiesProvinceID();
     }
@@ -4193,7 +4183,7 @@ lbl94:
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -4604,7 +4594,7 @@ lbl94:
             this.drawMoveUnitsArmy(oSB, nScale);
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         oSB.setColor(Color.WHITE);
         CFG.ARMY_HEIGHT = saved_ARMY_HEIGHT;
@@ -4728,7 +4718,7 @@ lbl94:
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         oSB.setColor(Color.WHITE);
     }
@@ -4810,7 +4800,7 @@ lbl94:
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         oSB.setColor(Color.WHITE);
     }
@@ -4828,7 +4818,7 @@ lbl94:
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         oSB.setColor(Color.WHITE);
     }
@@ -4848,7 +4838,7 @@ lbl94:
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         oSB.setColor(Color.WHITE);
     }
@@ -4858,7 +4848,7 @@ lbl94:
             this.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).drawArmy(oSB, nScale);
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         oSB.setColor(Color.WHITE);
     }
@@ -5821,7 +5811,7 @@ lbl94:
                 CFG.core.getCiv(iAgressorCivID).updateLoansFromCiv_WarDeclared(iCivB);
             }
             catch (Exception ex) {
-                // empty catch block
+                
             }
             for (i = CFG.core.getCiv((int)iAgressorCivID).civGD.civPlans.iWarPrepsSize - 1; i >= 0; --i) {
                 if (CFG.core.getCiv((int)iAgressorCivID).civGD.civPlans.warPreps.get((int)i).onCivID != iCivB) continue;
@@ -5889,7 +5879,7 @@ lbl94:
                     }
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
             }
         }
@@ -7143,7 +7133,7 @@ lbl94:
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         CFG.fontMain.get(0).getData().setScale(1.0f);
     }
@@ -7161,7 +7151,7 @@ lbl94:
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         CFG.fontMain.get(0).getData().setScale(1.0f);
     }
@@ -7177,7 +7167,7 @@ lbl94:
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         CFG.fontMain.get(0).getData().setScale(1.0f);
     }
@@ -7194,7 +7184,7 @@ lbl94:
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         CFG.fontMain.get(0).getData().setScale(1.0f);
     }
@@ -7220,7 +7210,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -7236,7 +7226,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -7253,7 +7243,7 @@ lbl94:
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -7277,7 +7267,7 @@ lbl94:
                 }
             }
             catch (Exception tempTime) {
-                // empty catch block
+                
             }
             oSB.setColor(Color.WHITE);
             CFG.fontMain.get(0).getData().setScale(1.0f);
@@ -7300,7 +7290,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             oSB.setColor(Color.WHITE);
             CFG.fontMain.get(0).getData().setScale(1.0f);
@@ -7329,7 +7319,7 @@ lbl94:
                 }
             }
             catch (Exception tempTime) {
-                // empty catch block
+                
             }
             oSB.setColor(Color.WHITE);
             CFG.fontMain.get(0).getData().setScale(1.0f);
@@ -7387,7 +7377,7 @@ lbl94:
                         }
                     }
                     catch (Exception ex) {
-                        // empty catch block
+                        
                     }
                 }
                 if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getWastelandLvl() < 0 && !CFG.core.getProv(CFG.core.getActiveProvID()).getSeaProv()) {
@@ -7457,7 +7447,7 @@ lbl94:
                     }
                 }
                 catch (Exception i2) {
-                    // empty catch block
+                    
                 }
                 oSB.setColor(Color.WHITE);
                 if (CFG.SPECTATOR_MODE) {
@@ -7481,7 +7471,7 @@ lbl94:
                             continue;
                         }
                         catch (Exception i4) {
-                            // empty catch block
+                            
                         }
                     }
                 } else {
@@ -7597,7 +7587,7 @@ lbl94:
                     }
                 }
                 catch (Exception i) {
-                    // empty catch block
+                    
                 }
                 oSB.setColor(Color.WHITE);
                 if (CFG.SPECTATOR_MODE) {
@@ -7641,7 +7631,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             oSB.setColor(Color.WHITE);
             CFG.fontMain.get(0).getData().setScale(1.0f);
@@ -7676,7 +7666,7 @@ lbl94:
                         }
                     }
                     catch (Exception ex) {
-                        // empty catch block
+                        
                     }
                 }
                 try {
@@ -7697,7 +7687,7 @@ lbl94:
                     }
                 }
                 catch (Exception j2) {
-                    // empty catch block
+                    
                 }
                 if (this.HIGHLIGHTED_CITIES_DISABLE_ANIMATION) {
                     if (this.lTIME_HIGHLIGHTED_CITIES > tempTime - 350L) {
@@ -7758,7 +7748,7 @@ lbl94:
                     }
                 }
                 catch (Exception e) {
-                    // empty catch block
+                    
                 }
                 oSB.setColor(Color.WHITE);
                 for (i = 0; i < CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).moveUnitsSize(); ++i) {
@@ -7780,7 +7770,7 @@ lbl94:
                 }
             }
             catch (Exception ex) {
-                // empty catch block
+                
             }
             oSB.setColor(Color.WHITE);
             CFG.fontMain.get(0).getData().setScale(1.0f);
@@ -7811,7 +7801,7 @@ lbl94:
                         }
                     }
                     catch (Exception ex) {
-                        // empty catch block
+                        
                     }
                 }
                 if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getWastelandLvl() < 0 && !CFG.core.getProv(CFG.core.getActiveProvID()).getSeaProv() && this.getPlayer(CFG.PLAYER_TURN_ID).getMetProv(CFG.core.getActiveProvID())) {
@@ -7882,7 +7872,7 @@ lbl94:
                     }
                 }
                 catch (Exception i15) {
-                    // empty catch block
+                    
                 }
                 oSB.setColor(Color.WHITE);
                 for (i = 0; i < CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).moveUnitsSize(); ++i) {
@@ -7899,7 +7889,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             oSB.setColor(Color.WHITE);
             CFG.fontMain.get(0).getData().setScale(1.0f);
@@ -7920,7 +7910,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -7937,7 +7927,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -7957,7 +7947,7 @@ lbl94:
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         CFG.fontMain.get(0).getData().setScale(1.0f);
     }
@@ -7977,7 +7967,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -7994,7 +7984,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -8015,7 +8005,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -8032,7 +8022,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -8052,7 +8042,7 @@ lbl94:
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         CFG.fontMain.get(0).getData().setScale(1.0f);
     }
@@ -8072,7 +8062,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -8089,7 +8079,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -8110,7 +8100,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -8127,7 +8117,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -8148,7 +8138,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -8165,7 +8155,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -8185,7 +8175,7 @@ lbl94:
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         CFG.fontMain.get(0).getData().setScale(1.0f);
     }
@@ -8205,7 +8195,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -8222,7 +8212,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -8243,7 +8233,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -8260,7 +8250,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -8279,7 +8269,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -8294,7 +8284,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -8314,7 +8304,7 @@ lbl94:
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         CFG.fontMain.get(0).getData().setScale(1.0f);
     }
@@ -8329,7 +8319,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -8341,7 +8331,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -8368,7 +8358,7 @@ lbl94:
                 }
             }
             catch (Exception isActiveProvinceCapital) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -8391,7 +8381,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -8418,7 +8408,7 @@ lbl94:
                 }
             }
             catch (Exception isActiveProvinceCapital) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -8441,7 +8431,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -8457,7 +8447,7 @@ lbl94:
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         CFG.fontMain.get(0).getData().setScale(1.0f);
     }
@@ -8472,7 +8462,7 @@ lbl94:
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         CFG.fontMain.get(0).getData().setScale(1.0f);
     }
@@ -8490,7 +8480,7 @@ lbl94:
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -8507,7 +8497,7 @@ lbl94:
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -8535,7 +8525,7 @@ lbl94:
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         CFG.fontMain.get(0).getData().setScale(1.0f);
     }
@@ -8553,7 +8543,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -8568,7 +8558,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -8587,7 +8577,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -8602,7 +8592,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -8621,7 +8611,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -8636,7 +8626,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -8655,7 +8645,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -8670,7 +8660,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -8689,7 +8679,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -8704,7 +8694,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -8723,7 +8713,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -8738,7 +8728,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -8757,7 +8747,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -8772,7 +8762,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -8791,7 +8781,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -8806,7 +8796,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -8825,7 +8815,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -8840,7 +8830,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -8859,7 +8849,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -8874,7 +8864,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -8893,7 +8883,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -8908,7 +8898,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -8927,7 +8917,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -8942,7 +8932,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -8961,7 +8951,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -8976,7 +8966,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -8995,7 +8985,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -9010,7 +9000,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -9029,7 +9019,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -9044,7 +9034,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -9063,7 +9053,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -9078,7 +9068,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -9097,7 +9087,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -9112,7 +9102,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -9131,7 +9121,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -9146,7 +9136,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -9165,7 +9155,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -9180,7 +9170,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -9199,7 +9189,7 @@ lbl94:
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         } else if (this.getDrawProvinceCitiesNames()) {
@@ -9214,7 +9204,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -9487,7 +9477,7 @@ lbl94:
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -9690,7 +9680,7 @@ lbl94:
                         }
                     }
                     catch (Exception j2) {
-                        // empty catch block
+                        
                     }
                     try {
                         int i3;
@@ -9736,7 +9726,7 @@ lbl94:
                         }
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                 }
             }) : (CFG.SPECTATOR_MODE ? new DrawMoveUnitsArmy(){
@@ -10109,7 +10099,7 @@ lbl94:
                         continue;
                     }
                     catch (Exception file) {
-                        // empty catch block
+                        
                     }
                 }
             }
@@ -10709,7 +10699,7 @@ lbl94:
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         return false;
     }
@@ -11044,7 +11034,7 @@ lbl94:
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -11224,7 +11214,7 @@ lbl94:
             if (war.getIsInAggressors(nDefender) && war.getIsInDefenders(nAggressor)) return;
         }
         
-        // Ensure they aren't somehow already in the same alliance or same puppet chain which would make war "invisible" or buggy
+        
         if (this.getCivsAreAllied(nAggressor, nDefender) || this.getCiv(nAggressor).getPuppetOfCiv() == this.getCiv(nDefender).getPuppetOfCiv()) {
              return;
         }
@@ -11556,7 +11546,7 @@ lbl94:
             }
         }
         catch (Exception ex) {
-            // empty catch block
+            
         }
         if (FileManager.IS_MAC) {
             try {
@@ -11565,7 +11555,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
     }
@@ -11667,9 +11657,7 @@ lbl94:
         fileSave.writeString(pr, false);
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     public final void buildGameProvinceData(int i) {
         int j;
         int k;
@@ -11749,9 +11737,7 @@ lbl94:
         }
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     public final void convertProvincesArmyPositionToAnotherScale(int nScale) {
         if (nScale == CFG.map.getMapScale(CFG.map.getActiveMapIDN()) || nScale <= 0) {
             return;
@@ -11808,9 +11794,7 @@ lbl94:
         CFG.toastM.addM(CFG.lang.get("Done"));
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     public final void convertProvincesPortPositionToAnotherScale(int nScale) {
         if (nScale == CFG.map.getMapScale(CFG.map.getActiveMapIDN()) || nScale <= 0) {
             return;
@@ -11904,7 +11888,7 @@ lbl94:
 
     public final void saveScenario_CustomJSON() {
         try {
-            // Redistribution logic
+            
             for (int i = 1; i < this.getCivsSize(); i++) {
                 Civilization civ = this.getCiv(i);
                 if (civ.civGD.targetPopulation > 0 || civ.civGD.targetEconomy > 0) {
@@ -11956,7 +11940,7 @@ lbl94:
             data.info.isPartOfCampaign = CFG.CREATE_SCENARIO_IS_PART_OF_CAMPAIGN;
             data.info.campaingCivsIDs = CFG.lCREATE_SCENARIO_IS_PART_OF_CAMPAIGN_CIVSIDS;
 
-            // HRE
+            
             data.hre.emperorTag = CFG.hreMgr.getHRE().getEmperor() > 0 ? this.getCiv(CFG.hreMgr.getHRE().getEmperor()).getCivTag() : "";
             for (int i = 0; i < CFG.hreMgr.getHRE().getProvincesSize(); i++) {
                 data.hre.provinceIDs.add(CFG.hreMgr.getHRE().getProvinces(i));
@@ -11968,7 +11952,7 @@ lbl94:
                 data.hre.memberTags.add(this.getCiv(CFG.hreMgr.getHRE().getPrince(i)).getCivTag());
             }
 
-            // Wars
+            
             for (int i = 0; i < this.getWarsSize(); i++) {
                 War_GameData war = this.getWar(i);
                 Scenario_CustomJSON.WarData wData = new Scenario_CustomJSON.WarData();
@@ -11983,7 +11967,7 @@ lbl94:
                 data.wars.add(wData);
             }
 
-            // Alliances
+            
             for (int i = 1; i < this.getAlliancesSize(); i++) {
                 Scenario_CustomJSON.AllianceData aData = new Scenario_CustomJSON.AllianceData();
                 aData.name = this.getAlliance(i).getAllianceName();
@@ -11993,7 +11977,7 @@ lbl94:
                 data.alliances.add(aData);
             }
 
-            // Grouping by civilizations
+            
             for (int i = 1; i < this.getCivsSize(); i++) {
                 Civilization civ = this.getCiv(i);
                 if (civ.getNumOfProvs() > 0 || civ.getCivTag().equals("REB")) {
@@ -12044,7 +12028,7 @@ lbl94:
                         }
                     }
 
-                    // Diplomacy
+                    
                     for (int j = 1; j < this.getCivsSize(); j++) {
                         if (i == j) continue;
                         String targetTag = this.getCiv(j).getCivTag();
@@ -12124,7 +12108,7 @@ lbl94:
                     pData.coreTags.add(this.getCiv(prov.getCores().getCivID(j)).getCivTag());
                 }
 
-                // Armies
+                
                 for (int j = 0; j < prov.getCivsSize(); j++) {
                     if (prov.getArmyID(j) > 0) {
                         Scenario_CustomJSON.ArmyData aData = new Scenario_CustomJSON.ArmyData();
@@ -12209,12 +12193,12 @@ lbl94:
     }
 
     public final void saveScenario() {
-        // --- ADVANCED STAT DISTRIBUTION LOGIC ---
+        
         for (int i = 1; i < this.getCivsSize(); i++) {
             Civilization civ = this.getCiv(i);
             if (civ.civGD.targetPopulation > 0 || civ.civGD.targetEconomy > 0) {
                 float totalGrowthRate = 0.0f;
-                // Calculate total growth rate for all owned provinces
+                
                 for (int j = 0; j < civ.getNumOfProvs(); j++) {
                     totalGrowthRate += this.getProv(civ.getProvID(j)).fPopulationGrowthRate;
                 }
@@ -12224,13 +12208,13 @@ lbl94:
                         int provID = civ.getProvID(j);
                         double provinceShare = (double)this.getProv(provID).fPopulationGrowthRate / (double)totalGrowthRate;
                         
-                        // Redistribute Population
+                        
                         if (civ.civGD.targetPopulation > 0) {
                             int newPop = (int)Math.max(1L, (long)((double)civ.civGD.targetPopulation * provinceShare));
                             this.getProv(provID).getPop().setPopulationOfCivID(this.getProv(provID).getCivId(), newPop);
                         }
                         
-                        // Redistribute Economy
+                        
                         if (civ.civGD.targetEconomy > 0) {
                             int newEco = (int)Math.max(1L, (long)((double)civ.civGD.targetEconomy * provinceShare));
                             this.getProv(provID).setEco(newEco);
@@ -12239,7 +12223,7 @@ lbl94:
                 }
             }
         }
-        // --- END ADVANCED LOGIC ---
+        
 
         block43: {
             block42: {
@@ -12607,9 +12591,7 @@ lbl94:
         }
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     public final void saveContinentPackagesData() {
         OutputStream os = null;
         try {
@@ -12674,9 +12656,7 @@ lbl94:
         }
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     public final void saveRegionPackagesData() {
         OutputStream os = null;
         try {
@@ -12715,9 +12695,7 @@ lbl94:
         }
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     public final void saveLinesData() {
         OutputStream os = null;
         try {
@@ -12847,9 +12825,7 @@ lbl94:
         drawCapitalFlagMap.drawProvinceFlagCapital_End(oSB, nProvinceID, bgColor, armyColor, nScale, tCenterX, tCenterY, tFlagWidth, fFlagScale);
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     public final void saveDiplomacyColors() {
         OutputStream os = null;
         try {
@@ -13101,7 +13077,7 @@ lbl94:
                 Renderer.oSBBorder2.begin();
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
     }
@@ -13159,7 +13135,7 @@ lbl94:
                 Renderer.oSBBorder2.begin();
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
     }
@@ -13284,7 +13260,7 @@ lbl94:
             nData.clear();
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         return new ME_Hover_v2(nElements);
     }
@@ -13587,7 +13563,7 @@ lbl94:
             nData.clear();
             if (!CFG.core.getProv(CFG.ACTIVE_PROVINCE_INFO).getSeaProv()) {
                 if (CFG.terrainTypesManager.getDefense(nTerrainID) != 0.0f || CFG.terrainTypesManager.getMilitaryUpkeep(nTerrainID) != 0.0f || CFG.terrainTypesManager.getMovementCost(nTerrainID) != 0.0f || CFG.terrainTypesManager.getPopulationGrowth(nTerrainID) != 0.0f || CFG.terrainTypesManager.getEconomyGrowth(nTerrainID) != 0.0f || CFG.terrainTypesManager.getBuildCost(nTerrainID) != 0.0f) {
-                    // empty if block
+                    
                 }
                 if (CFG.terrainTypesManager.getDefense(nTerrainID) != 0.0f) {
                     nData.add(new ME_Hover_2Type_Text(CFG.lang.get("DefenseModifier") + ": "));
@@ -14451,7 +14427,7 @@ lbl94:
                     return this.lPlayers.get(0);
                 }
             } catch (Exception ex2) {}
-            return new Player(0); // Return a dummy player for civ 0
+            return new Player(0); 
         }
     }
 
@@ -14733,7 +14709,7 @@ lbl94:
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -15243,7 +15219,7 @@ lbl94:
             this.loadArmiesWidth_ErrorIDs.add(nProvinceID);
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -15255,7 +15231,7 @@ lbl94:
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             this.loadArmiesWidth_ErrorIDs.remove(i);
         }
@@ -15303,13 +15279,13 @@ lbl94:
                         fileJSON.writeString(json.prettyPrint(outCivData), false, "UTF-8");
                     }
                     catch (Exception ex) {
-                        // ignore
+                        
                     }
                     return outCivData;
                 }
             }
             catch (Exception ex) {
-                // ignore
+                
             }
         }
         return null;

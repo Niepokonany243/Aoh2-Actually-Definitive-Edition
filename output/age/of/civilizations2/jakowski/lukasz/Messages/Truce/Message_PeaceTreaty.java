@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Messages.Truce;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -162,7 +160,7 @@ extends Message {
         catch (IndexOutOfBoundsException peaceID) {
         }
         catch (NullPointerException peaceID) {
-            // empty catch block
+            
         }
         ArrayList<MEHover_2E> nElements = new ArrayList<MEHover_2E>();
         ArrayList<ME_Hover_2Type> nData = new ArrayList<ME_Hover_2Type>();

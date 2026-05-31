@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,7 +14,7 @@ public class RendererSpriteBatch {
                 this.begun = true;
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
     }
@@ -28,7 +26,7 @@ public class RendererSpriteBatch {
                 this.begun = false;
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
     }

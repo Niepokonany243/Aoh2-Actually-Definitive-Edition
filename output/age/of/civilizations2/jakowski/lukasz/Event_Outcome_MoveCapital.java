@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -61,7 +59,7 @@ extends Event_Outcome {
                     CFG.core.getProv(CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).getCapitalProvID()).getCit(0).setCityLevel(CFG.getEditorCityLevel(1));
                 }
                 catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                    // empty catch block
+                    
                 }
             }
             CFG.core.getProv((int)this.getValue()).setIsCapital(true);
@@ -71,7 +69,7 @@ extends Event_Outcome {
                 CFG.core.getProv(CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).getCapitalProvID()).getCit(0).setCityLevel(CFG.getEditorCityLevel(0));
             }
             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                // empty catch block
+                
             }
             CFG.core.getProv(CFG.core.getCiv(this.getCivID()).getCapitalProvID()).updateDrawArmyInProv();
             CFG.core.getProv(CFG.core.getCiv(this.getCivID()).getCapitalProvID()).setDrawCitiesInProv(true);
@@ -95,7 +93,7 @@ extends Event_Outcome {
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
         }
         catch (NullPointerException nullPointerException) {
-            // empty catch block
+            
         }
         return new ArrayList<MEHover_2E>();
     }

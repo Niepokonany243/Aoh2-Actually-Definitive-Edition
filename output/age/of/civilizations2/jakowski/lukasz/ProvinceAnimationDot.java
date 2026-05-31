@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -39,10 +37,10 @@ public class ProvinceAnimationDot {
             out = true;
         }
         if (CFG.core.getProv(this.iProvinceID).getDrawProv()) {
-            // Renderer.shapeDrawer.setColor(new Color(this.dotColor.r, this.dotColor.g, this.dotColor.b, 0.15f * this.fPerc));
-            // Renderer.shapeDrawer.filledCircle((float)(this.posX + CFG.core.getProv(this.iProvinceID).getTranslateProvPosX()) * nScale, (float)(this.posY - CFG.map.getMpC().getPY()) * nScale, 20.0f * nScale * this.fPerc);
-            // Renderer.shapeDrawer.setColor(new Color(this.dotColor.r, this.dotColor.g, this.dotColor.b, 0.45f * this.fPerc));
-            // Renderer.shapeDrawer.filledCircle((float)(this.posX + CFG.core.getProv(this.iProvinceID).getTranslateProvPosX()) * nScale, (float)(this.posY - CFG.map.getMpC().getPY()) * nScale, 14.0f * nScale * this.fPerc);
+            
+            
+            
+            
         }
         return out;
     }

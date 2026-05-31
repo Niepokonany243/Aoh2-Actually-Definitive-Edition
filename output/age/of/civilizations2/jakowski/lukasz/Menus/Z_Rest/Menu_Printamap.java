@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Z_Rest;
 
 import age.of.civilizations2.jakowski.lukasz.Button.MenuElemUI;
@@ -61,14 +59,14 @@ extends Menu {
             ScissorStack.popScissors();
         }
         catch (IllegalStateException illegalStateException) {
-            // empty catch block
+            
         }
         Image tempMinimapPrerivew = new Image(new Texture(ScreenUtils.getFrameBufferPixmap(0, CFG.GAMEHEIGHT - CFG.GAMEHEIGHT, CFG.GAMEWIDTH, CFG.GAMEHEIGHT)));
         try {
             tempMinimapPrerivew.getTexture().getTextureData().prepare();
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
         PixmapIO.writePNG(FileManager.getSaveType("map/" + CFG.map.getFileActiveMapPath() + "PRINT/map" + this.id++ + ".png"), tempMinimapPrerivew.getTexture().getTextureData().consumePixmap());
         CFG.setRenderO(true);

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Messages;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Diplomacy.Message.Button_Diplomacy_MessageAlliance;
@@ -663,7 +661,7 @@ extends Menu {
                         CFG.core.buildCivilizationRegions(this.id);
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                 }
             });
@@ -675,7 +673,7 @@ extends Menu {
                         CFG.core.buildCivilizationRegions(this.id);
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                 }
             });

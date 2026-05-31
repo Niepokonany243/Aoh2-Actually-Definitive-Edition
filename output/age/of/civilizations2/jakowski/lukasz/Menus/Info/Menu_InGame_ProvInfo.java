@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Info;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Game.Button_GameNextTurn;
@@ -306,7 +304,7 @@ extends Menu {
                     }
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
             }
 
@@ -1062,7 +1060,7 @@ extends Menu {
                     CFG.menus.rebuildInGame_Build_ForeignInvestments(CFG.core.getProv(CFG.ACTIVE_PROVINCE_INFO).getCivId());
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
             }
 
@@ -1112,7 +1110,7 @@ extends Menu {
                     CFG.menus.rebuildInGame_Build_ForeignInvestmentsBuild(CFG.core.getProv(CFG.ACTIVE_PROVINCE_INFO).getCivId());
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
             }
 
@@ -1275,7 +1273,7 @@ extends Menu {
             lBuildingsImages.add(Images.bSupply);
         }
         if (CFG.core.getProv(nProvinceID).provGD.iAirDefense > 0) {
-            lBuildingsImages.add(Images.bSupply); // Using supply icon for air defense as a placeholder if no specific icon
+            lBuildingsImages.add(Images.bSupply); 
         }
         iBuildingsWidth = 0;
         for (int i = 0; i < lBuildingsImages.size(); ++i) {
@@ -1612,7 +1610,7 @@ extends Menu {
                         CFG.toastM.addM(CFG.plagueManager.getPlague_InGame(CFG.core.getProv((int)CFG.ACTIVE_PROVINCE_INFO).provGD.provincePlague.iPlagueID_InGame).getPlagueName(), CFG.COLOR_NEGATIVE_2);
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                 }
                 return;
@@ -1847,7 +1845,7 @@ extends Menu {
                     }
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
                 if (CFG.core.getProv(CFG.ACTIVE_PROVINCE_INFO).getLvlOfFort() > 0) {
                     nData.add(new ME_Hover_2Type_Text(CFG.lang.get(BuildingsManager.getFort_Name(CFG.core.getProv(CFG.ACTIVE_PROVINCE_INFO).getLvlOfFort())), CFG.COLOR_TEXT_NUM_OF_PROVINCES));
@@ -2306,7 +2304,7 @@ extends Menu {
                     nData.clear();
                 }
                 catch (Exception i2) {
-                    // empty catch block
+                    
                 }
                 try {
                     boolean showsRecruitedArmy = CFG.SPECTATOR_MODE || CFG.SANDBOX_MODE || CFG.FOG_OF_WAR < 1 || CFG.core.isAlly(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId(), CFG.core.getProv(nProvinceID).getCivId()) || CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getFog(nProvinceID);
@@ -2498,7 +2496,7 @@ extends Menu {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             if (BuildingsManager.getFarm_GrowthRateBonus(CFG.core.getProv(CFG.ACTIVE_PROVINCE_INFO).getLvlOfFarm()) > 0.0f) {
                 nData.add(new ME_Hover_2Type_Text(CFG.lang.get("Farm") + ": "));
@@ -2651,7 +2649,7 @@ extends Menu {
                     }
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
                 if (CFG.core.getProv(CFG.ACTIVE_PROVINCE_INFO).getLvlOfFort() > 0) {
                     nData.add(new ME_Hover_2Type_Text(CFG.lang.get(BuildingsManager.getFort_Name(CFG.core.getProv(CFG.ACTIVE_PROVINCE_INFO).getLvlOfFort())), CFG.COLOR_TEXT_NUM_OF_PROVINCES));

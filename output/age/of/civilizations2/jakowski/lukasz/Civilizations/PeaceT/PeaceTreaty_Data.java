@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Civilizations.PeaceT;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -1637,7 +1635,7 @@ public class PeaceTreaty_Data {
                         CFG.core.setActiveProvID(-1);
                     }
                     catch (Exception i) {
-                        // empty catch block
+                        
                     }
                     this.AIUseVictoryPoints();
                     return true;
@@ -1646,7 +1644,7 @@ public class PeaceTreaty_Data {
                     CFG.core.setActiveProvID(-1);
                 }
                 catch (Exception i) {
-                    // empty catch block
+                    
                 }
                 this.AIUseVictoryPoints();
                 return false;

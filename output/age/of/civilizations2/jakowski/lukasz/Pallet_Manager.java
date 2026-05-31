@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Game.Button_Game2;
@@ -57,7 +55,7 @@ public class Pallet_Manager {
                     }
                 }
                 catch (GdxRuntimeException tempFileT_Local) {
-                    // empty catch block
+                    
                 }
                 CFG.menus.INIT_GAME = 8;
             }
@@ -102,7 +100,7 @@ public class Pallet_Manager {
                         continue;
                     }
                     catch (GdxRuntimeException ex) {
-                        // empty catch block
+                        
                     }
                 }
                 this.lSampleColors.add(tempSampleColors);
@@ -113,7 +111,7 @@ public class Pallet_Manager {
             Object var4_9 = null;
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -282,7 +280,7 @@ public class Pallet_Manager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -314,7 +312,7 @@ public class Pallet_Manager {
             this.drawSampleColors_BORDER(oSB, nPosX, nPosY, nWidth, nHeight, nPalletID, isActive);
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.TradeRequest;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Flag.Button_Flag_JustFrame;
@@ -41,7 +39,7 @@ extends Menu {
         int tempWidth = Math.min(CFG.GAMEWIDTH / 3, Math.max(CFG.CIV_INFO_MENU_WIDTH / 2, CFG.CIV_INFO_MENU_WIDTH * 3 / 4));
         int tY = 0;
         
-        // 0: Gold
+        
         menuElements.add(new ButtonStats(CFG.lang.get("Gold"), CFG.PADD * 2, 2, tY, CFG.BUTTON_W * 2, (int)((float)CFG.BUTTON_H * 0.75f), false){
             @Override
             public int getWidthE() { return Menu_InGame_TradeRequest_Side.this.getElementW(); }
@@ -72,7 +70,7 @@ extends Menu {
             });
         }
         
-        // 1: Provinces
+        
         menuElements.add(new ButtonStats(CFG.lang.get("Provinces"), CFG.PADD * 2, 2, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE(), CFG.BUTTON_W * 2, (int)((float)CFG.BUTTON_H * 0.75f), false){
             @Override
             public int getWidthE() { return Menu_InGame_TradeRequest_Side.this.getElementW(); }
@@ -80,7 +78,7 @@ extends Menu {
             public boolean getCheckboxSt() { return left ? CFG.tradeRequest.listLEFT.lProvinces.size() > 0 : CFG.tradeRequest.listRight.lProvinces.size() > 0; }
         });
         
-        // 2: Declare War
+        
         menuElements.add(new ButtonStats(CFG.lang.get("DeclareWar"), CFG.PADD * 2, 2, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE(), CFG.BUTTON_W * 2, (int)((float)CFG.BUTTON_H * 0.75f), false){
             @Override
             public int getWidthE() { return Menu_InGame_TradeRequest_Side.this.getElementW(); }
@@ -88,7 +86,7 @@ extends Menu {
             public boolean getCheckboxSt() { return left ? CFG.tradeRequest.listLEFT.lDeclareWarOnCivID.size() > 0 : CFG.tradeRequest.listRight.lDeclareWarOnCivID.size() > 0; }
         });
         
-        // 3: Form Coalition
+        
         menuElements.add(new ButtonStats(CFG.lang.get("FormACoalitionAgainst"), CFG.PADD * 2, 2, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE(), CFG.BUTTON_W * 2, (int)((float)CFG.BUTTON_H * 0.75f), false){
             @Override
             public int getWidthE() { return Menu_InGame_TradeRequest_Side.this.getElementW(); }
@@ -96,7 +94,7 @@ extends Menu {
             public boolean getCheckboxSt() { return left ? CFG.tradeRequest.listLEFT.lFormCoalitionAgainst.size() > 0 : CFG.tradeRequest.listRight.lFormCoalitionAgainst.size() > 0; }
         });
         
-        // 3b: Fight Coalition Against All Neighbors
+        
         menuElements.add(new ButtonStats(CFG.lang.get("FightCoalitionAll"), CFG.PADD * 2, 2, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE(), CFG.BUTTON_W * 2, (int)((float)CFG.BUTTON_H * 0.75f), false){
             @Override
             public int getWidthE() { return Menu_InGame_TradeRequest_Side.this.getElementW(); }
@@ -104,7 +102,7 @@ extends Menu {
             public boolean getCheckboxSt() { return left ? CFG.tradeRequest.listLEFT.fightCoalitionAllNeighbors : CFG.tradeRequest.listRight.fightCoalitionAllNeighbors; }
         });
         
-        // 4: Defensive Pact
+        
         menuElements.add(new ButtonStats(CFG.lang.get("DefensivePact"), CFG.PADD * 2, 2, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE(), CFG.BUTTON_W * 2, (int)((float)CFG.BUTTON_H * 0.75f), false){
             @Override
             public int getWidthE() { return Menu_InGame_TradeRequest_Side.this.getElementW(); }
@@ -112,7 +110,7 @@ extends Menu {
             public boolean getCheckboxSt() { return left ? CFG.tradeRequest.listLEFT.defensivePact : CFG.tradeRequest.listRight.defensivePact; }
         });
         
-        // 5: NonAggression Pact
+        
         menuElements.add(new ButtonStats(CFG.lang.get("NonAggressionPact"), CFG.PADD * 2, 2, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE(), CFG.BUTTON_W * 2, (int)((float)CFG.BUTTON_H * 0.75f), false){
             @Override
             public int getWidthE() { return Menu_InGame_TradeRequest_Side.this.getElementW(); }
@@ -120,7 +118,7 @@ extends Menu {
             public boolean getCheckboxSt() { return left ? CFG.tradeRequest.listLEFT.nonAggressionPact : CFG.tradeRequest.listRight.nonAggressionPact; }
         });
         
-        // 6: Proclaim Independence
+        
         menuElements.add(new ButtonStats(CFG.lang.get("ProclaimIndependence"), CFG.PADD * 2, 2, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE(), CFG.BUTTON_W * 2, (int)((float)CFG.BUTTON_H * 0.75f), false){
             @Override
             public int getWidthE() { return Menu_InGame_TradeRequest_Side.this.getElementW(); }
@@ -128,7 +126,7 @@ extends Menu {
             public boolean getCheckboxSt() { return left ? CFG.tradeRequest.listLEFT.proclaimIndependence : CFG.tradeRequest.listRight.proclaimIndependence; }
         });
         
-        // 7: Military Access
+        
         menuElements.add(new ButtonStats(CFG.lang.get("MilitaryAccess"), CFG.PADD * 2, 2, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE(), CFG.BUTTON_W * 2, (int)((float)CFG.BUTTON_H * 0.75f), false){
             @Override
             public int getWidthE() { return Menu_InGame_TradeRequest_Side.this.getElementW(); }
@@ -136,7 +134,7 @@ extends Menu {
             public boolean getCheckboxSt() { return left ? CFG.tradeRequest.listLEFT.militaryAccess : CFG.tradeRequest.listRight.militaryAccess; }
         });
         
-        // 8: Prepare For War
+        
         java.util.List<Integer> prepList = left ? CFG.tradeRequest.listLEFT.lPrepareForWarCivID : CFG.tradeRequest.listRight.lPrepareForWarCivID;
         menuElements.add(new ButtonStats(CFG.lang.get("PrepareForWar"), CFG.PADD * 2, 2, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE(), CFG.BUTTON_W * 2, (int)((float)CFG.BUTTON_H * 0.75f), false){
             @Override
@@ -169,7 +167,7 @@ extends Menu {
             });
         }
         
-        // 9: Sanctions
+        
         java.util.List<Integer> sanList = left ? CFG.tradeRequest.listLEFT.lSanctionCivID : CFG.tradeRequest.listRight.lSanctionCivID;
         menuElements.add(new ButtonStats(CFG.lang.get("Sanctions"), CFG.PADD * 2, 2, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE(), CFG.BUTTON_W * 2, (int)((float)CFG.BUTTON_H * 0.75f), false){
             @Override

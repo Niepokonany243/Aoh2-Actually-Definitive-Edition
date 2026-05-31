@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -86,7 +84,7 @@ public class LangManager {
                         }
                     }
                     catch (Exception exr) {
-                        // empty catch block
+                        
                     }
                 }
                 if (key.indexOf(95) > 0) {
@@ -118,7 +116,7 @@ public class LangManager {
                     if (out != null && !out.isEmpty()) return this.stripBOM(out);
                 }
                 catch (MissingResourceException exr) {
-                    // empty catch block
+                    
                 }
             }
             try {
@@ -181,7 +179,7 @@ public class LangManager {
                         }
                     }
                     catch (Exception exr) {
-                        // empty catch block
+                        
                     }
                 }
                 if (key.indexOf(95) > 0) {
@@ -207,7 +205,7 @@ public class LangManager {
                     return this.stripBOM(this.bundleFormable.get(key.substring(0, key.indexOf(95))));
                 }
                 catch (MissingResourceException missingResourceException) {
-                    // empty catch block
+                    
                 }
             }
             return this.stripBOM(key);

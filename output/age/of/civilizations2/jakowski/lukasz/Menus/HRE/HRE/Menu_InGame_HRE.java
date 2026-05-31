@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.HRE.HRE;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Button_HRE_Elector;
@@ -139,7 +137,7 @@ extends Menu {
                         }
                     }
                     catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                        // empty catch block
+                        
                     }
                 }
 

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Z_Other;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -130,7 +128,7 @@ public class TutorialManager {
                             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
                             }
                             catch (NullPointerException nullPointerException) {
-                                // empty catch block
+                                
                             }
                         }
                     }
@@ -347,7 +345,7 @@ public class TutorialManager {
                             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
                             }
                             catch (NullPointerException nullPointerException) {
-                                // empty catch block
+                                
                             }
                         }
                     }
@@ -484,7 +482,7 @@ public class TutorialManager {
                             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
                             }
                             catch (NullPointerException nullPointerException) {
-                                // empty catch block
+                                
                             }
                         }
                     }
@@ -576,7 +574,7 @@ public class TutorialManager {
                             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
                             }
                             catch (NullPointerException nullPointerException) {
-                                // empty catch block
+                                
                             }
                         }
                     }
@@ -671,7 +669,7 @@ public class TutorialManager {
                             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
                             }
                             catch (NullPointerException nullPointerException) {
-                                // empty catch block
+                                
                             }
                         }
                     }
@@ -814,7 +812,7 @@ public class TutorialManager {
                             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
                             }
                             catch (NullPointerException nullPointerException) {
-                                // empty catch block
+                                
                             }
                         }
                     }
@@ -962,7 +960,7 @@ public class TutorialManager {
                             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
                             }
                             catch (NullPointerException nullPointerException) {
-                                // empty catch block
+                                
                             }
                         }
                     }
@@ -1146,7 +1144,7 @@ public class TutorialManager {
                             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
                             }
                             catch (NullPointerException nullPointerException) {
-                                // empty catch block
+                                
                             }
                         }
                     }
@@ -1372,7 +1370,7 @@ public class TutorialManager {
                             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
                             }
                             catch (NullPointerException nullPointerException) {
-                                // empty catch block
+                                
                             }
                         }
                     }
@@ -1615,7 +1613,7 @@ public class TutorialManager {
                             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
                             }
                             catch (NullPointerException nullPointerException) {
-                                // empty catch block
+                                
                             }
                         }
                     }
@@ -1860,7 +1858,7 @@ public class TutorialManager {
                             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
                             }
                             catch (NullPointerException nullPointerException) {
-                                // empty catch block
+                                
                             }
                         }
                     }
@@ -2033,7 +2031,7 @@ public class TutorialManager {
                             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
                             }
                             catch (NullPointerException nullPointerException) {
-                                // empty catch block
+                                
                             }
                         }
                     }
@@ -2130,7 +2128,7 @@ public class TutorialManager {
                             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
                             }
                             catch (NullPointerException nullPointerException) {
-                                // empty catch block
+                                
                             }
                         }
                     }
@@ -2322,7 +2320,7 @@ public class TutorialManager {
                             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
                             }
                             catch (NullPointerException nullPointerException) {
-                                // empty catch block
+                                
                             }
                         }
                     }
@@ -2459,7 +2457,7 @@ public class TutorialManager {
                             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
                             }
                             catch (NullPointerException nullPointerException) {
-                                // empty catch block
+                                
                             }
                         }
                     }
@@ -2596,7 +2594,7 @@ public class TutorialManager {
                             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
                             }
                             catch (NullPointerException nullPointerException) {
-                                // empty catch block
+                                
                             }
                         }
                     }
@@ -2726,7 +2724,7 @@ public class TutorialManager {
                             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
                             }
                             catch (NullPointerException nullPointerException) {
-                                // empty catch block
+                                
                             }
                         }
                     }
@@ -2796,7 +2794,7 @@ public class TutorialManager {
                             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
                             }
                             catch (NullPointerException nullPointerException) {
-                                // empty catch block
+                                
                             }
                         }
                     }
@@ -2942,7 +2940,7 @@ public class TutorialManager {
                             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
                             }
                             catch (NullPointerException nullPointerException) {
-                                // empty catch block
+                                
                             }
                         }
                     }
@@ -3001,7 +2999,7 @@ public class TutorialManager {
                             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
                             }
                             catch (NullPointerException nullPointerException) {
-                                // empty catch block
+                                
                             }
                         }
                     }
@@ -3060,7 +3058,7 @@ public class TutorialManager {
                             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
                             }
                             catch (NullPointerException nullPointerException) {
-                                // empty catch block
+                                
                             }
                         }
                     }

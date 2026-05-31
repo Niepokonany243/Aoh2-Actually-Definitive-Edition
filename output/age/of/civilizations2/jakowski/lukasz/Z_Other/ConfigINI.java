@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Z_Other;
 
 import age.of.civilizations2.jakowski.lukasz.Files.FileManager;
@@ -66,7 +64,7 @@ public class ConfigINI {
             }
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 

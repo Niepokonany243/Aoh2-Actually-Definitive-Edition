@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -898,7 +896,7 @@ public class TouchManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -1992,10 +1990,7 @@ public class TouchManager {
             }
         } : (CFG.menus.getInManageDiplomacy() ? new ExtraAction(){
 
-            /*
-             * Enabled force condition propagation
-             * Lifted jumps to return sites
-             */
+            
             @Override
             public void extraAction(int nPX, int nPY) {
                 if (CFG.menus.getManageDiplomacy_Alliances().getVisibleM() && CFG.map.getMpC().getDisableMovingMap()) {

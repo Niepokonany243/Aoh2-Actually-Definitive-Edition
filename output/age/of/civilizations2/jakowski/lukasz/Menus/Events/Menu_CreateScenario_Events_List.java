@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Events;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Game.Button_Game_NewGameBoxStyle_LEFT;
@@ -96,7 +94,7 @@ extends Menu {
                             nData.clear();
                         }
                         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                            // empty catch block
+                            
                         }
                         CFG.eventsManager.iCreateEvent_Day = CFG.eventsManager.getEvent((int)this.getCurr()).getEventDate_Since().iEventDay;
                         CFG.eventsManager.iCreateEvent_Month = CFG.eventsManager.getEvent((int)this.getCurr()).getEventDate_Since().iEventMonth;
@@ -164,7 +162,7 @@ extends Menu {
                             nData.clear();
                         }
                         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                            // empty catch block
+                            
                         }
                         CFG.eventsManager.iCreateEvent_Day = CFG.eventsManager.getEvent((int)this.getCurr()).getEventDate_Since().iEventDay;
                         CFG.eventsManager.iCreateEvent_Month = CFG.eventsManager.getEvent((int)this.getCurr()).getEventDate_Since().iEventMonth;

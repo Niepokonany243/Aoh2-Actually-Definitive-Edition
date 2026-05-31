@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.ServiceRibbon;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Classic.Button_Classic_LR;
@@ -89,7 +87,7 @@ extends Menu {
                 catch (ClassNotFoundException classNotFoundException) {
                 }
                 catch (IOException iOException) {
-                    // empty catch block
+                    
                 }
                 CFG.toastM.addM(CFG.EDITOR_ACTIVE_GAMEDATA_TAG);
                 CFG.menus.setMenuID(View.eGAME_EDITOR_SERVICE_RIBBON_EDIT);

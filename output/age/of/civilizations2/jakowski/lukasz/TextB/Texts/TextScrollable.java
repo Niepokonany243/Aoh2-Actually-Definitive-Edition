@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.TextB.Texts;
 
 import age.of.civilizations2.jakowski.lukasz.Button.MenuElemUI;
@@ -88,7 +86,7 @@ extends Text {
             ScissorStack.popScissors();
         }
         catch (IllegalStateException illegalStateException) {
-            // empty catch block
+            
         }
     }
 
@@ -117,13 +115,13 @@ extends Text {
                 this.iTextWidth = this.sText.length() * CFG.TEXT_HEIGHT_DEFAULT;
                 this.iTextHeight = CFG.TEXT_HEIGHT_DEFAULT;
             }
-            // Stability: Do NOT expand width automatically here. Keep it pinned to constructor width.
+            
             if (this.getHeightE() < this.iTextHeight) {
                 this.setHeightE(this.iTextHeight);
             }
         }
         catch (NullPointerException nullPointerException) {
-            // empty catch block
+            
         }
         try {
             if (CFG.fontMain != null && CFG.fontMain.size() > this.fontID) {
@@ -131,7 +129,7 @@ extends Text {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Packages;
 
 import age.of.civilizations2.jakowski.lukasz.Alliances_Names_GameData;
@@ -56,7 +54,7 @@ extends Menu {
             }
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
         this.initMenuWithBackButton(new TitleM(null, CFG.BUTTON_H * 3 / 4, false, false), 0, CFG.BUTTON_H * 3 / 4, CFG.GAMEWIDTH, CFG.GAMEHEIGHT - CFG.BUTTON_H * 3 / 4, menuElements);
         this.updateLang();
@@ -137,7 +135,7 @@ extends Menu {
         catch (ClassNotFoundException classNotFoundException) {
         }
         catch (IOException iOException) {
-            // empty catch block
+            
         }
         return nTag;
     }

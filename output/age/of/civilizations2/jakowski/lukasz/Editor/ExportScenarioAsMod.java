@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Editor;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -16,91 +14,91 @@ public class ExportScenarioAsMod {
                 file.copyTo(FileManager.getSaveType("mods/" + tag + "/" + "map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tag + "/" + tag));
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             try {
                 file = FileManager.loadFile("map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tag + "/" + tag);
                 file.copyTo(FileManager.getSaveType("mods/" + tag + "/" + "map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tag + "/" + tag));
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             try {
                 file = FileManager.loadFile("map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tag + "/" + tag + "_PD");
                 file.copyTo(FileManager.getSaveType("mods/" + tag + "/" + "map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tag + "/" + tag + "_PD"));
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             try {
                 file = FileManager.loadFile("map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tag + "/" + tag + "_D");
                 file.copyTo(FileManager.getSaveType("mods/" + tag + "/" + "map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tag + "/" + tag + "_D"));
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             try {
                 file = FileManager.loadFile("map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tag + "/" + tag + "_HRE");
                 file.copyTo(FileManager.getSaveType("mods/" + tag + "/" + "map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tag + "/" + tag + "_HRE"));
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             try {
                 file = FileManager.loadFile("map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tag + "/" + tag + "_W");
                 file.copyTo(FileManager.getSaveType("mods/" + tag + "/" + "map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tag + "/" + tag + "_W"));
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             try {
                 file = FileManager.loadFile("map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tag + "/" + tag + "_C");
                 file.copyTo(FileManager.getSaveType("mods/" + tag + "/" + "map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tag + "/" + tag + "_C"));
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             try {
                 file = FileManager.loadFile("map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tag + "/" + "events/" + tag + "_E");
                 file.copyTo(FileManager.getSaveType("mods/" + tag + "/" + "map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tag + "/" + "events/" + tag + "_E"));
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             try {
                 file = FileManager.loadFile("map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tag + "/" + tag + "_A");
                 file.copyTo(FileManager.getSaveType("mods/" + tag + "/" + "map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tag + "/" + tag + "_A"));
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             try {
                 file = FileManager.loadFile("map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tag + "/" + tag + "_O");
                 file.copyTo(FileManager.getSaveType("mods/" + tag + "/" + "map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tag + "/" + tag + "_O"));
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             try {
                 file = FileManager.loadFile("map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tag + "/" + tag + "_INFO" + ".json");
                 file.copyTo(FileManager.getSaveType("mods/" + tag + "/" + "map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tag + "/" + tag + "_INFO" + ".json"));
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             try {
                 file = FileManager.loadFile("map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tag + "/" + "preview.png");
                 file.copyTo(FileManager.getSaveType("mods/" + tag + "/" + "map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tag + "/" + "preview.png"));
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             try {
                 file = FileManager.loadFile("map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tag + "/" + "previewSpecial.png");
                 file.copyTo(FileManager.getSaveType("mods/" + tag + "/" + "map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tag + "/" + "previewSpecial.png"));
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             try {
                 FileHandle fileSave = FileManager.getSaveType("mods/" + tag + "/mod.txt");
@@ -114,14 +112,14 @@ public class ExportScenarioAsMod {
                 fileSave.writeString("}\n", true);
             }
             catch (Exception fileSave) {
-                // empty catch block
+                
             }
             try {
                 file = FileManager.loadFile("map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + tag + "/" + "preview.png");
                 file.copyTo(FileManager.getSaveType("mods/" + tag + "/logo.png"));
             }
             catch (Exception fileSave) {
-                // empty catch block
+                
             }
             try {
                 for (int i = 1; i < CFG.core.getCivsSize(); ++i) {

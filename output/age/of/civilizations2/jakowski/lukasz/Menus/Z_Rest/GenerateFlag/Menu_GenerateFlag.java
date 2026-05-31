@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Z_Rest.GenerateFlag;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Button_Transparent;
@@ -42,7 +40,7 @@ extends Menu {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         CFG.menus.setMenuIDWithoutAnim(CFG.backToMenu);
         CFG.menus.setBackAnimation(true);

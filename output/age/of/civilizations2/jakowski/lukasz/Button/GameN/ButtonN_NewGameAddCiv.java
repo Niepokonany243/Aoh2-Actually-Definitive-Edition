@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button.GameN;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -124,7 +122,7 @@ extends ButtonM {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         Gdx.gl.glActiveTexture(33984);
         IMGManager.getIMG(Images.flagDiplomacyMask).draw(oSB, posX + (IMGManager.getIMG(Images.flagDiplomacyOver).getWidth() - IMGManager.getIMG(Images.flagDiplomacyMask).getWidth()) / 2, posY + (IMGManager.getIMG(Images.flagDiplomacyOver).getHeight() - IMGManager.getIMG(Images.flagDiplomacyMask).getHeight()) / 2, IMGManager.getIMG(Images.flagDiplomacyMask).getWidth(), IMGManager.getIMG(Images.flagDiplomacyMask).getHeight());

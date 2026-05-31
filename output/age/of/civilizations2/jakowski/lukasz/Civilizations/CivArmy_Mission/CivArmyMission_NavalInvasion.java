@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Civilizations.CivArmy_Mission;
 
 import age.of.civilizations2.jakowski.lukasz.AI.AI_NeighProvinces;
@@ -47,9 +45,7 @@ extends CivArmyMission {
         return this.actionMission_Old(nCivID);
     }
 
-    /*
-     * Enabled aggressive block sorting
-     */
+    
     public boolean actionMission_New(int nCivID) {
         if (!CFG.core.getCivsAtWar(nCivID, CFG.core.getProv(this.toProvinceID).getCivId())) {
             if (!CFG.core.getCivsAreAllied(nCivID, CFG.core.getProv(this.toProvinceID).getCivId())) {
@@ -104,7 +100,7 @@ extends CivArmyMission {
                         tArmyToRecruit_PRE = CFG.core.getProv(this.iProvinceID).getArmyCivID1(nCivID);
                     } else {
                         if ((float)tArmyToRecruit_PRE > (float)enemyArmy * 1.175f) {
-                            if (true) { // removed gold check
+                            if (true) { 
                                 if ((float)tArmyToRecruit_PRE > (float)((long)enemyArmy + CFG.core.getCiv(CFG.core.getProv(this.toProvinceID).getCivId()).getGold() / (long)GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT) * 1.175f) {
                                     tArmyToRecruit_PRE = (int)Math.min((double)tArmyToRecruit_PRE, (double)(GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT + CFG.oR.nextInt(GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT * 4)) + Math.ceil(((float)enemyArmy + ((float)CFG.core.getCiv(CFG.core.getProv(this.toProvinceID).getCivId()).getGold() + Math.max(0.0f, (float)CFG.core.getCiv((int)CFG.core.getProv((int)this.toProvinceID).getCivId()).iBudget * 1.5f)) / (float)GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT) * 1.175f * (1.745f + (float)CFG.oR.nextInt(925) / 1000.0f)));
                                 }
@@ -158,7 +154,7 @@ extends CivArmyMission {
                     if (tArmyToRecruit_PRE > 0 && (tryRegroupArmy = new RegroupArmy(nCivID, listOfPossibleProvinces.get((int)iBestID).iProvinceID, this.iProvinceID)).getRouteSize() > 0) {
                         if (tryRegroupArmy.getRouteSize() == 1) {
                             if (!CFG.gameAction.moveArmyAction(listOfPossibleProvinces.get((int)iBestID).iProvinceID, this.iProvinceID, tArmyToRecruit_PRE, nCivID, true, false)) {
-                                // empty if block
+                                
                             }
                         } else if (CFG.gameAction.moveArmyAction(listOfPossibleProvinces.get((int)iBestID).iProvinceID, tryRegroupArmy.getRoute(0), tArmyToRecruit_PRE, nCivID, true, false)) {
                             tryRegroupArmy.setFromProvinceID(tryRegroupArmy.getRoute(0));
@@ -175,9 +171,7 @@ extends CivArmyMission {
         return false;
     }
 
-    /*
-     * Enabled aggressive block sorting
-     */
+    
     public boolean actionMission_Old(int nCivID) {
         if (!CFG.core.getCivsAtWar(nCivID, CFG.core.getProv(this.toProvinceID).getCivId())) {
             if (!CFG.core.getCivsAreAllied(nCivID, CFG.core.getProv(this.toProvinceID).getCivId())) {
@@ -226,7 +220,7 @@ extends CivArmyMission {
                     return false;
                 }
                 if ((float)tArmyToRecruit_PRE > (float)enemyArmy * 1.175f) {
-                    if (true) { // removed gold check
+                    if (true) { 
                         if ((float)tArmyToRecruit_PRE > (float)((long)enemyArmy + CFG.core.getCiv(CFG.core.getProv(this.toProvinceID).getCivId()).getGold() / (long)GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT) * 1.175f) {
                             tArmyToRecruit_PRE = (int)Math.min((double)tArmyToRecruit_PRE, (double)(GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT + CFG.oR.nextInt(GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT * 4)) + Math.ceil(((float)enemyArmy + ((float)CFG.core.getCiv(CFG.core.getProv(this.toProvinceID).getCivId()).getGold() + Math.max(0.0f, (float)CFG.core.getCiv((int)CFG.core.getProv((int)this.toProvinceID).getCivId()).iBudget * 1.5f)) / (float)GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT) * 1.175f * (1.745f + (float)CFG.oR.nextInt(925) / 1000.0f)));
                         }
@@ -283,7 +277,7 @@ extends CivArmyMission {
                     if (tArmyToRecruit_PRE > 0 && (tryRegroupArmy = new RegroupArmy(nCivID, listOfPossibleProvinces.get((int)iBestID).iProvinceID, this.iProvinceID)).getRouteSize() > 0) {
                         if (tryRegroupArmy.getRouteSize() == 1) {
                             if (!CFG.gameAction.moveArmyAction(listOfPossibleProvinces.get((int)iBestID).iProvinceID, this.iProvinceID, tArmyToRecruit_PRE, nCivID, true, false)) {
-                                // empty if block
+                                
                             }
                         } else if (CFG.gameAction.moveArmyAction(listOfPossibleProvinces.get((int)iBestID).iProvinceID, tryRegroupArmy.getRoute(0), tArmyToRecruit_PRE, nCivID, true, false)) {
                             tryRegroupArmy.setFromProvinceID(tryRegroupArmy.getRoute(0));
@@ -332,7 +326,7 @@ extends CivArmyMission {
         int colonizeCost = (int)((float)BuildingsManager.getPort_BuildCost(CFG.core.getProv(nProvinceID).getLvlOfPort() + 1, nProvinceID) * 1.05f);
         CFG.core.getCiv((int)this.iCivID).civGD.iLockTreasury = Math.max(CFG.core.getCiv((int)this.iCivID).civGD.iLockTreasury, colonizeCost);
         if (CFG.core.getCiv((int)this.iCivID).iBudget <= 0 || CFG.core.getCiv(this.iCivID).getGold() <= 0L || CFG.core.getCiv(this.iCivID).getGold() < (long)colonizeCost) {
-            // empty if block
+            
         }
     }
 }

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button.Classic;
 
 import age.of.civilizations2.jakowski.lukasz.BetterUI_Manager;
@@ -36,7 +34,7 @@ extends Button_Classic {
             }
             Images.pix.draw(oSB, this.getPosXE() + iTranslateX, this.getPosY() + iTranslateY, this.getWidthE(), this.getHeightE());
 
-            // Full borders
+            
             BetterUI_Manager.drawBetterButtonBorder(oSB, this.getPosXE() + iTranslateX, this.getPosY() + iTranslateY, this.getWidthE(), this.getHeightE(), this.getIsHovered(), isActive, this.getIsClickable());
 
             oSB.setColor(Color.WHITE);

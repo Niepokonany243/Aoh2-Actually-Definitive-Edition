@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Load.Generate;
 
 import age.of.civilizations2.jakowski.lukasz.Button.MenuElemUI;
@@ -98,7 +96,7 @@ extends Menu {
                 continue;
             }
             catch (GdxRuntimeException gdxRuntimeException) {
-                // empty catch block
+                
             }
         }
         CFG.toastM.addM(CFG.lang.get("Done") + " #" + CFG.lang.get(CFG.core.getGameScenars().getScenarioNameID(nScenarioID)), CFG.COLOR_HOVER_TITLE);

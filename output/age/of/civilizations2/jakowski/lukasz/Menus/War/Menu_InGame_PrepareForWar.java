@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.War;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Diplomacy.Button_Diplomacy_CallAllies;
@@ -369,7 +367,7 @@ extends Menu {
                                 CFG.core.getProv(CFG.core.getCiv((Integer)civs.get(i)).getCapitalProvID()).getCit(0).setCityLevel(CFG.getEditorCityLevel(0));
                             }
                             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                                // empty catch block
+                                
                             }
                             CFG.core.getProv(CFG.core.getCiv((Integer)civs.get(i)).getCapitalProvID()).setDrawCitiesInProv(true);
                             CFG.core.getProv(CFG.core.getCiv((Integer)civs.get(i)).getCapitalProvID()).updateDrawArmyInProv();
@@ -378,7 +376,7 @@ extends Menu {
                         continue;
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                 }
             }

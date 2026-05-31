@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Province;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Button_RelocatePop;
@@ -52,7 +50,7 @@ extends Menu {
         int maxPopulation = 0;
         int sliderButtonID = -1;
         
-        // Use the first province for nationality selection template
+        
         int mainFromID = fromProvinceIDs.isEmpty() ? nFromProvinceID : fromProvinceIDs.get(0);
         
         if (relocate.isEmpty() && mainFromID >= 0) {
@@ -64,8 +62,8 @@ extends Menu {
         try {
             for (Integer fID : fromProvinceIDs) {
                 for (i = 0; i < CFG.core.getProv(fID).getPop().getNatsSize(); ++i) {
-                    // Logic for multiple provinces: if nationality matches index in template? 
-                    // This is tricky. Simplification: relocate all selected provinces' population.
+                    
+                    
                     maxPopulation += CFG.core.getProv(fID).getPop().getPopulationID(i);
                 }
             }
@@ -341,7 +339,7 @@ extends Menu {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -401,8 +399,8 @@ extends Menu {
                 }
 
                 for (int i = 0; i < civs.size() && totalToRelocate > 0; ++i) {
-                    // If multiple provinces, we might want to move everyone or follow the 'relocate' template for the first province
-                    // For multiple selection, moving everyone is safer logic unless we merge nationalities
+                    
+                    
                     if (fromProvinceIDs.size() > 1 || (i < relocate.size() && relocate.get(i))) {
                         int possiblePop = (int)CFG.core.getProv(fID).getPop().getPopulationOfCivID((Integer)civs.get(i));
                         int move = Math.min(possiblePop, totalToRelocate);

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Events;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Game.Button_Game_NewGameBoxStyle_RIGHT_Remove;
@@ -511,7 +509,7 @@ extends Menu {
                         }
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                     if (!updated) {
                         CFG.eventsManager.createScenarioEvents.tempTAG = "";

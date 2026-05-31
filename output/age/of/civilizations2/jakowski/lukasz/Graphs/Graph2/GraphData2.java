@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Graphs.Graph2;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -93,8 +91,8 @@ public class GraphData2 {
                     if (this.lVectorPoints.get((int)i).x == this.lVectorPoints.get((int)(i - 1)).x) continue;
                     nPath.add(new Vector2((float)iPosX + this.lVectorPoints.get((int)i).x, (float)(-iPosY) + -this.lVectorPoints.get((int)i).y));
                 }
-                // Renderer.shapeDrawer.setColor(Graph2.GRAPH_LINE_COLOR);
-                // Renderer.shapeDrawer.path(nPath, 1.0f, JoinType.SMOOTH, true);
+                
+                
                 try {
                     Renderer.oSBBorder2.end();
                 }

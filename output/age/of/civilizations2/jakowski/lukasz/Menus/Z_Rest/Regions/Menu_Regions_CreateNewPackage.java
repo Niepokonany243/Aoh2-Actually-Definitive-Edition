@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Z_Rest.Regions;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Classic.Button_Classic;
@@ -93,7 +91,7 @@ extends Menu {
                 catch (ClassNotFoundException classNotFoundException) {
                 }
                 catch (IOException iOException) {
-                    // empty catch block
+                    
                 }
                 CFG.backToMenu = View.eMAP_EDITOR_CREATE_REGIONS_PACKAGE;
                 CFG.menus.setMenuID(View.eMAP_EDITOR_CREATE_NEW_REGION);

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Z_Rest2.Happiness;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;

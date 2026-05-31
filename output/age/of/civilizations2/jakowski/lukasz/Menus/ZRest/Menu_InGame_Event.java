@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.ZRest;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Button_Transparent;
@@ -125,7 +123,7 @@ extends Menu {
                         }
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                     nData.add(new ME_Hover_2Type_Space());
                     nElements.add(new MEHover_2E(nData));
@@ -208,7 +206,7 @@ extends Menu {
                 this.getTitleM().setText(CFG.lang.get("Event"));
             }
             catch (NullPointerException nullPointerException) {
-                // empty catch block
+                
             }
         }
         try {
@@ -228,7 +226,7 @@ extends Menu {
             this.iEventDateWidth = (int)CFG.glyphLay.width;
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -273,7 +271,7 @@ extends Menu {
             Renderer.drawText(oSB, CFG.FONT_BOLD_SMALL, this.sEventDate, this.getPosX() + this.getMenuElem(0).getPosXE() + this.getMenuElem(0).getWidthE() - CFG.PADD - this.iEventDateWidth + iTranslateX, this.getPosY() + this.getMenuElem(0).getPosY() + CFG.PADD + iTranslateY, new Color(1.0f, 1.0f, 1.0f, 0.8f));
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         oSB.setColor(Color.WHITE);
         this.drawMenuM(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);
@@ -309,7 +307,7 @@ extends Menu {
             CFG.eventsManager.getEvent((int)Menu_InGame_Event.EVENT_ID).lDecisions.get(iID).executeDecision();
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         CFG.menus.setVisibleInGame_Event(false);
         CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).runNextEvent2();

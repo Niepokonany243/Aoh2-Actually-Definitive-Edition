@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.BetterUI_Manager;
@@ -178,7 +176,7 @@ public class Menu {
             ScissorStack.popScissors();
         }
         catch (IllegalStateException illegalStateException) {
-            // empty catch block
+            
         }
         this.drawTitle(oSB, iTranslateX, iTranslateY, sliderMenuIsActive, this.getPosY());
         if (this.getCloseable()) {
@@ -191,7 +189,7 @@ public class Menu {
             this.getMenuElem(nMenuElementID).drawMEH2(oSB, this.getMenuPosX() + iTranslateX, this.getMenuPosY() + iTranslateY, this.getMenuElementIsActive(true, CFG.menus.getActiveMenuElemeID()));
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -224,7 +222,7 @@ public class Menu {
             }
         }
         catch (ArithmeticException arithmeticException) {
-            // empty catch block
+            
         }
     }
 
@@ -236,7 +234,7 @@ public class Menu {
             MenuElemUI elem = this.menuElem.get(i);
             if (!elem.getVisibleE()) continue;
             
-            // Virtual Scrolling: Skip drawing if element is completely off-screen
+            
             if (menuPosY + elem.getPosY() + elem.getHeightE() < parentPosY || menuPosY + elem.getPosY() > parentPosY + parentHeight) {
                 continue;
             }
@@ -377,7 +375,7 @@ public class Menu {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -396,7 +394,7 @@ public class Menu {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

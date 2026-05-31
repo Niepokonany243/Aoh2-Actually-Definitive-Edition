@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Civs.Ideologies;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Game.Button_Game;
@@ -43,7 +41,7 @@ extends Menu {
             }
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
         this.initMenu(null, 0, CFG.BUTTON_H + CFG.PADD * 2, CFG.GAMEWIDTH, CFG.BUTTON_H + CFG.PADD * 2 + 1, menuElements);
         this.updatedButtonsWidth(CFG.PADD, CFG.BUTTON_W);
@@ -62,7 +60,7 @@ extends Menu {
             }
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -77,7 +75,7 @@ extends Menu {
             }
         }
         catch (Exception ex) {
-            // empty catch block
+            
         }
     }
 
@@ -92,7 +90,7 @@ extends Menu {
             }
         }
         catch (Exception ex) {
-            // empty catch block
+            
         }
     }
 
@@ -256,7 +254,7 @@ extends Menu {
                 this.lCivsTags.clear();
             }
             catch (NullPointerException nullPointerException) {
-                // empty catch block
+                
             }
         }
         super.setVisibleM(visible);

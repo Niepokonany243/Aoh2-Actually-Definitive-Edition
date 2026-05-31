@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.HistoryLog;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -33,7 +31,7 @@ extends HistoryLog {
             this.iMessWidth = (int)(CFG.glyphLay.width * 0.7f);
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         try {
             CFG.glyphLay.setText(CFG.fontMain.get(0), CFG.core.getCiv(this.iCivA).getCivName() + " ");

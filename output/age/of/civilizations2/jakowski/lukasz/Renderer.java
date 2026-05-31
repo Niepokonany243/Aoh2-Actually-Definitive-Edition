@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -175,7 +173,7 @@ public class Renderer {
                 font.setColor(color);
                 font.draw((Batch)oSB, sText, (float)nPosX, (float)(-nPosY));
             } catch (Throwable ex) {
-                // Ignore LibGDX internal drawing errors like "Array is empty"
+                
             }
         }
     }
@@ -206,9 +204,7 @@ public class Renderer {
         Renderer.drawTextWithShadowRotated(oSB, 0, sText, nPosX, nPosY, color, rotate);
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     public static final void drawTextWithShadowRotated(SpriteBatch oSB, int fontID, String sText, int nPosX, int nPosY, Color color, float rotate) {
         if (sText != null && CFG.fontMain.size() > fontID) {
             Matrix4 oldTransformMatrix = oSB.getTransformMatrix().cpy();
@@ -239,9 +235,7 @@ public class Renderer {
         Renderer.drawTextRotated(oSB, 0, sText, nPosX, nPosY, color, rotate);
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     public static final void drawTextRotated(SpriteBatch oSB, int fontID, String sText, int nPosX, int nPosY, Color color, float rotate) {
         if (sText != null && CFG.fontMain.size() > fontID) {
             Matrix4 oldTransformMatrix = oSB.getTransformMatrix().cpy();
@@ -289,7 +283,7 @@ public class Renderer {
                 --i;
             }
 
-            // Simple Missile Flash - Performance Friendly
+            
             for (int k = mFlash.size() - 1; k >= 0; k--) {
                 long time = CFG.currentTimeMillis - mFlashTime.get(k);
                 if (time > 1000) {
@@ -316,9 +310,7 @@ public class Renderer {
         }
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     public static final synchronized void drawTextRotatedBorder(SpriteBatch oSB, String sText, int nPosX, int nPosY, Color color, float rotate) {
         if (sText != null && CFG.fontBorder != null) {
             Matrix4 oldTransformMatrix = oSB.getTransformMatrix().cpy();
@@ -409,7 +401,7 @@ public class Renderer {
             ScissorStack.popScissors();
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

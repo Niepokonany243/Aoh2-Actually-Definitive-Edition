@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.War.Coalition;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Flag.Button_InGameAction_War;

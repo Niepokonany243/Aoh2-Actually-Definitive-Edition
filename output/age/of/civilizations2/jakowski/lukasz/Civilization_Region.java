@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -506,9 +504,7 @@ public class Civilization_Region {
         }
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     public final void buildDrawData() {
         Civilization_Region civilization_Region = this;
         synchronized (CFG.FONT_LOCK) {
@@ -667,7 +663,7 @@ public class Civilization_Region {
                                 continue;
                             }
                             catch (NullPointerException nullPointerException) {
-                                // empty catch block
+                                
                             }
                         }
                     }

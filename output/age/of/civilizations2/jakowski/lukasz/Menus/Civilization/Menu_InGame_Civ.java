@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Civilization;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -213,7 +211,7 @@ extends Menu {
                     ScissorStack.popScissors();
                 }
                 catch (IllegalStateException illegalStateException) {
-                    // empty catch block
+                    
                 }
             }
 

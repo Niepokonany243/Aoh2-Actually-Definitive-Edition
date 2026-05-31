@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -210,13 +208,13 @@ public class Render {
                                 continue;
                             }
                             catch (Exception ex) {
-                                // empty catch block
+                                
                             }
                         }
                         continue;
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                 }
             }
@@ -254,10 +252,7 @@ public class Render {
         CFG.core.drawActiveProvinceBorder(oSB);
     }
 
-    /*
-     * Enabled force condition propagation
-     * Lifted jumps to return sites
-     */
+    
     public static final boolean drawInGame_WithoutScale_MapDetails() {
         if (!(CFG.map.getMpS().getCurrSc() >= 1.0f)) return false;
         float f = CFG.map.getMpS().getCurrSc();
@@ -1191,7 +1186,7 @@ public class Render {
                     }
                 }
                 catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                    // empty catch block
+                    
                 }
                 RenderProvince.drawProvincesBorder_NextPlayer(oSB);
             }
@@ -1205,7 +1200,7 @@ public class Render {
                         }
                     }
                     catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                        // empty catch block
+                        
                     }
                 }
             }
@@ -1219,7 +1214,7 @@ public class Render {
                         }
                     }
                     catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                        // empty catch block
+                        
                     }
                 }
             }
@@ -1234,7 +1229,7 @@ public class Render {
                     }
                 }
                 catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                    // empty catch block
+                    
                 }
                 RenderProvince.drawProvincesBorder_NextPlayer(oSB);
             }
@@ -1248,7 +1243,7 @@ public class Render {
                         }
                     }
                     catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                        // empty catch block
+                        
                     }
                 }
             }
@@ -1262,7 +1257,7 @@ public class Render {
                         }
                     }
                     catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                        // empty catch block
+                        
                     }
                 }
             }
@@ -1277,14 +1272,14 @@ public class Render {
             @Override
             public void drawRendererWithoutScale(SpriteBatch oSB) {
                 if (Render.drawInGame_WithoutScale_MapDetails()) {
-                    // empty if block
+                    
                 }
             }
 
             @Override
             public void drawRendererMapDetails(SpriteBatch oSB) {
                 if (Render.drawInGame_MapDetails()) {
-                    // empty if block
+                    
                 }
             }
         } : new Renderer(){
@@ -1298,14 +1293,14 @@ public class Render {
             @Override
             public void drawRendererWithoutScale(SpriteBatch oSB) {
                 if (Render.drawInGame_WithoutScale_MapDetails()) {
-                    // empty if block
+                    
                 }
             }
 
             @Override
             public void drawRendererMapDetails(SpriteBatch oSB) {
                 if (Render.drawInGame_MapDetails()) {
-                    // empty if block
+                    
                 }
             }
         }) : (CFG.menus.getInGameAC() ? new Renderer(){
@@ -1326,7 +1321,7 @@ public class Render {
                     }
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
                 oSB.setColor(Color.WHITE);
                 if (CFG.map.getMpS().getCurrSc() >= DISABLE_INNER_BORDERS) {
@@ -1395,7 +1390,7 @@ public class Render {
                     }
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
                 oSB.setColor(Color.WHITE);
                 if (CFG.map.getMpS().getCurrSc() >= DISABLE_INNER_BORDERS) {
@@ -1460,7 +1455,7 @@ public class Render {
                 catch (NullPointerException nullPointerException) {
                 }
                 catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                    // empty catch block
+                    
                 }
                 oSB.setColor(Color.WHITE);
                 if (CFG.map.getMpS().getCurrSc() >= DISABLE_INNER_BORDERS) {

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.ZRest;
 
 import age.of.civilizations2.jakowski.lukasz.Button.GameN.ButtonN_Battle;
@@ -138,7 +136,7 @@ extends Menu {
                 ScissorStack.popScissors();
             }
             catch (IllegalStateException illegalStateException) {
-                // empty catch block
+                
             }
         }
         this.endClipM(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);

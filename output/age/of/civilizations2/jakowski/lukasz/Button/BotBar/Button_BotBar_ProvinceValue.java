@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button.BotBar;
 
 import age.of.civilizations2.jakowski.lukasz.Button.BotBar.Button_BotBar;
@@ -34,7 +32,7 @@ extends Button_BotBar {
             this.iTextHeight = (int)CFG.glyphLay.height;
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button.Diplomacy;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Stats.ButtonStats;
@@ -100,7 +98,7 @@ extends ButtonStats {
             this.iText2Width = (int)CFG.glyphLay.width;
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 }

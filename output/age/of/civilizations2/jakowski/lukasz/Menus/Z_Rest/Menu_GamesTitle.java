@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Z_Rest;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Classic.Button_Classic_LR_Main;
@@ -81,7 +79,7 @@ extends Menu {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         Core.drawMenuBG(oSB, this.getPosX() + iTranslateX, iTranslateY, this.getWidthM(), CFG.GAMEHEIGHT);
         oSB.setColor(Color.WHITE);

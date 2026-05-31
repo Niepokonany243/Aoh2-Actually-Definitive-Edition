@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -87,7 +85,7 @@ extends Event_Outcome {
                         continue;
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                 }
                 CFG.gameAction.updateCivsHappiness(this.getCivID());
@@ -99,7 +97,7 @@ extends Event_Outcome {
                             CFG.core.buildCivilizationRegions(this.id);
                         }
                         catch (Exception exception) {
-                            // empty catch block
+                            
                         }
                     }
                 });
@@ -119,7 +117,7 @@ extends Event_Outcome {
                         continue;
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                 }
                 CFG.gameAction.updateCivsHappiness(this.getCivID());
@@ -135,7 +133,7 @@ extends Event_Outcome {
                             CFG.core.buildCivilizationRegions(this.id);
                         }
                         catch (Exception exception) {
-                            // empty catch block
+                            
                         }
                     }
                 });
@@ -147,7 +145,7 @@ extends Event_Outcome {
                             CFG.core.buildCivilizationRegions(this.id);
                         }
                         catch (Exception exception) {
-                            // empty catch block
+                            
                         }
                     }
                 });
@@ -233,7 +231,7 @@ extends Event_Outcome {
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
         }
         catch (NullPointerException nullPointerException) {
-            // empty catch block
+            
         }
         return new ArrayList<MEHover_2E>();
     }

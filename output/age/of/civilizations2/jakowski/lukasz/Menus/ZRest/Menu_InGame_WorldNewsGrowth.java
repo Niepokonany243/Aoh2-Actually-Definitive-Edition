@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.ZRest;
 
 import age.of.civilizations2.jakowski.lukasz.Button.GameN.Population.ButtonN_Pop_2_PopChange;
@@ -167,7 +165,7 @@ extends Menu {
             this.getTitleM().setText(CFG.map.getMapName_Just(CFG.map.getActiveMapIDN()) + ": " + CFG.lang.get("GrowthAndDecline"));
         }
         catch (NullPointerException nullPointerException) {
-            // empty catch block
+            
         }
     }
 

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Messages;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Button_Message;
@@ -81,7 +79,7 @@ extends Menu {
                 continue;
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
     }
@@ -115,7 +113,7 @@ extends Menu {
                     }
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
             }
             if (CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).getCivDiploGD().messageBox.getMessage((int)(CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).getCivDiploGD().messageBox.getMessagesSize() - 1 - iID)).fromCivID != CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId() && tempMessageType != MessageType.HIGH_INFLATION) {
@@ -132,7 +130,7 @@ extends Menu {
                     }
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
             }
             CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).getCivDiploGD().messageBox.getMessage(CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).getCivDiploGD().messageBox.getMessagesSize() - 1 - iID).onAction(CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).getCivDiploGD().messageBox.getMessagesSize() - 1 - iID);

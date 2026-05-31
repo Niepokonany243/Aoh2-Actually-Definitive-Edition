@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.ZRest;
 
 import age.of.civilizations2.jakowski.lukasz.AI.AI;
@@ -216,7 +214,7 @@ extends Menu {
                 CFG.core.resetRegroupArmy_Data();
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             Civilization civ = CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId());
             try {

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -378,20 +376,20 @@ public class AoCGame {
                     this.oSB.end();
                 }
                 catch (Exception ex) {
-                    // empty catch block
+                    
                 }
                 try {
                     Renderer.oSBBorder2.end();
                 }
                 catch (Exception ex) {
-                    // empty catch block
+                    
                 }
                 this.oSB.begin();
                 try {
                     Renderer.oSBBorder2.begin();
                 }
                 catch (Exception ex) {
-                    // empty catch block
+                    
                 }
                 this.oSB.oSBR.setShader(shaderDef);
                 Render.draw(this.oSB.oSBR);
@@ -400,7 +398,7 @@ public class AoCGame {
                     Renderer.oSBBorder2.end();
                 }
                 catch (Exception ex) {
-                    // empty catch block
+                    
                 }
                 cameraOrt.setToOrtho(false, CFG.GAMEWIDTH, -CFG.GAMEHEIGHT);
                 viewport.setWorldSize(CFG.GAMEWIDTH, CFG.GAMEHEIGHT);
@@ -412,13 +410,13 @@ public class AoCGame {
                     this.oSB.end();
                 }
                 catch (Exception ex) {
-                    // empty catch block
+                    
                 }
                 try {
                     Renderer.oSBBorder2.end();
                 }
                 catch (Exception ex) {
-                    // empty catch block
+                    
                 }
                 this.oSB.begin();
                 try {
@@ -431,7 +429,7 @@ public class AoCGame {
                     Renderer.oSBBorder2.begin();
                 }
                 catch (Exception ex) {
-                    // empty catch block
+                    
                 }
                 Render.drawWithoutScale(this.oSB.oSBR, this.oSBNames);
                 this.oSB.end();
@@ -445,7 +443,7 @@ public class AoCGame {
                     Renderer.oSBBorder2.end();
                 }
                 catch (Exception ex) {
-                    // empty catch block
+                    
                 }
                 viewport.setWorldSize((float)CFG.GAMEWIDTH / CFG.map.getMpS().getCurrSc(), (float)CFG.GAMEHEIGHT / CFG.map.getMpS().getCurrSc());
                 viewport.apply();
@@ -456,20 +454,20 @@ public class AoCGame {
                     this.oSB.end();
                 }
                 catch (Exception ex) {
-                    // empty catch block
+                    
                 }
                 try {
                     Renderer.oSBBorder2.end();
                 }
                 catch (Exception ex) {
-                    // empty catch block
+                    
                 }
                 this.oSB.begin();
                 try {
                     Renderer.oSBBorder2.begin();
                 }
                 catch (Exception ex) {
-                    // empty catch block
+                    
                 }
                 this.oSB.oSBR.setShader(shaderDef);
                 Render.drawMapDetails(this.oSB.oSBR);
@@ -479,7 +477,7 @@ public class AoCGame {
                     Renderer.oSBBorder2.end();
                 }
                 catch (Exception ex) {
-                    // empty catch block
+                    
                 }
                 cameraOrt.setToOrtho(false, CFG.GAMEWIDTH, -CFG.GAMEHEIGHT);
                 viewport.setWorldSize(CFG.GAMEWIDTH, CFG.GAMEHEIGHT);
@@ -490,7 +488,7 @@ public class AoCGame {
                     this.oSB.end();
                 }
                 catch (Exception ex) {
-                    // empty catch block
+                    
                 }
                 this.oSB.begin();
                 this.oSB.oSBR.setColor(Color.WHITE);
@@ -501,7 +499,7 @@ public class AoCGame {
                         CFG.drawTextDefaultWithShadow(this.oSB.oSBR, "FPS: " + CFG.iNumOfFPS, CFG.PADD * 2, CFG.PADD * 2, Color.WHITE);
                     }
                     catch (Exception ex) {
-                        // empty catch block
+                        
                     }
                 }
                 this.oSB.oSBR.setColor(Color.WHITE);
@@ -520,7 +518,7 @@ public class AoCGame {
                     this.oSB.end();
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
             }
         } else {
@@ -544,7 +542,7 @@ public class AoCGame {
             }
         }
         if (CFG.getIsDesktop()) {
-            // empty if block
+            
         }
         this.requestRendering.update();
     }
@@ -622,13 +620,13 @@ public class AoCGame {
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             try {
                 CFG.map.getMpB().disposeGameMap();
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             try {
                 if (!CFG.flagOfCivilizationH.isEmpty()) {
@@ -639,13 +637,13 @@ public class AoCGame {
                 }
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             try {
                 CFG.map.mpOv.dispose();
             }
             catch (Exception i) {
-                // empty catch block
+                
             }
             try {
                 CFG.SFXManager.dispose();
@@ -804,10 +802,7 @@ public class AoCGame {
                 return true;
             }
 
-            /*
-             * Enabled force condition propagation
-             * Lifted jumps to return sites
-             */
+            
             @Override
             public boolean keyUp(int keycode) {
                 try {

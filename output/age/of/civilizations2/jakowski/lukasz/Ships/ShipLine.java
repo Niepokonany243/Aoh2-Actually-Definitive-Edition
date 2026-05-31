@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Ships;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -75,8 +73,8 @@ public class ShipLine {
                 for (int j = 0; j < GameValues.gvShips.SHIP_LINE_PRECISION; ++j) {
                     nPath.add(new Vector2((this.vPoints[j].x + (float)CFG.map.getMpC().getPX()) * CFG.map.getMpS().getCurrSc(), (-this.vPoints[j].y - (float)CFG.map.getMpC().getPY()) * CFG.map.getMpS().getCurrSc()));
                 }
-                // Renderer.shapeDrawer.setColor(new Color(1.0f, 1.0f, 1.0f, 0.75f));
-                // Renderer.shapeDrawer.path(nPath, 6.0f, JoinType.SMOOTH, true);
+                
+                
                 Renderer.oSBBorder2.end();
                 Renderer.oSBBorder2.begin();
             }

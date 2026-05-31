@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -73,7 +71,7 @@ public class MapBG {
                     CFG.map.mpOv.dMO(oSB, nPosX, nPosY, 1.0f);
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
             }
 
@@ -92,7 +90,7 @@ public class MapBG {
                     CFG.map.mpOv.dMO(oSB, nPosX, nPosY, 1.0f);
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
             }
 
@@ -191,7 +189,7 @@ public class MapBG {
                     CFG.map.mpOv.dMO(oSB, nPosX, nPosY, 1.0f);
                 }
                 catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                    // empty catch block
+                    
                 }
             }
 
@@ -273,9 +271,7 @@ public class MapBG {
         }
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     public final void drawMinimapTexture_Generate(SpriteBatch oSB) {
         if (!(this.minimapCivs != null || this.lGMI.isEmpty() || CFG.menus.getIn_InitMenu() || CFG.menus.getInLoadMap() || CFG.menus.getInLoadSave())) {
             try {
@@ -285,7 +281,7 @@ public class MapBG {
                     ScissorStack.popScissors();
                 }
                 catch (IllegalStateException illegalStateException) {
-                    // empty catch block
+                    
                 }
                 oSB.end();
                 this.minimapIsBelowZero = false;
@@ -441,7 +437,7 @@ public class MapBG {
                     ScissorStack.popScissors();
                 }
                 catch (IllegalStateException illegalStateException) {
-                    // empty catch block
+                    
                 }
                 oSB.end();
             }
@@ -476,7 +472,7 @@ public class MapBG {
             ScissorStack.popScissors();
         }
         catch (IllegalStateException illegalStateException) {
-            // empty catch block
+            
         }
         oSB.end();
         int tMinX = this.getWidthM();
@@ -573,7 +569,7 @@ public class MapBG {
             ScissorStack.popScissors();
         }
         catch (IllegalStateException illegalStateException) {
-            // empty catch block
+            
         }
         oSB.end();
         int tMinX = this.getWidthM();
@@ -663,7 +659,7 @@ public class MapBG {
             tempMinimapPrerivew.getTexture().getTextureData().prepare();
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
         PixmapIO.writePNG(FileManager.getSaveType("map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + CFG.CREATE_SCENARIO_GAME_DATA_TAG + "/" + "preview.png"), tempMinimapPrerivew.getTexture().getTextureData().consumePixmap());
         oSB.setColor(Color.BLACK);
@@ -678,7 +674,7 @@ public class MapBG {
             ScissorStack.popScissors();
         }
         catch (IllegalStateException illegalStateException) {
-            // empty catch block
+            
         }
         oSB.end();
         oSB.begin();
@@ -689,14 +685,14 @@ public class MapBG {
                 tempFlagImage2.getTexture().getTextureData().prepare();
             }
             catch (GdxRuntimeException gdxRuntimeException) {
-                // empty catch block
+                
             }
             PixmapIO.writePNG(FileManager.getSaveType("map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + CFG.CREATE_SCENARIO_GAME_DATA_TAG + "/" + "preview.png"), tempFlagImage2.getTexture().getTextureData().consumePixmap());
             tempFlagImage2.getTexture().dispose();
             tempFlagImage2 = null;
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
         oSB.setColor(Color.BLACK);
         IMGManager.getIMG(Images.pix255).drawO(oSB, 0, 0, tempMinimapWidth, tempMinimapHeight);
@@ -713,7 +709,7 @@ public class MapBG {
             }
         }
         catch (RuntimeException runtimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -726,7 +722,7 @@ public class MapBG {
             }
         }
         catch (RuntimeException runtimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -742,7 +738,7 @@ public class MapBG {
             ScissorStack.popScissors();
         }
         catch (IllegalStateException illegalStateException) {
-            // empty catch block
+            
         }
     }
 

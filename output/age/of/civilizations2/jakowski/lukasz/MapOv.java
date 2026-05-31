@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -53,7 +51,7 @@ public class MapOv {
                 this.dispose();
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
     }
@@ -112,7 +110,7 @@ public class MapOv {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         oSB.setShader(AoCGame.shaderDef);
         oSB.setColor(Color.WHITE);

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -20,9 +18,7 @@ extends Thread {
         Actions.doActions();
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     public static void doActions() {
         long time = System.nanoTime();
         time = System.nanoTime();
@@ -150,7 +146,7 @@ extends Thread {
                 CFG.menus.getInGameProvInfo().getMenuElem(0).setClickable(true);
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
         finally {

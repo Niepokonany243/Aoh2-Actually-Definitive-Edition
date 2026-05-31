@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.FormableCivs;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Classic.Button_Classic;
@@ -180,7 +178,7 @@ extends Menu {
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
         }
         catch (NullPointerException nullPointerException) {
-            // empty catch block
+            
         }
         super.endClipM(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);
     }
@@ -224,7 +222,7 @@ extends Menu {
             catch (ClassNotFoundException i) {
             }
             catch (IOException i) {
-                // empty catch block
+                
             }
             CFG.menus.setMenuID(View.eMAP_EDITOR_FORMABLE_CIVS_EDIT);
         } else {

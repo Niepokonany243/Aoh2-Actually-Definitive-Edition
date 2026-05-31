@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.MenuE_HoverP;
 
 import age.of.civilizations2.jakowski.lukasz.MenuE_HoverP.ME_Hover_2Type;

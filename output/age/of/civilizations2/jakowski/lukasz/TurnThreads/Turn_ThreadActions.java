@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.TurnThreads;
 
 import age.of.civilizations2.jakowski.lukasz.Actions;
@@ -11,9 +9,7 @@ extends Thread {
     private boolean running = true;
     private boolean processTurn = false;
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     @Override
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
@@ -56,9 +52,7 @@ extends Thread {
         this.notify();
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     public void stopWorker() {
         this.running = false;
         Turn_ThreadActions turn_ThreadActions = this;

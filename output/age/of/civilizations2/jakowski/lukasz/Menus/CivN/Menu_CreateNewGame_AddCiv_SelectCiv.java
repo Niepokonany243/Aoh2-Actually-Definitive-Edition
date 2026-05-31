@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.CivN;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Classic.Button_Classic_LR_Line;

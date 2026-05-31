@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -89,13 +87,13 @@ public class TerrainTypesManager {
                     continue;
                 }
                 catch (IOException iOException) {
-                    // empty catch block
+                    
                 }
             }
             Object var4_7 = null;
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
         this.iTerrainTypesSize = this.lNames.size();
     }
@@ -128,9 +126,7 @@ public class TerrainTypesManager {
         return 1;
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     public final void saveTerrainData() {
         OutputStream os = null;
         try {

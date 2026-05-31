@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button;
 
 import age.of.civilizations2.jakowski.lukasz.Button.ButtonM;
@@ -93,7 +91,7 @@ extends ButtonM {
                 return;
             }
         } else if (CFG.core.getPlayer(0).getCivId() > 0) {
-            // empty if block
+            
         }
     }
 

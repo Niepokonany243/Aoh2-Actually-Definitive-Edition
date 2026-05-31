@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Load;
 
 import age.of.civilizations2.jakowski.lukasz.Button.MenuElemUI;
@@ -303,7 +301,7 @@ extends Menu {
                 CFG.core.cleanForeignInvestmentBuild();
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
     }

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.ShowProvinces;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Button_ShowProvincesList;
@@ -70,7 +68,7 @@ extends Menu {
             }
         }
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            // empty catch block
+            
         }
     }
 }

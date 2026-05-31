@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Info;
 
 import age.of.civilizations2.jakowski.lukasz.Button.BotBar.Button_BotBarFlag;
@@ -1207,7 +1205,7 @@ extends Menu {
                     catch (IndexOutOfBoundsException indexOutOfBoundsException) {
                     }
                     catch (NullPointerException nullPointerException) {
-                        // empty catch block
+                        
                     }
                 }
                 return;

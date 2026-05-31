@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Editor;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -42,7 +40,7 @@ extends Editor {
                         continue block5;
                     }
                     catch (GdxRuntimeException ex) {
-                        // empty catch block
+                        
                     }
                 }
             } while (!isAvailable);
@@ -68,7 +66,7 @@ extends Editor {
             ++this.iActivePaletteID;
         }
         if (!Gdx.input.isKeyPressed(62) || CFG.core.getActiveProvID() >= 0) {
-            // empty if block
+            
         }
         if (Gdx.input.isKeyPressed(19) && CFG.core.getActiveProvID() >= 0) {
             if (CFG.core.getProv(CFG.core.getActiveProvID()).getSeaProv() || CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() == 0) {
@@ -84,7 +82,7 @@ extends Editor {
                 catch (ClassNotFoundException fileCiv) {
                 }
                 catch (IOException fileCiv) {
-                    // empty catch block
+                    
                 }
             }
         }

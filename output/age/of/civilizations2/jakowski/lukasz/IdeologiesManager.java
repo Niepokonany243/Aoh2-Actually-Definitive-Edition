@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -186,7 +184,7 @@ public class IdeologiesManager {
             }
         }
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            // empty catch block
+            
         }
         return sIn;
     }
@@ -231,7 +229,7 @@ public class IdeologiesManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         nData.add(new ME_Hover_2Type_Space());
         nElements.add(new MEHover_2E(nData));
@@ -329,7 +327,7 @@ public class IdeologiesManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         nData.add(new ME_Hover_2Type_Space());
         nElements.add(new MEHover_2E(nData));

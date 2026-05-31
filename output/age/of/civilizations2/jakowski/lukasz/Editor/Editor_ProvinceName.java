@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Editor;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -157,7 +155,7 @@ extends Editor {
             name = CFG.core.getActiveProvID() >= 0 ? CFG.core.getProv(CFG.core.getActiveProvID()).getProvName() : "";
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         return "Province Name: " + name + "\nW A S D x3\nArrows x1\nSpace - Change Point Mode\nC - Center Point On/Off\nP - Reset";
     }

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -53,10 +51,7 @@ extends Event_Outcome {
         return false;
     }
 
-    /*
-     * Enabled force condition propagation
-     * Lifted jumps to return sites
-     */
+    
     @Override
     public void outcomeAction() {
         if (!this.canMakeAction()) return;

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Slider;
 
 import age.of.civilizations2.jakowski.lukasz.BetterUI_Manager;
@@ -85,7 +83,7 @@ extends Menu {
                         }
                     }
                     catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                        // empty catch block
+                        
                     }
                     CFG.core.resetChooseProvinceData();
                     CFG.core.checkProvinceActionMenu();

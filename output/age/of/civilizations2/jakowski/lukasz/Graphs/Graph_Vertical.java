@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Graphs;
 
 import age.of.civilizations2.jakowski.lukasz.Button.ButtonM;
@@ -616,7 +614,7 @@ extends MenuElemUI {
                 ScissorStack.popScissors();
             }
             catch (IllegalStateException illegalStateException) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(Graph.POINTS_TEXT_SCALE);
             CFG.drawTextDefault(oSB, "" + this.iMaxPoint, this.getPosXE() + ((int)((float)CFG.TEXT_HEIGHT_DEFAULT * 0.7f) + CFG.PADD * 2) + 1 + (int)(2.0f * CFG.GUI_SCALE) + iTranslateX, this.getPosY() + CFG.CIV_FLAG_HEIGHT + CFG.PADD * 2 + 1 + iTranslateY - (int)(2.0f * CFG.GUI_SCALE + Graph.POINTS_TEXT_SCALE * (float)CFG.TEXT_HEIGHT_DEFAULT), Graph.DATA_COLOR);
@@ -655,7 +653,7 @@ extends MenuElemUI {
             ScissorStack.popScissors();
         }
         catch (IllegalStateException illegalStateException) {
-            // empty catch block
+            
         }
         oSB.setColor(Graph.GRAPH_LINES_COLOR);
         for (int i = -1; i < this.verticalInfo.getTextSize() - 1; ++i) {
@@ -718,7 +716,7 @@ extends MenuElemUI {
             ScissorStack.popScissors();
         }
         catch (IllegalStateException illegalStateException) {
-            // empty catch block
+            
         }
     }
 
@@ -744,7 +742,7 @@ extends MenuElemUI {
             ScissorStack.popScissors();
         }
         catch (IllegalStateException illegalStateException) {
-            // empty catch block
+            
         }
     }
 

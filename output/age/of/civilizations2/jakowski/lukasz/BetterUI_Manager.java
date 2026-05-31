@@ -60,11 +60,11 @@ public class BetterUI_Manager {
         
         Color primary = getPrimaryColor();
         
-        // Very subtle background tint
+        
         oSB.setColor(primary.r, primary.g, primary.b, 0.05f);
         Images.pix.draw(oSB, iTranslateX, iTranslateY, CFG.GAMEWIDTH, CFG.GAMEHEIGHT);
         
-        // Minimalist Static Grid
+        
         oSB.setColor(primary.r, primary.g, primary.b, 0.03f);
         int gridSize = 100;
         for (int i = 0; i < CFG.GAMEWIDTH; i += gridSize) {
@@ -74,7 +74,7 @@ public class BetterUI_Manager {
             IMGManager.getIMG(Images.line32Off1).drawO(oSB, iTranslateX, i + iTranslateY, CFG.GAMEWIDTH, 1);
         }
 
-        // Clean Vignette
+        
         oSB.setColor(primary.r, primary.g, primary.b, 0.15f);
         IMGManager.getIMG(Images.gradient).drawO(oSB, iTranslateX, iTranslateY, CFG.GAMEWIDTH, CFG.GAMEHEIGHT);
         
@@ -86,11 +86,11 @@ public class BetterUI_Manager {
         
         Color bg = getBackgroundColor(0.92f);
         
-        // Elegant glass panel without any borders (as requested)
+        
         oSB.setColor(bg);
         Images.pix.draw(oSB, posX, posY, width, height);
         
-        // Faint texture
+        
         oSB.setColor(getPrimaryColor().r, getPrimaryColor().g, getPrimaryColor().b, 0.03f);
         for (int i=40; i<height; i+=80) {
             Images.pix.draw(oSB, posX, posY + i, width, 1);
@@ -101,12 +101,12 @@ public class BetterUI_Manager {
         if (!isClickable) return;
         
         Color primary = getPrimaryColor();
-        // Full solid border like the map selection button
+        
         oSB.setColor(primary.r, primary.g, primary.b, (isHovered || isActive) ? 1.0f : 0.75f);
-        Images.pix.draw(oSB, posX, posY, width, 2); // Top
-        Images.pix.draw(oSB, posX, posY + height - 2, width, 2); // Bottom
-        Images.pix.draw(oSB, posX, posY, 2, height); // Left
-        Images.pix.draw(oSB, posX + width - 2, posY, 2, height); // Right
+        Images.pix.draw(oSB, posX, posY, width, 2); 
+        Images.pix.draw(oSB, posX, posY + height - 2, width, 2); 
+        Images.pix.draw(oSB, posX, posY, 2, height); 
+        Images.pix.draw(oSB, posX + width - 2, posY, 2, height); 
         
         if (isHovered || isActive) {
             oSB.setColor(primary.r, primary.g, primary.b, 0.15f);
@@ -120,18 +120,18 @@ public class BetterUI_Manager {
         Color primary = getPrimaryColor();
         Color bg = getBackgroundColor(0.8f);
         
-        // Track Background
+        
         oSB.setColor(bg);
         Images.pix.draw(oSB, posX, posY, width, height);
         
-        // Track Border
+        
         oSB.setColor(primary.r, primary.g, primary.b, (isHovered || isActive) ? 1.0f : 0.75f);
-        Images.pix.draw(oSB, posX, posY, width, 2); // Top
-        Images.pix.draw(oSB, posX, posY + height - 2, width, 2); // Bottom
-        Images.pix.draw(oSB, posX, posY, 2, height); // Left
-        Images.pix.draw(oSB, posX + width - 2, posY, 2, height); // Right
+        Images.pix.draw(oSB, posX, posY, width, 2); 
+        Images.pix.draw(oSB, posX, posY + height - 2, width, 2); 
+        Images.pix.draw(oSB, posX, posY, 2, height); 
+        Images.pix.draw(oSB, posX + width - 2, posY, 2, height); 
 
-        // Filled Area
+        
         int fillW = currentPosX + diffX;
         if (fillW > width) fillW = width;
         if (fillW < 0) fillW = 0;
@@ -139,7 +139,7 @@ public class BetterUI_Manager {
         oSB.setColor(colorLeft.r, colorLeft.g, colorLeft.b, 0.6f);
         Images.pix.draw(oSB, posX, posY, fillW, height);
         
-        // Handle / Indicator
+        
         oSB.setColor(primary.r, primary.g, primary.b, 1.0f);
         Images.pix.draw(oSB, posX + fillW - 2, posY - 2, 4, height + 4);
         

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.PeaceTreaty.Response;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Button_ShowMenu;

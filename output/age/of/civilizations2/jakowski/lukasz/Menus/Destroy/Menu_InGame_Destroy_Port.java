@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Destroy;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Build.Button_Build_Building_Destroy;

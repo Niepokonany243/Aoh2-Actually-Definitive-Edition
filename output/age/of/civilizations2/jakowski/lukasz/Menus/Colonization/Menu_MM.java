@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Colonization;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Build.Button_BuildAll;
@@ -43,7 +41,7 @@ extends Menu {
             Menu_MM.getCivByPercentile();
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

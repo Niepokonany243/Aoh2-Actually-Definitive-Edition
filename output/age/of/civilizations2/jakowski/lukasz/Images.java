@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -240,12 +238,7 @@ public class Images {
     public static int dialog_line;
     public static int mainMenuEdge;
     public static int mainMenuEdge2;
-    public static int logo_steam;
-    public static int logo_android;
-    public static int logo_app;
-    public static int logo_fb;
-    public static int logo_twit;
-    public static int logo_yt;
+
     public static int editor_top;
     public static int editor_top_line;
     public static int editor_line;

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle.AIPlaystyle;
@@ -157,7 +155,7 @@ public class GameAction {
             CFG.menus.setVisibleInGame_History(false);
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -195,7 +193,7 @@ public class GameAction {
                 return Integer.parseInt(CFG.core.getCiv(nCivID).getCivTag().substring(CFG.core.getCiv(nCivID).getCivTag().lastIndexOf(95) + 2, CFG.core.getCiv(nCivID).getCivTag().length()));
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
         return 0;
@@ -211,7 +209,7 @@ public class GameAction {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -498,7 +496,7 @@ public class GameAction {
             }
         }
         catch (Exception ex2) {
-            // empty catch block
+            
         }
         for (i2 = 0; i2 < CFG.core.getProvinSize(); ++i2) {
             Province province = CFG.core.getProv(i2);
@@ -604,7 +602,7 @@ public class GameAction {
                     CFG.core.getProv(tempOld).getCit(0).setCityLevel(CFG.getEditorCityLevel(1));
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
             }
             CFG.core.getProv(CFG.core.getCiv(nCivID).getCapitalProvID()).setIsCapital(true);
@@ -614,7 +612,7 @@ public class GameAction {
                 CFG.core.getProv(CFG.core.getCiv(nCivID).getCapitalProvID()).getCit(0).setCityLevel(CFG.getEditorCityLevel(0));
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.core.getProv(CFG.core.getCiv(nCivID).getCapitalProvID()).setDrawCitiesInProv(true);
             return true;
@@ -667,7 +665,7 @@ public class GameAction {
                 CFG.core.getProv(nProvinceID).updateDrawArmyInProv();
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             return true;
         }
@@ -1076,9 +1074,9 @@ public class GameAction {
                 for (int i = 0; i < civE.moveUnitsSize(); ++i) {
                     MoveUnits moveUnitsI = civE.getMoveUnits(i);
                     if (CFG.settingsGD.ANNEXATION_DELAY && CFG.core.getProv(moveUnitsI.getFromProviID()).getOccupationTurnsLeft() > 0) continue;
-                    // ── Occupation delay: block attacks INTO delay-occupied provinces ──
+                    
                     if (CFG.settingsGD.ANNEXATION_DELAY && CFG.core.getProv(moveUnitsI.getToProvID()).isOccupied() && CFG.core.getProv(moveUnitsI.getToProvID()).getOccupationTurnsLeft() > 0 && CFG.core.getCivsAtWar(civRTO, CFG.core.getProv(moveUnitsI.getToProvID()).getCivId())) continue;
-                    // ───────────────────────────────────────────────────────────────────
+                    
                     if (moveUnitsI.getNumberOfUnits() <= CFG.MIN_ARMY_REQUIRED_TO_ATTACK || CFG.core.getProv(moveUnitsI.getToProvID()).getCivId() <= 0 || CFG.core.getProv(moveUnitsI.getFromProviID()).isOccupied() || !CFG.core.getProv(moveUnitsI.getToProvID()).isOccupied() || !CFG.core.getCivsAtWar(civRTO, CFG.core.getProv(moveUnitsI.getToProvID()).getCivId())) continue;
                     if (moveUnitsI.getNumberOfUnits() > CFG.core.getProv(moveUnitsI.getFromProviID()).getArmyCivID1(civRTO)) {
                         moveUnitsI.setNumberOfUnits(CFG.core.getProv(moveUnitsI.getFromProviID()).getArmyCivID1(civRTO));
@@ -1180,9 +1178,9 @@ public class GameAction {
                 for (i = 0; i < CFG.core.getCiv(civRTO).moveUnitsSize(); ++i) {
                     MoveUnits moveUnitsI = CFG.core.getCiv(civRTO).getMoveUnits(i);
                     if (CFG.settingsGD.ANNEXATION_DELAY && CFG.core.getProv(moveUnitsI.getFromProviID()).getOccupationTurnsLeft() > 0) continue;
-                    // ── Occupation delay: prevent counterattack into delay-locked province ──
+                    
                     if (CFG.settingsGD.ANNEXATION_DELAY && CFG.core.getProv(moveUnitsI.getToProvID()).isOccupied() && CFG.core.getProv(moveUnitsI.getToProvID()).getOccupationTurnsLeft() > 0 && CFG.core.getCivsAtWar(civRTO, CFG.core.getProv(moveUnitsI.getToProvID()).getCivId())) continue;
-                    // ────────────────────────────────────────────────────────────────────────
+                    
                     if (CFG.core.getProv(moveUnitsI.getToProvID()).getCivId() == 0 || CFG.core.getCivsAtWar(civRTO, CFG.core.getProv(moveUnitsI.getToProvID()).getCivId()) || CFG.core.getMilitaryAccess(civRTO, CFG.core.getProv(moveUnitsI.getToProvID()).getCivId()) > 0 || CFG.core.getProv(moveUnitsI.getToProvID()).getCivId() == civRTO || CFG.core.getCiv(CFG.core.getProv(moveUnitsI.getToProvID()).getCivId()).getPuppetOfCiv() == civRTO || CFG.core.getCiv(civRTO).getPuppetOfCiv() == CFG.core.getProv(moveUnitsI.getToProvID()).getCivId() || CFG.core.getCiv(civRTO).getAlliance() > 0 && CFG.core.getCiv(civRTO).getAlliance() == CFG.core.getCiv(CFG.core.getProv(moveUnitsI.getToProvID()).getCivId()).getAlliance()) {
                         if (moveUnitsI.getNumberOfUnits() > CFG.core.getProv(moveUnitsI.getFromProviID()).getArmyCivID1(civRTO)) {
                             moveUnitsI.setNumberOfUnits(CFG.core.getProv(moveUnitsI.getFromProviID()).getArmyCivID1(civRTO));
@@ -1313,7 +1311,7 @@ public class GameAction {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         this.startNewTurn();
     }
@@ -1554,7 +1552,7 @@ public class GameAction {
 
     public final float getModifiedRevolutionsRisk(int nProvinceID) {
         float risk = CFG.core.getProv(nProvinceID).getRevRisk();
-        if (risk > 1.0f) { return risk * 2.0f; } // Force upraise if > 100% risk
+        if (risk > 1.0f) { return risk * 2.0f; } 
         return risk * (1.0f + (float)CFG.core.getProv(nProvinceID).getCores().getCivsSize() * GameValues.gvRebels.PROVINCE_REVOLT_RISK_PER_CORE_MODIFIER) - (float)CFG.core.getProvinceArmy(nProvinceID) / (float)CFG.core.getProv(nProvinceID).getPop().getPops() * GameValues.gvRebels.PROVINCE_REVOLT_RISK_ARMY_PER_POP_REDUCTION;
     }
 
@@ -1573,7 +1571,7 @@ public class GameAction {
                 nProvinces.remove(tBest);
             }
 
-            // Standard Rebels Logic (Force just rebels)
+            
             String nRevTag = CFG.ideologiesMgr.getRealTag(CFG.core.getCiv(nCivID).getCivTag()) + CFG.ideologiesMgr.getIdeologyID(CFG.ideologiesMgr.REBELS_ID).getExtraTag();
             int revoltCivID = -1;
             for (i = 1; i < CFG.core.getCivsSize(); ++i) {
@@ -1583,7 +1581,7 @@ public class GameAction {
                     continue;
                 }
 
-                // Allow expanding existing rebels if they meet the criteria
+                
                 if (CFG.core.getCiv(i).getNumOfProvs() > 0) {
                     CFG.core.getCiv(i).civGD.iTurnsSinceLastAttack = 100;
                     for (j = 0; j < tempSorted.size(); ++j) {
@@ -1733,13 +1731,13 @@ public class GameAction {
                         provinceFrom.getCit(0).setCityLevel(CFG.getEditorCityLevel(3));
                     }
                     catch (Exception j3) {
-                        // empty catch block
+                        
                     }
                     try {
                         provinceTo.getCit(0).setCityLevel(CFG.getEditorCityLevel(0));
                     }
                     catch (Exception j3) {
-                        // empty catch block
+                        
                     }
                 }
                 provinceFrom.setDrawCitiesInProv(false);
@@ -1869,7 +1867,7 @@ public class GameAction {
                                 CFG.core.getWar(tWarID).addCasualties(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i), tempArmy);
                             }
                             catch (Exception exception) {
-                                // empty catch block
+                                
                             }
                         }
                         CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) - losses);
@@ -1953,7 +1951,7 @@ public class GameAction {
                                 CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0);
                             }
                             catch (Exception exception) {
-                                // empty catch block
+                                
                             }
                             if (this.SHOW_REPORT) {
                                 CFG.reportData.attackersWon = true;
@@ -1994,7 +1992,7 @@ public class GameAction {
                                     CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i2);
                                 }
                                 catch (Exception exception) {
-                                    // empty catch block
+                                    
                                 }
                                 if (this.SHOW_REPORT && (CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i2) > 0 || CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivsSize() == 1)) {
                                     CFG.reportData.lDefenders_IDs.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i2));
@@ -2061,7 +2059,7 @@ public class GameAction {
                                     CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += Math.max(0L, ((Number)tempAttackersArmy.get(0)).longValue() - (long)Math.ceil((double)((Long)tempAttackersArmy.get(0)).longValue() / (double)tempNumOfUnits * (double)(attackersArmy - defendersArmy)));
                                 }
                                 catch (Exception ex) {
-                                    // empty catch block
+                                    
                                 }
                                 if (this.SHOW_REPORT) {
                                     CFG.reportData.lAttackers_IDs.add((Integer)tempAttackersCivID.get(0));
@@ -2085,7 +2083,7 @@ public class GameAction {
                                         CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += Math.max(0, (Long)tempAttackersArmy.get(i4) - (long)Math.floor((double)((Long)tempAttackersArmy.get(i4)).longValue() / (double)tempNumOfUnits * (double)(attackersArmy - defendersArmy)));
                                     }
                                     catch (Exception ex3) {
-                                        // empty catch block
+                                        
                                     }
                                     if (this.SHOW_REPORT) {
                                         CFG.reportData.lAttackers_IDs.add((Integer)tempAttackersCivID.get(i4));
@@ -2185,7 +2183,7 @@ public class GameAction {
                                         CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince = CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince + Math.max(0, this.currentMoveUnits.getMoveUnits(i6).getNumberOfUnits() > tempDefendersArmyLeft ? tempDefendersArmyLeft : this.currentMoveUnits.getMoveUnits(i6).getNumberOfUnits());
                                     }
                                     catch (Exception ex) {
-                                        // empty catch block
+                                        
                                     }
                                     if ((tempDefendersArmyLeft -= this.currentMoveUnits.getMoveUnits(i6).getNumberOfUnits()) >= 0) continue;
                                     tempDefendersArmyLeft = 0;
@@ -2311,7 +2309,7 @@ public class GameAction {
                                         CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += unitLosses;
                                     }
                                     catch (Exception ex) {
-                                        // empty catch block
+                                        
                                     }
                                     if (this.SHOW_REPORT) {
                                         CFG.reportData.lAttackers_IDs.add(this.currentMoveUnits.getCivID(i8));
@@ -2334,7 +2332,7 @@ public class GameAction {
                                         CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += this.currentMoveUnits.getMoveUnits(i8).getNumberOfUnits();
                                     }
                                     catch (Exception ex) {
-                                        // empty catch block
+                                        
                                     }
                                     if (this.SHOW_REPORT) {
                                         CFG.reportData.lAttackers_IDs.add(this.currentMoveUnits.getCivID(i8));
@@ -2364,7 +2362,7 @@ public class GameAction {
                                     CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += (long)Math.ceil((float)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0) / (float)defendersArmy2 * (float)attackersArmy);
                                 }
                                 catch (Exception ex) {
-                                    // empty catch block
+                                    
                                 }
                                 if (this.SHOW_REPORT) {
                                     CFG.reportData.lDefenders_IDs.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
@@ -2392,7 +2390,7 @@ public class GameAction {
                                         CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += (long)Math.floor((float)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy);
                                     }
                                     catch (Exception exception) {
-                                        // empty catch block
+                                        
                                     }
                                     if (this.SHOW_REPORT) {
                                         CFG.reportData.lDefenders_IDs.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
@@ -2423,7 +2421,7 @@ public class GameAction {
                                             CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += (long)Math.floor((float)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy);
                                         }
                                         catch (Exception exception) {
-                                            // empty catch block
+                                            
                                         }
                                         if (this.SHOW_REPORT) {
                                             CFG.reportData.lDefenders_IDs.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
@@ -2449,7 +2447,7 @@ public class GameAction {
                                     CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += attackersArmy;
                                 }
                                 catch (Exception tempIDs) {
-                                    // empty catch block
+                                    
                                 }
                                 if (this.SHOW_REPORT) {
                                     CFG.reportData.lDefenders_IDs.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId());
@@ -2531,7 +2529,7 @@ public class GameAction {
                                     CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i);
                                 }
                                 catch (Exception defendersArmy2) {
-                                    // empty catch block
+                                    
                                 }
                                 CFG.reportData.lDefenders_IDs.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
                                 CFG.reportData.lDefenders_Armies.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i));
@@ -2548,7 +2546,7 @@ public class GameAction {
                                         CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i);
                                     }
                                     catch (Exception defendersArmy2) {
-                                        // empty catch block
+                                        
                                     }
                                 }
                                 this.battleReportSave.lDefenders_IDs.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
@@ -2610,7 +2608,7 @@ public class GameAction {
                                     CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += currentLosses;
                                 }
                                 catch (Exception exception) {
-                                    // empty catch block
+                                    
                                 }
                                 CFG.reportData.lDefenders_IDs.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
                                 CFG.reportData.lDefenders_Armies.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i));
@@ -2627,7 +2625,7 @@ public class GameAction {
                                         CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += currentLosses;
                                     }
                                     catch (Exception exception) {
-                                        // empty catch block
+                                        
                                     }
                                 }
                                 this.battleReportSave.lDefenders_IDs.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
@@ -3439,7 +3437,7 @@ public class GameAction {
             CFG.menus.setVisible_InGame_ProvinceAction_Nuke(false);
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -3694,13 +3692,13 @@ public class GameAction {
                     for (i = 0; i < provincePopulation.getNatsSize(); ++i) {
                         if (nCivID != provincePopulation.getCivID(i)) continue;
                         if (provincePopulation.setPopulationOfCivID(provincePopulation.getCivID(i), provincePopulation.getPopulationID(i) - nNumOfUnits)) {
-                            // empty if block
+                            
                         }
                         break;
                     }
                 }
                 catch (Exception i) {
-                    // empty catch block
+                    
                 }
             }
             if ((nRecruitedPop -= (long)provincePopulation.getPops()) < (long)nNumOfUnits) {
@@ -4250,7 +4248,7 @@ public class GameAction {
                     CFG.menus.getInGameProvInfo().getMenuElem(30).setVisibleE(false);
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
             }
         }
@@ -4492,7 +4490,7 @@ public class GameAction {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -4723,7 +4721,7 @@ public class GameAction {
                         CFG.menus.getInGameProvInfo().getMenuElem(1).setTextE(provName + fullTag);
                     }
                 }
-                // ────────────────────────────────────────────────────────────────────
+                
                 CFG.menus.getInGameProvInfo().getMenuElem(24).setVisibleE(true);
                 CFG.menus.getInGameProvInfo().getMenuElem(24).setTextE("" + (CFG.core.getProv(CFG.ACTIVE_PROVINCE_INFO).getNeighProvincesSize() + CFG.core.getProv(CFG.ACTIVE_PROVINCE_INFO).getNeighSeaProvincesSize()));
                 CFG.menus.getInGameProvInfo().getMenuElem(26).setVisibleE(true);
@@ -4865,7 +4863,7 @@ public class GameAction {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -4976,7 +4974,7 @@ public class GameAction {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -5277,7 +5275,7 @@ public class GameAction {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

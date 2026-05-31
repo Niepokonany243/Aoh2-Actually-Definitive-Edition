@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.VProvince.Stability;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -416,7 +414,7 @@ extends Menu {
                                 nData.clear();
                             }
                             catch (Exception exception) {
-                                // empty catch block
+                                
                             }
                             nData.add(new ME_Hover_2Type_Text(CFG.lang.get("Happiness") + ": "));
                             nData.add(new ME_Hover_2Type_Text("" + CFG.getPrecision2(GameValues.gvAssimilate.ASSIMILATE_HAPPINESS_CHANGE_PER_TURN * 100.0f, 100) + " " + CFG.lang.get("PerTurn"), CFG.COLOR_NEGATIVE_2));

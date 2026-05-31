@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -122,14 +120,14 @@ extends Event_Outcome {
                 }
             }
             catch (Exception ex) {
-                // empty catch block
+                
             }
             if (tLeaderGD != null) {
                 this.leaderOfCiv = tLeaderGD.getLeaderOfCiv();
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

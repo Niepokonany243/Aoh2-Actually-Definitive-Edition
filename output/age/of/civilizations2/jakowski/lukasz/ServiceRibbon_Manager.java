@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -42,9 +40,7 @@ public class ServiceRibbon_Manager {
         }
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     public final void saveStatistics_Civ(StatsCivGD stats_Civ_GD) {
         if (stats_Civ_GD.sTag.length() == 0) {
             return;
@@ -232,13 +228,13 @@ public class ServiceRibbon_Manager {
                     continue;
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
             }
             this.iSRSize = this.lSR.size();
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -249,7 +245,7 @@ public class ServiceRibbon_Manager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         oSB.setColor(Color.WHITE);
     }
@@ -261,7 +257,7 @@ public class ServiceRibbon_Manager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         oSB.setColor(Color.WHITE);
     }
@@ -281,7 +277,7 @@ public class ServiceRibbon_Manager {
             this.lSROverlayImages.get(0).drawO(oSB, nPosX, nPosY - this.lSROverlayImages.get(0).getHeight(), CFG.SERVICE_RIBBON_WIDTH * nExtraScale, CFG.SERVICE_RIBBON_HEIGHT * nExtraScale);
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -301,14 +297,12 @@ public class ServiceRibbon_Manager {
             CFG.drawRect(oSB, nPosX - 1, nPosY - 2, CFG.SERVICE_RIBBON_WIDTH + 2, CFG.SERVICE_RIBBON_HEIGHT + 2);
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         oSB.setColor(Color.WHITE);
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     public final void saveData() {
         OutputStream os = null;
         try {
@@ -373,7 +367,7 @@ public class ServiceRibbon_Manager {
                 continue;
             }
             catch (GdxRuntimeException tempSRImages) {
-                // empty catch block
+                
             }
         }
         int oRa = IMGManager.getIMG(Images.mainMenuEdge2).getWidth() + IMGManager.getIMG(Images.mainMenuEdge2).getHeight();
@@ -386,7 +380,7 @@ public class ServiceRibbon_Manager {
                 continue;
             }
             catch (GdxRuntimeException gdxRuntimeException) {
-                // empty catch block
+                
             }
         }
         this.iSRImagesSize = this.lSRImages.size();

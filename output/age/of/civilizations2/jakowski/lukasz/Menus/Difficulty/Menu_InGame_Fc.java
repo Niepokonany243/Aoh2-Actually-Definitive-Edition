@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Difficulty;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Flag.Button_InGameAction;
@@ -160,7 +158,7 @@ extends Menu {
                     }
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
                 nData.add(new ME_Hover_2Type_Space());
                 nElements.add(new MEHover_2E(nData));
@@ -282,7 +280,7 @@ extends Menu {
                 }
             }
             catch (Exception warID) {
-                // empty catch block
+                
             }
             CFG.core.ceasefire(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId(), this.iOnCivID);
             CFG.menus.rebuildMenu_InGame_TruceInfoBox2(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId(), this.iOnCivID);

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button.NewGame;
 
 import age.of.civilizations2.jakowski.lukasz.Button.NewGame.Button_InGameBox;
@@ -96,7 +94,7 @@ extends Button_InGameBox {
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
         }
         catch (NullPointerException nullPointerException) {
-            // empty catch block
+            
         }
     }
 

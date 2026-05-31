@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.CivInfo;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Button_Rank;
@@ -111,7 +109,7 @@ extends Menu {
                     }
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
                 nData.add(new ME_Hover_2Type_Space());
                 nElements.add(new MEHover_2E(nData));
@@ -185,7 +183,7 @@ extends Menu {
                     }
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }

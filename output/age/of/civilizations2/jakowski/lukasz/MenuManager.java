@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -1420,9 +1418,7 @@ public class MenuManager {
         CFG.toastM.addM(s);
     }
 
-    /*
-     * Opcode count of 13502 triggered aggressive code reduction.  Override with --aggressivesizethreshold.
-     */
+    
     public final int getViewID(View eMenu) {
         try {
             switch (eMenu) {
@@ -1566,7 +1562,7 @@ public class MenuManager {
                         this.setOrderOfMenuID(1);
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                     return this.MAIN_MENU;
                 }
@@ -2596,7 +2592,7 @@ public class MenuManager {
                         }
                     }
                     catch (Exception exr) {
-                        // empty catch block
+                        
                     }
                     return this.INGAME_FORMABLE_CIV_PROVINCES;
                 }
@@ -3482,7 +3478,7 @@ public class MenuManager {
                             this.menus.get(this.CREATE_CIVILIZATION).set(this.CREATE_CIVILIZATION_LIST_FLAGS, new Menu_CreateCivListFlags());
                         }
                         catch (Exception ex) {
-                            // empty catch block
+                            
                         }
                     }
                     return this.CREATE_CIVILIZATION;
@@ -4656,7 +4652,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -4681,7 +4677,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -4693,7 +4689,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -4989,7 +4985,7 @@ public class MenuManager {
             this.setOrderOfMenu_InGame_CivInfo();
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -5044,7 +5040,7 @@ public class MenuManager {
         catch (NullPointerException nullPointerException) {
         }
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            // empty catch block
+            
         }
         return null;
     }
@@ -5056,7 +5052,7 @@ public class MenuManager {
         catch (NullPointerException nullPointerException) {
         }
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            // empty catch block
+            
         }
         return null;
     }
@@ -6225,7 +6221,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -6274,7 +6270,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -6554,7 +6550,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -6644,7 +6640,7 @@ public class MenuManager {
             this.menus.get(this.CREATE_NEWGAME).get(this.CREATE_NEW_GAME_ADD_CIV).updateMenuElements_IsInView();
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -6669,7 +6665,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -6741,7 +6737,7 @@ public class MenuManager {
             this.menus.get(this.INGAME_AC).get(0).updateMenuElements_IsInView();
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -7232,7 +7228,7 @@ public class MenuManager {
             this.slideMap_ActionMove.update_ActionMove_SlideMap();
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -7243,7 +7239,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -7307,7 +7303,7 @@ public class MenuManager {
             CFG.tutorialManager.draw(oSB, iTranslateX, 0);
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         try {
             if (this.hoverActiveMenuID >= 0 && this.hoverActiveMenuElemID >= 0) {
@@ -7329,7 +7325,7 @@ public class MenuManager {
             this.dragCiv.draw(oSB, iTranslateX);
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -7352,11 +7348,7 @@ public class MenuManager {
     public final void updateBuildProvinceHoverInformation() {
         buildProvinceHover_Informations = this.getInGameView() || this.getInGame_CreateAVassal() || this.getInGame_SelectProvinces() || this.getInGame_ShowProvinces() || this.getInGame_TradeSelectCiv() || this.getInGame_PeaceTreaty() || this.getInGame_PeaceTreaty_Response() ? (this.getInGame_PeaceTreaty() || this.getInGame_PeaceTreaty_Response() ? new BuildProvinceHover_Informations(){
 
-            /*
-             * Enabled aggressive block sorting
-             * Enabled unnecessary exception pruning
-             * Enabled aggressive exception aggregation
-             */
+            
             @Override
             public void build() {
                 try {
@@ -7516,11 +7508,7 @@ public class MenuManager {
             }
         } : new BuildProvinceHover_Informations(){
 
-            /*
-             * Enabled aggressive block sorting
-             * Enabled unnecessary exception pruning
-             * Enabled aggressive exception aggregation
-             */
+            
             @Override
             public void build() {
                 try {
@@ -7718,11 +7706,7 @@ public class MenuManager {
             }
         })) : (this.getInGame_Timeline() || this.getInVictory() ? (CFG.FOG_OF_WAR == 2 ? new BuildProvinceHover_Informations(){
 
-            /*
-             * Enabled aggressive block sorting
-             * Enabled unnecessary exception pruning
-             * Enabled aggressive exception aggregation
-             */
+            
             @Override
             public void build() {
                 try {
@@ -7793,11 +7777,7 @@ public class MenuManager {
             }
         } : new BuildProvinceHover_Informations(){
 
-            /*
-             * Enabled aggressive block sorting
-             * Enabled unnecessary exception pruning
-             * Enabled aggressive exception aggregation
-             */
+            
             @Override
             public void build() {
                 try {
@@ -7887,11 +7867,7 @@ public class MenuManager {
             }
         } : (this.getInCreateScenario_Events() ? new BuildProvinceHover_Informations(){
 
-            /*
-             * Enabled aggressive block sorting
-             * Enabled unnecessary exception pruning
-             * Enabled aggressive exception aggregation
-             */
+            
             @Override
             public void build() {
                 try {
@@ -7934,11 +7910,7 @@ public class MenuManager {
             }
         } : new BuildProvinceHover_Informations(){
 
-            /*
-             * Enabled aggressive block sorting
-             * Enabled unnecessary exception pruning
-             * Enabled aggressive exception aggregation
-             */
+            
             @Override
             public void build() {
                 try {
@@ -8086,11 +8058,7 @@ public class MenuManager {
             }
         } : (this.getInCreateScenario_HolyRomanEmpire() ? new BuildProvinceHover_Informations(){
 
-            /*
-             * Enabled aggressive block sorting
-             * Enabled unnecessary exception pruning
-             * Enabled aggressive exception aggregation
-             */
+            
             @Override
             public void build() {
                 try {
@@ -8592,7 +8560,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -8665,7 +8633,7 @@ public class MenuManager {
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -8788,7 +8756,7 @@ public class MenuManager {
         catch (IndexOutOfBoundsException i) {
         }
         catch (NullPointerException i) {
-            // empty catch block
+            
         }
         try {
             for (int i = 0; i < this.getActiveMenu().size(); ++i) {
@@ -9400,7 +9368,7 @@ public class MenuManager {
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
         }
         catch (NullPointerException nullPointerException) {
-            // empty catch block
+            
         }
         return false;
     }
@@ -9928,7 +9896,7 @@ public class MenuManager {
                                     }
                                 }
                                 catch (Exception exception) {
-                                    // empty catch block
+                                    
                                 }
                                 super.drawE(oSB, iTranslateX, iTranslateY, isActive, scrollableY);
                             }
@@ -10110,7 +10078,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -10140,7 +10108,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -10396,7 +10364,7 @@ public class MenuManager {
             Render.updateRenderer();
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -10532,7 +10500,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -10631,7 +10599,7 @@ public class MenuManager {
             this.menus.get(this.CREATE_NEWGAME).get(this.CREATE_NEW_GAME_CIV_INFO_SHOW_MENU).setVisibleM(false);
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -10673,7 +10641,7 @@ public class MenuManager {
             this.menus.get(this.CREATE_NEWGAME).get(this.CREATE_NEW_GAME_CIV_INFO_DIPLOMACY).setVisibleM(tVisible);
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -10868,7 +10836,7 @@ public class MenuManager {
             this.menus.get(this.IN_GAME_MENU).get(this.INGAME_EVENT).setVisibleM(visible);
         }
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            // empty catch block
+            
         }
     }
 
@@ -10877,7 +10845,7 @@ public class MenuManager {
             this.menus.get(this.IN_GAME_MENU).get(this.INGAME_SEND_MESSAGE).setVisibleM(visible);
         }
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            // empty catch block
+            
         }
     }
 
@@ -10886,7 +10854,7 @@ public class MenuManager {
             this.menus.get(this.IN_GAME_MENU).get(this.INGAME_PLUNDER).setVisibleM(visible);
         }
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            // empty catch block
+            
         }
     }
 
@@ -11319,7 +11287,7 @@ public class MenuManager {
                 }
             }
             catch (Exception a) {
-                // empty catch block
+                
             }
             this.menus.get(this.IN_GAME_MENU).get(this.INGAME_EVENT).setVisibleM(false);
             int tPosX = this.menus.get(this.IN_GAME_MENU).get(this.INGAME_EVENT).getPosX();
@@ -11338,7 +11306,7 @@ public class MenuManager {
             CFG.SFXManager.playSound(SFXManager.SFX_EVENT);
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -13846,7 +13814,7 @@ public class MenuManager {
                 armyIn = CFG.core.getProv(CFG.core.getActiveProvID()).getArmyID(0);
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             this.menus.get(this.IN_GAME_MENU).get(this.INGAME_ACTION_INFO_CHOOSE_PROVINCE).getMenuElem(0).setWidthE(1);
             this.menus.get(this.IN_GAME_MENU).get(this.INGAME_ACTION_INFO_CHOOSE_PROVINCE).getMenuElem(0).setTextE(CFG.lang.get("Recruit") + " " + this.getInGame_ProvRecruitSlider().getCurr() + " " + CFG.lang.get("Units") + ". [" + (armyIn + this.getInGame_ProvRecruitSlider().getCurr()) + "]");
@@ -13866,7 +13834,7 @@ public class MenuManager {
             this.menus.get(this.IN_GAME_MENU).get(this.INGAME_ACTION_INFO_CHOOSE_PROVINCE).getMenuElem(5).setCurr(this.getInGame_ProvRecruitSlider().getCurr());
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14022,7 +13990,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14045,7 +14013,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14068,7 +14036,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14091,7 +14059,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14114,7 +14082,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14137,7 +14105,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14160,7 +14128,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14183,7 +14151,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14206,7 +14174,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14229,7 +14197,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14252,7 +14220,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14275,7 +14243,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14298,7 +14266,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14321,7 +14289,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14344,7 +14312,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14367,7 +14335,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14390,7 +14358,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14413,7 +14381,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14436,7 +14404,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14459,7 +14427,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14518,7 +14486,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14541,7 +14509,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14564,7 +14532,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14605,7 +14573,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14628,7 +14596,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14867,7 +14835,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14908,7 +14876,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14931,7 +14899,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -14980,7 +14948,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -15093,7 +15061,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -15134,7 +15102,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -15247,7 +15215,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -15324,7 +15292,7 @@ public class MenuManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -15638,7 +15606,7 @@ public class MenuManager {
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
         }
         catch (NullPointerException nullPointerException) {
-            // empty catch block
+            
         }
     }
 
@@ -15675,7 +15643,7 @@ public class MenuManager {
             }
             CFG.map.getMpB().updateWorldMap_Shaders();
         } catch (IndexOutOfBoundsException e) {
-            // menu not yet initialized
+            
         }
     }
 

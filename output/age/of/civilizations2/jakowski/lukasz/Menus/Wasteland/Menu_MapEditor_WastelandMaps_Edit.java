@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Wasteland;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Classic.Button_Classic;
@@ -201,9 +199,7 @@ extends Menu {
         }
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     public final void saveData() {
         WastelandMap_GameData wastelandMap_GameData = new WastelandMap_GameData();
         wastelandMap_GameData.setName(this.getMenuElem(1).getTextE().length() == 0 ? "NO NAME" : this.getMenuElem(1).getTextE());

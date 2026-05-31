@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Formable;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -41,9 +39,7 @@ extends Menu {
         ArrayList<MenuElemUI> menuElements = new ArrayList<MenuElemUI>();
         menuElements.add(new Button_FormCivTitle(CFG.lang.get("FormX", CFG.lang.getCiv(CFG.formableCivs_GameData.getFormableCivTag())), 0, 0, CFG.GAMEWIDTH, Math.max(CFG.BUTTON_H * 4 / 5, Math.max(IMGManager.getIMG(Images.flagDiplomacyOver).getHeight() + CFG.PADD * 4, (CFG.TEXT_HEIGHT_DEFAULT + CFG.PADD) * 2 + CFG.PADD)), true, CFG.canFormACiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId(), CFG.formableCivs_GameData.getFormableCivTag(), false)){
 
-            /*
-             * WARNING - Removed try catching itself - possible behaviour change.
-             */
+            
             @Override
             public void drawTextE(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive) {
                 super.drawTextE(oSB, iTranslateX, iTranslateY, isActive);
@@ -67,7 +63,7 @@ extends Menu {
                         }
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                 }
             }

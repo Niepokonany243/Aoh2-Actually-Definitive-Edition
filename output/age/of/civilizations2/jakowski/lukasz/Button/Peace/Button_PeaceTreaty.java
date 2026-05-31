@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button.Peace;
 
 import age.of.civilizations2.jakowski.lukasz.Button.ButtonM;
@@ -91,7 +89,7 @@ extends ButtonM {
             }
         }
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            // empty catch block
+            
         }
         Renderer.drawTextWithShadow(oSB, this.fontID, this.sDate, this.getPosXE() + (this.getWidthE() - this.iDateWidth) / 2 + iTranslateX, this.getPosY() + this.getHeightE() / 2 + CFG.PADD / 2 + iTranslateY, CFG.COLOR_TEXT_GRAY_NS_HOVER);
         Renderer.drawTextWithShadow(oSB, this.fontID, this.sText, this.getPosXE() + (this.getWidthE() - this.getTextWidthU()) / 2 + iTranslateX, this.getPosY() + this.getHeightE() / 2 - this.iTextHeight - CFG.PADD / 2 + iTranslateY, this.getColorE(isActive));
@@ -137,7 +135,7 @@ extends ButtonM {
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
         }
         catch (NullPointerException nullPointerException) {
-            // empty catch block
+            
         }
     }
 }

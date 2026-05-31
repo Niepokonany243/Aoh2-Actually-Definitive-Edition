@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Cond;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Classic.Button_Classic;
@@ -78,7 +76,7 @@ extends Menu {
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
         }
         catch (IllegalArgumentException illegalArgumentException) {
-            // empty catch block
+            
         }
         this.getMenuElem(5).setTextE(CFG.lang.get("Decision") + ": " + tName);
         this.getTitleM().setText(CFG.lang.get("DecisionTaken"));

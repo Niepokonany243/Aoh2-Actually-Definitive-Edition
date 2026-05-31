@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Diplomacy;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -46,7 +44,7 @@ public class Loans {
             CFG.core.getCiv(iCivID).removeLoan(iLoanID);
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -58,7 +56,7 @@ public class Loans {
             CFG.core.getCiv(byCivID).setRelationD(iCivID, CFG.core.getCiv(byCivID).getRelationD(iCivID) + GameValues.gvLoan.DEBT_RELIEF_RELATIONS_INCREASE);
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 }

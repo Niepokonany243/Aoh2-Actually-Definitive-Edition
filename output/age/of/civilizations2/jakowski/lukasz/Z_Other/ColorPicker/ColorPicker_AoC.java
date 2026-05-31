@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Z_Other.ColorPicker;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -75,7 +73,7 @@ public class ColorPicker_AoC {
                             }
                         }
                         catch (Exception exception) {
-                            // empty catch block
+                            
                         }
                         CFG.menus.getColorPicker().setActiveRGBColor(CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).getR(), CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).getG(), CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).getB());
                         CFG.menus.getColorPicker().updateColors();
@@ -94,7 +92,7 @@ public class ColorPicker_AoC {
                             CFG.core.getAlliance(Menu_InGame_Alliance.ALLIANCE_ID).getColorOfAlliance().setB(((ColorPicker_AoC)ColorPicker_AoC.this).activeColor.b);
                         }
                         catch (Exception exception) {
-                            // empty catch block
+                            
                         }
                     }
 
@@ -615,7 +613,7 @@ public class ColorPicker_AoC {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

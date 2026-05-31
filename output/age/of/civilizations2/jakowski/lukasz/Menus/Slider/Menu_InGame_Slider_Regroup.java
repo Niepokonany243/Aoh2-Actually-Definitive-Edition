@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Slider;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Game.Button_Game_Accept;
@@ -116,7 +114,7 @@ extends Menu {
                         }
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                 }
                 CFG.core.resetRegroupArmy_Data();

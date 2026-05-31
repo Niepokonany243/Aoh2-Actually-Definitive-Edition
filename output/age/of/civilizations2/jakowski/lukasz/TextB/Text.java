@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.TextB;
 
 import age.of.civilizations2.jakowski.lukasz.Button.MenuElemUI;
@@ -152,7 +150,7 @@ extends MenuElemUI {
                     this.iTextHeight = CFG.TEXT_HEIGHT_DEFAULT;
                 }
 
-                // Stability: Don't auto-expand width if it was already set manually and is large enough
+                
                 if (super.getWidthE() <= 0 || (super.getWidthE() < this.iTextWidth && !this.isPinnedWidth())) {
                     this.setWidthE(this.iTextWidth);
                 }

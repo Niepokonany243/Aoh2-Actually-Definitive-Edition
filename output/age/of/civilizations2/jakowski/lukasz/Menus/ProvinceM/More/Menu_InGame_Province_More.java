@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.ProvinceM.More;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -142,12 +140,12 @@ extends Menu {
             });
             tPosY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE();
         }
-        // ── Occupation Status Banner ─────────────────────────────────────────
+        
         if (CFG.core.getProv(BuildingsManager.iBuildInProvinceID).isOccupied()) {
             final int occupierCivID = CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getCivId();
             final int trueOwnerCivID = CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getTrueOwnerOfProv();
             final int turnsLeft = CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getOccupationTurnsLeft();
-            // Section header
+            
             menuElements.add(new TextBuildTitle("OCCUPIED", -1, 0, tPosY, tempW + extraW, CFG.TEXT_HEIGHT_DEFAULT + CFG.PADD * 3){
                 @Override
                 public Color getColor(boolean isActive) {
@@ -155,7 +153,7 @@ extends Menu {
                 }
             });
             tPosY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE();
-            // Occupier row
+            
             menuElements.add(new TextIcon_FlagDiplomacy(CFG.core.getCiv(occupierCivID).getCivName(), occupierCivID, 0, tPosY, tempW + extraW){
                 @Override
                 public Color getColorE(boolean isActive) {
@@ -176,7 +174,7 @@ extends Menu {
                 }
             });
             tPosY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE();
-            // True owner row
+            
             menuElements.add(new TextIcon_FlagDiplomacy(CFG.core.getCiv(trueOwnerCivID).getCivName(), trueOwnerCivID, 0, tPosY, tempW + extraW){
                 @Override
                 public Color getColorE(boolean isActive) {
@@ -197,7 +195,7 @@ extends Menu {
                 }
             });
             tPosY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE();
-            // Occupation timer row
+            
             menuElements.add(new Button_Build_Text(
                 turnsLeft > 0 ? "Occupied: " + turnsLeft + " turn" + (turnsLeft != 1 ? "s" : "") + " ago" : "Occupied",
                 0, tPosY, tempW + extraW, false, BuildingsManager.iBuildInProvinceID){
@@ -233,7 +231,7 @@ extends Menu {
             });
             tPosY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE();
         }
-        // ── Genocide Status Banner ─────────────────────────────────────────
+        
         if (CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getDisplayTimerTurns() > 0 && !CFG.core.getProv(BuildingsManager.iBuildInProvinceID).isOccupied()) {
             final int genCivID = CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId();
             final int genTurnsLeft = GameManager.getGenocideTurnsLeft(genCivID, BuildingsManager.iBuildInProvinceID);
@@ -272,7 +270,7 @@ extends Menu {
             });
             tPosY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE();
         }
-        // ────────────────────────────────────────────────────────────────────
+        
         if (BuildingsManager.iBuildInProvinceID >= 0) {
             boolean canDestroy = false;
             canDestroy = ownProvince && CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfFort() > 0;
@@ -332,7 +330,7 @@ extends Menu {
             menuElements.add(new TextBuildTitle(CFG.lang.get("Buildings"), -1, 0, tPosY, tempW + extraW, CFG.TEXT_HEIGHT_DEFAULT + CFG.PADD * 4){});
             tPosY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE();
 
-            // Fort
+            
             menuElements.add(new Button_Build_Level(CFG.lang.get(BuildingsManager.getFort_Name(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfFort() + 1)), Images.bFort, "" + CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfFort(), BuildingsManager.getFort_BuildCost(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfFort() + 1, BuildingsManager.iBuildInProvinceID), BuildingsManager.getFort_BuildMovementCost(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfFort() + 1), 0, tPosY, tempW, true, CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfFort() == BuildingsManager.getFort_MaxLevel(), CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).isInConstruction(BuildingsManager.iBuildInProvinceID, ConstructionType.FORT), BuildingsManager.getFort_TechLevel(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfFort() + 1)){
                 @Override
                 public void actionElem(int iID) {
@@ -352,7 +350,7 @@ extends Menu {
             tRow = (tRow + 1) % 2;
             tPosY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE();
 
-            // Air Defense
+            
             menuElements.add(new Button_Build_Level(BuildingsManager.getAirDefense_Name(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).provGD.iAirDefense + 1), Images.bSupply, "" + CFG.core.getProv(BuildingsManager.iBuildInProvinceID).provGD.iAirDefense, BuildingsManager.getAirDefense_BuildCost(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).provGD.iAirDefense + 1, BuildingsManager.iBuildInProvinceID), BuildingsManager.getAirDefense_BuildMovementCost(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).provGD.iAirDefense + 1), 0, tPosY, tempW, true, CFG.core.getProv(BuildingsManager.iBuildInProvinceID).provGD.iAirDefense == BuildingsManager.getAirDefense_MaxLevel(), CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).isInConstruction(BuildingsManager.iBuildInProvinceID, ConstructionType.AIR_DEFENSE), BuildingsManager.getAirDefense_TechLevel(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).provGD.iAirDefense + 1)){
                 @Override
                 public void actionElem(int iID) {
@@ -372,8 +370,8 @@ extends Menu {
             tRow = (tRow + 1) % 2;
             tPosY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE();
 
-            // Tower
-            // Tower
+            
+            
             menuElements.add(new Button_Build_Level(CFG.lang.get(BuildingsManager.getTower_Name(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfWatchTower() + 1)), Images.bTower, "" + CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfWatchTower(), BuildingsManager.getTower_BuildCost(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfWatchTower() + 1, BuildingsManager.iBuildInProvinceID), BuildingsManager.getTower_BuildMovementCost(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfWatchTower() + 1), 0, tPosY, tempW, true, CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfWatchTower() == BuildingsManager.getTower_MaxLevel(), CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).isInConstruction(BuildingsManager.iBuildInProvinceID, ConstructionType.TOWER), BuildingsManager.getTower_TechLevel(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfWatchTower() + 1)){
                 @Override
                 public void actionElem(int iID) {
@@ -393,7 +391,7 @@ extends Menu {
             tRow = (tRow + 1) % 2;
             tPosY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE();
 
-            // Port
+            
             if (CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getNeighSeaProvincesSize() > 0) {
                 menuElements.add(new Button_Build_Level(CFG.lang.get(BuildingsManager.getPort_Name(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfPort() + 1)), Images.bPort, "" + CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfPort(), BuildingsManager.getPort_BuildCost(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfPort() + 1, BuildingsManager.iBuildInProvinceID), BuildingsManager.getPort_BuildMovementCost(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfPort() + 1), 0, tPosY, tempW, true, CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfPort() == BuildingsManager.getPort_MaxLevel(), CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).isInConstruction(BuildingsManager.iBuildInProvinceID, ConstructionType.PORT), BuildingsManager.getPort_TechLevel(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfPort() + 1)){
                 @Override
@@ -415,7 +413,7 @@ extends Menu {
                 tPosY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE();
             }
 
-            // Farm
+            
             menuElements.add(new Button_Build_Level(CFG.lang.get(BuildingsManager.getFarm_Name(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfFarm() + 1)), Images.bFarm, "" + CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfFarm(), BuildingsManager.getFarm_BuildCost(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfFarm() + 1, BuildingsManager.iBuildInProvinceID), BuildingsManager.getFarm_BuildMovementCost(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfFarm() + 1), 0, tPosY, tempW, true, CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfFarm() == BuildingsManager.getFarm_MaxLevel(), CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).isInConstruction(BuildingsManager.iBuildInProvinceID, ConstructionType.FARM), BuildingsManager.getFarm_TechLevel(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfFarm() + 1)){
                 @Override
                 public void actionElem(int iID) {
@@ -435,7 +433,7 @@ extends Menu {
             tRow = (tRow + 1) % 2;
             tPosY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE();
 
-            // Workshop
+            
             menuElements.add(new Button_Build_Level(CFG.lang.get(BuildingsManager.getWorkshop_Name(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfWorkshop() + 1)), Images.bWorkshop, "" + CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfWorkshop(), BuildingsManager.getWorkshop_BuildCost(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfWorkshop() + 1, BuildingsManager.iBuildInProvinceID), BuildingsManager.getWorkshop_BuildMovementCost(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfWorkshop() + 1), 0, tPosY, tempW, true, CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfWorkshop() == BuildingsManager.getWorkshop_MaxLevel(), CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).isInConstruction(BuildingsManager.iBuildInProvinceID, ConstructionType.WORKSHOP), BuildingsManager.getWorkshop_TechLevel(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfWorkshop() + 1)){
                 @Override
                 public void actionElem(int iID) {
@@ -455,7 +453,7 @@ extends Menu {
             tRow = (tRow + 1) % 2;
             tPosY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE();
 
-            // Market
+            
             menuElements.add(new Button_Build_Level(CFG.lang.get(BuildingsManager.getMarket_Name(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfMarket() + 1)), Images.bMarket, "" + CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfMarket(), BuildingsManager.getMarket_BuildCost(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfMarket() + 1, BuildingsManager.iBuildInProvinceID), BuildingsManager.getMarket_BuildMovementCost(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfMarket() + 1), 0, tPosY, tempW, true, CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfMarket() == BuildingsManager.getMarket_MaxLevel(), CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).isInConstruction(BuildingsManager.iBuildInProvinceID, ConstructionType.MARKET), BuildingsManager.getMarket_TechLevel(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfMarket() + 1)){
                 @Override
                 public void actionElem(int iID) {
@@ -475,7 +473,7 @@ extends Menu {
             tRow = (tRow + 1) % 2;
             tPosY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE();
 
-            // Library
+            
             menuElements.add(new Button_Build_Level(CFG.lang.get(BuildingsManager.getLibrary_Name(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfLibrary() + 1)), Images.bLibrary, "" + CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfLibrary(), BuildingsManager.getLibrary_BuildCost(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfLibrary() + 1, BuildingsManager.iBuildInProvinceID), BuildingsManager.getLibrary_BuildMovementCost(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfLibrary() + 1), 0, tPosY, tempW, true, CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfLibrary() == BuildingsManager.getLibrary_MaxLevel(), CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).isInConstruction(BuildingsManager.iBuildInProvinceID, ConstructionType.LIBRARY), BuildingsManager.getLibrary_TechLevel(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfLibrary() + 1)){
                 @Override
                 public void actionElem(int iID) {
@@ -495,7 +493,7 @@ extends Menu {
             tRow = (tRow + 1) % 2;
             tPosY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE();
 
-            // Armoury
+            
             menuElements.add(new Button_Build_Level(CFG.lang.get(BuildingsManager.getArmoury_Name(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfArmoury() + 1)), Images.bArmoury, "" + CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfArmoury(), BuildingsManager.getArmoury_BuildCost(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfArmoury() + 1, BuildingsManager.iBuildInProvinceID), BuildingsManager.getArmoury_BuildMovementCost(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfArmoury() + 1), 0, tPosY, tempW, true, CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfArmoury() == BuildingsManager.getArmoury_MaxLevel(), CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).isInConstruction(BuildingsManager.iBuildInProvinceID, ConstructionType.ARMOURY), BuildingsManager.getArmoury_TechLevel(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfArmoury() + 1)){
                 @Override
                 public void actionElem(int iID) {
@@ -515,7 +513,7 @@ extends Menu {
             tRow = (tRow + 1) % 2;
             tPosY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE();
 
-            // Supply
+            
             menuElements.add(new Button_Build_Level(CFG.lang.get(BuildingsManager.getSupply_Name(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfSupply() + 1)), Images.bSupply, "" + CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfSupply(), BuildingsManager.getSupply_BuildCost(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfSupply() + 1, BuildingsManager.iBuildInProvinceID), BuildingsManager.getSupply_BuildMovementCost(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfSupply() + 1), 0, tPosY, tempW, true, CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfSupply() == BuildingsManager.getSupply_MaxLevel(), CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).isInConstruction(BuildingsManager.iBuildInProvinceID, ConstructionType.SUPPLY), BuildingsManager.getSupply_TechLevel(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).getLvlOfSupply() + 1)){
                 @Override
                 public void actionElem(int iID) {

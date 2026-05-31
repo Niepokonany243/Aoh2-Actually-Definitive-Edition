@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button.GameN;
 
 import age.of.civilizations2.jakowski.lukasz.Button.ButtonM;
@@ -171,7 +169,7 @@ extends ButtonM {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         imgID = Images.economy;
         if (!this.getIsHovered()) {
@@ -215,7 +213,7 @@ extends ButtonM {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -228,7 +226,7 @@ extends ButtonM {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus;
 
 import age.of.civilizations2.jakowski.lukasz.BetterUI_Manager;
@@ -187,7 +185,7 @@ extends Menu {
                 }
             } catch (Exception ex) {}
             
-            // Draw ONLY the themed progress bar, NO screen effects/grids during loading
+            
             CFG.drLOA(oSB, (int)((float)CFG.GAMEWIDTH * CFG.getLOAPAD()) + iTranslateX, CFG.GAMEHEIGHT - (int)((float)CFG.BUTTON_H * 0.8f) * 2 - CFG.PADD + iTranslateY, (int)((float)CFG.GAMEWIDTH * (1.0f - CFG.getLOAPAD() * 2.0f)), (int)((float)CFG.BUTTON_H * 0.8f), (float)this.iStepID / (float)(this.iNumOfSteps + CFG.map.getMapNumOfProvinces(CFG.map.getActiveMapIDN()) * 2));
             CFG.drawJakowskiGamesRIGHT_BOT(oSB, iTranslateX, (float)this.iStepID / (float)(this.iNumOfSteps + CFG.map.getMapNumOfProvinces(CFG.map.getActiveMapIDN()) * 2));
             CFG.drawVersionLB(oSB, iTranslateX);
@@ -227,7 +225,7 @@ extends Menu {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         oSB.setColor(new Color(0.0f, 0.0f, 0.0f, 0.6f));
         IMGManager.getIMG(Images.gradient).drawO(oSB, iTranslateX, -IMGManager.getIMG(Images.gradient).getHeight() + iTranslateY, CFG.GAMEWIDTH, CFG.PADD * 3);
@@ -316,7 +314,7 @@ extends Menu {
                         }
                     }
                     catch (Exception tempFileT2) {
-                        // empty catch block
+                        
                     }
                     Menu_InitGame.loadBackground();
                     ++this.iStepID;
@@ -430,12 +428,7 @@ extends Menu {
                     Images.dialog_desc = IMGManager.addIMG("UI/" + CFG.getResPath() + "dialog/" + "desc.png");
                     Images.dialog_line = IMGManager.addIMG("UI/" + CFG.getResPath() + "dialog/" + "line_2xdesc.png");
                     Images.mainMenuEdge = IMGManager.addIMG("UI/" + CFG.getResPath() + "main_menu/" + "main_menu_edge.png");
-                    Images.logo_steam = IMGManager.addIMG("UI/" + CFG.getResPath() + "main_menu/" + "pc.png");
-                    Images.logo_android = IMGManager.addIMG("UI/" + CFG.getResPath() + "main_menu/" + "android.png");
-                    Images.logo_app = IMGManager.addIMG("UI/" + CFG.getResPath() + "main_menu/" + "app.png");
-                    Images.logo_fb = IMGManager.addIMG("UI/" + CFG.getResPath() + "main_menu/" + "fb.png");
-                    Images.logo_twit = IMGManager.addIMG("UI/" + CFG.getResPath() + "main_menu/" + "twit.png");
-                    Images.logo_yt = IMGManager.addIMG("UI/" + CFG.getResPath() + "main_menu/" + "yt.png");
+
                     CFG.sLoading = CFG.lang.get("LoadingGraphics");
                     ++this.iStepID;
                     break block105;

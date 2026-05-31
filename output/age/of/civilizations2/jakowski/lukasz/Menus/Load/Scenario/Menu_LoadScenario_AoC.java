@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Load.Scenario;
 
 import age.of.civilizations2.jakowski.lukasz.Button.MenuElemUI;

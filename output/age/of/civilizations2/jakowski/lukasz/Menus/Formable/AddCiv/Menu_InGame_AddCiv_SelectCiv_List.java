@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Formable.AddCiv;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -49,7 +47,7 @@ extends Menu {
             tagsSPLITED_ED = tempT_ED.split(";");
         }
         catch (GdxRuntimeException tempFileT_ED) {
-            // empty catch block
+            
         }
         this.lCivsTags = new ArrayList<String>();
         ArrayList<String> lTempNames = new ArrayList<String>();
@@ -333,9 +331,7 @@ extends Menu {
         this.lLoadedFlags_TagsIDs.add(nCivTagID);
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     @Override
     public void draw(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean sliderMenuIsActive) {
         super.beginClipM(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);
@@ -369,7 +365,7 @@ extends Menu {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         super.endClipM(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);
     }

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -55,7 +53,7 @@ public class Toast {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         oSB.setColor(Color.WHITE);
     }
@@ -114,7 +112,7 @@ public class Toast {
                     this.lMessageWidth.add((int)CFG.glyphLay.width);
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
             }
             this.iMaxWidth = this.lMessageWidth.get(0);
@@ -122,7 +120,7 @@ public class Toast {
             this.addM();
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -146,7 +144,7 @@ public class Toast {
                     continue;
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
             }
         }
@@ -179,7 +177,7 @@ public class Toast {
                     continue;
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
             }
         }

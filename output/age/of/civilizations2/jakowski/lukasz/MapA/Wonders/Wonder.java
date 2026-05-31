@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.MapA.Wonders;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -58,7 +56,7 @@ public class Wonder {
             this.nImage = null;
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 }

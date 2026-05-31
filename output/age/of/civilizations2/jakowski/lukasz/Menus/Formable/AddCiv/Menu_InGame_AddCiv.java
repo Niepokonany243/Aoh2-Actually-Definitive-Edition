@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Formable.AddCiv;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -432,7 +430,7 @@ extends Menu {
                 ScissorStack.popScissors();
             }
             catch (IllegalStateException illegalStateException) {
-                // empty catch block
+                
             }
             super.endClipM(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);
         } else {
@@ -459,7 +457,7 @@ extends Menu {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         CFG.menus.setVisible_InGame_AddCiv(true);
     }
@@ -510,7 +508,7 @@ extends Menu {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
     }
@@ -533,7 +531,7 @@ extends Menu {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
     }
@@ -600,7 +598,7 @@ extends Menu {
                     }
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
                 CFG.core.setActiveProvID(-1);
                 CFG.core.setActiveProvID(provinceID);

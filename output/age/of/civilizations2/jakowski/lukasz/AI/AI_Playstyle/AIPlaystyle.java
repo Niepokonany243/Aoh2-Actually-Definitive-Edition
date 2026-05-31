@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle;
 
 import age.of.civilizations2.jakowski.lukasz.AI.AI_ArmyUpkeep;
@@ -154,7 +152,7 @@ public class AIPlaystyle {
             CFG.exceptionStack(ex);
         }
 
-        // WAR/PREP MISSILES: 20% income, before recruiting
+        
         if (isAtWar || isPreparingForWar) {
             if (CFG.core.getCiv(nCivID).civGD.sandboxMissileSpend > 0) {
                 this.sandboxMissileProduction(nCivID);
@@ -246,11 +244,11 @@ public class AIPlaystyle {
                     continue;
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
             }
         } else if (!isAtWar && !CFG.core.getCiv(nCivID).civGD.sandboxMilitarise && CFG.core.getCiv(nCivID).getMovemPoints() > GameValues.gvAiProvince.BUILD_INVEST_MIN_MOVEMENT_POINTS) {
-            // PEACE BUILDING: Spend 50% of all money
+            
             this.billionaireBuilding(nCivID);
 
             if (!CFG.settingsGD.DISABLE_AI_INVESTING && GameCalendar.TURNID % GameValues.gvAiProvince.EXTRA_INVEST_ECO_EVERY_X_TURN == nCivID % GameValues.gvAiProvince.EXTRA_INVEST_ECO_EVERY_X_TURN) {
@@ -266,7 +264,7 @@ public class AIPlaystyle {
         }
         CFG.core.getCiv((int)nCivID).civGD.moveAtWar_ProvincesLostAndConquered_LastTurn = 0;
         
-        // PEACE MISSILES: 10% income, last decision
+        
         if (!isAtWar && !isPreparingForWar) {
             if (CFG.core.getCiv(nCivID).civGD.sandboxMissileSpend > 0) {
                 this.sandboxMissileProduction(nCivID);
@@ -722,9 +720,7 @@ public class AIPlaystyle {
         }
     }
 
-    /*
-     * Unable to fully structure code
-     */
+    
     public final void diplomacyActions_DeclareWar(int nCivID) {
         if (GameCalendar.AI_AGGRESSIVENESS > 0.0f) {
             Civilization civ = CFG.core.getCiv(nCivID);
@@ -1367,7 +1363,7 @@ public class AIPlaystyle {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         return n3;
     }
@@ -2237,7 +2233,7 @@ public class AIPlaystyle {
         Civilization civ = CFG.core.getCiv(n);
         if (civ.getGold() < 1000L) return;
 
-        // Massive building only if NOT at war and NOT preparing for war
+        
         boolean preparingForWar = false;
         for (int i = 1; i < CFG.core.getCivsSize(); i++) {
             if (civ.civGD.civPlans.isPreparingForTheWar(i)) {
@@ -2247,10 +2243,10 @@ public class AIPlaystyle {
         }
         if (civ.isAtWarC() || preparingForWar) return;
 
-        // Forced Missile Program Upgrade if at peace and has enough money
+        
         if (!civ.isAtWarC() && civ.civGD.iMissileTier < 3) {
             long upgradeCost = (long)(civ.incomeTaxation * (civ.civGD.iMissileTier == 1 ? 25.0f : 62.5f));
-            if (civ.getGold() >= upgradeCost * 2) { // Ensure they have double the cost to avoid immediate bankruptcy
+            if (civ.getGold() >= upgradeCost * 2) { 
                 age.of.civilizations2.jakowski.lukasz.MapA.MissileManager.upgradeMissileTier(n);
             }
         }
@@ -2266,7 +2262,7 @@ public class AIPlaystyle {
             sortedProvs.add(civ.getProvID(i));
         }
         
-        // Sort by economy descending
+        
         java.util.Collections.sort(sortedProvs, new java.util.Comparator<Integer>() {
             @Override
             public int compare(Integer a, Integer b) {
@@ -2284,7 +2280,7 @@ public class AIPlaystyle {
             boolean actionDone = false;
 
             if (spentBuildings < maxSpendBuildings) {
-                // Workshops / Ports (45%)
+                
                 if (rand < 45) {
                     if (p.getBasinID() >= 0 || p.getNeighSeaProvincesSize() > 0) {
                         if (civ.getTechLevel() >= age.of.civilizations2.jakowski.lukasz.MapA.BuildingsManager.getPort_TechLevel(1) && p.getLvlOfPort() < age.of.civilizations2.jakowski.lukasz.MapA.BuildingsManager.getPort_MaxLevel()) {
@@ -2304,7 +2300,7 @@ public class AIPlaystyle {
                     }
                 }
                 
-                // Fort / Watchtower (40%)
+                
                 if (!actionDone && rand < 40) {
                     if (civ.getTechLevel() >= age.of.civilizations2.jakowski.lukasz.MapA.BuildingsManager.getFort_TechLevel(1) && p.getLvlOfFort() < age.of.civilizations2.jakowski.lukasz.MapA.BuildingsManager.getFort_MaxLevel_CanBuild(n)) {
                         long cost = age.of.civilizations2.jakowski.lukasz.MapA.BuildingsManager.getFort_BuildCost(p.getLvlOfFort() + 1, pID);
@@ -2322,7 +2318,7 @@ public class AIPlaystyle {
                     }
                 }
 
-                // Air Defense (30%)
+                
                 if (!actionDone && rand < 30 && age.of.civilizations2.jakowski.lukasz.MapA.BuildingsManager.canBuildAirDefense(pID)) {
                     long cost = age.of.civilizations2.jakowski.lukasz.MapA.BuildingsManager.getAirDefense_BuildCost(p.provGD.iAirDefense + 1, pID);
                     if (age.of.civilizations2.jakowski.lukasz.MapA.BuildingsManager.buildAirDefense(pID, n)) {
@@ -2331,7 +2327,7 @@ public class AIPlaystyle {
                     }
                 }
                 
-                // Farms (20%)
+                
                 if (!actionDone && rand < 20) {
                     if (civ.getTechLevel() >= age.of.civilizations2.jakowski.lukasz.MapA.BuildingsManager.getFarm_TechLevel(1) && p.getLvlOfFarm() < age.of.civilizations2.jakowski.lukasz.MapA.BuildingsManager.getFarm_MaxLevel_CanBuild(n)) {
                         long cost = age.of.civilizations2.jakowski.lukasz.MapA.BuildingsManager.getFarm_BuildCost(p.getLvlOfFarm() + 1, pID);
@@ -2343,7 +2339,7 @@ public class AIPlaystyle {
                 }
             }
             
-            // Investment if no building was built or we have spare investing budget
+            
             if (civ.getGold() > 0L && !civ.isInvestedDev(pID)) {
                 long investAmount = GameManager.investMaxDevGold(pID, n);
                 if (investAmount > 0) {
@@ -2623,7 +2619,7 @@ public class AIPlaystyle {
             if ((regroupArmy_AtPeace = new RegroupArmy_AtPeace(n, aI_RegoupArmyData.iProvinceID, ((AI_ProvinceInfo)arrayList6.get((int)0)).iProvinceID)).getRouteSize() > 0) {
                 if (regroupArmy_AtPeace.getRouteSize() == 1) {
                     if (!CFG.gameAction.moveArmyAction(aI_RegoupArmyData.iProvinceID, ((AI_ProvinceInfo)arrayList6.get((int)0)).iProvinceID, aI_RegoupArmyData.iArmy, n, true, false)) {
-                        // empty if block
+                        
                     }
                 } else if (CFG.gameAction.moveArmyAction(aI_RegoupArmyData.iProvinceID, regroupArmy_AtPeace.getRoute(0), aI_RegoupArmyData.iArmy, n, true, false)) {
                     regroupArmy_AtPeace.setFromProvinceID(regroupArmy_AtPeace.getRoute(0));
@@ -2639,7 +2635,7 @@ public class AIPlaystyle {
             if (regroupArmy_AtPeace.getRouteSize() > 0) {
                 if (regroupArmy_AtPeace.getRouteSize() == 1) {
                     if (!CFG.gameAction.moveArmyAction(aI_RegoupArmyData.iProvinceID, CFG.core.getCiv(n).getCapitalProvID(), aI_RegoupArmyData.iArmy, n, true, false)) {
-                        // empty if block
+                        
                     }
                 } else if (CFG.gameAction.moveArmyAction(aI_RegoupArmyData.iProvinceID, regroupArmy_AtPeace.getRoute(0), aI_RegoupArmyData.iArmy, n, true, false)) {
                     regroupArmy_AtPeace.setFromProvinceID(regroupArmy_AtPeace.getRoute(0));
@@ -2716,7 +2712,7 @@ public class AIPlaystyle {
                 if (regroupArmy_AtPeace.getRouteSize() > 0) {
                     if (regroupArmy_AtPeace.getRouteSize() == 1) {
                         if (!CFG.gameAction.moveArmyAction(aI_RegoupArmyData.iProvinceID, CFG.core.getCiv(n).getCapitalProvID(), aI_RegoupArmyData.iArmy, n, true, false)) {
-                            // empty if block
+                            
                         }
                     } else if (CFG.gameAction.moveArmyAction(aI_RegoupArmyData.iProvinceID, regroupArmy_AtPeace.getRoute(0), aI_RegoupArmyData.iArmy, n, true, false)) {
                         regroupArmy_AtPeace.setFromProvinceID(regroupArmy_AtPeace.getRoute(0));
@@ -2771,7 +2767,7 @@ public class AIPlaystyle {
                             continue;
                         }
                         catch (Exception exception) {
-                            // empty catch block
+                            
                         }
                     }
                     if (!arrayList.isEmpty()) {
@@ -2845,7 +2841,7 @@ public class AIPlaystyle {
                 }
             }
             catch (NullPointerException nullPointerException) {
-                // empty catch block
+                
             }
             List<AI_NeighProvinces> list = CFG.oAI.getAllNeighboringProvincesInRange_OnlyOwn_Clear(aI_RegoupArmyData.iProvinceID, n, Math.max(CFG.core.getCiv((int)n).civGD.civPers.REGROUP_AT_PEACE_MAX_PROVINCES, CFG.core.getCiv(n).getNumOfProvs() / 10), false, false, new ArrayList<AI_NeighProvinces>(), new ArrayList<Integer>());
             if (!list.isEmpty()) {
@@ -3053,7 +3049,7 @@ public class AIPlaystyle {
             }
         }
         
-        // AI MISSILE USAGE
+        
         if (CFG.settingsGD.MISSILES && (CFG.core.getCiv(n).civGD.iMissiles > 0 || CFG.core.getCiv(n).civGD.iMissiles_T2 > 0 || CFG.core.getCiv(n).civGD.iMissiles_T3 > 0)) {
             try {
                 age.of.civilizations2.jakowski.lukasz.MapA.MissileManager.strikeAllEnemies(n);
@@ -3127,7 +3123,7 @@ public class AIPlaystyle {
                         }
                     }
                     if (CFG.core.getCiv(n).getGold() <= (long)GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT || CFG.core.getCiv(n).recruitArmy_AI((Integer)arrayList.get(n3), n4)) {
-                        // empty if block
+                        
                     }
                 }
             }
@@ -3841,7 +3837,7 @@ public class AIPlaystyle {
                         }
                     }
                     if (CFG.core.getProv(n6).getLvlOfPort() > 0 || BuildingsManager.constructPort(n6, n)) {
-                        // empty if block
+                        
                     }
                 }
                 for (n4 = CFG.core.getCiv((int)n).civGD.civPlans.armiesMissions.size() - 1; n4 >= 0; --n4) {
@@ -4375,7 +4371,7 @@ public class AIPlaystyle {
             if (((RegroupArmy)(object = new RegroupArmy_AtWar(n, aI_RegoupArmyData.iProvinceID, ((AI_ProvinceInfo)((ArrayList)object2).get((int)0)).iProvinceID))).getRouteSize() > 0) {
                 if (((RegroupArmy)object).getRouteSize() == 1) {
                     if (!CFG.gameAction.moveArmyAction(aI_RegoupArmyData.iProvinceID, ((AI_ProvinceInfo)((ArrayList)object2).get((int)0)).iProvinceID, (int)aI_RegoupArmyData.iArmy, n, true, false)) {
-                        // empty if block
+                        
                     }
                 } else if (CFG.gameAction.moveArmyAction(aI_RegoupArmyData.iProvinceID, ((RegroupArmy)object).getRoute(0), (int)aI_RegoupArmyData.iArmy, n, true, false)) {
                     ((RegroupArmy)object).setFromProvinceID(((RegroupArmy)object).getRoute(0));
@@ -4391,7 +4387,7 @@ public class AIPlaystyle {
             if (((RegroupArmy)object).getRouteSize() > 0) {
                 if (((RegroupArmy)object).getRouteSize() == 1) {
                     if (!CFG.gameAction.moveArmyAction(aI_RegoupArmyData.iProvinceID, CFG.core.getCiv(n).getCapitalProvID(), (int)aI_RegoupArmyData.iArmy, n, true, false)) {
-                        // empty if block
+                        
                     }
                 } else if (CFG.gameAction.moveArmyAction(aI_RegoupArmyData.iProvinceID, ((RegroupArmy)object).getRoute(0), (int)aI_RegoupArmyData.iArmy, n, true, false)) {
                     ((RegroupArmy)object).setFromProvinceID(((RegroupArmy)object).getRoute(0));
@@ -4439,7 +4435,7 @@ public class AIPlaystyle {
                                 continue;
                             }
                             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                                // empty catch block
+                                
                             }
                         }
                     }
@@ -4509,7 +4505,7 @@ public class AIPlaystyle {
                 }
             }
             catch (NullPointerException nullPointerException) {
-                // empty catch block
+                
             }
             List<AI_NeighProvinces> list = this.getAllNeighboringProvincesInRange_RegroupPrepareForWAr(aI_RegoupArmyData.iProvinceID, n, CFG.core.getCiv((int)n).civGD.civPers.REGROUP_AT_PEACE_MAX_PROVINCES + CFG.core.getCiv(n).getNumOfProvs() / 15, new ArrayList<AI_NeighProvinces>(), new ArrayList<Integer>());
             if (list.size() > 0) {
@@ -4603,7 +4599,7 @@ public class AIPlaystyle {
                             continue;
                         }
                         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                            // empty catch block
+                            
                         }
                     }
                     if (arrayList.size() > 0) {
@@ -4681,7 +4677,7 @@ public class AIPlaystyle {
                 }
             }
             catch (NullPointerException nullPointerException) {
-                // empty catch block
+                
             }
             List<AI_NeighProvinces> list = this.getAllNeighboringProvincesInRange_RegroupAtWar(aI_RegoupArmyData.iProvinceID, n, CFG.core.getCiv((int)n).civGD.civPers.REGROUP_AT_PEACE_MAX_PROVINCES + CFG.core.getCiv(n).getNumOfProvs() / 15, new ArrayList<AI_NeighProvinces>(), new ArrayList<Integer>());
             if (list.size() > 0) {
@@ -4746,7 +4742,7 @@ public class AIPlaystyle {
                     if (regroupArmy_AtWar.getRouteSize() > 0) {
                         if (regroupArmy_AtWar.getRouteSize() == 1) {
                             if (!CFG.gameAction.moveArmyAction(aI_RegoupArmyData.iProvinceID, CFG.core.getCiv(n).getCapitalProvID(), (int)aI_RegoupArmyData.iArmy, n, true, false)) {
-                                // empty if block
+                                
                             }
                         } else if (CFG.gameAction.moveArmyAction(aI_RegoupArmyData.iProvinceID, regroupArmy_AtWar.getRoute(0), (int)aI_RegoupArmyData.iArmy, n, true, false)) {
                             regroupArmy_AtWar.setFromProvinceID(regroupArmy_AtWar.getRoute(0));
@@ -5590,7 +5586,7 @@ public class AIPlaystyle {
             boolean canEnd_V2;
             boolean playerTakesPartInPeaceTreaty;
 
-            // Decompiler Aliases
+            
             int var1_1 = n;
             Civilization var2_2 = civ;
             MessageBox_GameData var3_4 = messageBox;
@@ -6066,7 +6062,7 @@ public class AIPlaystyle {
                                     }
                                 }
                                 catch (Exception var46_56) {
-                                    // empty catch block
+                                    
                                 }
                                 if (nScore > 0.0f) {
                                     message.onAccept(n);
@@ -7506,7 +7502,7 @@ public class AIPlaystyle {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             try {
                 if ((float)CFG.core.getCiv(civ.getPuppetOfCiv()).getVassal_Tribute(nCivID) > (float)GameValues.gvVassal.PERCENTAGE_OF_INCOME_FOR_LORD_MAX * civ.LIBERTY_ACCEPTABLE_TRIBUTE) {
@@ -7517,7 +7513,7 @@ public class AIPlaystyle {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             try {
                 if (CFG.core.getCivRelationOfCivB(nCivID, civ.getPuppetOfCiv()) < (float)GameValues.gvVassalLiberty.RELATION_NEGATIVE_THRESHOLD) {
@@ -7526,7 +7522,7 @@ public class AIPlaystyle {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             if (updateLiberity) {
                 civ.setVassalLibertyDesire(civ.getVassalLibertyDesire() - civ.getVassalLibertyDesire() * GameValues.gvVassalLiberty.PASSIVE_LIBERTY_DECAY_PERC * (float)GameValues.gvUpdate.AI_TURN_ESSENTIALS_2);
@@ -7549,7 +7545,7 @@ public class AIPlaystyle {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             try {
                 if ((float)CFG.core.getCiv(civ.getPuppetOfCiv()).getVassal_Tribute(nCivID) > (float)GameValues.gvVassal.PERCENTAGE_OF_INCOME_FOR_LORD_MAX * civ.LIBERTY_ACCEPTABLE_TRIBUTE) {
@@ -7560,7 +7556,7 @@ public class AIPlaystyle {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             try {
                 if (CFG.core.getCivRelationOfCivB(nCivID, civ.getPuppetOfCiv()) < (float)GameValues.gvVassalLiberty.RELATION_NEGATIVE_THRESHOLD) {
@@ -7569,7 +7565,7 @@ public class AIPlaystyle {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             if (updateLiberity) {
                 out -= civ.getVassalLibertyDesire() * GameValues.gvVassalLiberty.PASSIVE_LIBERTY_DECAY_PERC;

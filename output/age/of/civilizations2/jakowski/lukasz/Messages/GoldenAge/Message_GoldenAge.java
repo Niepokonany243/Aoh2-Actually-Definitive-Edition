@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Messages.GoldenAge;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -39,7 +37,7 @@ extends Message {
             CFG.menus.rebuildInGame_Messages();
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

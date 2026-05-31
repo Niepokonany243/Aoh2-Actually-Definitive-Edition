@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Console;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -438,7 +436,7 @@ public class Commands {
                         CFG.ARMY_RETREAT = Math.min(Math.max(0.0f, CFG.ARMY_RETREAT), 0.99f);
                     }
                     catch (Exception ex) {
-                        // empty catch block
+                        
                     }
                     return;
                 }
@@ -448,7 +446,7 @@ public class Commands {
                         CFG.ARMY_RETREAT = Math.min(Math.max(0.0f, CFG.ARMY_RETREAT), 0.99f);
                     }
                     catch (Exception ex) {
-                        // empty catch block
+                        
                     }
                     return;
                 }
@@ -457,7 +455,7 @@ public class Commands {
                         CFG.MIN_ARMY_REQUIRED_TO_ATTACK = Integer.parseInt(tempCommand[1]);
                     }
                     catch (Exception ex) {
-                        // empty catch block
+                        
                     }
                     return;
                 }
@@ -1032,7 +1030,7 @@ public class Commands {
                         }
                     }
                     catch (Exception population) {
-                        // empty catch block
+                        
                     }
                     return;
                 }
@@ -1057,7 +1055,7 @@ public class Commands {
                         }
                     }
                     catch (Exception tActiveProvince) {
-                        // empty catch block
+                        
                     }
                     return;
                 }
@@ -1082,7 +1080,7 @@ public class Commands {
                         }
                     }
                     catch (Exception tActiveProvince) {
-                        // empty catch block
+                        
                     }
                     return;
                 }

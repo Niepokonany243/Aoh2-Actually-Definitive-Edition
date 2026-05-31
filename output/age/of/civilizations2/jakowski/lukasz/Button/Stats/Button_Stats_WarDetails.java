@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button.Stats;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -182,7 +180,7 @@ extends ButtonStats {
             ScissorStack.popScissors();
         }
         catch (IllegalStateException illegalStateException) {
-            // empty catch block
+            
         }
         Renderer.drawTextWithShadow(oSB, this.fontID, "" + this.iCivilianDeaths, this.getPosXE() + this.getWidthE() - this.iCivilianDeathsWidth - CFG.PADD * 3 - (int)((float)IMGManager.getIMG(Images.economy).getWidth() * this.getImageScale(Images.economy)) + iTranslateX, this.getPosY() + this.getHeightE() / 2 - CFG.PADD - CFG.TEXT_HEIGHT_DEFAULT_SMALL + iTranslateY, this.oColorCivilianDeaths);
         Renderer.drawTextWithShadow(oSB, this.fontID, "" + this.iEconomicLosses, this.getPosXE() + this.getWidthE() - this.iEconomicLossesWidth - CFG.PADD * 3 - (int)((float)IMGManager.getIMG(Images.economy).getWidth() * this.getImageScale(Images.economy)) + iTranslateX, this.getPosY() + this.getHeightE() / 2 + CFG.PADD + iTranslateY, this.oColorEconomicLosses);
@@ -364,7 +362,7 @@ extends ButtonStats {
                 }
             }
             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                // empty catch block
+                
             }
         }
     }

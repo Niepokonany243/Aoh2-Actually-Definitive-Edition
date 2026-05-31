@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.NewGame.Choose;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Button_Transparent;
@@ -125,7 +123,7 @@ extends Menu {
                 }
             }
             catch (GdxRuntimeException gdxRuntimeException) {
-                // empty catch block
+                
             }
         }
         sTexts = new ArrayList<String>();
@@ -220,7 +218,7 @@ extends Menu {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
         super.drawMenuM(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);
@@ -259,7 +257,7 @@ extends Menu {
                 oSB.setColor(Color.WHITE);
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
         Menu_ChooseScenario.iFHR = -1;

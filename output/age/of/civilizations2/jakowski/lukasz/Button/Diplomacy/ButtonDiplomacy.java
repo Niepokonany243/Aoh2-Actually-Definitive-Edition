@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button.Diplomacy;
 
 import age.of.civilizations2.jakowski.lukasz.Button.ButtonM;
@@ -129,7 +127,7 @@ extends ButtonM {
             ScissorStack.popScissors();
         }
         catch (IllegalStateException illegalStateException) {
-            // empty catch block
+            
         }
     }
 
@@ -1450,7 +1448,7 @@ extends ButtonM {
                 CFG.core.setActiveProvID(CFG.core.getCiv(CFG.getActiveCivInfoId()).getCapitalProvID());
             }
             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                // empty catch block
+                
             }
             CFG.updateActiveCivInfo_CreateNewGame();
             CFG.core.enableDrawCivilizationRegions(CFG.getActiveCivInfoId(), 1);

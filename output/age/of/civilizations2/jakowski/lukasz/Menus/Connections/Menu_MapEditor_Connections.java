@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Connections;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Game.Button_Game;
@@ -114,7 +112,7 @@ extends Menu {
                                     }
                                 }
                                 catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                                    // empty catch block
+                                    
                                 }
                             }
                             try {
@@ -139,7 +137,7 @@ extends Menu {
                                     }
                                 }
                                 catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                                    // empty catch block
+                                    
                                 }
                             }
                             try {
@@ -164,7 +162,7 @@ extends Menu {
                                     }
                                 }
                                 catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                                    // empty catch block
+                                    
                                 }
                             }
                         }

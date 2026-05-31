@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.NewGame;
 
 import age.of.civilizations2.jakowski.lukasz.BetterUI_Manager;
@@ -368,7 +366,7 @@ extends Menu {
             CFG.SFXManager.playSound(SFXManager.SFX_START);
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

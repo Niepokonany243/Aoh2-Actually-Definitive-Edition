@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Loan;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Diplomacy.Buton_Diplomacy_Loan;
@@ -72,7 +70,7 @@ extends Menu {
                             }
                         }
                         catch (Exception exception) {
-                            // empty catch block
+                            
                         }
                     }
                 });

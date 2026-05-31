@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.AI.AI_CivsInRange;
@@ -98,7 +96,7 @@ public class Civilization {
                     int provinceID = this.getProvID(i);
                     if (CFG.core.getProv(provinceID).getCivId() == this.getCivId() && !CFG.core.getProv(provinceID).isOccupied()) {
                         
-                        // SILENT AUTO ASSIMILATION
+                        
                         if (runAssi && CFG.core.getProv(provinceID).getProviStability() < this.civGD.autoAssimilationThreshold && this.isAssimilateOrganized_GET(provinceID) == null) {
                             long cost = GameManager.assimilateCost(provinceID, GameValues.gvAssimilate.ASSIMILATE_NUM_OF_TURNS_MAX);
                             if (this.getGold() >= cost) {
@@ -110,7 +108,7 @@ public class Civilization {
                             }
                         }
                         
-                        // SILENT AUTO HAPPINESS
+                        
                         if (runHappi && CFG.core.getProv(provinceID).getHappi() < this.civGD.autoHappinessThreshold && !this.isFestivalOrganized(provinceID)) {
                             long cost = Festival.festivalCost(provinceID);
                             if ((float)cost <= (float)this.getGold() * this.civGD.autoHappinessMaxMoney && this.getMovemPoints() >= GameValues.gvFestival.COST_FESTIVAL_MOVEMENT_POINTS) {
@@ -123,7 +121,7 @@ public class Civilization {
                             }
                         }
                         
-                        // SILENT AUTO INVEST (100% logic)
+                        
                         if (runInvest && !this.isInvestedDev(provinceID)) {
                             if (this.getMovemPoints() >= GameValues.gvInvestDevelopment.INVEST_DEVELOPMENT_MOVEMENT_POINTS && this.getTechLevel() > CFG.core.getProv(provinceID).getDeveLvl()) {
                                 long investAmount = GameManager.investMaxDevGold(provinceID, this.getCivId());
@@ -135,7 +133,7 @@ public class Civilization {
                             }
                         }
                         
-                        // SILENT AUTO BUILD
+                        
                         if (runBuild) {
                             if (this.civGD.autoBuild_Farm && BuildingsManager.canBuildFarm(provinceID)) {
                                 int moveCost = BuildingsManager.getFarm_BuildMovementCost(CFG.core.getProv(provinceID).getLvlOfFarm() + 1);
@@ -383,7 +381,7 @@ public class Civilization {
                 catch (Exception exception) {}
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
         return false;
@@ -1192,7 +1190,7 @@ public class Civilization {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         return false;
     }
@@ -1205,7 +1203,7 @@ public class Civilization {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         return false;
     }
@@ -1247,7 +1245,7 @@ public class Civilization {
                     this.civGD.recruitArmySize = this.civGD.recruitArmy.size();
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
             }
         }
@@ -1590,7 +1588,7 @@ public class Civilization {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -2291,7 +2289,7 @@ public class Civilization {
                 catch (Exception exception) {}
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
         return false;
@@ -2365,7 +2363,7 @@ public class Civilization {
                 catch (Exception exception) {}
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
         return false;
@@ -2416,7 +2414,7 @@ public class Civilization {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         return false;
     }
@@ -2448,7 +2446,7 @@ public class Civilization {
                 }
             }
             catch (RuntimeException ex) {
-                // empty catch block
+                
             }
             if (GameValues.gvInGame.LOAD_LORD_VASSAL_SPECIAL_FLAG && this.getPuppetOfCiv() != this.getCivId() && this.loadFlag_Vassal()) {
                 return;
@@ -2503,7 +2501,7 @@ public class Civilization {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
     }
@@ -2535,7 +2533,7 @@ public class Civilization {
                 }
             }
             catch (RuntimeException ex) {
-                // empty catch block
+                
             }
             try {
                 try {
@@ -2739,13 +2737,13 @@ public class Civilization {
                             Civilization.this.setB(tempCiv.getB());
                         }
                         catch (Exception exception) {
-                            // empty catch block
+                            
                         }
                     }
                 });
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
     }
@@ -2774,7 +2772,7 @@ public class Civilization {
             this.civGD.relation.put(iID, Float.valueOf(nOpinion));
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -2783,7 +2781,7 @@ public class Civilization {
             this.civGD.relation.put(iID, Float.valueOf(GameValues.gvDiplomacy.RELATION_AT_WAR));
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -3220,7 +3218,7 @@ public class Civilization {
                 catch (Exception exception) {}
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
         return false;
@@ -3497,7 +3495,7 @@ public class Civilization {
         catch (NullPointerException nullPointerException) {
         }
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            // empty catch block
+            
         }
         return true;
     }

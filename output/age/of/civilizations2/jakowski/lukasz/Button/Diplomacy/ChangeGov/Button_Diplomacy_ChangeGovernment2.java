@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button.Diplomacy.ChangeGov;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -187,7 +185,7 @@ extends ButtonM {
             }
         }
         catch (Exception posX) {
-            // empty catch block
+            
         }
         Renderer.drawTextWithShadow(oSB, this.fontID, this.getTextE(), this.getPosXE() + ButtonDiplomacy.iDiploWidth + CFG.PADD * 4 + IMGManager.getIMG(Images.flagRect2).getWidth() + iTranslateX, this.getPosY() + this.getHeightE() / 2 - CFG.PADD - this.getTextHeight() + iTranslateY, this.getColorE(isActive));
         int pX = this.getPosXE() + ButtonDiplomacy.iDiploWidth + CFG.PADD * 4 + IMGManager.getIMG(Images.flagRect2).getWidth() + iTranslateX;

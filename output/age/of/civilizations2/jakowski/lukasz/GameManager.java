@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle.AIPlaystyle;
@@ -362,7 +360,7 @@ public class GameManager {
             CFG.historyManager.addHistoryLog(new HistoryLog_NewColony(nCivID, nProvinceID));
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         return true;
     }
@@ -920,7 +918,7 @@ public class GameManager {
             }
         }
         catch (Exception i) {
-            // empty catch block
+            
         }
         while (!supportedProvinces.isEmpty() && nMoney > 0) {
             int numOfTunrs;
@@ -1109,7 +1107,7 @@ public class GameManager {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
         return true;
@@ -1172,7 +1170,7 @@ public class GameManager {
                 Core.addDiplomacyLines(CFG.core.getCapitalOrProvince(byCivID), provinceID, CFG.COLOR_NEGATIVE_2);
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
         return true;
@@ -1852,7 +1850,7 @@ public class GameManager {
             CFG.historyManager.addHistoryLog(new HistoryLog_Guarantee(iCivID, iFromCivID));
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -2264,7 +2262,7 @@ public class GameManager {
                                 }
                             }
                             catch (Exception j2) {
-                                // empty catch block
+                                
                             }
                         }
                         if (peaceTreaty.civsDemandsDefenders.get((int)i).changeReligionToCivID <= 0 || CFG.core.getCiv(peaceTreaty.civsDemandsDefenders.get((int)i).iCivID).getReligionID() == CFG.core.getCiv(peaceTreaty.civsDemandsDefenders.get((int)i).changeReligionToCivID).getReligionID()) continue;
@@ -2308,7 +2306,7 @@ public class GameManager {
                                 }
                             }
                             catch (Exception j3) {
-                                // empty catch block
+                                
                             }
                         }
                         if (peaceTreaty.civsDemandsAggressors.get((int)i).changeReligionToCivID <= 0 || CFG.core.getCiv(peaceTreaty.civsDemandsAggressors.get((int)i).iCivID).getReligionID() == CFG.core.getCiv(peaceTreaty.civsDemandsAggressors.get((int)i).changeReligionToCivID).getReligionID()) continue;
@@ -2494,7 +2492,7 @@ public class GameManager {
                                     CFG.core.buildCivilizationRegions(this.id);
                                 }
                                 catch (Exception exception) {
-                                    // empty catch block
+                                    
                                 }
                             }
                         });
@@ -2513,7 +2511,7 @@ public class GameManager {
                                     CFG.core.buildCivilizationRegions(this.id);
                                 }
                                 catch (Exception exception) {
-                                    // empty catch block
+                                    
                                 }
                             }
                         });
@@ -3051,7 +3049,7 @@ public class GameManager {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
     }

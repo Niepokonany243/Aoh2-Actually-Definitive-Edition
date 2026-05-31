@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Wars;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -67,7 +65,7 @@ extends Menu {
                         }
                     }
                     catch (Exception exception) {
-                        // empty catch block
+                        
                     }
                     for (z = 0; z < CFG.core.getWar(i).getDefendersSize(); ++z) {
                         if (!CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)CFG.core.getWar((int)i).getDefenderID((int)z).getCivID()).getIdeology()).REVOLUTIONARY) continue;

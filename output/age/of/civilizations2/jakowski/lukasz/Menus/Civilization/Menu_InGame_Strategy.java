@@ -23,7 +23,7 @@ public class Menu_InGame_Strategy extends Menu {
             return;
         }
 
-        // Battle Strategy Tabs
+        
         int tabW = (fixedStrategyWidth - CFG.PADD * 2) / 4;
         for (int i = 0; i < 4; i++) {
             final int strategyID = i;
@@ -47,7 +47,7 @@ public class Menu_InGame_Strategy extends Menu {
         menuElements.add(new Text_Static("-------------------", -1, CFG.PADD, tY, fixedStrategyWidth - CFG.PADD * 2, CFG.BUTTON_H / 2));
         tY += CFG.BUTTON_H / 2 + CFG.PADD;
 
-        // Auto Options
+        
         menuElements.add(new Button_Game_Checkbox("Auto-Assimilation", CFG.PADD, CFG.PADD, tY, fixedStrategyWidth - CFG.PADD * 2, true, civ.civGD.autoAssimilation) {
             @Override
             public void actionElem(int iID) { 
@@ -120,7 +120,7 @@ public class Menu_InGame_Strategy extends Menu {
         menuElements.add(new Text_Static("---------", -1, CFG.PADD, tY, fixedStrategyWidth - CFG.PADD * 2, CFG.BUTTON_H / 2));
         tY += CFG.BUTTON_H / 2 + CFG.PADD;
 
-        // Parameters
+        
         menuElements.add(new Slider(CFG.PADD, tY, fixedStrategyWidth - CFG.PADD * 2, CFG.BUTTON_H / 2, 1, 100, (int)(civ.civGD.autoHappinessMaxMoney * 100)) {
             @Override
             public void updateSlider(int nX) {

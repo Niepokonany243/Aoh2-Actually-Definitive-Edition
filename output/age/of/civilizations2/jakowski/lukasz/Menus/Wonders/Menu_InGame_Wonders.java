@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Wonders;
 
 import age.of.civilizations2.jakowski.lukasz.Button.GameN.ButtonN_Wonder_2;

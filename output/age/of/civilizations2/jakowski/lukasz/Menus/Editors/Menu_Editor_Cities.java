@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Editors;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Classic.Button_Classic;
@@ -63,7 +61,7 @@ extends Menu {
             }
         }
         catch (GdxRuntimeException tempFileT) {
-            // empty catch block
+            
         }
         ArrayList<String> visibleTags = new ArrayList<String>();
         for (int i = 0; i < this.lTags.size(); ++i) {
@@ -92,7 +90,7 @@ extends Menu {
                 continue;
             }
             catch (IOException iOException) {
-                // empty catch block
+                
             }
         }
         this.lTags = visibleTags;
@@ -172,7 +170,7 @@ extends Menu {
             catch (ClassNotFoundException classNotFoundException) {
             }
             catch (IOException iOException) {
-                // empty catch block
+                
             }
             CFG.menus.setMenuID(View.eCC);
             CFG.updateKeyboard_Actions();

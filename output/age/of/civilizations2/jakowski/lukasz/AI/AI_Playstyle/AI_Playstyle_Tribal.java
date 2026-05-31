@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle;
 
 import age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle.AIPlaystyle;
@@ -33,7 +31,7 @@ extends AIPlaystyle {
             if (CFG.oR.nextInt(100) < CFG.core.getCiv((int)nCivID).UNCIVILIZED_MIGRATE) {
                 if (CFG.core.getCiv(nCivID).getNumOfProvs() < this.MIGRATE_MAX_NUM_OF_PROVINCES) {
                     if (!this.migration(nCivID)) {
-                        // empty if block
+                        
                     }
                 } else {
                     this.migration_NotConnected(nCivID);
@@ -120,7 +118,7 @@ extends AIPlaystyle {
                             }
                         }
                         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                            // empty catch block
+                            
                         }
                     }
                 }

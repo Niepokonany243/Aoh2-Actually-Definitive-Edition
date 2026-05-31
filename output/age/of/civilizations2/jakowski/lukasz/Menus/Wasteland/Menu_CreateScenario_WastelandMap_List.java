@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Wasteland;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Game.Button_Game_TextTwoLines;
@@ -81,12 +79,12 @@ extends Menu {
                     continue;
                 }
                 catch (IOException iOException) {
-                    // empty catch block
+                    
                 }
             }
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
         this.initMenu(null, 0, CFG.GAMEHEIGHT - CFG.BUTTON_H - CFG.PADD * 2, CFG.GAMEWIDTH - CFG.map.getMpB().getMinimapWidth(), CFG.BUTTON_H + CFG.PADD * 2, menuElements, true, false);
         this.updateLang();
@@ -163,7 +161,7 @@ extends Menu {
             catch (IOException iOException) {
             }
             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                // empty catch block
+                
             }
             CFG.core.buildWastelandLevels();
         }

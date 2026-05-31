@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Z_Other;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -126,9 +124,7 @@ public class PNM {
         }
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     public static final void bPND(int i, boolean rebuild) {
         if (pND.get(i) != null) {
             try {
@@ -242,7 +238,7 @@ public class PNM {
                             PNM.pND.get((int)i).fontScale = 1.0E-4f;
                         }
                     }
-                    // ** MonitorExit[tempPointsAngle] (shouldn't be in output)
+                    
                     int jSize2 = tempPoints.size();
                     for (j = 0; j < jSize2; ++j) {
                         PNM.pND.get((int)i).drawPoints.add(new Point_XY((int)((Vector2)tempPoints.get((int)j)).x, (int)((Vector2)tempPoints.get((int)j)).y));
@@ -259,7 +255,7 @@ public class PNM {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
     }
@@ -367,7 +363,7 @@ public class PNM {
             oSB.setTransformMatrix(oldTransformMatrix);
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -398,7 +394,7 @@ public class PNM {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

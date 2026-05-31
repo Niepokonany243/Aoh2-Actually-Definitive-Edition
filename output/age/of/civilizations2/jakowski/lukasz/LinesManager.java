@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -95,7 +93,7 @@ public class LinesManager {
         catch (IOException iOException) {
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
         this.migrateImage = new Image(new Texture(FileManager.loadFile("UI/pix"), Pixmap.Format.RGBA8888, true), Texture.TextureFilter.Linear, CFG.editorLine_GameData.getRapeatImage() ? Texture.TextureWrap.Repeat : Texture.TextureWrap.ClampToEdge);
     }
@@ -119,7 +117,7 @@ public class LinesManager {
         catch (IOException iOException) {
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
         this.moveLandImage = new Image(new Texture(FileManager.loadFile("UI/pix"), Pixmap.Format.RGBA8888, true), Texture.TextureFilter.Linear, CFG.editorLine_GameData.getRapeatImage() ? Texture.TextureWrap.Repeat : Texture.TextureWrap.ClampToEdge);
     }

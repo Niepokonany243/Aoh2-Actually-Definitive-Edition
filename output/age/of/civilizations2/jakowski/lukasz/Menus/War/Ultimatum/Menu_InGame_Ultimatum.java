@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.War.Ultimatum;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Diplomacy.Button_Diplomacy_Demand;
@@ -174,7 +172,7 @@ extends Menu {
             tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE();
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         menuElements.add(new Button_Diplomacy_Demand(CFG.lang.get("DemandProvinces") + ": ", CFG.getActiveCivInfoId(), 2, tY, CFG.BUTTON_W * 2){
 

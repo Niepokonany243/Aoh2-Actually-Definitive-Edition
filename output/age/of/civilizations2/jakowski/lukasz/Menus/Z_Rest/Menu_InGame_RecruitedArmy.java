@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Z_Rest;
 
 import age.of.civilizations2.jakowski.lukasz.Button.MenuElemUI;
@@ -244,7 +242,7 @@ extends Menu {
             this.getTitleM().setText(CFG.lang.get("RecruitedArmy"));
         }
         catch (NullPointerException nullPointerException) {
-            // empty catch block
+            
         }
     }
 

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -100,7 +98,7 @@ public class UnionFlagsToGenerate {
                     continue;
                 }
                 catch (OutOfMemoryError ex) {
-                    // empty catch block
+                    
                 }
             }
             if (this.typeOfAction == UnionFlagsToGenerate_TypesOfAction.CIV_ID_SMALL) {
@@ -122,7 +120,7 @@ public class UnionFlagsToGenerate {
                     ScissorStack.popScissors();
                 }
                 catch (IllegalStateException ex) {
-                    // empty catch block
+                    
                 }
                 oSB.end();
                 oSB.begin();
@@ -150,7 +148,7 @@ public class UnionFlagsToGenerate {
                     ScissorStack.popScissors();
                 }
                 catch (IllegalStateException ex) {
-                    // empty catch block
+                    
                 }
                 oSB.end();
                 oSB.begin();
@@ -178,7 +176,7 @@ public class UnionFlagsToGenerate {
                     ScissorStack.popScissors();
                 }
                 catch (IllegalStateException ex) {
-                    // empty catch block
+                    
                 }
                 oSB.end();
                 oSB.begin();

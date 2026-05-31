@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Graphs.Graph2;
 
 import age.of.civilizations2.jakowski.lukasz.Images;

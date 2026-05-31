@@ -56,7 +56,7 @@ public class Scenario_CustomJSON {
         public List<String> coreTags = new ArrayList<String>();
         public List<ArmyData> armies = new ArrayList<ArmyData>();
 
-        // Buildings
+        
         public Integer fort;
         public Integer watchTower;
         public Integer port;
@@ -95,7 +95,7 @@ public class Scenario_CustomJSON {
         public Long seteco;
         public Integer missiles;
         
-        public String puppetOf; // Tag of the lord
+        public String puppetOf; 
         public List<RelationData> relations = new ArrayList<RelationData>();
         public List<RelationData> nonAggressionPacts = new ArrayList<RelationData>();
         public List<RelationData> defensivePacts = new ArrayList<RelationData>();

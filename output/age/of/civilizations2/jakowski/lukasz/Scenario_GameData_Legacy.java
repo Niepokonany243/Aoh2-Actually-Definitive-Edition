@@ -5,9 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Legacy version of Scenario_GameData used for loading old binary files.
- */
+
 public class Scenario_GameData_Legacy
 implements Serializable {
     private static final long serialVersionUID = 0L;

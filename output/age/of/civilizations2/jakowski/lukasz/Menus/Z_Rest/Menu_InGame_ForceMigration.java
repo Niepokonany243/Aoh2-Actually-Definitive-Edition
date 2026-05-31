@@ -257,7 +257,7 @@ extends Menu {
                             int natCivId = this.getCurr();
                             CFG.menus.rebuildInGameForceMigration(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId(), natCivId);
                         } catch (Exception exception) {
-                            // empty catch block
+                            
                         }
                     }
 

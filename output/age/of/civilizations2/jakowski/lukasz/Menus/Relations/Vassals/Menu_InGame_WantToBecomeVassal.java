@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Relations.Vassals;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Flag.Button_InGameAction;
@@ -120,7 +118,7 @@ extends Menu {
             extraName = ": " + CFG.core.getCiv(this.iOnCivID).getCivName();
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         this.initMenu(new TitleM_TextSmall(CFG.lang.get("WantsToBecomeYourVassal") + extraName, CFG.BUTTON_H * 3 / 4, true, true){
 

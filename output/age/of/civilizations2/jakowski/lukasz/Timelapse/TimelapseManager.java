@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Timelapse;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -301,7 +299,7 @@ public class TimelapseManager {
             this.timelapseTurnChanges.lTurnChanges.get(iSize).add(new Timelapse_TurnChanges(nProvinceID, toCivID, isOccupied));
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -417,7 +415,7 @@ public class TimelapseManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         return out;
     }
@@ -433,7 +431,7 @@ public class TimelapseManager {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             return 0;
         }

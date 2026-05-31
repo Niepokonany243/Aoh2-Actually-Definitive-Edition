@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Civilization;
 
 import age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle.AIPlaystyle;
@@ -82,7 +80,7 @@ extends Menu {
             isRebels = CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)CFG.getActiveCivInfoId()).getIdeology()).REVOLUTIONARY;
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         if (CFG.SPECTATOR_MODE) {
             menuElems.add(new Button_DiplomacyAction(Images.diploAZ, CFG.lang.get("LockCivilization") + ": " + (CFG.SPECTATOR_MODE_LOCK_CIV ? CFG.lang.get("On") : CFG.lang.get("Off")), 0, 0, nPosY, menuW - 2, tempElemH, true){
@@ -546,7 +544,7 @@ extends Menu {
                             }
                         }
                         catch (Exception exception) {
-                            // empty catch block
+                            
                         }
                         return super.getColorE(isActive);
                     }
@@ -583,7 +581,7 @@ extends Menu {
                             }
                         }
                         catch (Exception exception) {
-                            // empty catch block
+                            
                         }
                         nData.add(new ME_Hover_2Type_Space());
                         nElements.add(new MEHover_2E(nData));
@@ -850,7 +848,7 @@ extends Menu {
                     }
                 }
                 catch (Exception exception) {
-                    // empty catch block
+                    
                 }
                 return super.getColorE(isActive);
             }
@@ -1206,7 +1204,7 @@ extends Menu {
                             }
                         }
                         catch (Exception exception) {
-                            // empty catch block
+                            
                         }
                     }
                 }
@@ -1691,7 +1689,7 @@ extends Menu {
                             nData.clear();
                         }
                         catch (Exception exception) {
-                            // empty catch block
+                            
                         }
                         this.menuElemHover = new ME_Hover_v2(nElements);
                     }
@@ -2343,7 +2341,7 @@ extends Menu {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

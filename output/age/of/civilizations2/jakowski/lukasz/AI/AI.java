@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.AI;
 
 import age.of.civilizations2.jakowski.lukasz.AI.AI_NeighProvinces;
@@ -427,7 +425,7 @@ public class AI {
             civLambda.numOf_SuppliesCamp = 0;
             civLambda.numOf_Markets = 0;
         });
-        // O(W * A * D) instead of O(C²) - populate isAtWarWithCivs from war objects
+        
         for (i = 0; i < CFG.core.getWarsSize(); ++i) {
             War_GameData war = CFG.core.getWar(i);
             for (int a = 0; a < war.getAggressorsSize(); ++a) {
@@ -442,7 +440,7 @@ public class AI {
             }
         }
         
-        // This count needs to be synchronized or calculated after
+        
         this.iNumOfColonizedProvcs = 0;
         for (int i2 = 1; i2 < CFG.core.getCivsSize(); ++i2) {
             this.iNumOfColonizedProvcs += CFG.core.getCiv(i2).civGD.coloniesFounded.size();
@@ -494,7 +492,7 @@ public class AI {
             }
         }
         
-        // Count playable provinces (needs synchronization or sequential count)
+        
         this.PLAYABLE_PROVINCES = 0;
         for (int i4 = 0; i4 < CFG.core.getProvinSize(); ++i4) {
             if (!CFG.core.getProv(i4).getSeaProv() && CFG.core.getProv(i4).getWastelandLvl() < 0) {
@@ -1309,7 +1307,7 @@ public class AI {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Load;
 
 import age.of.civilizations2.jakowski.lukasz.Button.MenuElemUI;
@@ -379,7 +377,7 @@ extends Menu {
                         }
                     }
                     catch (Exception i) {
-                        // empty catch block
+                        
                     }
                     CFG.setActiveCivInfoId(0);
                     CFG.map.getMpB().disposeMinimapOfCivilizations();

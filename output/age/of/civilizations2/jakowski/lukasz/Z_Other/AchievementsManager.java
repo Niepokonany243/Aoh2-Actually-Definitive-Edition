@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Z_Other;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -18,7 +16,7 @@ public class AchievementsManager {
             sUM.sUI.storeStats();
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -32,7 +30,7 @@ public class AchievementsManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         try {
             if (CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).playerGD.challengeID >= 0 && ChallengesManager.challengeList.get((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).playerGD.challengeID).FORM_TAG.equals(tag)) {
@@ -49,7 +47,7 @@ public class AchievementsManager {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 }

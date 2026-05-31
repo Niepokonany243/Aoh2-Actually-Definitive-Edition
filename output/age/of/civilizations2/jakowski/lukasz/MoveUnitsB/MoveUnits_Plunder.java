@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.MoveUnitsB;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -32,7 +30,7 @@ public class MoveUnits_Plunder {
         catch (IllegalArgumentException illegalArgumentException) {
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.AI.AI_Build;
 
 import age.of.civilizations2.jakowski.lukasz.AI.AI_Build.AI_Build;
@@ -16,7 +14,7 @@ extends AI_Build_Option {
         try {
             Civilization civ = CFG.core.getCiv(nCivID);
             if (civ.isAtWarC() && civ.numOf_Ports == 0 && civ.getSeaAccess() > 0 && civ.getBordersWithEnemy() == 0) {
-                return 1000000.0f; // Force port construction if at war and no way to reach enemies except by sea
+                return 1000000.0f; 
             }
             if (CFG.core.getCiv(nCivID).getCivRegionsSize() > CFG.core.getCiv((int)nCivID).numOf_Ports) {
                 for (int i = 0; i < CFG.core.getCiv(nCivID).getCivRegionsSize(); ++i) {

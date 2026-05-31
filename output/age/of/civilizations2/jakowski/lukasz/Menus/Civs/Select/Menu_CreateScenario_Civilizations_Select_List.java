@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Civs.Select;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -84,7 +82,7 @@ extends Menu {
                             continue;
                         }
                         catch (Exception tempT) {
-                            // empty catch block
+                            
                         }
                     }
                     for (i3 = 0; i3 < sUM.sUIIS; ++i3) {
@@ -96,7 +94,7 @@ extends Menu {
                             continue;
                         }
                         catch (Exception tempT) {
-                            // empty catch block
+                            
                         }
                     }
                 }
@@ -115,7 +113,7 @@ extends Menu {
                             continue;
                         }
                         catch (Exception tempT) {
-                            // empty catch block
+                            
                         }
                     }
                     for (i4 = 0; i4 < sUM.sUIIS; ++i4) {
@@ -127,7 +125,7 @@ extends Menu {
                             continue;
                         }
                         catch (Exception tempT) {
-                            // empty catch block
+                            
                         }
                     }
                 }
@@ -148,7 +146,7 @@ extends Menu {
                 }
             }
             catch (GdxRuntimeException tagsSPLITED_ED) {
-                // empty catch block
+                
             }
         }
         try {
@@ -161,7 +159,7 @@ extends Menu {
             }
         }
         catch (Exception i) {
-            // empty catch block
+            
         }
         civsTags = new ArrayList<String>();
         civsNames = new ArrayList<String>();
@@ -390,9 +388,7 @@ extends Menu {
         this.loadedFlags_TagsIDs.add(nCivTagID);
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     @Override
     public void draw(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean sliderMenuIsActive) {
         super.beginClipM(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);
@@ -427,7 +423,7 @@ extends Menu {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         super.endClipM(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);
     }

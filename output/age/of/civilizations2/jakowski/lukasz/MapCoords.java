@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -183,7 +181,7 @@ public class MapCoords {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -206,7 +204,7 @@ public class MapCoords {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -229,7 +227,7 @@ public class MapCoords {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         return -1;
     }
@@ -240,7 +238,7 @@ public class MapCoords {
             CFG.map.getMpSl().setScrollEvent(i);
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

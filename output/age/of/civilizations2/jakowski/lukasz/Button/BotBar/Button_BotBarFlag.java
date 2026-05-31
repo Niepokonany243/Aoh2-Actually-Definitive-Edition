@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button.BotBar;
 
 import age.of.civilizations2.jakowski.lukasz.Button.BotBar.Button_BotBar;
@@ -58,7 +56,7 @@ extends Button_BotBar {
         catch (IllegalArgumentException illegalArgumentException) {
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 

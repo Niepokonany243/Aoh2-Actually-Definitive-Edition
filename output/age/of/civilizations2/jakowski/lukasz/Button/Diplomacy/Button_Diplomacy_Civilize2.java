@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button.Diplomacy;
 
 import age.of.civilizations2.jakowski.lukasz.Button.ButtonM;
@@ -125,14 +123,14 @@ extends ButtonM {
             Renderer.drawText(oSB, this.fontID, CFG.ideologiesMgr.getIdeologyID(CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)this.iCivID).getIdeology()).CAN_BECOME_CIVILIZED).getName(), this.getPosXE() + ButtonDiplomacy.iDiploWidth + this.getTextWidthU() + iTranslateX, this.getPosY() + this.getHeightE() / 2 - this.getTextHeight() / 2 + iTranslateY, new Color(CFG.ideologiesMgr.getIdeologyID((int)CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)this.iCivID).getIdeology()).CAN_BECOME_CIVILIZED).getColor().r, CFG.ideologiesMgr.getIdeologyID((int)CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)this.iCivID).getIdeology()).CAN_BECOME_CIVILIZED).getColor().g, CFG.ideologiesMgr.getIdeologyID((int)CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)this.iCivID).getIdeology()).CAN_BECOME_CIVILIZED).getColor().b, 1.0f));
         }
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            // empty catch block
+            
         }
         try {
             oSB.flush();
             ScissorStack.popScissors();
         }
         catch (IllegalStateException illegalStateException) {
-            // empty catch block
+            
         }
     }
 

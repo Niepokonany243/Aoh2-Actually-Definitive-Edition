@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -50,7 +48,7 @@ extends Event_Outcome {
                 Menu_InGame_PrepareForWar.explode(this.getCivID());
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             if (CFG.core.getCiv(this.getCivID()).getIsPlayer()) {
                 CFG.menus.updateInGameTopAll(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId());

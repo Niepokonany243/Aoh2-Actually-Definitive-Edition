@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button2;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -295,7 +293,7 @@ extends ButtonM {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         this.menuElemHover = new ME_Hover_v2(nElements);
     }

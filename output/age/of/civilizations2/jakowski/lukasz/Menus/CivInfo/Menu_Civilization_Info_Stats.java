@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.CivInfo;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Button_Transparent;
@@ -159,7 +157,7 @@ extends Menu {
                     this.menuElemHover = new ME_Hover_v2(nElements);
                 }
                 catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                    // empty catch block
+                    
                 }
             }
         });
@@ -203,7 +201,7 @@ extends Menu {
                     this.menuElemHover = new ME_Hover_v2(nElements);
                 }
                 catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                    // empty catch block
+                    
                 }
             }
         });
@@ -278,7 +276,7 @@ extends Menu {
             this.getMenuElem(6).setPosX((int)((float)IMGManager.getIMG(Images.noLeader).getWidth() * fScale + (float)(CFG.PADD * 2)));
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
     }
 
@@ -334,7 +332,7 @@ extends Menu {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         CFG.drawRect_InfoBox_Right(oSB, this.getPosX() + CFG.PADD + 2 + iTranslateX, this.getMenuPosY() + this.getMenuElem(10).getPosY() - CFG.PADD + iTranslateY, this.getWidthM() - CFG.PADD * 2 - 2, this.getMenuElem(10).getHeightE() + CFG.PADD * 2);
         CFG.drawRect_InfoBox_Right(oSB, this.getPosX() + CFG.PADD + 2 + iTranslateX, this.getMenuPosY() + this.getMenuElem(12).getPosY() - CFG.PADD + iTranslateY, this.getWidthM() - CFG.PADD * 2 - 2, this.getMenuElem(12).getHeightE() + CFG.PADD * 2);

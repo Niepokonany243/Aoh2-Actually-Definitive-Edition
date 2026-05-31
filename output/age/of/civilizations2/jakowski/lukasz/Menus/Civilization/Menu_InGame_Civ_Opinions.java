@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Civilization;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -113,7 +111,7 @@ extends Menu {
             }
         }
         catch (IndexOutOfBoundsException tempC) {
-            // empty catch block
+            
         }
         this.initMenu(null, 0 + AoCGame.LEFT, IMGManager.getIMG(Images.gameTop).getHeight() + CFG.PADD * 4 + (int)((float)CFG.TEXT_HEIGHT_DEFAULT * 0.6f) + ButtonFlagBig.getButtonH() + CFG.PADD * 4, menuW, tempElemH * 8, menuElements, false, false);
         this.updateLang();

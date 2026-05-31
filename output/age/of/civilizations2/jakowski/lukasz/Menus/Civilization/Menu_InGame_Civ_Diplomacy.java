@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Civilization;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -192,7 +190,7 @@ extends Menu {
                                 }
                             }
                             catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                                // empty catch block
+                                
                             }
                         }
                     });
@@ -442,7 +440,7 @@ extends Menu {
                 }
             }
             catch (IndexOutOfBoundsException j) {
-                // empty catch block
+                
             }
             tData.clear();
             for (i = 1; i < CFG.core.getCivsSize(); ++i) {

@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -73,13 +71,13 @@ extends Event_Conditions {
                             continue;
                         }
                         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                            // empty catch block
+                            
                         }
                     }
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             return CFG.lang.get("DecisionTaken") + ": " + (tName.length() == 0 ? "NOT FOUND!" : tName);
         }

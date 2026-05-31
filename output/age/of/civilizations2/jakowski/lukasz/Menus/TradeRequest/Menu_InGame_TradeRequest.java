@@ -69,7 +69,7 @@ public class Menu_InGame_TradeRequest extends Menu {
         final int colW = Math.max(1, (tempWidth - colGap * 4) / 3);
         int tY = 0;
 
-        // Top: Likelihood bar (spans full width)
+        
         menuElements.add(new Button_Diplomacy_LikelihoodOfSuccess(
             CFG.lang.get("LikelihoodOfSuccess") + ": ",
             GameManager.getTradeRequest_LikelihoodOfSuccess_Text(),
@@ -80,7 +80,7 @@ public class Menu_InGame_TradeRequest extends Menu {
         });
         tY += menuElements.get(menuElements.size() - 1).getHeightE();
 
-        // --- LEFT COLUMN: Your Offers ---
+        
         int leftX = CFG.PADD;
         int centerX = leftX + colW + colGap;
         int rightX = centerX + colW + colGap;
@@ -129,7 +129,7 @@ public class Menu_InGame_TradeRequest extends Menu {
         addOfferToggle(menuElements, CFG.lang.get("Sanctions"), leftX, colY, colW,
             CFG.tradeRequest.listLEFT.lSanctionCivID.size() > 0, OFFER_SANCTIONS, true);
 
-        // --- CENTER COLUMN: Detail panel ---
+        
         int centerDetailY = tY;
         boolean showDetail = selectedLeftOffer >= 0 || selectedRightOffer >= 0;
         if (showDetail) {
@@ -278,7 +278,7 @@ public class Menu_InGame_TradeRequest extends Menu {
             centerDetailY = menuElements.get(menuElements.size() - 1).getPosY() + menuElements.get(menuElements.size() - 1).getHeightE();
         }
 
-        // --- RIGHT COLUMN: Their Offers ---
+        
         int rightColY = tY;
         addOfferToggle(menuElements, CFG.lang.get("Gold"), rightX, rightColY, colW,
             CFG.tradeRequest.listRight.iGold > 0, OFFER_GOLD, false);
@@ -323,12 +323,12 @@ public class Menu_InGame_TradeRequest extends Menu {
         addOfferToggle(menuElements, CFG.lang.get("Sanctions"), rightX, rightColY, colW,
             CFG.tradeRequest.listRight.lSanctionCivID.size() > 0, OFFER_SANCTIONS, false);
 
-        // Compute tY as max Y of all columns
+        
         tY = Math.max(colY + CFG.BUTTON_H * 3 / 4, rightColY + CFG.BUTTON_H * 3 / 4);
         if (showDetail) tY = Math.max(tY, centerDetailY);
         tY += CFG.PADD;
 
-        // Bottom: Cancel and Send buttons
+        
         menuElements.add(new Button_InGameAction(CFG.lang.get("Cancel"), -1, CFG.PADD, tY, CFG.BUTTON_W, true) {
             @Override
             public int getWidthE() { return tempWidth / 2 - CFG.PADD - CFG.PADD / 2; }

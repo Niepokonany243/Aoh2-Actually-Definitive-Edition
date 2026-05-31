@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Button.Stats;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Stats.Button_Stats_Flag;
@@ -19,9 +17,7 @@ extends Button_Stats_Flag {
         super(iCivID, sText, iTextPosX, iPosX, iPosY, iWidth, iHeight);
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     @Override
     public void drawTextE(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive) {
         Rectangle clipBounds = new Rectangle(this.getPosXE() + iTranslateX, CFG.GAMEHEIGHT - this.getPosY() - iTranslateY - this.getHeightE(), this.getWidthE(), this.getHeightE());

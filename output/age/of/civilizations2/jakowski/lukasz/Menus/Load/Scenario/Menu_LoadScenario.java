@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Load.Scenario;
 
 import age.of.civilizations2.jakowski.lukasz.Button.MenuElemUI;
@@ -56,7 +54,7 @@ extends Menu {
                 } else if (iStepID == 2) {
                     CFG.core.loadScenario_2(editor);
                 } else if (iStepID == 3 || iStepID == 4 || iStepID == 5) {
-                    // Skip or handle as needed, original code had if (iStepID != 3 && iStepID != 4 && iStepID != 5)
+                    
                 } else if (iStepID == 6) {
                     CFG.core.loadScenario_2_Flags();
                 } else if (iStepID == 7) {
@@ -73,13 +71,13 @@ extends Menu {
                         );
                     }
                     if (loadingFuture.isDone()) {
-                        iStepID = 13; // Will be incremented to 14
+                        iStepID = 13; 
                         loadingStarted = false;
                     } else {
-                        return; // Wait for next frame
+                        return; 
                     }
                 } else if (iStepID >= 8 && iStepID <= 13) {
-                    // Handled by parallel block at step 7
+                    
                 } else if (iStepID == 14) {
                     CFG.core.loadScenario_10(editor);
                 } else if (iStepID == 15) {

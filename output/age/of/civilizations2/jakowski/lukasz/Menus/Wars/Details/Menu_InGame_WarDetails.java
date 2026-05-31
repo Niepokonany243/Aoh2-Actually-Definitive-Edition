@@ -49,9 +49,9 @@ public class Menu_InGame_WarDetails extends Menu {
         int titleH = CFG.BUTTON_H / 2;
         int elementH = Math.max(CFG.BUTTON_H, CFG.TEXT_HEIGHT_DEFAULT * 2 + CFG.PADD * 4);
 
-        // ... rest of the logic ...
+        
 
-        // Calculate Totals First
+        
         long totalAgg = 0;
         long totalDef = 0;
         try {
@@ -63,19 +63,19 @@ public class Menu_InGame_WarDetails extends Menu {
             }
         } catch (Exception e) {}
 
-        // Titles
+        
         menuElements.add(new Button_Stats_Title(CFG.lang.get("Aggressors"), CFG.PADD * 2, 0, tY, tempWidth / 2, titleH));
         menuElements.add(new Button_Stats_Title(CFG.lang.get("Defenders"), CFG.PADD * 2, tempWidth / 2, tY, tempWidth / 2, titleH));
         tY += titleH + CFG.PADD;
 
-        // TOTAL VS BAR AT CENTER (Top of list)
+        
         String totalText = CFG.getNumber_SHORT(totalAgg) + " VS " + CFG.getNumber_SHORT(totalDef);
         menuElements.add(new Button_Stats_Title(totalText, CFG.PADD, 0, tY, tempWidth, elementH / 2));
         tY += elementH / 2 + CFG.PADD * 2;
 
         int startY = tY;
         
-        // Aggressors List
+        
         try {
             for (int i = 0; i < CFG.core.getWar(WAR_ID).getAggressorsSize(); i++) {
                 int civID = CFG.core.getWar(WAR_ID).getAggressorID(i).getCivID();
@@ -94,7 +94,7 @@ public class Menu_InGame_WarDetails extends Menu {
         int endY_Aggressors = tY;
         tY = startY;
 
-        // Defenders List
+        
         try {
             for (int i = 0; i < CFG.core.getWar(WAR_ID).getDefendersSize(); i++) {
                 int civID = CFG.core.getWar(WAR_ID).getDefenderID(i).getCivID();

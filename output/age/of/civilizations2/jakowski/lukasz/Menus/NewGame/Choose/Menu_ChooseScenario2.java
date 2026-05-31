@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.NewGame.Choose;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -94,7 +92,7 @@ extends Menu {
                                     }
                                 }
                                 catch (Exception exception) {
-                                    // empty catch block
+                                    
                                 }
                                 this.menuElemHover = new ME_Hover_v2(nElements);
                             }
@@ -163,7 +161,7 @@ extends Menu {
                                     }
                                 }
                                 catch (Exception exception) {
-                                    // empty catch block
+                                    
                                 }
                                 this.menuElemHover = new ME_Hover_v2(nElements);
                             }
@@ -186,7 +184,7 @@ extends Menu {
             }
         }
         catch (Exception exception) {
-            // empty catch block
+            
         }
         this.initMenu(null, 0, CFG.BUTTON_H * 3 / 4 + CFG.BUTTON_H * 3 + CFG.PADD, CFG.GAMEWIDTH, CFG.GAMEHEIGHT - CFG.BUTTON_H * 3 / 4 - CFG.BUTTON_H * 3 - CFG.PADD, menuElements);
         this.updateLang();
@@ -234,7 +232,7 @@ extends Menu {
                     this.getMenuElem(iID).setCheckboxSt(false);
                 }
                 catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                    // empty catch block
+                    
                 }
                 Menu_ChooseScenario_Title.loadPreview(iID - 1);
                 try {
@@ -242,7 +240,7 @@ extends Menu {
                     break;
                 }
                 catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                    // empty catch block
+                    
                 }
             }
         }

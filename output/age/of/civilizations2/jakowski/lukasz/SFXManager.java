@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -70,11 +68,7 @@ public class SFXManager {
     public static String RADIO_STATIONS_FILE;
     public static String RADIO_LIST_FILE;
 
-    /*
-     * Enabled aggressive block sorting
-     * Enabled unnecessary exception pruning
-     * Enabled aggressive exception aggregation
-     */
+    
     public SFXManager() {
         this.lTitles = new ArrayList<List<String>>();
         this.lSounds = new ArrayList<Sound>();
@@ -107,7 +101,7 @@ public class SFXManager {
                 this.lTitles.add(titlesDefault);
             }
             catch (GdxRuntimeException tempFileT) {
-                // empty catch block
+                
             }
         }
         try {
@@ -358,7 +352,7 @@ public class SFXManager {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
     }
@@ -463,7 +457,7 @@ public class SFXManager {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
         }
     }
@@ -653,7 +647,7 @@ public class SFXManager {
         catch (NullPointerException nullPointerException) {
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -675,7 +669,7 @@ public class SFXManager {
         catch (NullPointerException nullPointerException) {
         }
         catch (GdxRuntimeException gdxRuntimeException) {
-            // empty catch block
+            
         }
     }
 
@@ -779,7 +773,7 @@ public class SFXManager {
             }
         }
         catch (NullPointerException nullPointerException) {
-            // empty catch block
+            
         }
     }
 

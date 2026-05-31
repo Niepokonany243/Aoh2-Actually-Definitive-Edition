@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.CreateCiv;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
@@ -271,9 +269,7 @@ extends Menu {
         }
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    
     private final void saveData() {
         FileHandle file;
         OutputStream os = null;

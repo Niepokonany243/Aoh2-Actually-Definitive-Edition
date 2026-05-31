@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Z_Rest.Lines;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Classic.Button_Classic_LR;
@@ -52,7 +50,7 @@ extends Menu {
                 continue;
             }
             catch (GdxRuntimeException gdxRuntimeException) {
-                // empty catch block
+                
             }
         }
         this.initMenu(null, 0, CFG.BUTTON_H * 3 / 4, CFG.GAMEWIDTH, CFG.GAMEHEIGHT - CFG.BUTTON_H * 3 / 4 - CFG.BUTTON_H - CFG.PADD, menuElements);
@@ -76,7 +74,7 @@ extends Menu {
         catch (NullPointerException nullPointerException) {
         }
         catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            // empty catch block
+            
         }
         super.endClipM(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);
     }
@@ -109,7 +107,7 @@ extends Menu {
                     break;
                 }
                 catch (GdxRuntimeException gdxRuntimeException) {
-                    // empty catch block
+                    
                 }
             }
         }

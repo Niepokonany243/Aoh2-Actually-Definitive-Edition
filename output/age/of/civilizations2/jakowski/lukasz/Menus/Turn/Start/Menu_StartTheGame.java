@@ -1,6 +1,4 @@
-/*
- * Decompiled with CFR 0.152.
- */
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Turn.Start;
 
 import age.of.civilizations2.jakowski.lukasz.Button.Button_Transparent;
@@ -87,7 +85,7 @@ extends Menu {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                
             }
             CFG.fontMain.get(0).getData().setScale(1.0f);
         }
@@ -109,7 +107,7 @@ extends Menu {
             }
         }
         catch (NullPointerException nullPointerException) {
-            // empty catch block
+            
         }
     }
 
