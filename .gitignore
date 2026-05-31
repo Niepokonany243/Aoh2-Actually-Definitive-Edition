@@ -49,3 +49,4 @@ gradle/wrapper/
 !/output/
 !/game/
 !/map/
+!/game.jar
