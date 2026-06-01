@@ -81,6 +81,27 @@ project(':desktop') {
         implementation "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
         implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
     }
+
+    task gameJar(type: Jar) {
+        dependsOn project(':core').classes
+        dependsOn classes
+
+        archiveFileName = 'game.jar'
+        destinationDirectory = rootProject.layout.projectDirectory
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+        manifest {
+            attributes 'Main-Class': mainClassName
+        }
+
+        from project(':core').sourceSets.main.output
+        from sourceSets.main.output
+        from {
+            configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        }
+
+        exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+    }
 }
 
 project(':android') {

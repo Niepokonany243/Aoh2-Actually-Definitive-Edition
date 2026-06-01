@@ -6,11 +6,14 @@ hs_err_pid*
 # Gradle
 .gradle/
 build/
-gradle/
-gradlew
-gradlew.bat
 *.jar
 *.class
+!gradle/
+!gradle/wrapper/
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+!gradlew
+!gradlew.bat
 
 # IDE
 .junie/
@@ -41,9 +44,6 @@ jre/
 game.jar.bak
 procyon.jar
 cfr.jar
-
-# Gradle wrapper binary
-gradle/wrapper/
 
 # Never ignore source/game/map/output — these are the repo
 !/output/
