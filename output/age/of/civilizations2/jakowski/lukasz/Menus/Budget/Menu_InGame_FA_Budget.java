@@ -693,7 +693,7 @@ extends Menu {
                 return isActive ? CFG.COLOR_TEXT_GRAY_NS_HOVER : (this.getIsClickable() ? (this.getIsHovered() ? CFG.COLOR_TEXT_GRAY_NS : Color.WHITE) : new Color(0.78f, 0.78f, 0.78f, 0.7f));
             }
         });
-        menuElements.add(new Slider_InGame_Goods(CFG.lang.get("Goods"), CFG.PADD * 3, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE() + CFG.PADD, tempWidth - CFG.PADD * 6, CFG.TEXT_HEIGHT_DEFAULT + CFG.PADD * 2 + CFG.PADD * 5, 0, 100, (int)(CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getSpendingGoodsB() * 100.0f)){
+        menuElements.add(new Slider_InGame_Goods(CFG.lang.get("Goods"), CFG.PADD * 3, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE() + CFG.PADD, tempWidth - CFG.PADD * 6, CFG.TEXT_HEIGHT_DEFAULT + CFG.PADD * 2 + CFG.PADD * 5, 0, 500, (int)(CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getSpendingGoodsB() * 100.0f)){
 
             @Override
             public String getDrawText() {
@@ -833,7 +833,7 @@ extends Menu {
             }
         });
         ((MenuElemUI)menuElements.get(menuElements.size() - 1)).setMin((int)(CFG.gameUpdate.getResearchSpending(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId(), CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).iBudget) * (1.0f + CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getModifier_Research())));
-        menuElements.add(new Slider_InGame_Investments(CFG.lang.get("Investments"), CFG.PADD * 3, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE() + CFG.PADD * 2, tempWidth - CFG.PADD * 6, CFG.TEXT_HEIGHT_DEFAULT + CFG.PADD * 2 + CFG.PADD * 5, 0, 100, (int)(CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getSpendingInvestmentsB() * 100.0f)){
+        menuElements.add(new Slider_InGame_Investments(CFG.lang.get("Investments"), CFG.PADD * 3, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE() + CFG.PADD * 2, tempWidth - CFG.PADD * 6, CFG.TEXT_HEIGHT_DEFAULT + CFG.PADD * 2 + CFG.PADD * 5, 0, 500, (int)(CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getSpendingInvestmentsB() * 100.0f)){
 
             @Override
             public String getDrawText() {

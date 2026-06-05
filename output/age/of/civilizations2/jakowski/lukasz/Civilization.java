@@ -350,8 +350,8 @@ public class Civilization {
         this.civGD.spendingsInvestments = fSpendings_Investments;
         if (this.civGD.spendingsInvestments < 0.0f) {
             this.civGD.spendingsInvestments = 0.0f;
-        } else if (this.civGD.spendingsInvestments > 1.0f) {
-            this.civGD.spendingsInvestments = 1.0f;
+        } else if (this.civGD.spendingsInvestments > 5.0f) {
+            this.civGD.spendingsInvestments = 5.0f;
         }
     }
 
@@ -3071,8 +3071,8 @@ public class Civilization {
         this.civGD.spendingsGoods = fSpendings_Goods;
         if (this.civGD.spendingsGoods < 0.0f) {
             this.civGD.spendingsGoods = 0.0f;
-        } else if (this.civGD.spendingsGoods > 1.0f) {
-            this.civGD.spendingsGoods = 1.0f;
+        } else if (this.civGD.spendingsGoods > 5.0f) {
+            this.civGD.spendingsGoods = 5.0f;
         }
     }
 

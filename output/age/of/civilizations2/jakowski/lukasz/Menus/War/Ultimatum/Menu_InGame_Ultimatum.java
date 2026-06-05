@@ -27,6 +27,7 @@ import age.of.civilizations2.jakowski.lukasz.MenuE_HoverP.ME_Hover_v2;
 import age.of.civilizations2.jakowski.lukasz.Menus.Messages.Diplomacy.Menu_InGame_Message_Alliance;
 import age.of.civilizations2.jakowski.lukasz.Menus.Relations.Actions.Menu_InGameOfferAlliance;
 import age.of.civilizations2.jakowski.lukasz.Menus.Z_Rest.Menu_InGame_SelectProvinces;
+import age.of.civilizations2.jakowski.lukasz.Render;
 import age.of.civilizations2.jakowski.lukasz.RenderProvince;
 import age.of.civilizations2.jakowski.lukasz.Renderer;
 import age.of.civilizations2.jakowski.lukasz.SFXManager;
@@ -195,6 +196,7 @@ extends Menu {
                     CFG.selectMode = true;
                     CFG.core.getProvSelected().clearSelectedProvinces();
                     CFG.menus.setMenuID(View.eINGAME_SELECT_PROVINCES);
+                    Render.updateRenderer();
                     RenderProvince.updateDrawProvinces();
                 } else {
                     CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID = onCivID;
@@ -209,6 +211,7 @@ extends Menu {
                         CFG.core.getProvSelected().addProv(CFG.ultimatum.demandProvinces.get(i));
                     }
                     CFG.menus.setMenuID(View.eINGAME_SELECT_PROVINCES);
+                    Render.updateRenderer();
                     RenderProvince.updateDrawProvinces();
                 }
             }

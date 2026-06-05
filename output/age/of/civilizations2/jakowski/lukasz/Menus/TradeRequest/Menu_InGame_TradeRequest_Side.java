@@ -12,6 +12,7 @@ import age.of.civilizations2.jakowski.lukasz.Images;
 import age.of.civilizations2.jakowski.lukasz.Menu;
 import age.of.civilizations2.jakowski.lukasz.Menus.TradeRequest.Menu_InGame_TradeRequest_SelectCiv;
 import age.of.civilizations2.jakowski.lukasz.Menus.Z_Rest.Menu_InGame_SelectProvinces;
+import age.of.civilizations2.jakowski.lukasz.Render;
 import age.of.civilizations2.jakowski.lukasz.RenderProvince;
 import age.of.civilizations2.jakowski.lukasz.Renderer;
 import age.of.civilizations2.jakowski.lukasz.Title.TitleM;
@@ -289,6 +290,7 @@ extends Menu {
                     CFG.selectMode = true;
                     CFG.core.getProvSelected().clearSelectedProvinces();
                     CFG.menus.setMenuID(View.eINGAME_SELECT_PROVINCES);
+                    Render.updateRenderer();
                     RenderProvince.updateDrawProvinces();
                 } else {
                     CFG.tradeRequest.listLEFT.lProvinces.clear();
@@ -304,6 +306,7 @@ extends Menu {
                 CFG.selectMode = true;
                 CFG.core.getProvSelected().clearSelectedProvinces();
                 CFG.menus.setMenuID(View.eINGAME_SELECT_PROVINCES);
+                Render.updateRenderer();
                 RenderProvince.updateDrawProvinces();
             } else {
                 CFG.tradeRequest.listRight.lProvinces.clear();

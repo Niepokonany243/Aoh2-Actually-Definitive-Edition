@@ -893,7 +893,7 @@ public class TouchManager {
 
     public final void actionUp_setActiveProvinceID(int nPosX, int nPosY) {
         try {
-            if (System.currentTimeMillis() - this.lSelectionTime < 350L && !CFG.map.getMpS().getScaleMode() && (float)this.actDPoX + (float)CFG.PADD * CFG.DENSITY > (float)nPosX && (float)this.actDPoX - (float)CFG.PADD * CFG.DENSITY < (float)nPosX && (float)this.actDPoY + (float)CFG.PADD * CFG.DENSITY > (float)nPosY && (float)this.actDPoY - (float)CFG.PADD * CFG.DENSITY < (float)nPosY) {
+            if (CFG.brushMode || System.currentTimeMillis() - this.lSelectionTime < 350L && !CFG.map.getMpS().getScaleMode() && (float)this.actDPoX + (float)CFG.PADD * CFG.DENSITY > (float)nPosX && (float)this.actDPoX - (float)CFG.PADD * CFG.DENSITY < (float)nPosX && (float)this.actDPoY + (float)CFG.PADD * CFG.DENSITY > (float)nPosY && (float)this.actDPoY - (float)CFG.PADD * CFG.DENSITY < (float)nPosY) {
                 com.badlogic.gdx.math.Vector2 worldPos = MapTransform.screenToWorld(nPosX, nPosY);
                 CFG.core.setProvinceID((int)worldPos.x, (int)worldPos.y);
                 if (!CFG.brushMode) {

@@ -2917,6 +2917,10 @@ public class GameManager {
             GameManager.imposeSanctions(iCivID, sanCivID, tradeRequest.listRight.iSanctionTurns);
         }
         CFG.core.getCiv((int)iFromCivID).getCivDiploGD().messageBox.addMessage(new Message_TradeReuest_Accepted(iCivID));
+        ProvinceMesh.markAllDirty();
+        Render.updateRenderer();
+        RenderProvince.updateDrawProvinces();
+        CFG.map.getMpB().updateWorldMap_Shaders();
     }
 
     public static final void declineTradeRequest(int iCivID, int iFromCivID, TradeRequest_GameData tradeRequest) {

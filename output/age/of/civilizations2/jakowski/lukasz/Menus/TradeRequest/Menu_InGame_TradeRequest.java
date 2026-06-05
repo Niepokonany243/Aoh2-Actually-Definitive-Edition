@@ -23,6 +23,7 @@ import age.of.civilizations2.jakowski.lukasz.Menus.Relations.Actions.Menu_InGame
 import age.of.civilizations2.jakowski.lukasz.Menus.TradeRequest.Menu_InGame_TradeRequest_SelectCiv;
 import age.of.civilizations2.jakowski.lukasz.Menus.Z_Rest.Menu_InGame_SelectProvinces;
 import age.of.civilizations2.jakowski.lukasz.TradeRequest_List;
+import age.of.civilizations2.jakowski.lukasz.Render;
 import age.of.civilizations2.jakowski.lukasz.RenderProvince;
 import age.of.civilizations2.jakowski.lukasz.Renderer;
 import age.of.civilizations2.jakowski.lukasz.SFXManager;
@@ -610,6 +611,7 @@ public class Menu_InGame_TradeRequest extends Menu {
         CFG.selectMode = true;
         CFG.core.getProvSelected().clearSelectedProvinces();
         CFG.menus.setMenuID(View.eINGAME_SELECT_PROVINCES);
+        Render.updateRenderer();
         RenderProvince.updateDrawProvinces();
     }
 

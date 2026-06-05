@@ -64,14 +64,19 @@ extends Menu {
         ArrayList<Integer> tempProvs = new ArrayList<Integer>();
         ArrayList<Integer> tempProvincesWithWonders = new ArrayList<Integer>();
         int totalPopulation = 0;
+        int[] cachedCounts = new int[CFG.core.getProvinSize()];
+        java.util.Arrays.fill(cachedCounts, -1);
         for (i = 0; i < CFG.core.getCiv(this.iCivID).getNumOfProvs(); ++i) {
-            if (CFG.FOG_OF_WAR == 2 && !CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getMetProv(CFG.core.getCiv(this.iCivID).getProvID(i))) continue;
-            if (Menu_InGame_View_Buildings.countNumOfBuildings(CFG.core.getCiv(this.iCivID).getProvID(i)) > 0) {
-                tempProvs.add(CFG.core.getCiv(this.iCivID).getProvID(i));
-                totalPopulation += Menu_InGame_View_Buildings.countNumOfBuildings(CFG.core.getCiv(this.iCivID).getProvID(i));
+            int provID = CFG.core.getCiv(this.iCivID).getProvID(i);
+            if (CFG.FOG_OF_WAR == 2 && !CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getMetProv(provID)) continue;
+            int bCount = Menu_InGame_View_Buildings.countNumOfBuildings(provID);
+            cachedCounts[provID] = bCount;
+            if (bCount > 0) {
+                tempProvs.add(provID);
+                totalPopulation += bCount;
             }
-            if (CFG.core.getProv(CFG.core.getCiv(this.iCivID).getProvID(i)).getWonderSize() <= 0) continue;
-            tempProvincesWithWonders.add(CFG.core.getCiv(this.iCivID).getProvID(i));
+            if (CFG.core.getProv(provID).getWonderSize() <= 0) continue;
+            tempProvincesWithWonders.add(provID);
             ++totalPopulation;
         }
         menuElements.add(new Button_DiplomacyAction(Images.buildAll, CFG.map.getMapName_Just(CFG.map.getActiveMapIDN()) + ": " + CFG.lang.get("TopCivilizations"), 0, 0, tY, tempW, Menu_InGame_Civ_Decisions.getButtonH(), true){
@@ -126,7 +131,11 @@ extends Menu {
 
             @Override
             public int compare(Integer a, Integer b) {
-                return Integer.compare(Menu_InGame_View_Buildings.countNumOfBuildings(b), Menu_InGame_View_Buildings.countNumOfBuildings(a));
+                int ca = cachedCounts[a];
+                int cb = cachedCounts[b];
+                if (ca < 0) ca = Menu_InGame_View_Buildings.countNumOfBuildings(a);
+                if (cb < 0) cb = Menu_InGame_View_Buildings.countNumOfBuildings(b);
+                return Integer.compare(cb, ca);
             }
         });
         tempProvincesSorted.addAll(tempProvs);
@@ -156,7 +165,10 @@ extends Menu {
                 }
             }
             for (i = 0; i < tempProvincesSorted.size(); ++i) {
-                menuElements.add(new Button_View_Buildings(i, (CFG.core.getProv((Integer)tempProvincesSorted.get(i)).getName().length() > 0 ? CFG.core.getProv((Integer)tempProvincesSorted.get(i)).getName() : CFG.core.getCiv(this.iCivID).getCivName()) + ": ", (Integer)tempProvincesSorted.get(i), Menu_InGame_View_Buildings.countNumOfBuildings((Integer)tempProvincesSorted.get(i)), 0, tY, CFG.CIV_INFO_MENU_WIDTH, false){
+                int tProvID = tempProvincesSorted.get(i);
+                int tCount = cachedCounts[tProvID];
+                if (tCount < 0) tCount = Menu_InGame_View_Buildings.countNumOfBuildings(tProvID);
+                menuElements.add(new Button_View_Buildings(i, (CFG.core.getProv(tProvID).getName().length() > 0 ? CFG.core.getProv(tProvID).getName() : CFG.core.getCiv(this.iCivID).getCivName()) + ": ", tProvID, tCount, 0, tY, CFG.CIV_INFO_MENU_WIDTH, false){
 
                     @Override
                     public void actionElem(int iID) {

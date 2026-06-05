@@ -5341,8 +5341,11 @@ public class CFG {
             core.getCiv(nCivB).removeInvest(i);
         }
         if ((core.getPlayer(PLAYER_TURN_ID).getCivId() == nCivA || core.getPlayer(PLAYER_TURN_ID).getCivId() == nCivB) && FOG_OF_WAR > 0) {
-            for (i = 0; i < core.getProvinSize(); ++i) {
-                core.getProv(i).updateDrawArmyInProv();
+            for (int updateI = 0; updateI < core.getCiv(nCivA).getNumOfProvs(); ++updateI) {
+                core.getProv(core.getCiv(nCivA).getProvID(updateI)).updateDrawArmyInProv();
+            }
+            for (int updateI = 0; updateI < core.getCiv(nCivB).getNumOfProvs(); ++updateI) {
+                core.getProv(core.getCiv(nCivB).getProvID(updateI)).updateDrawArmyInProv();
             }
         }
         try {

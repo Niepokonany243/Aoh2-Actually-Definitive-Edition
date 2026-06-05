@@ -3393,7 +3393,7 @@ public class AIPlaystyle {
                                 n22 = (int)Math.max(Plunder.plunderEfficiency_RequiredMAX(n, arrayList.get((int)arrayList2.get((int)((Integer)arrayList5.get((int)n5)).intValue()).intValue()).iProvinceID), (float)n22);
                                 Plunder.plunderProvince(n, arrayList.get((int)arrayList2.get((int)((Integer)arrayList5.get((int)n5)).intValue()).intValue()).iProvinceID, n22);
                             }
-                            if (CFG.AI_GENOCIDE_ENABLED && !CFG.core.getCiv(n).getIsPlayer() && CFG.oR.nextInt(100) < (int)(CFG.GENOCIDE_CHANCE * 100.0f) && GameManager.hasGenocidablePopulation(n, arrayList.get((int)arrayList2.get((int)((Integer)arrayList5.get((int)n5)).intValue()).intValue()).iProvinceID)) {
+                            if (CFG.AI_GENOCIDE_ENABLED && !CFG.core.getCiv(n).getIsPlayer() && CFG.oR.nextInt(100) < (int)(CFG.GENOCIDE_CHANCE * 100.0f) && CFG.core.getProv((int)arrayList.get((int)arrayList2.get((int)((Integer)arrayList5.get((int)n5)).intValue()).intValue()).iProvinceID).getCivId() != n && GameManager.hasGenocidablePopulation(n, arrayList.get((int)arrayList2.get((int)((Integer)arrayList5.get((int)n5)).intValue()).intValue()).iProvinceID)) {
                                 GameManager.genocideAllMinorities(n, arrayList.get((int)arrayList2.get((int)((Integer)arrayList5.get((int)n5)).intValue()).intValue()).iProvinceID);
                             }
                             if (arrayList6.isEmpty()) continue;

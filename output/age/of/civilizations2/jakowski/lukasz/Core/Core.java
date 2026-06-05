@@ -15822,10 +15822,10 @@ lbl94:
 
     public int airDefenseAllProvinces_Number(int civID) {
         int out = 0;
-        int maxLVL = BuildingsManager.getAirDefense_MaxLevel();
+        int maxLVL = BuildingsManager.getAirDefense_MaxLevel_CanBuild(civID);
         for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
             int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).provGD.iAirDefense >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.AIR_DEFENSE) != 0) continue;
+            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getSeaProv() || CFG.core.getProv(provinceID).provGD.iAirDefense >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.AIR_DEFENSE) != 0) continue;
             ++out;
         }
         return out;
@@ -15833,10 +15833,10 @@ lbl94:
 
     public int airDefenseAllProvinces_Cost(int civID) {
         int out = 0;
-        int maxLVL = BuildingsManager.getAirDefense_MaxLevel();
+        int maxLVL = BuildingsManager.getAirDefense_MaxLevel_CanBuild(civID);
         for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
             int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).provGD.iAirDefense >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.AIR_DEFENSE) != 0) continue;
+            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getSeaProv() || CFG.core.getProv(provinceID).provGD.iAirDefense >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.AIR_DEFENSE) != 0) continue;
             out += BuildingsManager.getAirDefense_BuildCost(CFG.core.getProv(provinceID).provGD.iAirDefense + 1, provinceID);
         }
         return out;
@@ -15844,10 +15844,10 @@ lbl94:
 
     public float airDefenseAllProvinces_CostMovement(int civID) {
         int out = 0;
-        int maxLVL = BuildingsManager.getAirDefense_MaxLevel();
+        int maxLVL = BuildingsManager.getAirDefense_MaxLevel_CanBuild(civID);
         for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
             int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).provGD.iAirDefense >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.AIR_DEFENSE) != 0) continue;
+            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getSeaProv() || CFG.core.getProv(provinceID).provGD.iAirDefense >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.AIR_DEFENSE) != 0) continue;
             ++out;
             out += BuildingsManager.getAirDefense_BuildMovementCost(CFG.core.getProv(provinceID).provGD.iAirDefense + 1);
         }
@@ -15857,10 +15857,10 @@ lbl94:
     public int airDefenseAllProvinces(int civID) {
         ArrayList<Integer> provinces = new ArrayList<Integer>();
         int out = 0;
-        int maxLVL = BuildingsManager.getAirDefense_MaxLevel();
+        int maxLVL = BuildingsManager.getAirDefense_MaxLevel_CanBuild(civID);
         for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
             int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).provGD.iAirDefense >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.AIR_DEFENSE) != 0) continue;
+            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getSeaProv() || CFG.core.getProv(provinceID).provGD.iAirDefense >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.AIR_DEFENSE) != 0) continue;
             provinces.add(provinceID);
         }
         while (!provinces.isEmpty() && CFG.core.getCiv(civID).getGold() > 0L) {

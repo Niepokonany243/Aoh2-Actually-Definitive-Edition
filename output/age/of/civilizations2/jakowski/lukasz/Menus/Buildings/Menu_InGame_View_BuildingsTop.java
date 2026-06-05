@@ -47,20 +47,36 @@ public class Menu_InGame_View_BuildingsTop extends Menu {
         
         int castleNum = 0, towerNum = 0, portNum = 0, farmNum = 0, workshopNum = 0, marketNum = 0, libraryNum = 0, armouryNum = 0, supplyNum = 0, airDefenseNum = 0;
 
-        for (int i = 0; i < CFG.core.getProvinSize(); ++i) {
-            Province prov = CFG.core.getProv(i);
-            if (prov.getCivId() <= 0) continue;
-            
-            addBData(castle, prov.getCivId(), prov.getLvlOfFort()); castleNum += prov.getLvlOfFort();
-            addBData(tower, prov.getCivId(), prov.getLvlOfWatchTower()); towerNum += prov.getLvlOfWatchTower();
-            addBData(port, prov.getCivId(), Math.max(0, prov.getLvlOfPort())); portNum += Math.max(0, prov.getLvlOfPort());
-            addBData(farm, prov.getCivId(), prov.getLvlOfFarm()); farmNum += prov.getLvlOfFarm();
-            addBData(workshop, prov.getCivId(), prov.getLvlOfWorkshop()); workshopNum += prov.getLvlOfWorkshop();
-            addBData(market, prov.getCivId(), prov.getLvlOfMarket()); marketNum += prov.getLvlOfMarket();
-            addBData(library, prov.getCivId(), prov.getLvlOfLibrary()); libraryNum += prov.getLvlOfLibrary();
-            addBData(armoury, prov.getCivId(), prov.getLvlOfArmoury()); armouryNum += prov.getLvlOfArmoury();
-            addBData(supply, prov.getCivId(), prov.getLvlOfSupply()); supplyNum += prov.getLvlOfSupply();
-            addBData(airDefense, prov.getCivId(), prov.provGD.iAirDefense); airDefenseNum += prov.provGD.iAirDefense;
+        for (int civIndex = 1; civIndex < CFG.core.getCivsSize(); ++civIndex) {
+            if (CFG.core.getCiv(civIndex).getNumOfProvs() <= 0) continue;
+            int civID = civIndex;
+            int tempProvSize = CFG.core.getCiv(civID).getNumOfProvs();
+            int tempFort = 0, tempTower = 0, tempPort = 0, tempFarm = 0, tempWorkshop = 0, tempMarket = 0, tempLibrary = 0, tempArmoury = 0, tempSupply = 0, tempAirDefense = 0;
+            for (int p = 0; p < tempProvSize; ++p) {
+                int provID = CFG.core.getCiv(civID).getProvID(p);
+                Province prov = CFG.core.getProv(provID);
+                if (prov.getSeaProv()) continue;
+                tempFort += prov.getLvlOfFort();
+                tempTower += prov.getLvlOfWatchTower();
+                tempPort += Math.max(0, prov.getLvlOfPort());
+                tempFarm += prov.getLvlOfFarm();
+                tempWorkshop += prov.getLvlOfWorkshop();
+                tempMarket += prov.getLvlOfMarket();
+                tempLibrary += prov.getLvlOfLibrary();
+                tempArmoury += prov.getLvlOfArmoury();
+                tempSupply += prov.getLvlOfSupply();
+                tempAirDefense += prov.provGD.iAirDefense;
+            }
+            if (tempFort > 0) { addBData(castle, civID, tempFort); castleNum += tempFort; }
+            if (tempTower > 0) { addBData(tower, civID, tempTower); towerNum += tempTower; }
+            if (tempPort > 0) { addBData(port, civID, tempPort); portNum += tempPort; }
+            if (tempFarm > 0) { addBData(farm, civID, tempFarm); farmNum += tempFarm; }
+            if (tempWorkshop > 0) { addBData(workshop, civID, tempWorkshop); workshopNum += tempWorkshop; }
+            if (tempMarket > 0) { addBData(market, civID, tempMarket); marketNum += tempMarket; }
+            if (tempLibrary > 0) { addBData(library, civID, tempLibrary); libraryNum += tempLibrary; }
+            if (tempArmoury > 0) { addBData(armoury, civID, tempArmoury); armouryNum += tempArmoury; }
+            if (tempSupply > 0) { addBData(supply, civID, tempSupply); supplyNum += tempSupply; }
+            if (tempAirDefense > 0) { addBData(airDefense, civID, tempAirDefense); airDefenseNum += tempAirDefense; }
         }
 
         int totalNum = castleNum + towerNum + portNum + farmNum + workshopNum + marketNum + libraryNum + armouryNum + supplyNum + airDefenseNum;

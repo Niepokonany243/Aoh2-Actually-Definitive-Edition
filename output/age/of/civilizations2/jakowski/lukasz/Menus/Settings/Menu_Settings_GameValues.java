@@ -108,7 +108,9 @@ public class Menu_Settings_GameValues extends Menu {
                     }
                     field.set(parentObj, arr);
                 }
-            } catch (Exception e) {}
+            } catch (Exception e) {
+                CFG.exceptionStack(e);
+            }
         }
         
         public void save() {
@@ -116,7 +118,9 @@ public class Menu_Settings_GameValues extends Menu {
                 Json json = new Json();
                 String jsonStr = json.toJson(parentObj);
                 FileManager.getSaveType(jsonPath).writeString(jsonStr, false);
-            } catch (Exception e) {}
+            } catch (Exception e) {
+                CFG.exceptionStack(e);
+            }
         }
     }
 

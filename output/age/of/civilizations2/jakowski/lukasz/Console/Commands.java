@@ -153,8 +153,9 @@ public class Commands {
                         CFG.core.removePlayer(pTID);
                         if (pTID > 0 && CFG.PLAYER_TURN_ID == pTID) {
                             CFG.PLAYER_TURN_ID = pTID - 1;
-                            CFG.gameAction.loadActivePlayerData();
-                            break block247;
+                        }
+                        if (CFG.FOG_OF_WAR > 0) {
+                            CFG.gameAction.buildFogOfWar(CFG.PLAYER_TURN_ID);
                         }
                         CFG.gameAction.loadActivePlayerData();
                     }
@@ -167,10 +168,11 @@ public class Commands {
                         CFG.core.removePlayer(CFG.PLAYER_TURN_ID);
                         if (pTID > 0) {
                             CFG.PLAYER_TURN_ID = pTID - 1;
-                            CFG.gameAction.loadActivePlayerData();
-                        } else {
-                            CFG.gameAction.loadActivePlayerData();
                         }
+                        if (CFG.FOG_OF_WAR > 0) {
+                            CFG.gameAction.buildFogOfWar(CFG.PLAYER_TURN_ID);
+                        }
+                        CFG.gameAction.loadActivePlayerData();
                     }
                     break block247;
                 }
