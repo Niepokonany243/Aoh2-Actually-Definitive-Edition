@@ -42,6 +42,7 @@ import age.of.civilizations2.jakowski.lukasz.MenuE_HoverP.ME_Hover_2Type_Religio
 import age.of.civilizations2.jakowski.lukasz.MenuE_HoverP.ME_Hover_2Type_Space;
 import age.of.civilizations2.jakowski.lukasz.MenuE_HoverP.ME_Hover_2Type_Terrain;
 import age.of.civilizations2.jakowski.lukasz.MenuE_HoverP.ME_Hover_2Type_Text;
+import age.of.civilizations2.jakowski.lukasz.MenuE_HoverP.ME_Hover_2Type_TextDesc;
 import age.of.civilizations2.jakowski.lukasz.MenuE_HoverP.ME_Hover_2Type_Text_Big;
 import age.of.civilizations2.jakowski.lukasz.MenuE_HoverP.ME_Hover_2Type_Wonder;
 import age.of.civilizations2.jakowski.lukasz.MenuE_HoverP.ME_Hover_v2;
@@ -2410,15 +2411,18 @@ extends Menu {
             nData.add(new ME_Hover_2Type_Image(Images.technology, CFG.PADD, 0));
             nElements.add(new MEHover_2E(nData));
             nData.clear();
-            if (CFG.core.getProv(CFG.ACTIVE_PROVINCE_INFO).getDeveLvl() >= 0.4f) {
-                nData.add(new ME_Hover_2Type_Space());
-                nElements.add(new MEHover_2E(nData));
-                nData.clear();
-                nData.add(new ME_Hover_2Type_Text("Missile Interception Chance: ", CFG.COLOR_TEXT_NUM_OF_PROVINCES));
-                nData.add(new ME_Hover_2Type_Text("50% (T1)", CFG.COLOR_POSITIVE));
-                nElements.add(new MEHover_2E(nData));
-                nData.clear();
-            }
+            nData.add(new ME_Hover_2Type_Space());
+            nElements.add(new MEHover_2E(nData));
+            nData.clear();
+            float missileDefense = MissileManager.getDevelopmentMissileDefense(CFG.core.getProv(nProvinceID));
+            nData.add(new ME_Hover_2Type_Text("Missile Defense: ", CFG.COLOR_TEXT_NUM_OF_PROVINCES));
+            nData.add(new ME_Hover_2Type_Text("" + (int)(missileDefense * 100.0f) + "%", missileDefense > 0.0f ? CFG.COLOR_POSITIVE : CFG.COLOR_NEUTRAL2));
+            nData.add(new ME_Hover_2Type_Image(Images.development, CFG.PADD, 0));
+            nElements.add(new MEHover_2E(nData));
+            nData.clear();
+            nData.add(new ME_Hover_2Type_TextDesc(">0.1: 40%, >0.3: 60%, >0.5: 80%, >0.9: 95%", CFG.COLOR_NEUTRAL2));
+            nElements.add(new MEHover_2E(nData));
+            nData.clear();
             return new ME_Hover_v2(nElements);
         }
         catch (Exception exception) {
@@ -2564,15 +2568,18 @@ extends Menu {
             nData.add(new ME_Hover_2Type_Image(Images.technology, CFG.PADD, 0));
             nElements.add(new MEHover_2E(nData));
             nData.clear();
-            if (CFG.core.getProv(CFG.ACTIVE_PROVINCE_INFO).getDeveLvl() >= 0.4f) {
-                nData.add(new ME_Hover_2Type_Space());
-                nElements.add(new MEHover_2E(nData));
-                nData.clear();
-                nData.add(new ME_Hover_2Type_Text("Missile Interception Chance: ", CFG.COLOR_TEXT_NUM_OF_PROVINCES));
-                nData.add(new ME_Hover_2Type_Text("50% (T1)", CFG.COLOR_POSITIVE));
-                nElements.add(new MEHover_2E(nData));
-                nData.clear();
-            }
+            nData.add(new ME_Hover_2Type_Space());
+            nElements.add(new MEHover_2E(nData));
+            nData.clear();
+            float missileDefense = MissileManager.getDevelopmentMissileDefense(CFG.core.getProv(CFG.ACTIVE_PROVINCE_INFO));
+            nData.add(new ME_Hover_2Type_Text("Missile Defense: ", CFG.COLOR_TEXT_NUM_OF_PROVINCES));
+            nData.add(new ME_Hover_2Type_Text("" + (int)(missileDefense * 100.0f) + "%", missileDefense > 0.0f ? CFG.COLOR_POSITIVE : CFG.COLOR_NEUTRAL2));
+            nData.add(new ME_Hover_2Type_Image(Images.development, CFG.PADD, 0));
+            nElements.add(new MEHover_2E(nData));
+            nData.clear();
+            nData.add(new ME_Hover_2Type_TextDesc(">0.1: 40%, >0.3: 60%, >0.5: 80%, >0.9: 95%", CFG.COLOR_NEUTRAL2));
+            nElements.add(new MEHover_2E(nData));
+            nData.clear();
             return new ME_Hover_v2(nElements);
         }
         catch (Exception exception) {

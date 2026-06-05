@@ -270,6 +270,7 @@ public class Map {
         }
         this.mpB.drawMinimapTexture_Generate(oSB);
         this.mpB.drawMap(oSB, this.mpC.getPX(), this.mpC.getPY());
+        ProvinceSelectionOverlay.draw(oSB);
         this.mpB.drawMapBorder(oSB, this.mpC.getPX(), this.mpC.getPY());
     }
 

@@ -134,15 +134,14 @@ extends Menu {
                 if (CFG.core.getProv(CFG.core.getCiv(this.iCivID).getProvID(i)).getLvlOfWorkshop() <= 0) continue;
                 buildingsTotal += CFG.core.getProv(CFG.core.getCiv(this.iCivID).getProvID(i)).getLvlOfWorkshop();
             }
-            while (!tempProvs.isEmpty()) {
-                int tBest = 0;
-                for (int i = 1; i < tempProvs.size(); ++i) {
-                    if (CFG.core.getProv((Integer)tempProvs.get(tBest)).getEco() <= CFG.core.getProv((Integer)tempProvs.get(i)).getEco()) continue;
-                    tBest = i;
+            java.util.Collections.sort(tempProvs, new java.util.Comparator<Integer>(){
+
+                @Override
+                public int compare(Integer a, Integer b) {
+                    return Long.compare(CFG.core.getProv(a).getEco(), CFG.core.getProv(b).getEco());
                 }
-                tempProvincesSorted.add((Integer)tempProvs.get(tBest));
-                tempProvs.remove(tBest);
-            }
+            });
+            tempProvincesSorted.addAll(tempProvs);
             int buttonH = Math.max(CFG.BUTTON_H * 3 / 4, CFG.TEXT_HEIGHT_DEFAULT + CFG.PADD * 4);
             boolean row = false;
             if (!tempProvincesSorted.isEmpty()) {

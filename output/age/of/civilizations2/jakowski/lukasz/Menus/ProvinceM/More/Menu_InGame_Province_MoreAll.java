@@ -1578,6 +1578,91 @@ extends Menu {
         ((MenuElemUI)menuElements.get(menuElements.size() - 1)).setCurr(row % 2);
         ((MenuElemUI)menuElements.get(menuElements.size() - 2)).setCurr(row % 2);
         ++row;
+        menuElements.add(new Button_Transparent_WithHoverEnabled(0, tPosY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE(), ButtonDiplomacy.iDiploWidth, tempElemH, true){
+
+            @Override
+            public void drawButtonBGE(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive) {
+                super.drawButtonBGE(oSB, iTranslateX, iTranslateY, isActive);
+                if (this.getIsHovered()) {
+                    oSB.setColor(new Color(0.0f, 0.0f, 0.0f, 0.45f));
+                    IMGManager.getIMG(Images.gradientXY).draw(oSB, this.getPosXE() + iTranslateX, this.getPosY() + iTranslateY, this.getWidthE(), CFG.PADD * 2, false, true);
+                    IMGManager.getIMG(Images.gradientXY).draw(oSB, this.getPosXE() + iTranslateX, this.getPosY() + this.getHeightE() - CFG.PADD * 2 + iTranslateY, this.getWidthE(), CFG.PADD * 2);
+                    oSB.setColor(Color.WHITE);
+                }
+            }
+
+            @Override
+            public void actionElem(int iID) {
+                CFG.toastM.addM(CFG.lang.get("AirDefense"), CFG.COLOR_TEXT_NUM_OF_PROVINCES);
+                CFG.toastM.setTimeInView(2500);
+            }
+
+            @Override
+            public void buildElemHover() {
+                ArrayList<MEHover_2E> nElements = new ArrayList<MEHover_2E>();
+                ArrayList<ME_Hover_2Type> nData = new ArrayList<ME_Hover_2Type>();
+                nData.add(new ME_Hover_2Type_Text_Big(CFG.lang.get("AirDefense"), CFG.COLOR_TEXT_NUM_OF_PROVINCES));
+                nData.add(new ME_Hover_2Type_Image_Big(Images.bSupply, CFG.PADD, 0));
+                nElements.add(new MEHover_2E(nData));
+                nData.clear();
+                this.menuElemHover = new ME_Hover_v2(nElements);
+            }
+        });
+        menuElements.add(new ButtonN_ActionAll(Colors.COLOR_TEXT_MODIFIER_POSITIVE, CFG.lang.get(BuildingsManager.getAirDefense_Name(1)) + ": " + CFG.lang.get("AllProvinces"), CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId(), CFG.lang.get("Provinces") + ": ", CFG.getNumberWthSpaces("" + CFG.core.airDefenseAllProvinces_Number(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId())), CFG.getNumber_SHORT(CFG.core.airDefenseAllProvinces_Cost(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId())), CFG.getPrecision2(CFG.core.airDefenseAllProvinces_CostMovement(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()), 10), Images.topMovementPoints, CFG.COLOR_MOVEMENT, Images.bSupply, CFG.COLOR_TEXT_NUM_OF_PROVINCES, 0, tPosY, tempW - extraW - 2, tempElemH){
+
+            @Override
+            public void actionElem(int iID) {
+                CFG.setDialogType(DialogType.ALL_AIR_DEFENSE);
+            }
+
+            @Override
+            public void actionElemPPM() {
+                CFG.core.airDefenseAllProvinces(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId());
+                CFG.menus.setVisible_InGame_MoreAll(true, true);
+            }
+        });
+        menuElements.add(new Button_Build_Text(">>", tempW - 2 - extraW, tPosY, extraW + 2, tempElemH, true, BuildingsManager.iBuildInProvinceID){
+
+            @Override
+            public void drawTextE(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive) {
+                if (this.getIsHovered()) {
+                    IMGManager.getIMG(Images.bSupply).draw(oSB, this.getPosXE() + this.getWidthE() / 2 - IMGManager.getIMG(Images.bSupply).getWidth() / 2 + iTranslateX, this.getPosY() + this.getHeightE() / 2 - IMGManager.getIMG(Images.bSupply).getHeight() / 2 + iTranslateY);
+                } else {
+                    super.drawTextE(oSB, iTranslateX, iTranslateY, isActive);
+                }
+            }
+
+            @Override
+            public void buildElemHover() {
+                try {
+                    ArrayList<MEHover_2E> nElements = new ArrayList<MEHover_2E>();
+                    ArrayList<ME_Hover_2Type> nData = new ArrayList<ME_Hover_2Type>();
+                    nData.add(new ME_Hover_2Type_Flag_Big(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId(), 0, CFG.PADD));
+                    nData.add(new ME_Hover_2Type_Text_Big(CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getCivName(), CFG.COLOR_TEXT_NUM_OF_PROVINCES));
+                    nData.add(new ME_Hover_2Type_Image_Big(Images.bSupply, CFG.PADD, 0));
+                    nElements.add(new MEHover_2E(nData));
+                    nData.clear();
+                    nData.add(new ME_Hover_2Type_Text(CFG.lang.get(BuildingsManager.getAirDefense_Name(1)) + ": "));
+                    nData.add(new ME_Hover_2Type_Text(CFG.lang.get("AllProvinces"), CFG.COLOR_HOVER_TITLE));
+                    nData.add(new ME_Hover_2Type_Image(Images.provinces, CFG.PADD, 0));
+                    nElements.add(new MEHover_2E(nData));
+                    nData.clear();
+                    this.menuElemHover = new ME_Hover_v2(nElements);
+                }
+                catch (Exception e) {
+                    this.menuElemHover = null;
+                }
+            }
+
+            @Override
+            public void actionElem(int iID) {
+                CFG.core.airDefenseAllProvinces(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId());
+                CFG.menus.setVisible_InGame_MoreAll(true, true);
+            }
+        });
+        ((MenuElemUI)menuElements.get(menuElements.size() - 1)).setCurr(row % 2);
+        ((MenuElemUI)menuElements.get(menuElements.size() - 2)).setCurr(row % 2);
+        ++row;
         menuElements.add(new TextBuildTitle(CFG.lang.get("Wonders"), -1, 0, tPosY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE(), tempW, CFG.TEXT_HEIGHT_DEFAULT + CFG.PADD * 4){
 
             @Override

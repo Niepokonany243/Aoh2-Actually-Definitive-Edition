@@ -7295,10 +7295,16 @@ public class MenuManager {
     }
 
     public final void drawMM(SpriteBatch oSB, int menuID, int iTranslateX) {
+        long menuStart = 0L;
         try {
             for (int i = this.menus.get(menuID).size() - 1; i >= 0; --i) {
                 if (!this.menus.get(menuID).get(this.orderOfMenu.get(menuID).get(i)).getVisibleM()) continue;
+                menuStart = System.currentTimeMillis();
                 this.menus.get(menuID).get(this.orderOfMenu.get(menuID).get(i)).draw(oSB, iTranslateX, this.dialogMenu.getVisibleM() ? false : (this.keyboardMode ? false : this.orderOfMenu.get(menuID).get(i) == this.activeMenuID));
+                long menuTime = System.currentTimeMillis() - menuStart;
+                if (menuTime > 50) {
+                    CFG.LOG("PERF", "[drawMM] menuIdx:" + this.orderOfMenu.get(menuID).get(i) + " time:" + menuTime + "ms");
+                }
             }
             CFG.tutorialManager.draw(oSB, iTranslateX, 0);
         }
@@ -7306,6 +7312,7 @@ public class MenuManager {
             
         }
         try {
+            long hoverStart = System.currentTimeMillis();
             if (this.hoverActiveMenuID >= 0 && this.hoverActiveMenuElemID >= 0) {
                 this.updateEleemntHover_Animation();
                 this.getActiveMenu().get(this.hoverActiveMenuID).drawHoverM(oSB, iTranslateX, 0, this.hoverActiveMenuElemID);
@@ -7313,6 +7320,11 @@ public class MenuManager {
                 this.updateEleemntHover_Animation();
                 this.provHoverInfo.drawProvinceInfo(oSB, Touch.getMousePosX() + this.getHover_ExtraPosX(), Touch.getMousePosY() + this.getHover_ExtraPosY());
             }
+            long hoverTime = System.currentTimeMillis() - hoverStart;
+            if (hoverTime > 20) {
+                CFG.LOG("PERF", "[drawMM] hover:" + hoverTime + "ms");
+            }
+            long overlaysStart = System.currentTimeMillis();
             if (this.colorPicker.getVisible()) {
                 this.colorPicker.draw(oSB, iTranslateX);
             }
@@ -7323,6 +7335,10 @@ public class MenuManager {
                 this.dialogMenu.draw(oSB, iTranslateX, true);
             }
             this.dragCiv.draw(oSB, iTranslateX);
+            long overlaysTime = System.currentTimeMillis() - overlaysStart;
+            if (overlaysTime > 20) {
+                CFG.LOG("PERF", "[drawMM] overlays:" + overlaysTime + "ms");
+            }
         }
         catch (Exception exception) {
             

@@ -791,7 +791,7 @@ extends Menu {
 
             @Override
             public String getDrawText() {
-                return this.getCurr() + "%";
+                return this.getCurr() + "%" + (this.iMinMarker > 0 ? " (min:" + this.iMinMarker + "%)" : "");
             }
 
             @Override
@@ -932,7 +932,7 @@ extends Menu {
 
             @Override
             public String getDrawText() {
-                return this.getCurr() + "%";
+                return this.getCurr() + "%" + (this.iMinMarker > 0 ? " (min:" + this.iMinMarker + "%)" : "");
             }
 
             @Override
@@ -1304,20 +1304,6 @@ extends Menu {
                 break;
             }
             case 14: {
-                if (this.getMenuElem(14).getCurr() + this.getMenuElem(16).getCurr() + this.getMenuElem(18).getCurr() + this.getMenuElem(20).getCurr() > GameValues.gvAiBudget.BUDGET_MAX) {
-                    if (this.getMenuElem(16).getCurr() + this.getMenuElem(18).getCurr() > 0) {
-                        CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).setSpendingGoodsB((float)this.getMenuElem(14).getCurr() / 100.0f);
-                        CFG.gameUpdate.updateSpendingOfCivID(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId(), CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).iBudget);
-                        this.getMenuElem(14).setCurr((int)(CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getSpendingGoodsB() * 100.0f));
-                        this.getMenuElem(16).setCurr((int)(CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getSpendingResearchB() * 100.0f));
-                        this.getMenuElem(18).setCurr((int)(CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getSpendingInvestmentsB() * 100.0f));
-                        if (this.getMenuElem(14).getCurr() + this.getMenuElem(16).getCurr() + this.getMenuElem(18).getCurr() + this.getMenuElem(20).getCurr() > GameValues.gvAiBudget.BUDGET_MAX) {
-                            this.getMenuElem(14).setCurr(GameValues.gvAiBudget.BUDGET_MAX - this.getMenuElem(20).getCurr() - this.getMenuElem(16).getCurr() - this.getMenuElem(18).getCurr());
-                        }
-                    } else {
-                        this.getMenuElem(14).setCurr(GameValues.gvAiBudget.BUDGET_MAX - this.getMenuElem(20).getCurr() - this.getMenuElem(16).getCurr() - this.getMenuElem(18).getCurr());
-                    }
-                }
                 this.updateResearchAndIvestments();
                 this.getMenuElem(14).setCurr(this.getMenuElem(14).getCurr());
                 this.getMenuElem(18).setCurr(this.getMenuElem(18).getCurr());
@@ -1325,24 +1311,12 @@ extends Menu {
                 break;
             }
             case 16: {
-                if (this.getMenuElem(16).getCurr() + this.getMenuElem(20).getCurr() + this.getMenuElem(14).getCurr() > GameValues.gvAiBudget.BUDGET_MAX) {
-                    this.getMenuElem(16).setCurr(GameValues.gvAiBudget.BUDGET_MAX - this.getMenuElem(20).getCurr() - this.getMenuElem(14).getCurr());
-                }
-                if (this.getMenuElem(16).getCurr() + this.getMenuElem(18).getCurr() + this.getMenuElem(20).getCurr() + this.getMenuElem(14).getCurr() > GameValues.gvAiBudget.BUDGET_MAX) {
-                    this.getMenuElem(18).setCurr(GameValues.gvAiBudget.BUDGET_MAX - this.getMenuElem(16).getCurr() - this.getMenuElem(20).getCurr() - this.getMenuElem(14).getCurr());
-                }
                 this.updateResearchAndIvestments();
                 this.getMenuElem(18).setCurr(this.getMenuElem(18).getCurr());
                 this.getMenuElem(17).setMin((int)(CFG.gameUpdate.getResearchSpending(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId(), CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).iBudget) * (1.0f + CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getModifier_Research())));
                 break;
             }
             case 18: {
-                if (this.getMenuElem(18).getCurr() + this.getMenuElem(20).getCurr() + this.getMenuElem(14).getCurr() > GameValues.gvAiBudget.BUDGET_MAX) {
-                    this.getMenuElem(18).setCurr(GameValues.gvAiBudget.BUDGET_MAX - this.getMenuElem(20).getCurr() - this.getMenuElem(14).getCurr());
-                }
-                if (this.getMenuElem(16).getCurr() + this.getMenuElem(18).getCurr() + this.getMenuElem(20).getCurr() + this.getMenuElem(14).getCurr() > GameValues.gvAiBudget.BUDGET_MAX) {
-                    this.getMenuElem(16).setCurr(GameValues.gvAiBudget.BUDGET_MAX - this.getMenuElem(18).getCurr() - this.getMenuElem(20).getCurr() - this.getMenuElem(14).getCurr());
-                }
                 this.updateResearchAndIvestments();
                 this.getMenuElem(18).setCurr(this.getMenuElem(18).getCurr());
                 this.getMenuElem(17).setMin((int)(CFG.gameUpdate.getResearchSpending(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId(), CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).iBudget) * (1.0f + CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getModifier_Research())));

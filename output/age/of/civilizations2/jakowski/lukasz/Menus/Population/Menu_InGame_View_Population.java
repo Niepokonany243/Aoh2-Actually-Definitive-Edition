@@ -44,6 +44,8 @@ import age.of.civilizations2.jakowski.lukasz.Title.TitleM_TextSmall;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class Menu_InGame_View_Population
 extends Menu {
@@ -73,23 +75,24 @@ extends Menu {
         if (iCivID == CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId() || nukeButton) {
             tempW += extraW;
         }
-        ArrayList<Integer> tempProvincesSorted = new ArrayList<Integer>();
-        ArrayList<Integer> tempProvs = new ArrayList<Integer>();
         int totalPopulation = 0;
+        ArrayList<Integer> tempProvs = new ArrayList<Integer>();
         for (int i = 0; i < CFG.core.getCiv(iCivID).getNumOfProvs(); ++i) {
             if (CFG.FOG_OF_WAR == 2 && !CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getMetProv(CFG.core.getCiv(iCivID).getProvID(i))) continue;
             tempProvs.add(CFG.core.getCiv(iCivID).getProvID(i));
             totalPopulation += CFG.core.getProv(CFG.core.getCiv(iCivID).getProvID(i)).getPop().getPops();
         }
-        while (!tempProvs.isEmpty()) {
-            int tBest = 0;
-            for (int i = 1; i < tempProvs.size(); ++i) {
-                if (CFG.core.getProv((Integer)tempProvs.get(tBest)).getPop().getPops() >= CFG.core.getProv((Integer)tempProvs.get(i)).getPop().getPops()) continue;
-                tBest = i;
+        Collections.sort(tempProvs, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer a, Integer b) {
+                long popA = CFG.core.getProv(a).getPop().getPops();
+                long popB = CFG.core.getProv(b).getPop().getPops();
+                if (popA > popB) return -1;
+                if (popA < popB) return 1;
+                return 0;
             }
-            tempProvincesSorted.add((Integer)tempProvs.get(tBest));
-            tempProvs.remove(tBest);
-        }
+        });
+        ArrayList<Integer> tempProvincesSorted = new ArrayList<Integer>(tempProvs);
         menuElements.add(new Button_DiplomacyAction(Images.pop, CFG.map.getMapName_Just(CFG.map.getActiveMapIDN()) + ": " + CFG.lang.get("Population"), 0, 0, tY, tempW, Menu_InGame_Civ_Decisions.getButtonH(), true){
 
             @Override

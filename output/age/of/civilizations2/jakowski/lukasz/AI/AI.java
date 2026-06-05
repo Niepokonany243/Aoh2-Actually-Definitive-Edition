@@ -242,27 +242,13 @@ public class AI {
                 int j;
                 War_GameData warData = CFG.core.getWar(i);
                 boolean next = false;
-                for (j = 0; j < warData.getDefendersSize(); ++j) {
-                    if (warData.getDefenderID(j).getCivID() >= 0) continue;
-                    CFG.core.removeWarData(i);
-                    next = true;
-                    break;
-                }
-                if (!next) {
-                    for (j = 0; j < warData.getAggressorsSize(); ++j) {
-                        if (warData.getAggressorID(j).getCivID() >= 0) continue;
-                        CFG.core.removeWarData(i);
-                        next = true;
-                        break;
-                    }
-                }
-                if (next) continue;
-                
+
                 int currentWarScore = CFG.core.getCachedWarScore(warData);
                 
                 for (j = 0; j < warData.getDefendersSize(); ++j) {
                     int defenderCivID = warData.getDefenderID(j).getCivID();
-                    if (CFG.core.getCiv(defenderCivID).getNumOfProvs() != 0 && currentWarScore > -100) continue;
+                    if (currentWarScore > -100) continue;
+                    if (CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)defenderCivID).getIdeology()).REVOLUTIONARY) continue;
                     for (k = 0; k < warData.getAggressorsSize(); ++k) {
                         if (CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)warData.getAggressorID((int)k).getCivID()).getIdeology()).REVOLUTIONARY) continue;
                         CFG.core.getCiv((int)warData.getAggressorID((int)k).getCivID()).getCivDiploGD().messageBox.addMessage(new Message_WeCanSignPeace(defenderCivID));
@@ -270,41 +256,14 @@ public class AI {
                 }
                 for (j = 0; j < warData.getAggressorsSize(); ++j) {
                     int aggressorCivID = warData.getAggressorID(j).getCivID();
-                    if (CFG.core.getCiv(aggressorCivID).getNumOfProvs() != 0 && currentWarScore < 100) continue;
+                    if (currentWarScore < 100) continue;
+                    if (CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)aggressorCivID).getIdeology()).REVOLUTIONARY) continue;
                     for (k = 0; k < warData.getDefendersSize(); ++k) {
                         if (CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)warData.getDefenderID((int)k).getCivID()).getIdeology()).REVOLUTIONARY) continue;
                         CFG.core.getCiv((int)warData.getDefenderID((int)k).getCivID()).getCivDiploGD().messageBox.addMessage(new Message_WeCanSignPeace(aggressorCivID));
                     }
                 }
-                try {
-                    if (warData.getAggressorsSize() > 0 && CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)warData.getAggressorID((int)0).getCivID()).getIdeology()).REVOLUTIONARY && CFG.core.getCiv(warData.getAggressorID(0).getCivID()).getNumOfProvs() == 0 && CFG.core.getCiv(warData.getAggressorID(0).getCivID()).civGD.iTurnsSinceLastAttack <= 0) {
-                        try {
-                            int a;
-                            ArrayList<Boolean> lDefenders = new ArrayList<Boolean>();
-                            ArrayList<Boolean> lAggressors = new ArrayList<Boolean>();
-                            for (a = warData.getAggressorsSize() - 1; a >= 0; --a) {
-                                lAggressors.add(true);
-                            }
-                            for (a = warData.getDefendersSize() - 1; a >= 0; --a) {
-                                lDefenders.add(true);
-                            }
-                            Menu_PeaceTreaty.WAR_ID = i;
-                            CFG.peaceTreatyData = new PeaceTreaty_Data(Menu_PeaceTreaty.WAR_ID, lDefenders, lAggressors, true);
-                            int toCivID = warData.getAggressorID(0).getCivID();
-                            CFG.peaceTreatyData.preparePeaceTreatyToSend(toCivID);
-                            CFG.core.lPeaceTreaties.add(new PeaceTreaty_GameData_MessageData(CFG.peaceTreatyData.peaceTreatyGD));
-                            String peaceTreatyTag = CFG.core.lPeaceTreaties.get((int)(CFG.core.lPeaceTreaties.size() - 1)).PEACE_TREATY_TAG;
-                            GameManager.acceptPeaceTreaty(toCivID, peaceTreatyTag, true);
-                            continue;
-                        }
-                        catch (Exception ex) {
-                            CFG.exceptionStack(ex);
-                        }
-                    }
-                }
-                catch (Exception exr) {
-                    CFG.exceptionStack(exr);
-                }
+
                 if (warData.getWarTurnID() < GameCalendar.TURNID - GameValues.gvAiWar.STATUS_QUO_WAR_IS_TOO_LONG) {
                     int a;
                     boolean playerInWar = false;

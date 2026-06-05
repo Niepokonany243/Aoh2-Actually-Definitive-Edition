@@ -24,6 +24,7 @@ public enum DialogType {
     ALL_LIBRARY,
     ALL_ARMOURY,
     ALL_SUPPLIES,
+    ALL_AIR_DEFENSE,
     NO_ORDERS,
     CONFIRM_END_TURN,
     FORM_A_CIV,

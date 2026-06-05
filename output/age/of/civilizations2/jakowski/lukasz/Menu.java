@@ -198,23 +198,27 @@ public class Menu {
             if (this.scrollableY && this.getHeightM() < this.iMaxSliderPosY) {
                 if (CFG.settingsGD.BETTER_UI) {
                     Color primary = BetterUI_Manager.getPrimaryColor();
-                    oSB.setColor(new Color(0.1f, 0.1f, 0.1f, 0.8f));
+                    CFG.tmpColor.set(0.1f, 0.1f, 0.1f, 0.8f);
+                    oSB.setColor(CFG.tmpColor);
                     Images.pix.draw(oSB, this.getPosX() + this.getWidthM() - CFG.PADD * 2 + iTranslateX, this.getPosY() + iTranslateY, CFG.PADD * 2, this.getHeightM());
-                    
-                    oSB.setColor(new Color(primary.r, primary.g, primary.b, 0.6f));
+                    CFG.tmpColor.set(primary.r, primary.g, primary.b, 0.6f);
+                    oSB.setColor(CFG.tmpColor);
                     int scrollH = Math.max(20, this.getHeightM() * this.getHeightM() / this.iMaxSliderPosY);
                     int scrollY = (this.getHeightM() - scrollH) * (this.getPosY() - this.getMenuPosY()) / (this.iMaxSliderPosY - this.getHeightM());
                     Images.pix.draw(oSB, this.getPosX() + this.getWidthM() - CFG.PADD * 2 + 1 + iTranslateX, this.getPosY() + scrollY + iTranslateY, CFG.PADD * 2 - 2, scrollH);
                     oSB.setColor(Color.WHITE);
                     return;
                 }
-                oSB.setColor(new Color(0.22f, 0.22f, 0.3f, 1.0f));
+                CFG.tmpColor.set(0.22f, 0.22f, 0.3f, 1.0f);
+                oSB.setColor(CFG.tmpColor);
                 IMGManager.getIMG(Images.scrollPosition).draw2O(oSB, this.getPosX() + this.getWidthM() - CFG.PADD * 2 + 1 + iTranslateX, this.getPosY() - IMGManager.getIMG(Images.scrollPosition).getHeight() + iTranslateY, IMGManager.getIMG(Images.scrollPosition).getWidth(), this.getHeightM() - IMGManager.getIMG(Images.scrollPosition).getHeight());
                 IMGManager.getIMG(Images.scrollPosition).drawO(oSB, this.getPosX() + this.getWidthM() - CFG.PADD * 2 + 1 + iTranslateX, this.getPosY() + this.getHeightM() - IMGManager.getIMG(Images.scrollPosition).getHeight() + iTranslateY, false, true);
                 if (CFG.menus.getSliderMenuMode()) {
-                    oSB.setColor(new Color(0.0f, 0.0f, 0.08f, 1.0f));
+                    CFG.tmpColor.set(0.0f, 0.0f, 0.08f, 1.0f);
+                    oSB.setColor(CFG.tmpColor);
                 } else {
-                    oSB.setColor(new Color(0.098f, 0.098f, 0.16f, 1.0f));
+                    CFG.tmpColor.set(0.098f, 0.098f, 0.16f, 1.0f);
+                    oSB.setColor(CFG.tmpColor);
                 }
                 IMGManager.getIMG(Images.scrollPositionActive).draw2O(oSB, this.getPosX() + this.getWidthM() - CFG.PADD * 2 + iTranslateX + 1, this.getPosY() + (this.getHeightM() - 100 * this.getHeightM() / this.iMaxSliderPosY * this.getHeightM() / 100) * (this.getPosY() - this.getMenuPosY()) / (this.iMaxSliderPosY - this.getHeightM()) - IMGManager.getIMG(Images.scrollPositionActive).getHeight() + iTranslateY, CFG.PADD * 2 - 2, this.getHeightM() * 100 / this.iMaxSliderPosY * this.getHeightM() / 100 - IMGManager.getIMG(Images.scrollPositionActive).getHeight());
                 IMGManager.getIMG(Images.scrollPositionActive).drawO(oSB, this.getPosX() + this.getWidthM() - CFG.PADD * 2 + iTranslateX + 1, this.getPosY() + (this.getHeightM() - 100 * this.getHeightM() / this.iMaxSliderPosY * this.getHeightM() / 100) * (this.getPosY() - this.getMenuPosY()) / (this.iMaxSliderPosY - this.getHeightM()) + this.getHeightM() * 100 / this.iMaxSliderPosY * this.getHeightM() / 100 - IMGManager.getIMG(Images.scrollPositionActive).getHeight() + iTranslateY, false, true);
@@ -232,7 +236,7 @@ public class Menu {
         int parentHeight = this.getHeightM();
         for (int i = this.iMenuElemsSize - 1; i >= 0; --i) {
             MenuElemUI elem = this.menuElem.get(i);
-            if (!elem.getVisibleE()) continue;
+            if (!elem.getVisibleE() || !elem.getIsInView()) continue;
             
             
             if (menuPosY + elem.getPosY() + elem.getHeightE() < parentPosY || menuPosY + elem.getPosY() > parentPosY + parentHeight) {
@@ -259,11 +263,11 @@ public class Menu {
     }
 
     private final boolean getMenuElementIsInView(int i) {
-        return this.menuElem.get(i).getPosY() + this.getMenuPosY() > this.getPosY() && this.menuElem.get(i).getPosY() + this.getMenuPosY() < this.getPosY() + this.getHeightM() || this.menuElem.get(i).getPosY() + this.menuElem.get(i).getHeightE() + this.getMenuPosY() > this.getPosY() && this.menuElem.get(i).getPosY() + this.menuElem.get(i).getHeightE() + this.getMenuPosY() < this.getPosY() + this.getHeightM();
+        return this.menuElem.get(i).getPosY() + this.menuElem.get(i).getHeightE() + this.getMenuPosY() >= this.getPosY() && this.menuElem.get(i).getPosY() + this.getMenuPosY() <= this.getPosY() + this.getHeightM();
     }
 
     private final boolean getMenuElementIsInView_X(int i) {
-        return this.menuElem.get(i).getPosXE() + this.getMenuPosX() >= this.getPosX() && this.menuElem.get(i).getPosXE() + this.getMenuPosX() <= this.getPosX() + this.getWidthM() || this.menuElem.get(i).getPosXE() + this.menuElem.get(i).getWidthE() + this.getMenuPosX() >= this.getPosX() && this.menuElem.get(i).getPosXE() + this.menuElem.get(i).getWidthE() + this.getMenuPosX() <= this.getPosX() + this.getWidthM();
+        return this.menuElem.get(i).getPosXE() + this.menuElem.get(i).getWidthE() + this.getMenuPosX() >= this.getPosX() && this.menuElem.get(i).getPosXE() + this.getMenuPosX() <= this.getPosX() + this.getWidthM();
     }
 
     public boolean getMenuElementIsActive(boolean sliderMenuIsActive, int i) {

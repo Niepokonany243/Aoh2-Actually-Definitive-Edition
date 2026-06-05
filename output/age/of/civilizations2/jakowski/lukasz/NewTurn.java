@@ -102,7 +102,10 @@ extends Thread {
         }
     }
 
+    public static long lastTurnTime = 0L;
     public static final void doAction() {
+        long perfStart = System.currentTimeMillis();
+        long perfMark = perfStart;
         CFG.resetModes();
         CFG.core.invalidateWarCache();
         try {
@@ -125,6 +128,7 @@ extends Thread {
                 });
             }
             CFG.gameUpdate.updateCivs_Money();
+            long perfNow = System.currentTimeMillis(); if (perfNow - perfMark > 50) { CFG.LOG("PERF", "[doAction] updateCivs_Money: " + (perfNow - perfMark) + "ms"); } perfMark = perfNow;
 
             for (int civIndex = 1; civIndex < CFG.core.getCivsSize(); ++civIndex) {
                 try {
@@ -168,9 +172,12 @@ extends Thread {
                     }
                 } catch (Exception ex) {}
             }
-            
+            long perfNow2 = System.currentTimeMillis(); if (perfNow2 - perfMark > 50) { CFG.LOG("PERF", "[doAction] civLoop: " + (perfNow2 - perfMark) + "ms"); } perfMark = perfNow2;
+
             CFG.plagueManager.runPlagues();
             CFG.core.cleanupWars();
+            long perfNow3 = System.currentTimeMillis(); if (perfNow3 - perfMark > 50) { CFG.LOG("PERF", "[doAction] cleanupWars: " + (perfNow3 - perfMark) + "ms"); } perfMark = perfNow3;
+
             NewTurn.updateCapitulation();
             NewTurn.checkOccupiedProvincesIfAreAtWar();
             NewTurn.updateGameData();
@@ -290,6 +297,9 @@ extends Thread {
             CFG.exceptionStack(ex);
         }
         finally {
+            long perfEnd = System.currentTimeMillis();
+            lastTurnTime = perfEnd - perfStart;
+            if (lastTurnTime > 100) { CFG.LOG("PERF", "[doAction] TOTAL: " + lastTurnTime + "ms"); }
             CFG.menus.getInGameProvInfo().getMenuElem(0).setClickable(true);
             Menu_InGame_2.TIME_CONTINUE = System.currentTimeMillis();
         }
@@ -468,12 +478,15 @@ extends Thread {
     }
 
     public static final void doAction_End() {
+        long perfStart = System.currentTimeMillis();
+        long perfMark = perfStart;
         try {
             tempTime = System.nanoTime();
             for (int i = 0; i < CFG.core.getPlayersSize(); ++i) {
                 CFG.core.getPlayer(i).setNoOrders(true);
             }
             CFG.gameAction.moveRegroupArmy();
+            long perfNow = System.currentTimeMillis(); if (perfNow - perfMark > 50) { CFG.LOG("PERF", "[doAction_End] moveRegroupArmy: " + (perfNow - perfMark) + "ms"); } perfMark = perfNow;
             for (int civID = 1; civID < CFG.core.getCivsSize(); ++civID) {
                 if (CFG.core.getCiv(civID).getUpdateRegions()) {
                     final int id = civID;
@@ -514,7 +527,10 @@ extends Thread {
             CFG.exceptionStack(ex);
         }
         finally {
+            long perfEnd = System.currentTimeMillis();
+            if (perfEnd - perfStart > 100) { CFG.LOG("PERF", "[doAction_End] TOTAL: " + (perfEnd - perfStart) + "ms"); }
             CFG.menus.getInGameProvInfo().getMenuElem(0).setClickable(true);
+            CFG.gameAction.updateInGame_ProvinceInfo();
             Menu_InGame_2.TIME_CONTINUE = System.currentTimeMillis();
         }
     }

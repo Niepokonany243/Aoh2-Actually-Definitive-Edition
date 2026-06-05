@@ -9422,7 +9422,7 @@ nData.add(new ME_Hover_2Type_Text("" + (int)(fQ * 100.0f) + "%", fQ > 0.6f ? CFG
         Render.updateRenderer();
         RenderProvince.updateDrawProvinces();
         Render.updateDrawMoveUnits();
-        ProvinceMesh.needsUpdate = true;
+        ProvinceMesh.markAllDirty();
         CFG.menus.updateBuildProvinceHoverInformation();
         if (RTS.isEnabled() && !RTS.PAUSE) {
             RTS.updateTimePast_AfterAction(0.75f);
@@ -9438,7 +9438,7 @@ nData.add(new ME_Hover_2Type_Text("" + (int)(fQ * 100.0f) + "%", fQ > 0.6f ? CFG
         Render.updateRenderer();
         RenderProvince.updateDrawProvinces();
         Render.updateDrawMoveUnits();
-        ProvinceMesh.needsUpdate = true;
+        ProvinceMesh.markAllDirty();
         CFG.menus.updateBuildProvinceHoverInformation();
     }
 

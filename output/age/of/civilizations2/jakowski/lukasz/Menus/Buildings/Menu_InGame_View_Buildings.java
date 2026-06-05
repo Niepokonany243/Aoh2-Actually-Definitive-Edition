@@ -122,15 +122,14 @@ extends Menu {
             }
         });
         tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE();
-        while (!tempProvs.isEmpty()) {
-            int tBest = 0;
-            for (int i2 = 1; i2 < tempProvs.size(); ++i2) {
-                if (Menu_InGame_View_Buildings.countNumOfBuildings((Integer)tempProvs.get(tBest)) >= Menu_InGame_View_Buildings.countNumOfBuildings((Integer)tempProvs.get(i2))) continue;
-                tBest = i2;
+        java.util.Collections.sort(tempProvs, new java.util.Comparator<Integer>(){
+
+            @Override
+            public int compare(Integer a, Integer b) {
+                return Integer.compare(Menu_InGame_View_Buildings.countNumOfBuildings(b), Menu_InGame_View_Buildings.countNumOfBuildings(a));
             }
-            tempProvincesSorted.add((Integer)tempProvs.get(tBest));
-            tempProvs.remove(tBest);
-        }
+        });
+        tempProvincesSorted.addAll(tempProvs);
         if (!tempProvincesSorted.isEmpty() || !tempProvincesWithWonders.isEmpty()) {
             menuElements.add(new ButtonN_Pop(new Color((float)CFG.core.getCiv(this.iCivID).getR() / 255.0f, (float)CFG.core.getCiv(this.iCivID).getG() / 255.0f, (float)CFG.core.getCiv(this.iCivID).getB() / 255.0f, 1.0f), CFG.core.getCiv(this.iCivID).getCivName(), this.iCivID, CFG.lang.get("Buildings") + ": ", CFG.getNumberWthSpaces("" + totalPopulation), Images.buildAll, CFG.COLOR_TEXT_NUM_OF_PROVINCES, 0, tY, tempW){
 

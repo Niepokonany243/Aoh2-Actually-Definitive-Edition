@@ -3913,14 +3913,17 @@ public class GameAction {
     }
 
     public void updateInGame_ProvinceInfo() {
+        long pt = System.currentTimeMillis();
         if (Menu_InGame_ProvInfo.getUseSmallProvinceInfo()) {
             this.updateInGame_ProvinceInfoSmall();
         } else {
             this.updateInGame_ProvinceInfoBig();
         }
+        long pt2 = System.currentTimeMillis(); if (pt2 - pt > 20) { CFG.LOG("[TIME] updateInGame_ProvinceInfo:" + (pt2 - pt) + "ms"); }
     }
 
     public void updateInGame_ProvinceInfoBig() {
+        long perfStart = System.currentTimeMillis();
         block29: {
             try {
                 int n = CFG.ACTIVE_PROVINCE_INFO = CFG.chosenProvinceID >= 0 ? CFG.chosenProvinceID : CFG.core.getActiveProvID();
@@ -4256,6 +4259,7 @@ public class GameAction {
             }
         }
         this.updateInGame_ProvinceInfo_PosXBig();
+        long perfEnd = System.currentTimeMillis(); if (perfEnd - perfStart > 20) { CFG.LOG("[TIME] updateInGame_ProvinceInfoBig:" + (perfEnd - perfStart) + "ms"); }
     }
 
     public final void updateInGame_ProvinceInfo_PosXBig() {
@@ -4498,6 +4502,7 @@ public class GameAction {
     }
 
     protected final void updateInGame_ProvinceInfoSmall() {
+        final long PERF_START_ProvinceInfoSmall = System.currentTimeMillis();
         block23: {
             try {
                 int n = CFG.ACTIVE_PROVINCE_INFO = CFG.chosenProvinceID >= 0 ? CFG.chosenProvinceID : CFG.core.getActiveProvID();
@@ -4766,6 +4771,7 @@ public class GameAction {
             }
         }
         this.updateInGame_ProvinceInfo_PosXSmall();
+        long perfEnd = System.currentTimeMillis(); if (perfEnd - PERF_START_ProvinceInfoSmall > 20) { CFG.LOG("[TIME] updateInGame_ProvinceInfoSmall:" + (perfEnd - PERF_START_ProvinceInfoSmall) + "ms"); }
     }
 
     public final void takeNextTurn() {

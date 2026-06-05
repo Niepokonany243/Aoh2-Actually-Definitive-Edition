@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProvinceMesh {
     private static Mesh mesh;
@@ -26,6 +28,8 @@ public class ProvinceMesh {
     private static final int INDICES_PER_PROVINCE = 6;
     private static final int COMPONENTS_PER_VERTEX = 5; 
     public static boolean needsUpdate = true;
+    private static List<Integer> dirtyProvinces = new ArrayList<Integer>();
+    private static boolean markAllDirty = false;
 
     public static void init() {
         if (initialized) dispose();
@@ -153,6 +157,18 @@ public class ProvinceMesh {
         return value + 1;
     }
 
+    public static void markDirty(int provinceID) {
+        if (!markAllDirty && !dirtyProvinces.contains(provinceID)) {
+            dirtyProvinces.add(provinceID);
+        }
+        needsUpdate = true;
+    }
+
+    public static void markAllDirty() {
+        markAllDirty = true;
+        needsUpdate = true;
+    }
+
     public static void updateProvinceColor(int provinceID) {
         if (!initialized) return;
         Province p = CFG.core.getProv(provinceID);
@@ -176,9 +192,19 @@ public class ProvinceMesh {
     }
     
     public static void updateAllStates() {
-        if (!initialized) return;
-        for (int i = 0; i < CFG.core.getProvinSize(); i++) {
-            updateProvinceColor(i);
+        if (!initialized || !needsUpdate) return;
+        needsUpdate = false;
+        if (markAllDirty) {
+            markAllDirty = false;
+            dirtyProvinces.clear();
+            for (int i = 0; i < CFG.core.getProvinSize(); i++) {
+                updateProvinceColor(i);
+            }
+        } else {
+            for (int i = 0; i < dirtyProvinces.size(); i++) {
+                updateProvinceColor(dirtyProvinces.get(i));
+            }
+            dirtyProvinces.clear();
         }
         colorTexture.draw(colorPixmap, 0, 0);
     }

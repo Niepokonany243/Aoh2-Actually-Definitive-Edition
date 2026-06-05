@@ -290,7 +290,7 @@ public class Player {
             if (this.playerGD.metProvin.get(i) != met) {
                 this.playerGD.metProvin.set(i, met);
                 CFG.core.updateSortedPIV = true;
-                ProvinceMesh.needsUpdate = true;
+                ProvinceMesh.markDirty(i);
             }
         }
         catch (Exception exception) {

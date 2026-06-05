@@ -20,6 +20,8 @@ extends Thread {
 
     
     public static void doActions() {
+        long perfStart = System.currentTimeMillis();
+        long perfMark = perfStart;
         long time = System.nanoTime();
         time = System.nanoTime();
         try {
@@ -33,6 +35,7 @@ extends Thread {
             if (CFG.getIsDesktop()) {
                 Actions.runRevolts();
             }
+            long perfNow = System.currentTimeMillis(); if (perfNow - perfMark > 50) { CFG.LOG("PERF", "[Actions] runRevolts: " + (perfNow - perfMark) + "ms"); } perfMark = perfNow;
             time = System.nanoTime();
             time = System.nanoTime();
             time = System.nanoTime();
@@ -62,6 +65,7 @@ extends Thread {
             CFG.oAI.setLoadingTurnActionsOfCivID(0);
             time = System.nanoTime();
             CFG.oAI.buildAI_Data();
+            long perfNow2 = System.currentTimeMillis(); if (perfNow2 - perfMark > 50) { CFG.LOG("PERF", "[Actions] buildAI_Data: " + (perfNow2 - perfMark) + "ms"); } perfMark = perfNow2;
             time = System.nanoTime();
             try {
                 CFG.oAI.turnOrders_0();
@@ -99,6 +103,7 @@ extends Thread {
             catch (Exception ex) {
                 CFG.exceptionStack(ex);
             }
+            long perfNow3 = System.currentTimeMillis(); if (perfNow3 - perfMark > 50) { CFG.LOG("PERF", "[Actions] turnOrders: " + (perfNow3 - perfMark) + "ms"); } perfMark = perfNow3;
             time = System.nanoTime();
             for (int civIndex = 1; civIndex < CFG.core.getCivsSize(); ++civIndex) {
                 try {

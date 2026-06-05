@@ -30,6 +30,118 @@ import age.of.civilizations2.jakowski.lukasz.Messages.Built.Message_Bulit_Worksh
 public class BuildingsManager {
     public static int iBuildInProvinceID = 0;
     public static boolean buildBySelectingProvinceOnMap = false;
+    private static final int BUILDING_COUNT_FORT = 0;
+    private static final int BUILDING_COUNT_TOWER = 1;
+    private static final int BUILDING_COUNT_PORT = 2;
+    private static final int BUILDING_COUNT_FARM = 3;
+    private static final int BUILDING_COUNT_LIBRARY = 4;
+    private static final int BUILDING_COUNT_ARMOURY = 5;
+    private static final int BUILDING_COUNT_WORKSHOP = 6;
+    private static final int BUILDING_COUNT_MARKET = 7;
+    private static final int BUILDING_COUNT_SUPPLY = 8;
+    private static final int BUILDING_COUNT_AIR_DEFENSE = 9;
+    private static final int BUILDING_COUNT_TYPES = 10;
+    private static int[][] civBuildingCountCache = new int[0][BUILDING_COUNT_TYPES];
+    private static int[] civBuildingCountCacheTurn = new int[0];
+    private static int[] civBuildingCountCacheProvs = new int[0];
+
+    private static void ensureBuildingCountCache() {
+        int civsSize = CFG.core.getCivsSize();
+        if (civBuildingCountCache.length >= civsSize) {
+            return;
+        }
+        int[][] nCache = new int[civsSize][BUILDING_COUNT_TYPES];
+        int[] nTurn = new int[civsSize];
+        int[] nProvs = new int[civsSize];
+        for (int i = 0; i < civsSize; ++i) {
+            java.util.Arrays.fill(nCache[i], -1);
+            nTurn[i] = -1;
+            nProvs[i] = -1;
+        }
+        for (int i = 0; i < civBuildingCountCache.length; ++i) {
+            System.arraycopy(civBuildingCountCache[i], 0, nCache[i], 0, BUILDING_COUNT_TYPES);
+            nTurn[i] = civBuildingCountCacheTurn[i];
+            nProvs[i] = civBuildingCountCacheProvs[i];
+        }
+        civBuildingCountCache = nCache;
+        civBuildingCountCacheTurn = nTurn;
+        civBuildingCountCacheProvs = nProvs;
+    }
+
+    private static synchronized void invalidateBuildingCountCache(int civID) {
+        if (civID >= 0 && civID < civBuildingCountCache.length) {
+            java.util.Arrays.fill(civBuildingCountCache[civID], -1);
+        }
+    }
+
+    private static synchronized int getCivBuildingCount(int civID, int buildingType) {
+        try {
+            BuildingsManager.ensureBuildingCountCache();
+            int provsSize = CFG.core.getCiv(civID).getNumOfProvs();
+            if (civBuildingCountCacheTurn[civID] != GameCalendar.TURNID || civBuildingCountCacheProvs[civID] != provsSize) {
+                java.util.Arrays.fill(civBuildingCountCache[civID], -1);
+                civBuildingCountCacheTurn[civID] = GameCalendar.TURNID;
+                civBuildingCountCacheProvs[civID] = provsSize;
+            }
+            if (civBuildingCountCache[civID][buildingType] >= 0) {
+                return civBuildingCountCache[civID][buildingType];
+            }
+            int out = 0;
+            for (int i = 0; i < provsSize; ++i) {
+                int provID = CFG.core.getCiv(civID).getProvID(i);
+                switch (buildingType) {
+                    case BUILDING_COUNT_FORT: {
+                        out += CFG.core.getProv(provID).getLvlOfFort();
+                        break;
+                    }
+                    case BUILDING_COUNT_TOWER: {
+                        if (CFG.core.getProv(provID).getLvlOfWatchTower() <= 0) break;
+                        ++out;
+                        break;
+                    }
+                    case BUILDING_COUNT_PORT: {
+                        if (CFG.core.getProv(provID).getLvlOfPort() <= 0) break;
+                        ++out;
+                        break;
+                    }
+                    case BUILDING_COUNT_FARM: {
+                        out += CFG.core.getProv(provID).getLvlOfFarm();
+                        break;
+                    }
+                    case BUILDING_COUNT_LIBRARY: {
+                        out += CFG.core.getProv(provID).getLvlOfLibrary();
+                        break;
+                    }
+                    case BUILDING_COUNT_ARMOURY: {
+                        if (CFG.core.getProv(provID).getLvlOfArmoury() <= 0) break;
+                        ++out;
+                        break;
+                    }
+                    case BUILDING_COUNT_WORKSHOP: {
+                        out += CFG.core.getProv(provID).getLvlOfWorkshop();
+                        break;
+                    }
+                    case BUILDING_COUNT_MARKET: {
+                        out += CFG.core.getProv(provID).getLvlOfMarket();
+                        break;
+                    }
+                    case BUILDING_COUNT_SUPPLY: {
+                        if (CFG.core.getProv(provID).getLvlOfSupply() <= 0) break;
+                        ++out;
+                        break;
+                    }
+                    case BUILDING_COUNT_AIR_DEFENSE: {
+                        out += CFG.core.getProv(provID).provGD.iAirDefense;
+                        break;
+                    }
+                }
+            }
+            return civBuildingCountCache[civID][buildingType] = out;
+        }
+        catch (Exception e) {
+            return 0;
+        }
+    }
 
     public static final String getMissileProgram_Name(int nLevel) {
         return "Missile Program";
@@ -75,11 +187,7 @@ public class BuildingsManager {
 
     public static final int getFort_BuildCost(int nLevel, int nProvinceID) {
         try {
-            int iNumOfBuildings = 0;
-            for (int i = 0; i < CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getNumOfProvs(); ++i) {
-                if (CFG.core.getProv(CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getProvID(i)).getLvlOfFort() <= 0) continue;
-                iNumOfBuildings += CFG.core.getProv(CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getProvID(i)).getLvlOfFort();
-            }
+            int iNumOfBuildings = BuildingsManager.getCivBuildingCount(CFG.core.getProv(nProvinceID).getCivId(), BUILDING_COUNT_FORT);
             return Math.max(50, (int)(((float)CFG.core.getGameScenars().getScenario_StartingPopulation() * (GameValues.gvBuildingFort.FORT_BUILD_COST[nLevel] + GameValues.gvBuildingFort.FORT_EXTRA_COST_PER_FORT * (float)iNumOfBuildings) + (float)CFG.core.getGameScenars().getScenario_StartingPopulation() * (GameValues.gvBuildingFort.FORT_COST_DEVELOPMENT_MODIFIER * (1.0f - CFG.core.getProv(nProvinceID).getDeveLvl()))) * (1.0f + CFG.terrainTypesManager.getBuildCost(CFG.core.getProv(nProvinceID).getTerrainTypeID()))));
         }
         catch (Exception e) {
@@ -167,6 +275,7 @@ public class BuildingsManager {
     public static final boolean buildFort(int nProvinceID, int nCivID) {
         if (!CFG.core.getProv(nProvinceID).getSeaProv() && CFG.core.getProv(nProvinceID).getLvlOfFort() < BuildingsManager.getFort_MaxLevel()) {
             CFG.core.getProv(nProvinceID).setLvlOfFort(CFG.core.getProv(nProvinceID).getLvlOfFort() + 1);
+            BuildingsManager.invalidateBuildingCountCache(nCivID);
             ++CFG.core.getCiv((int)nCivID).civGD.numOfBuildingsConstructed;
             for (int i = 0; i < CFG.core.getPlayersSize(); ++i) {
                 if (CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getNumOfProvs() <= 0) continue;
@@ -185,6 +294,7 @@ public class BuildingsManager {
             if (CFG.core.getCiv(nCivID).getMovemPoints() >= GameValues.gvBuildings.DESTROY_MOVEMENT_COST) {
                 CFG.core.getCiv(nCivID).setMovementPoints(CFG.core.getCiv(nCivID).getMovemPoints() - GameValues.gvBuildings.DESTROY_MOVEMENT_COST);
                 CFG.core.getProv(nProvinceID).setLvlOfFort(0);
+                BuildingsManager.invalidateBuildingCountCache(CFG.core.getProv(nProvinceID).getCivId());
                 if (CFG.core.getCiv(nCivID).getIsPlayer()) {
                     Core.addProvinceDot(nProvinceID, Colors.COLOR_TEXT_MODIFIER_NEGATIVE);
                 }
@@ -200,6 +310,7 @@ public class BuildingsManager {
             if (CFG.core.getCiv(nCivID).getMovemPoints() >= GameValues.gvBuildings.DESTROY_MOVEMENT_COST) {
                 CFG.core.getCiv(nCivID).setMovementPoints(CFG.core.getCiv(nCivID).getMovemPoints() - GameValues.gvBuildings.DESTROY_MOVEMENT_COST);
                 CFG.core.getProv(nProvinceID).setLvlOfWatchTower(0);
+                BuildingsManager.invalidateBuildingCountCache(CFG.core.getProv(nProvinceID).getCivId());
                 if (CFG.core.getCiv(nCivID).getIsPlayer()) {
                     CFG.core.getProv(nProvinceID).updateFogOfWar(CFG.core.getPlayerIDbyCivID(nCivID));
                 }
@@ -218,6 +329,7 @@ public class BuildingsManager {
             if (CFG.core.getCiv(nCivID).getMovemPoints() >= GameValues.gvBuildings.DESTROY_MOVEMENT_COST) {
                 CFG.core.getCiv(nCivID).setMovementPoints(CFG.core.getCiv(nCivID).getMovemPoints() - GameValues.gvBuildings.DESTROY_MOVEMENT_COST);
                 CFG.core.getProv(nProvinceID).setLvlOfPort(0);
+                BuildingsManager.invalidateBuildingCountCache(CFG.core.getProv(nProvinceID).getCivId());
                 if (CFG.core.getCiv(nCivID).getIsPlayer()) {
                     Core.addProvinceDot(nProvinceID, Colors.COLOR_TEXT_MODIFIER_NEGATIVE);
                 }
@@ -233,6 +345,7 @@ public class BuildingsManager {
             if (CFG.core.getCiv(nCivID).getMovemPoints() >= GameValues.gvBuildings.DESTROY_MOVEMENT_COST) {
                 CFG.core.getCiv(nCivID).setMovementPoints(CFG.core.getCiv(nCivID).getMovemPoints() - GameValues.gvBuildings.DESTROY_MOVEMENT_COST);
                 CFG.core.getProv(nProvinceID).setLvlOfFarm(0);
+                BuildingsManager.invalidateBuildingCountCache(CFG.core.getProv(nProvinceID).getCivId());
                 if (CFG.core.getCiv(nCivID).getIsPlayer()) {
                     Core.addProvinceDot(nProvinceID, Colors.COLOR_TEXT_MODIFIER_NEGATIVE);
                 }
@@ -248,6 +361,7 @@ public class BuildingsManager {
             if (CFG.core.getCiv(nCivID).getMovemPoints() >= GameValues.gvBuildings.DESTROY_MOVEMENT_COST) {
                 CFG.core.getCiv(nCivID).setMovementPoints(CFG.core.getCiv(nCivID).getMovemPoints() - GameValues.gvBuildings.DESTROY_MOVEMENT_COST);
                 CFG.core.getProv(nProvinceID).setLvlOfWorkshop(0);
+                BuildingsManager.invalidateBuildingCountCache(CFG.core.getProv(nProvinceID).getCivId());
                 if (CFG.core.getCiv(nCivID).getIsPlayer()) {
                     Core.addProvinceDot(nProvinceID, Colors.COLOR_TEXT_MODIFIER_NEGATIVE);
                 }
@@ -263,6 +377,7 @@ public class BuildingsManager {
             if (CFG.core.getCiv(nCivID).getMovemPoints() >= GameValues.gvBuildings.DESTROY_MOVEMENT_COST) {
                 CFG.core.getCiv(nCivID).setMovementPoints(CFG.core.getCiv(nCivID).getMovemPoints() - GameValues.gvBuildings.DESTROY_MOVEMENT_COST);
                 CFG.core.getProv(nProvinceID).setLvlOfMarket(0);
+                BuildingsManager.invalidateBuildingCountCache(CFG.core.getProv(nProvinceID).getCivId());
                 if (CFG.core.getCiv(nCivID).getIsPlayer()) {
                     Core.addProvinceDot(nProvinceID, Colors.COLOR_TEXT_MODIFIER_NEGATIVE);
                 }
@@ -278,6 +393,7 @@ public class BuildingsManager {
             if (CFG.core.getCiv(nCivID).getMovemPoints() >= GameValues.gvBuildings.DESTROY_MOVEMENT_COST) {
                 CFG.core.getCiv(nCivID).setMovementPoints(CFG.core.getCiv(nCivID).getMovemPoints() - GameValues.gvBuildings.DESTROY_MOVEMENT_COST);
                 CFG.core.getProv(nProvinceID).setLvlOfLibrary(0);
+                BuildingsManager.invalidateBuildingCountCache(CFG.core.getProv(nProvinceID).getCivId());
                 if (CFG.core.getCiv(nCivID).getIsPlayer()) {
                     Core.addProvinceDot(nProvinceID, Colors.COLOR_TEXT_MODIFIER_NEGATIVE);
                 }
@@ -293,6 +409,7 @@ public class BuildingsManager {
             if (CFG.core.getCiv(nCivID).getMovemPoints() >= GameValues.gvBuildings.DESTROY_MOVEMENT_COST) {
                 CFG.core.getCiv(nCivID).setMovementPoints(CFG.core.getCiv(nCivID).getMovemPoints() - GameValues.gvBuildings.DESTROY_MOVEMENT_COST);
                 CFG.core.getProv(nProvinceID).setLvlOfArmoury(0);
+                BuildingsManager.invalidateBuildingCountCache(CFG.core.getProv(nProvinceID).getCivId());
                 if (CFG.core.getCiv(nCivID).getIsPlayer()) {
                     Core.addProvinceDot(nProvinceID, Colors.COLOR_TEXT_MODIFIER_NEGATIVE);
                 }
@@ -308,6 +425,7 @@ public class BuildingsManager {
             if (CFG.core.getCiv(nCivID).getMovemPoints() >= GameValues.gvBuildings.DESTROY_MOVEMENT_COST) {
                 CFG.core.getCiv(nCivID).setMovementPoints(CFG.core.getCiv(nCivID).getMovemPoints() - GameValues.gvBuildings.DESTROY_MOVEMENT_COST);
                 CFG.core.getProv(nProvinceID).setLvlOfSupply(0);
+                BuildingsManager.invalidateBuildingCountCache(CFG.core.getProv(nProvinceID).getCivId());
                 if (CFG.core.getCiv(nCivID).getIsPlayer()) {
                     Core.addProvinceDot(nProvinceID, Colors.COLOR_TEXT_MODIFIER_NEGATIVE);
                 }
@@ -341,11 +459,7 @@ public class BuildingsManager {
 
     public static final int getTower_BuildCost(int nLevel, int nProvinceID) {
         try {
-            int iNumOfBuildigns = 0;
-            for (int i = 0; i < CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getNumOfProvs(); ++i) {
-                if (CFG.core.getProv(CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getProvID(i)).getLvlOfWatchTower() <= 0) continue;
-                ++iNumOfBuildigns;
-            }
+            int iNumOfBuildigns = BuildingsManager.getCivBuildingCount(CFG.core.getProv(nProvinceID).getCivId(), BUILDING_COUNT_TOWER);
             return Math.max(50, (int)(((float)CFG.core.getGameScenars().getScenario_StartingPopulation() * (GameValues.gvBuildingWatchTower.TOWER_BUILD_COST[nLevel] + GameValues.gvBuildingWatchTower.TOWER_EXTRA_COST_PER_TOWER * (float)iNumOfBuildigns) + (float)CFG.core.getGameScenars().getScenario_StartingPopulation() * (GameValues.gvBuildingWatchTower.TOWER_COST_DEVELOPMENT_MODIFIER * (1.0f - CFG.core.getProv(nProvinceID).getDeveLvl()))) * (1.0f + CFG.terrainTypesManager.getBuildCost(CFG.core.getProv(nProvinceID).getTerrainTypeID()))));
         }
         catch (Exception e) {
@@ -433,6 +547,7 @@ public class BuildingsManager {
     public static final boolean buildTower(int nProvinceID, int nCivID) {
         if (!CFG.core.getProv(nProvinceID).getSeaProv() && CFG.core.getProv(nProvinceID).getLvlOfWatchTower() < BuildingsManager.getTower_MaxLevel()) {
             CFG.core.getProv(nProvinceID).setLvlOfWatchTower(CFG.core.getProv(nProvinceID).getLvlOfWatchTower() + 1);
+            BuildingsManager.invalidateBuildingCountCache(nCivID);
             ++CFG.core.getCiv((int)nCivID).civGD.numOfBuildingsConstructed;
             for (int i = 0; i < CFG.core.getPlayersSize(); ++i) {
                 if (CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getNumOfProvs() <= 0) continue;
@@ -463,11 +578,7 @@ public class BuildingsManager {
 
     public static final int getPort_BuildCost(int nLevel, int nProvinceID) {
         try {
-            int iNumOfBuildigns = 0;
-            for (int i = 0; i < CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getNumOfProvs(); ++i) {
-                if (CFG.core.getProv(CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getProvID(i)).getLvlOfPort() <= 0) continue;
-                ++iNumOfBuildigns;
-            }
+            int iNumOfBuildigns = BuildingsManager.getCivBuildingCount(CFG.core.getProv(nProvinceID).getCivId(), BUILDING_COUNT_PORT);
             return Math.max(50, (int)(((float)CFG.core.getGameScenars().getScenario_StartingPopulation() * (GameValues.gvBuildingPort.PORT_BUILD_COST[nLevel] + GameValues.gvBuildingPort.PORT_EXTRA_COST_PER_PORT * (float)iNumOfBuildigns) + (float)CFG.core.getGameScenars().getScenario_StartingPopulation() * (GameValues.gvBuildingPort.PORT_COST_DEVELOPMENT_MODIFIER * (1.0f - CFG.core.getProv(nProvinceID).getDeveLvl()))) * (1.0f + CFG.terrainTypesManager.getBuildCost(CFG.core.getProv(nProvinceID).getTerrainTypeID())) * (CFG.core.getProv(nProvinceID).isOccupied() ? GameValues.gvBuildingPort.BUILD_PORT_IN_OCCUPIED_PROVINCE_MODIFIER : 1.0f)));
         }
         catch (Exception e) {
@@ -555,6 +666,7 @@ public class BuildingsManager {
     public static final boolean buildPort(int nProvinceID, int nCivID) {
         if (CFG.core.getProv(nProvinceID).getLvlOfPort() >= 0 && CFG.core.getProv(nProvinceID).getLvlOfPort() < BuildingsManager.getPort_MaxLevel()) {
             CFG.core.getProv(nProvinceID).setLvlOfPort(CFG.core.getProv(nProvinceID).getLvlOfPort() + 1);
+            BuildingsManager.invalidateBuildingCountCache(nCivID);
             ++CFG.core.getCiv((int)nCivID).civGD.numOfBuildingsConstructed;
             if (CFG.core.getCiv(nCivID).getIsPlayer()) {
                 CFG.core.getCiv((int)nCivID).getCivDiploGD().messageBox.addMessage(new Message_Bulit_Port(nCivID, nProvinceID));
@@ -587,11 +699,7 @@ public class BuildingsManager {
 
     public static final int getFarm_BuildCost(int nLevel, int nProvinceID) {
         try {
-            int iNumOfBuildigns = 0;
-            for (int i = 0; i < CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getNumOfProvs(); ++i) {
-                if (CFG.core.getProv(CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getProvID(i)).getLvlOfFarm() <= 0) continue;
-                iNumOfBuildigns += CFG.core.getProv(CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getProvID(i)).getLvlOfFarm();
-            }
+            int iNumOfBuildigns = BuildingsManager.getCivBuildingCount(CFG.core.getProv(nProvinceID).getCivId(), BUILDING_COUNT_FARM);
             return Math.max(50, (int)(((float)CFG.core.getGameScenars().getScenario_StartingPopulation() * (GameValues.gvBuildingFarm.FARM_BUILD_COST[nLevel] + GameValues.gvBuildingFarm.FARM_EXTRA_COST_PER_FARM * (float)iNumOfBuildigns) + (float)CFG.core.getGameScenars().getScenario_StartingPopulation() * (GameValues.gvBuildingFarm.FARM_COST_DEVELOPMENT_MODIFIER * (1.0f - CFG.core.getProv(nProvinceID).getDeveLvl()))) * (1.0f + CFG.terrainTypesManager.getBuildCost(CFG.core.getProv(nProvinceID).getTerrainTypeID()))));
         }
         catch (Exception e) {
@@ -675,6 +783,7 @@ public class BuildingsManager {
     public static final boolean buildFarm(int nProvinceID, int nCivID) {
         if (!CFG.core.getProv(nProvinceID).getSeaProv() && CFG.core.getProv(nProvinceID).getLvlOfFarm() < BuildingsManager.getFarm_MaxLevel()) {
             CFG.core.getProv(nProvinceID).setLvlOfFarm(CFG.core.getProv(nProvinceID).getLvlOfFarm() + 1);
+            BuildingsManager.invalidateBuildingCountCache(nCivID);
             ++CFG.core.getCiv((int)nCivID).civGD.numOfBuildingsConstructed;
             if (CFG.core.getCiv(nCivID).getIsPlayer()) {
                 CFG.core.getCiv((int)nCivID).getCivDiploGD().messageBox.addMessage(new Message_Bulit_Farm(nCivID, nProvinceID));
@@ -715,11 +824,7 @@ public class BuildingsManager {
 
     public static final int getLibrary_BuildCost(int nLevel, int nProvinceID) {
         try {
-            int iNumOfBuildigns = 0;
-            for (int i = 0; i < CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getNumOfProvs(); ++i) {
-                if (CFG.core.getProv(CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getProvID(i)).getLvlOfLibrary() <= 0) continue;
-                iNumOfBuildigns += CFG.core.getProv(CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getProvID(i)).getLvlOfLibrary();
-            }
+            int iNumOfBuildigns = BuildingsManager.getCivBuildingCount(CFG.core.getProv(nProvinceID).getCivId(), BUILDING_COUNT_LIBRARY);
             return Math.max(50, (int)(((float)CFG.core.getGameScenars().getScenario_StartingPopulation() * (GameValues.gvBuildingLibrary.LIBRARY_BUILD_COST[nLevel] + GameValues.gvBuildingLibrary.LIBRARY_EXTRA_COST_PER_LIBRARY * (float)iNumOfBuildigns) + (float)CFG.core.getGameScenars().getScenario_StartingPopulation() * (GameValues.gvBuildingLibrary.LIBRARY_COST_DEVELOPMENT_MODIFIER * (1.0f - CFG.core.getProv(nProvinceID).getDeveLvl()))) * (1.0f + CFG.terrainTypesManager.getBuildCost(CFG.core.getProv(nProvinceID).getTerrainTypeID()))));
         }
         catch (Exception e) {
@@ -803,6 +908,7 @@ public class BuildingsManager {
     public static final boolean buildLibrary(int nProvinceID, int nCivID) {
         if (!CFG.core.getProv(nProvinceID).getSeaProv() && CFG.core.getProv(nProvinceID).getLvlOfLibrary() < BuildingsManager.getLibrary_MaxLevel()) {
             CFG.core.getProv(nProvinceID).setLvlOfLibrary(CFG.core.getProv(nProvinceID).getLvlOfLibrary() + 1);
+            BuildingsManager.invalidateBuildingCountCache(nCivID);
             ++CFG.core.getCiv((int)nCivID).civGD.numOfBuildingsConstructed;
             if (CFG.core.getCiv(nCivID).getIsPlayer()) {
                 CFG.core.getCiv((int)nCivID).getCivDiploGD().messageBox.addMessage(new Message_Built_Library(nCivID, nProvinceID));
@@ -831,11 +937,7 @@ public class BuildingsManager {
 
     public static final int getArmoury_BuildCost(int nLevel, int nProvinceID) {
         try {
-            int iNumOfArmouries = 0;
-            for (int i = 0; i < CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getNumOfProvs(); ++i) {
-                if (CFG.core.getProv(CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getProvID(i)).getLvlOfArmoury() <= 0) continue;
-                ++iNumOfArmouries;
-            }
+            int iNumOfArmouries = BuildingsManager.getCivBuildingCount(CFG.core.getProv(nProvinceID).getCivId(), BUILDING_COUNT_ARMOURY);
             return Math.max(50, (int)(((float)CFG.core.getGameScenars().getScenario_StartingPopulation() * (GameValues.gvBuildingArmoury.ARMOURY_BUILD_COST[nLevel] + GameValues.gvBuildingArmoury.ARMOURY_EXTRA_COST_PER_ARMOURY * (float)iNumOfArmouries) + (float)CFG.core.getGameScenars().getScenario_StartingPopulation() * (GameValues.gvBuildingArmoury.ARMOURY_COST_DEVELOPMENT_MODIFIER * (1.0f - CFG.core.getProv(nProvinceID).getDeveLvl()))) * (1.0f + CFG.terrainTypesManager.getBuildCost(CFG.core.getProv(nProvinceID).getTerrainTypeID()))));
         }
         catch (Exception e) {
@@ -910,6 +1012,7 @@ public class BuildingsManager {
     public static final boolean buildArmoury(int nProvinceID, int nCivID) {
         if (!CFG.core.getProv(nProvinceID).getSeaProv() && CFG.core.getProv(nProvinceID).getLvlOfArmoury() < BuildingsManager.getArmoury_MaxLevel()) {
             CFG.core.getProv(nProvinceID).setLvlOfArmoury(CFG.core.getProv(nProvinceID).getLvlOfArmoury() + 1);
+            BuildingsManager.invalidateBuildingCountCache(nCivID);
             ++CFG.core.getCiv((int)nCivID).civGD.numOfBuildingsConstructed;
             if (CFG.core.getCiv(nCivID).getIsPlayer()) {
                 CFG.core.getCiv((int)nCivID).getCivDiploGD().messageBox.addMessage(new Message_Bulit_Armoury(nCivID, nProvinceID));
@@ -946,11 +1049,7 @@ public class BuildingsManager {
 
     public static final int getWorkshop_BuildCost(int nLevel, int nProvinceID) {
         try {
-            int iNumOfBuildigns = 0;
-            for (int i = 0; i < CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getNumOfProvs(); ++i) {
-                if (CFG.core.getProv(CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getProvID(i)).getLvlOfWorkshop() <= 0) continue;
-                iNumOfBuildigns += CFG.core.getProv(CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getProvID(i)).getLvlOfWorkshop();
-            }
+            int iNumOfBuildigns = BuildingsManager.getCivBuildingCount(CFG.core.getProv(nProvinceID).getCivId(), BUILDING_COUNT_WORKSHOP);
             return Math.max(50, (int)(((float)CFG.core.getGameScenars().getScenario_StartingPopulation() * (GameValues.gvBuildingWorkshop.WORKSHOP_BUILD_COST[nLevel] + GameValues.gvBuildingWorkshop.WORKSHOP_EXTRA_COST_PER_WORKSHOP * (float)iNumOfBuildigns) + (float)CFG.core.getGameScenars().getScenario_StartingPopulation() * (GameValues.gvBuildingWorkshop.WORKSHOP_COST_DEVELOPMENT_MODIFIER * (1.0f - CFG.core.getProv(nProvinceID).getDeveLvl()))) * (1.0f + CFG.terrainTypesManager.getBuildCost(CFG.core.getProv(nProvinceID).getTerrainTypeID()))));
         }
         catch (Exception e) {
@@ -1034,6 +1133,7 @@ public class BuildingsManager {
     public static final boolean buildWorkshop(int nProvinceID, int nCivID) {
         if (!CFG.core.getProv(nProvinceID).getSeaProv() && CFG.core.getProv(nProvinceID).getLvlOfWorkshop() < BuildingsManager.getWorkshop_MaxLevel()) {
             CFG.core.getProv(nProvinceID).setLvlOfWorkshop(CFG.core.getProv(nProvinceID).getLvlOfWorkshop() + 1);
+            BuildingsManager.invalidateBuildingCountCache(nCivID);
             ++CFG.core.getCiv((int)nCivID).civGD.numOfBuildingsConstructed;
             if (CFG.core.getCiv(nCivID).getIsPlayer()) {
                 CFG.core.getCiv((int)nCivID).getCivDiploGD().messageBox.addMessage(new Message_Bulit_Workshop(nCivID, nProvinceID));
@@ -1070,11 +1170,7 @@ public class BuildingsManager {
 
     public static final int getMarket_BuildCost(int nLevel, int nProvinceID) {
         try {
-            int iNumOfBuildigns = 0;
-            for (int i = 0; i < CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getNumOfProvs(); ++i) {
-                if (CFG.core.getProv(CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getProvID(i)).getLvlOfMarket() <= 0) continue;
-                iNumOfBuildigns += CFG.core.getProv(CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getProvID(i)).getLvlOfMarket();
-            }
+            int iNumOfBuildigns = BuildingsManager.getCivBuildingCount(CFG.core.getProv(nProvinceID).getCivId(), BUILDING_COUNT_MARKET);
             return Math.max(50, (int)(((float)CFG.core.getGameScenars().getScenario_StartingPopulation() * (GameValues.gvBuildingMarket.MARKET_BUILD_COST[nLevel] + GameValues.gvBuildingMarket.MARKET_EXTRA_COST_PER_MARKET * (float)iNumOfBuildigns) + (float)CFG.core.getGameScenars().getScenario_StartingPopulation() * (GameValues.gvBuildingMarket.MARKET_COST_DEVELOPMENT_MODIFIER * (1.0f - CFG.core.getProv(nProvinceID).getDeveLvl()))) * (1.0f + CFG.terrainTypesManager.getBuildCost(CFG.core.getProv(nProvinceID).getTerrainTypeID()))));
         }
         catch (Exception e) {
@@ -1158,6 +1254,7 @@ public class BuildingsManager {
     public static final boolean buildMarket(int nProvinceID, int nCivID) {
         if (!CFG.core.getProv(nProvinceID).getSeaProv() && CFG.core.getProv(nProvinceID).getLvlOfMarket() < BuildingsManager.getMarket_MaxLevel()) {
             CFG.core.getProv(nProvinceID).setLvlOfMarket(CFG.core.getProv(nProvinceID).getLvlOfMarket() + 1);
+            BuildingsManager.invalidateBuildingCountCache(nCivID);
             ++CFG.core.getCiv((int)nCivID).civGD.numOfBuildingsConstructed;
             if (CFG.core.getCiv(nCivID).getIsPlayer()) {
                 CFG.core.getCiv((int)nCivID).getCivDiploGD().messageBox.addMessage(new Message_Bulit_Market(nCivID, nProvinceID));
@@ -1186,11 +1283,7 @@ public class BuildingsManager {
 
     public static final int getSupply_BuildCost(int nLevel, int nProvinceID) {
         try {
-            int iNumOfBuildigns = 0;
-            for (int i = 0; i < CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getNumOfProvs(); ++i) {
-                if (CFG.core.getProv(CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getProvID(i)).getLvlOfSupply() <= 0) continue;
-                ++iNumOfBuildigns;
-            }
+            int iNumOfBuildigns = BuildingsManager.getCivBuildingCount(CFG.core.getProv(nProvinceID).getCivId(), BUILDING_COUNT_SUPPLY);
             return Math.max(50, (int)(((float)CFG.core.getGameScenars().getScenario_StartingPopulation() * (GameValues.gvBuildingSupplyCamp.SUPPLY_BUILD_COST[nLevel] + GameValues.gvBuildingSupplyCamp.SUPPLY_EXTRA_COST_PER_SUPPLY * (float)iNumOfBuildigns) + (float)CFG.core.getGameScenars().getScenario_StartingPopulation() * (GameValues.gvBuildingSupplyCamp.SUPPLY_COST_DEVELOPMENT_MODIFIER * (1.0f - CFG.core.getProv(nProvinceID).getDeveLvl()))) * (1.0f + CFG.terrainTypesManager.getBuildCost(CFG.core.getProv(nProvinceID).getTerrainTypeID()))));
         }
         catch (Exception e) {
@@ -1278,6 +1371,7 @@ public class BuildingsManager {
     public static final boolean buildSupply(int nProvinceID, int nCivID) {
         if (!CFG.core.getProv(nProvinceID).getSeaProv() && CFG.core.getProv(nProvinceID).getLvlOfSupply() < BuildingsManager.getSupply_MaxLevel()) {
             CFG.core.getProv(nProvinceID).setLvlOfSupply(CFG.core.getProv(nProvinceID).getLvlOfSupply() + 1);
+            BuildingsManager.invalidateBuildingCountCache(nCivID);
             ++CFG.core.getCiv((int)nCivID).civGD.numOfBuildingsConstructed;
             if (CFG.core.getCiv(nCivID).getIsPlayer()) {
                 CFG.core.getCiv((int)nCivID).getCivDiploGD().messageBox.addMessage(new Message_Bulit_Supply(nCivID, nProvinceID));
@@ -1324,11 +1418,7 @@ public class BuildingsManager {
 
     public static final int getAirDefense_BuildCost(int nLevel, int nProvinceID) {
         try {
-            int iNumOfBuildings = 0;
-            for (int i = 0; i < CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getNumOfProvs(); ++i) {
-                if (CFG.core.getProv(CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getProvID(i)).provGD.iAirDefense <= 0) continue;
-                iNumOfBuildings += CFG.core.getProv(CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getProvID(i)).provGD.iAirDefense;
-            }
+            int iNumOfBuildings = BuildingsManager.getCivBuildingCount(CFG.core.getProv(nProvinceID).getCivId(), BUILDING_COUNT_AIR_DEFENSE);
             return Math.max(100, (int)(((float)CFG.core.getGameScenars().getScenario_StartingPopulation() * (age.of.civilizations2.jakowski.lukasz.GameValues.GameValues.gvAirDefense.AIR_DEFENSE_BUILD_COST[nLevel] + age.of.civilizations2.jakowski.lukasz.GameValues.GameValues.gvAirDefense.AIR_DEFENSE_EXTRA_COST_PER_BUILDING * (float)iNumOfBuildings) + (float)CFG.core.getGameScenars().getScenario_StartingPopulation() * (age.of.civilizations2.jakowski.lukasz.GameValues.GameValues.gvAirDefense.AIR_DEFENSE_COST_DEVELOPMENT_MODIFIER * (1.0f - CFG.core.getProv(nProvinceID).getDeveLvl()))) * (1.0f + CFG.terrainTypesManager.getBuildCost(CFG.core.getProv(nProvinceID).getTerrainTypeID()))));
         } catch (Exception e) {
             return 1000;
@@ -1385,6 +1475,7 @@ public class BuildingsManager {
     public static final boolean buildAirDefense(int nProvinceID, int nCivID) {
         if (!CFG.core.getProv(nProvinceID).getSeaProv() && CFG.core.getProv(nProvinceID).provGD.iAirDefense < BuildingsManager.getAirDefense_MaxLevel()) {
             CFG.core.getProv(nProvinceID).provGD.iAirDefense++;
+            BuildingsManager.invalidateBuildingCountCache(nCivID);
             ++CFG.core.getCiv((int)nCivID).civGD.numOfBuildingsConstructed;
             if (CFG.core.getCiv(nCivID).getIsPlayer()) {
                 CFG.core.getCiv((int)nCivID).getCivDiploGD().messageBox.addMessage(new age.of.civilizations2.jakowski.lukasz.Messages.Built.Message_Built_AirDefense(nCivID, nProvinceID));
@@ -1399,6 +1490,7 @@ public class BuildingsManager {
             if (CFG.core.getCiv(nCivID).getMovemPoints() >= age.of.civilizations2.jakowski.lukasz.GameValues.GameValues.gvBuildings.DESTROY_MOVEMENT_COST) {
                 CFG.core.getCiv(nCivID).setMovementPoints(CFG.core.getCiv(nCivID).getMovemPoints() - age.of.civilizations2.jakowski.lukasz.GameValues.GameValues.gvBuildings.DESTROY_MOVEMENT_COST);
                 CFG.core.getProv(nProvinceID).provGD.iAirDefense = 0;
+                BuildingsManager.invalidateBuildingCountCache(CFG.core.getProv(nProvinceID).getCivId());
                 return true;
             }
             return false;

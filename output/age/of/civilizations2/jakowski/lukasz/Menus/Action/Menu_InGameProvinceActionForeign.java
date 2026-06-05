@@ -68,7 +68,10 @@ public class Menu_InGameProvinceActionForeign extends Menu {
                 super.drawTextE(oSB, iTranslateX, iTranslateY, isActive);
             }
             @Override
-            public void actionElem(int iID) { Menu_InGameProvinceActionForeign.investForeign(); }
+            public void actionElem(int iID) { 
+                CFG.MISSILE_STRIKE_MODE = false;
+                Menu_InGameProvinceActionForeign.investForeign(); 
+            }
         });
 
         
@@ -89,7 +92,10 @@ public class Menu_InGameProvinceActionForeign extends Menu {
                 super.drawTextE(oSB, iTranslateX, iTranslateY, isActive);
             }
             @Override
-            public void actionElem(int iID) { Menu_InGameProvinceActionForeign.buildForeign(); }
+            public void actionElem(int iID) { 
+                CFG.MISSILE_STRIKE_MODE = false;
+                Menu_InGameProvinceActionForeign.buildForeign(); 
+            }
         });
 
         
@@ -105,7 +111,11 @@ public class Menu_InGameProvinceActionForeign extends Menu {
                 int civID = CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId();
                 int targetProvID = CFG.core.getActiveProvID();
                 if (targetProvID >= 0) {
-                    age.of.civilizations2.jakowski.lukasz.MapA.MissileManager.strikeProvince(civID, targetProvID);
+                    if (CFG.core.getCivsAtWar(civID, CFG.core.getProv(targetProvID).getCivId())) {
+                        CFG.MISSILE_STRIKE_MODE = !CFG.MISSILE_STRIKE_MODE;
+                    } else {
+                        age.of.civilizations2.jakowski.lukasz.MapA.MissileManager.strikeProvince(civID, targetProvID);
+                    }
                 }
                 CFG.menus.updateInGameTopAll(civID);
             }
@@ -125,7 +135,10 @@ public class Menu_InGameProvinceActionForeign extends Menu {
             @Override
             public boolean getVisibleE() { return CFG.ENABLE_NUKES && (GameValues.gvAtomic.PROVINCE_ACTION_NUKE_VISIBLE_ALL_THE_TIME || CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).civGD.iNukes > 0 || NukeManager.canBuildNuke_TechLvl(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId())); }
             @Override
-            public void actionElem(int iID) { Menu_InGameProvinceActionForeign.useNuke(); }
+            public void actionElem(int iID) { 
+                CFG.MISSILE_STRIKE_MODE = false;
+                Menu_InGameProvinceActionForeign.useNuke(); 
+            }
         });
 
         
@@ -145,7 +158,10 @@ public class Menu_InGameProvinceActionForeign extends Menu {
                 } catch (Exception ex) { return false; }
             }
             @Override
-            public void actionElem(int iID) { Menu_InGameProvAction.clickOffensive(); }
+            public void actionElem(int iID) { 
+                CFG.MISSILE_STRIKE_MODE = false;
+                Menu_InGameProvAction.clickOffensive(); 
+            }
         });
 
         this.initMenu(null, 0, CFG.GAMEHEIGHT - CFG.map.getMpB().getMinimapHeight() - CFG.BUTTON_H - CFG.PADD * 2, CFG.GAMEWIDTH, CFG.BUTTON_H + CFG.PADD * 2, menuElements, false, false);

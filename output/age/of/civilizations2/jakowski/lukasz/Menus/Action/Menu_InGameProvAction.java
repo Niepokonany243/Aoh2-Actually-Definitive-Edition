@@ -1103,6 +1103,7 @@ extends Menu {
 
     @Override
     public final void actionEL(int iID) {
+        CFG.MISSILE_STRIKE_MODE = false;
         switch (iID) {
             case 0: {
                 Menu_InGameProvAction.clickMove();
@@ -1155,6 +1156,7 @@ extends Menu {
                     break;
                 }
                 CFG.menus.rebuildInGame_Genocide(CFG.core.getActiveProvID());
+                break;
             }
         }
     }

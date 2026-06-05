@@ -26,11 +26,11 @@ extends Menu {
     public static int iSort = 1;
 
     public final long getRecruitedArmy(int nCivID) {
-        return CFG.SANDBOX_MODE || CFG.SPECTATOR_MODE || CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId() == CFG.core.getSortedCivsAZ(nCivID - 1) || CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getAlliance() > 0 && CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getAlliance() == CFG.core.getCiv(CFG.core.getSortedCivsAZ(nCivID - 1)).getAlliance() || CFG.core.getCiv(CFG.core.getSortedCivsAZ(nCivID - 1)).getPuppetOfCiv() == CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId() ? CFG.core.getCiv(CFG.core.getSortedCivsAZ(nCivID - 1)).getNumberOfUnits() : -1L;
+        return CFG.core.getCiv(CFG.core.getSortedCivsAZ(nCivID - 1)).getNumberOfUnits();
     }
 
     public final long getRecruitedArmy_2(int nCivID) {
-        return CFG.SANDBOX_MODE || CFG.SPECTATOR_MODE || CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId() == nCivID || CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getAlliance() > 0 && CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getAlliance() == CFG.core.getCiv(nCivID).getAlliance() || CFG.core.getCiv(nCivID).getPuppetOfCiv() == CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId() ? CFG.core.getCiv(nCivID).getNumberOfUnits() : -1L;
+        return CFG.core.getCiv(nCivID).getNumberOfUnits();
     }
 
     public Menu_InGame_Army(int tInit) {

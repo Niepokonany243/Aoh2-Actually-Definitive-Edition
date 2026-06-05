@@ -3847,7 +3847,7 @@ public class Province {
         oldCivID = this.provGD.armiesC.get(0).getCivID();
         this.provGD.armiesC.get(0).setCivID(nCivID);
         CFG.core.updateSortedPIV = true;
-        ProvinceMesh.needsUpdate = true;
+        ProvinceMesh.markDirty(this.getProvID());
         if (oldCivID != 0) {
             CFG.core.getCiv(oldCivID).removeProv(this.getProvID());
             CFG.core.getCiv(oldCivID).setUpdateRegions(true);

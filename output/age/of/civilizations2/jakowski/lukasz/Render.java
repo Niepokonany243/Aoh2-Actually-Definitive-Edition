@@ -128,7 +128,6 @@ public class Render {
             Core.drawProvinceDots_Just(oSB, CFG.map.getMpS().getCurrSc());
         }
         catch (Exception ex) {
-            CFG.exceptionStack(ex);
         }
         if (CFG.menus.getInGameView() && CFG.map.getMpS().getCurrSc() >= 1.0f) {
             ShipManager.draw(oSB);
@@ -154,7 +153,6 @@ public class Render {
             }
         }
         catch (Exception ex) {
-            CFG.exceptionStack(ex);
         }
     }
 
@@ -171,7 +169,6 @@ public class Render {
             }
         }
         catch (Exception ex) {
-            CFG.exceptionStack(ex);
         }
     }
 
@@ -184,13 +181,11 @@ public class Render {
             oldTransformMatrix = oSB.getTransformMatrix().cpy();
         }
         catch (Exception ex) {
-            CFG.exceptionStack(ex);
         }
         try {
             CFG.fontBorder.setColor(new Color(1.0f, 1.0f, 1.0f, CFG.settingsGD.PROVINCE_NAMES_ALPHA * (1.0f - Core.DRAW_PROVINCE_NAMES_ALPHA)));
         }
         catch (Exception ex) {
-            CFG.exceptionStack(ex);
         }
         try {
             if (!DISABLE_CIVS_NAMES || Core.DRAW_PROVINCE_NAMES_ALPHA < 0.99f) {
@@ -220,7 +215,6 @@ public class Render {
             }
         }
         catch (Exception ex) {
-            CFG.exceptionStack(ex);
         }
         oSB.setTransformMatrix(oldTransformMatrix);
     }
@@ -234,7 +228,6 @@ public class Render {
                 continue;
             }
             catch (Exception ex) {
-                CFG.exceptionStack(ex);
             }
         }
     }

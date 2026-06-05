@@ -41,6 +41,9 @@ public class Menu_InGame_Missiles extends Menu {
         menuElements.add(new Text_Desc("Stockpile: T1: " + civ.civGD.iMissiles + " | T2: " + civ.civGD.iMissiles_T2 + " | T3: " + civ.civGD.iMissiles_T3, CFG.PADD, tY + CFG.PADD, tempWidth - CFG.PADD * 2));
         tY += menuElements.get(menuElements.size() - 1).getHeightE() + CFG.PADD;
 
+        menuElements.add(new Text_Desc("Global Rank: #" + civ.getRankPos() + " | Missile Cost: x" + MissileManager.getMissileCostRankMultiplier(civID), CFG.PADD, tY + CFG.PADD, tempWidth - CFG.PADD * 2));
+        tY += menuElements.get(menuElements.size() - 1).getHeightE() + CFG.PADD;
+
         {
             int tier = civ.civGD.iMissileTier;
             long cost = MissileManager.calculateMissileCost(civID, tier);

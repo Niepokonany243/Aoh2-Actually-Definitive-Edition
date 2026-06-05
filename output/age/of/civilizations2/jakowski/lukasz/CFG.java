@@ -630,6 +630,7 @@ public class CFG {
     public static Color[] ECON_COLORS_CACHE = new Color[101];
     public static Color[] TECH_COLORS_CACHE = new Color[101];
     public static Color[] GROWTH_COLORS_CACHE = new Color[101];
+    public static Color tmpColor = new Color();
     public static float PROVINCE_ALPHA_TECHNOLOGY_LEVEL;
     public static Color[] COLOR_TECHNOLOGY_LEVEL;
     public static int iLOAH;
@@ -5997,6 +5998,10 @@ public class CFG {
                     menus.getDialogMenu().getMenuElem(3).setTextE(lang.get(BuildingsManager.getSupply_Name(1)) + ": " + lang.get("AllProvinces"));
                     break;
                 }
+                case ALL_AIR_DEFENSE: {
+                    menus.getDialogMenu().getMenuElem(3).setTextE(lang.get(BuildingsManager.getAirDefense_Name(1)) + ": " + lang.get("AllProvinces"));
+                    break;
+                }
                 case ALL_PORT: {
                     menus.getDialogMenu().getMenuElem(3).setTextE(lang.get(BuildingsManager.getPort_Name(1)) + ": " + lang.get("AllProvinces"));
                     break;
@@ -6945,6 +6950,13 @@ public class CFG {
                     }
                     if (CFG.mapModesManager.getActiveMapModeID() == MapModesManager.VIEW_LEVEL_OF_SUPPLY_MODE && CFG.menus.getVisible_InGame_View_Stats()) {
                         CFG.menus.setVisible_InGame_ViewBSupply(true);
+                    }
+                    return;
+                }
+                case ALL_AIR_DEFENSE: {
+                    CFG.core.airDefenseAllProvinces(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId());
+                    if (CFG.menus.getInGame_ProvincemMore_Visible()) {
+                        CFG.menus.setVisible_InGame_MoreAll(true, true);
                     }
                     return;
                 }

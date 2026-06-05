@@ -180,10 +180,11 @@ public class TouchManager {
                 int targetProvID = CFG.core.getActiveProvID();
                 if (MissileManager.canStrikeProvince(playerCivID, targetProvID, true)) {
                     MissileManager.strikeProvince(playerCivID, targetProvID);
+                    CFG.gameAction.updateInGame_ProvinceInfo();
+                    CFG.menus.updateInGameTopAll(playerCivID);
+                } else {
+                    CFG.MISSILE_STRIKE_MODE = false;
                 }
-                CFG.MISSILE_STRIKE_MODE = false;
-                CFG.gameAction.updateInGame_ProvinceInfo();
-                CFG.menus.updateInGameTopAll(playerCivID);
                 return;
             }
             this.aUSM(nPosX, nPosY);
@@ -210,10 +211,11 @@ public class TouchManager {
             int targetProvID = CFG.core.getActiveProvID();
             if (MissileManager.canStrikeProvince(playerCivID, targetProvID, true)) {
                 MissileManager.strikeProvince(playerCivID, targetProvID);
+                CFG.gameAction.updateInGame_ProvinceInfo();
+                CFG.menus.updateInGameTopAll(playerCivID);
+            } else {
+                CFG.MISSILE_STRIKE_MODE = false;
             }
-            CFG.MISSILE_STRIKE_MODE = false;
-            CFG.gameAction.updateInGame_ProvinceInfo();
-            CFG.menus.updateInGameTopAll(playerCivID);
             return;
         }
         this.actionUp_setActiveProvinceID(nPosX, nPosY);
@@ -499,13 +501,17 @@ public class TouchManager {
                     }
                 } else if (CFG.MISSILE_STRIKE_MODE && CFG.menus.getInGameView()) {
                     int playerCivID = CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId();
+                    boolean anyStrike = false;
                     for (int i8 = 0; i8 < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i8) {
                         int targetPID = CFG.core.getPIV(i8);
                         if (!TouchManager.aUSMIIBXC(targetPID, this.iSBXX, this.iSBXY, nMaxX, nMaxY)) continue;
                         if (!MissileManager.canStrikeProvince(playerCivID, targetPID, true)) continue;
                         MissileManager.strikeProvince(playerCivID, targetPID);
+                        anyStrike = true;
                     }
-                    CFG.MISSILE_STRIKE_MODE = false;
+                    if (!anyStrike) {
+                        CFG.MISSILE_STRIKE_MODE = false;
+                    }
                 } else if (CFG.mapModesManager.getActiveMapModeID() == -1 || CFG.mapModesManager.getActiveMapModeID() == MapModesManager.VIEW_ARMY_MODE) {
                     TouchManager.cMABX();
                     for (i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
@@ -888,7 +894,8 @@ public class TouchManager {
     public final void actionUp_setActiveProvinceID(int nPosX, int nPosY) {
         try {
             if (System.currentTimeMillis() - this.lSelectionTime < 350L && !CFG.map.getMpS().getScaleMode() && (float)this.actDPoX + (float)CFG.PADD * CFG.DENSITY > (float)nPosX && (float)this.actDPoX - (float)CFG.PADD * CFG.DENSITY < (float)nPosX && (float)this.actDPoY + (float)CFG.PADD * CFG.DENSITY > (float)nPosY && (float)this.actDPoY - (float)CFG.PADD * CFG.DENSITY < (float)nPosY) {
-                CFG.core.setProvinceID((int)((float)nPosX / CFG.map.getMpS().getCurrSc()), (int)((float)nPosY / CFG.map.getMpS().getCurrSc()));
+                com.badlogic.gdx.math.Vector2 worldPos = MapTransform.screenToWorld(nPosX, nPosY);
+                CFG.core.setProvinceID((int)worldPos.x, (int)worldPos.y);
                 if (!CFG.brushMode) {
                     CFG.SFXManager.playSound(SFXManager.SFX_PROVINCE, SFXManager.PERC_VOLUME_SELECT_PROVINCE);
                 }

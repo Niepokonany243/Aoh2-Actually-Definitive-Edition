@@ -352,12 +352,18 @@ public class AoCGame {
     }
 
     public void render() {
+        long renderStart = System.currentTimeMillis();
         try {
             this.update();
             this.updateMoveMap();
         }
         catch (Exception ex) {
         }
+        long perfUpdate = System.currentTimeMillis();
+        long perfPhase1 = 0L;
+        long perfPhase2 = 0L;
+        long perfPhase3 = 0L;
+        long perfPhase4 = 0L;
         if (CFG.core != null) {
             try {
                 ProvinceBorder.drawProvBorder_Prepare();
@@ -365,6 +371,7 @@ public class AoCGame {
             catch (Exception ex) {
             }
             try {
+                long phaseStart = System.currentTimeMillis();
                 Gdx.gl.glClearColor(CFG.BG_COLOR.r, CFG.BG_COLOR.g, CFG.BG_COLOR.b, CFG.BG_COLOR.a);
                 Gdx.gl.glClear(16640);
                 viewport.setWorldSize((float)CFG.GAMEWIDTH / CFG.map.getMpS().getCurrSc(), (float)CFG.GAMEHEIGHT / CFG.map.getMpS().getCurrSc());
@@ -393,6 +400,7 @@ public class AoCGame {
                 }
                 this.oSB.oSBR.setShader(shaderDef);
                 Render.draw(this.oSB.oSBR);
+                perfPhase1 = System.currentTimeMillis() - phaseStart;
                 this.oSB.end();
                 try {
                     Renderer.oSBBorder2.end();
@@ -431,7 +439,9 @@ public class AoCGame {
                 catch (Exception ex) {
                     
                 }
+                long phase2Start = System.currentTimeMillis();
                 Render.drawWithoutScale(this.oSB.oSBR, this.oSBNames);
+                perfPhase2 = System.currentTimeMillis() - phase2Start;
                 this.oSB.end();
                 try {
                     this.oSBNames.end();
@@ -469,9 +479,11 @@ public class AoCGame {
                 catch (Exception ex) {
                     
                 }
+                long phase3Start = System.currentTimeMillis();
                 this.oSB.oSBR.setShader(shaderDef);
                 Render.drawMapDetails(this.oSB.oSBR);
                 CFG.cloudsAnimation.cloudsInterface.drawCloudsInterface(this.oSB.oSBR);
+                perfPhase3 = System.currentTimeMillis() - phase3Start;
                 this.oSB.end();
                 try {
                     Renderer.oSBBorder2.end();
@@ -490,6 +502,7 @@ public class AoCGame {
                 catch (Exception ex) {
                     
                 }
+                long phase4Start = System.currentTimeMillis();
                 this.oSB.begin();
                 this.oSB.oSBR.setColor(Color.WHITE);
                 CFG.menus.drawMM(this.oSB.oSBR);
@@ -504,6 +517,7 @@ public class AoCGame {
                 }
                 this.oSB.oSBR.setColor(Color.WHITE);
                 this.oSB.end();
+                perfPhase4 = System.currentTimeMillis() - phase4Start;
             }
             catch (IllegalStateException ex) {
                 CFG.exceptionStack(ex);
@@ -545,6 +559,11 @@ public class AoCGame {
             
         }
         this.requestRendering.update();
+        long renderEnd = System.currentTimeMillis();
+        long renderTotalMs = renderEnd - renderStart;
+        if (renderTotalMs > 50) {
+            CFG.LOG("PERF", "[render] TOTAL: " + renderTotalMs + "ms (update: " + (perfUpdate - renderStart) + "ms) [phase1_map:" + perfPhase1 + "ms][phase2_overlay:" + perfPhase2 + "ms][phase3_details:" + perfPhase3 + "ms][phase4_ui:" + perfPhase4 + "ms]");
+        }
     }
 
     private void countFPS() {
@@ -1214,12 +1233,14 @@ public class AoCGame {
                                     Menu_InGameProvinceActionForeign.buildForeign();
                                     return false;
                                 } else if (keycode == 31) {
-                                    if (CFG.MISSILE_STRIKE_MODE) {
-                                        CFG.MISSILE_STRIKE_MODE = false;
+                                    int civID = CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId();
+                                    int targetProvID = CFG.core.getActiveProvID();
+                                    if (targetProvID >= 0 && CFG.core.getCivsAtWar(civID, CFG.core.getProv(targetProvID).getCivId())) {
+                                        CFG.MISSILE_STRIKE_MODE = !CFG.MISSILE_STRIKE_MODE;
                                     } else {
-                                        CFG.MISSILE_STRIKE_MODE = true;
+                                        CFG.MISSILE_STRIKE_MODE = false;
                                     }
-                                    CFG.menus.updateInGameTopAll(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId());
+                                    CFG.menus.updateInGameTopAll(civID);
                                     return false;
                                 } else {
                                     if (keycode != 49) return false;

@@ -10,6 +10,13 @@ import age.of.civilizations2.jakowski.lukasz.Messages.Province.Missile.Message_M
 public class MissileManager {
     public static java.util.Map<Integer, Integer> turnInterceptions = new java.util.HashMap<>();
     public static int lastTurnID = -1;
+    private static final float MISSILE_RANGE_TIER_1 = 2000.0f;
+    private static final float MISSILE_RANGE_TIER_2 = 8000.0f;
+    private static final float MISSILE_RANGE_TIER_3 = 16000.0f;
+    private static final float DEV_MISSILE_DEFENSE_01 = 0.4f;
+    private static final float DEV_MISSILE_DEFENSE_03 = 0.6f;
+    private static final float DEV_MISSILE_DEFENSE_05 = 0.8f;
+    private static final float DEV_MISSILE_DEFENSE_09 = 0.95f;
 
     public static long calculateMissileCost(int civID) {
         return calculateMissileCost(civID, CFG.core.getCiv(civID).civGD.iMissileTier);
@@ -19,10 +26,35 @@ public class MissileManager {
         long taxation = CFG.core.getCiv(civID).incomeTaxation;
         long baseCost = (long)((float)taxation * 0.5f); 
         if (baseCost < 100) baseCost = 100; 
-        
-        if (tier == 2) return baseCost * 10;
-        if (tier == 3) return baseCost * 25;
-        return baseCost;
+
+        long tierCost = baseCost;
+        if (tier == 2) tierCost = baseCost * 10;
+        else if (tier == 3) tierCost = baseCost * 25;
+        return multiplyCost(tierCost, getMissileCostRankMultiplier(civID));
+    }
+
+    public static int getMissileCostRankMultiplier(int civID) {
+        try {
+            return Math.max(1, CFG.core.getCiv(civID).getRankPos());
+        }
+        catch (Exception ex) {
+            return 1;
+        }
+    }
+
+    private static long multiplyCost(long cost, int multiplier) {
+        if (multiplier <= 1) return cost;
+        if (cost > Long.MAX_VALUE / (long)multiplier) return Long.MAX_VALUE;
+        return cost * (long)multiplier;
+    }
+
+    public static float getDevelopmentMissileDefense(Province prov) {
+        float dev = prov.getDeveLvl();
+        if (dev > 0.9f) return DEV_MISSILE_DEFENSE_09;
+        if (dev > 0.5f) return DEV_MISSILE_DEFENSE_05;
+        if (dev > 0.3f) return DEV_MISSILE_DEFENSE_03;
+        if (dev > 0.1f) return DEV_MISSILE_DEFENSE_01;
+        return 0.0f;
     }
 
     public static boolean upgradeMissileTier(int civID) {
@@ -130,7 +162,7 @@ public class MissileManager {
         if (startProv < 0 && attacker.getNumOfProvs() > 0) startProv = attacker.getProvID(0);
         if (startProv < 0) return false;
         float dist = Distance.getManhattanDistance(startProv, targetProvinceID);
-        return tier != 1 || dist <= 2000 ? (tier != 2 || dist <= 8000) && (tier != 3 || dist <= 50000) : false;
+        return tier != 1 || dist <= MISSILE_RANGE_TIER_1 ? (tier != 2 || dist <= MISSILE_RANGE_TIER_2) && (tier != 3 || dist <= MISSILE_RANGE_TIER_3) : false;
     }
 
     public static void strikeProvince(int attackerCivID, int targetProvinceID, int tier) {
@@ -160,9 +192,9 @@ public class MissileManager {
         if (startProv < 0) startProv = attacker.getProvID(0);
         
         float dist = Distance.getManhattanDistance(startProv, targetProvinceID);
-        if (tier == 1 && dist > 2000) return;
-        else if (tier == 2 && dist > 8000) return;
-        else if (tier == 3 && dist > 50000) return;
+        if (tier == 1 && dist > MISSILE_RANGE_TIER_1) return;
+        else if (tier == 2 && dist > MISSILE_RANGE_TIER_2) return;
+        else if (tier == 3 && dist > MISSILE_RANGE_TIER_3) return;
 
         if (defenderCivID > 0 && !CFG.core.getCivsAtWar(attackerCivID, defenderCivID)) {
             CFG.core.declareWar_Simple(attackerCivID, defenderCivID);
@@ -235,12 +267,7 @@ public class MissileManager {
         }
         
         
-        float devInterceptionChance = 0.0f;
-        if (prov.getDeveLvl() >= 0.4f) {
-            devInterceptionChance = 0.5f;
-            if (tier == 2) devInterceptionChance = 0.25f;
-            else if (tier == 3) devInterceptionChance = 0.1f;
-        }
+        float devInterceptionChance = getDevelopmentMissileDefense(prov);
 
         
         float protectionChance = 0.0f;
@@ -249,7 +276,7 @@ public class MissileManager {
             protectionChance = age.of.civilizations2.jakowski.lukasz.GameValues.GameValues.gvAirDefense.AIR_DEFENSE_PROTECTION_CHANCE[prov.provGD.iAirDefense];
         }
         
-        float finalChance = Math.max(protectionChance, devInterceptionChance) * (1.0f - (float)interceptions * 0.2f);
+        float finalChance = (1.0f - (1.0f - protectionChance) * (1.0f - devInterceptionChance)) * (1.0f - (float)interceptions * 0.2f);
         if (finalChance < 0.05f && (protectionChance > 0 || devInterceptionChance > 0)) finalChance = 0.05f; 
         
         if (CFG.oR.nextFloat() < finalChance) {

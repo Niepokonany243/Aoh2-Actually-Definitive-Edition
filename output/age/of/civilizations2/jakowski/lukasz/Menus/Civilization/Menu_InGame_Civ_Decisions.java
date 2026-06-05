@@ -173,6 +173,15 @@ public class Menu_InGame_Civ_Decisions extends Menu {
             public void actionElem(int iID) { CFG.menus.rebuildInGame_FormCivList(); }
         });
 
+        menuElems.add(new Button_DiplomacyAction(Images.diploVassal, CFG.lang.get("LiberateAVassal"), 0, 0, tY += tempElemH, menuW - 2, tempElemH, true){
+            @Override
+            public void actionElem(int iID) {
+                CFG.core.setActiveProvID(-1);
+                CFG.menus.rebuildManageDiplomacy_Vassals();
+                CFG.menus.setMenuID(View.eMANAGE_DIPLOMACY);
+            }
+        });
+
         menuElems.add(new Button_DiplomacyAction(Images.nuke, CFG.lang.get("BuildAnAtomicBomb"), 0, 0, tY += tempElemH, menuW - 2, tempElemH, true){
             @Override
             public void actionElem(int iID) { CFG.menus.rebuildInGame_Build_Nuke(); }
@@ -202,6 +211,48 @@ public class Menu_InGame_Civ_Decisions extends Menu {
             });
         }
 
+        menuElems.add(new Button_DiplomacyAction(Images.gov, CFG.lang.get("ChangeGovernment"), 0, 0, tY += tempElemH, menuW - 2, tempElemH, true){
+            @Override
+            public void actionElem(int iID) { CFG.menus.rebuildInGame_ChangeGovernment(); }
+        });
+
+        menuElems.add(new Button_DiplomacyAction(Images.diploAlliance, CFG.lang.get("Alliances"), 0, 0, tY += tempElemH, menuW - 2, tempElemH, true){
+            @Override
+            public void actionElem(int iID) { CFG.menus.rebuildInGame_FormAlliance(); }
+        });
+
+        menuElems.add(new Button_DiplomacyAction(Images.diploUnion, CFG.lang.get("Unions"), 0, 0, tY += tempElemH, menuW - 2, tempElemH, true){
+            @Override
+            public void actionElem(int iID) { CFG.menus.rebuildInGame_FormUnionList(); }
+        });
+
+        menuElems.add(new Button_DiplomacyAction(Images.diploWar, CFG.lang.get("Wars"), 0, 0, tY += tempElemH, menuW - 2, tempElemH, true){
+            @Override
+            public void actionElem(int iID) { CFG.menus.rebuildInGame_Wars(); }
+        });
+
+        menuElems.add(new Button_DiplomacyAction(Images.diploArmy, CFG.lang.get("Army"), 0, 0, tY += tempElemH, menuW - 2, tempElemH, true){
+            @Override
+            public void actionElem(int iID) { CFG.menus.rebuildInGame_Army(); }
+        });
+
+        menuElems.add(new Button_DiplomacyAction(Images.diploArmyStar, CFG.lang.get("MoveCapital"), 0, 0, tY += tempElemH, menuW - 2, tempElemH, true){
+            @Override
+            public void actionElem(int iID) { CFG.menus.rebuildInGame_MoveCapital(CFG.core.getActiveProvID()); }
+            @Override
+            public boolean getIsClickable() { return CFG.core.getActiveProvID() >= 0; }
+        });
+
+        menuElems.add(new Button_DiplomacyAction(Images.victoryPoints, CFG.lang.get("VictoryConditions"), 0, 0, tY += tempElemH, menuW - 2, tempElemH, true){
+            @Override
+            public void actionElem(int iID) { CFG.menus.rebuildInGame_VictoryConditions(); }
+        });
+
+        menuElems.add(new Button_DiplomacyAction(Images.time, CFG.lang.get("History"), 0, 0, tY += tempElemH, menuW - 2, tempElemH, true){
+            @Override
+            public void actionElem(int iID) { CFG.menus.rebuildInGame_History(); }
+        });
+
         LAST_ELEMENT_POSY = tY;
         this.initMenu(new TitleM_TextSmall(null, Menu_InGame_Civ_DiplomacyORActions.getButtonHeight(), false, false){
             @Override
@@ -210,7 +261,7 @@ public class Menu_InGame_Civ_Decisions extends Menu {
                 CFG.drawRectInfoBox_Left_Title(oSB, Menu_InGame_Civ_Decisions.this.getPosX() + iTranslateX, Menu_InGame_Civ_Decisions.this.getPosY() - this.getHeightT(), Menu_InGame_Civ_Decisions.this.getWidthM() - 2, this.getHeightT());
                 Renderer.drawTextWithShadow(oSB, CFG.FONT_BOLD_SMALL, CFG.lang.get("Decisions"), nPosX + nWidth / 2 - (int)CFG.glyphLay.width / 2 + iTranslateX, nPosY - this.getHeightT() + this.getHeightT() / 2 + 1 - (int)CFG.glyphLay.height / 2, CFG.COLOR_TEXT_CIV_INFO_TITLE);
             }
-        }, AoCGame.LEFT, IMGManager.getIMG(Images.gameTop).getHeight() + CFG.PADD * 4 + (int)((float)CFG.TEXT_HEIGHT_DEFAULT * 0.6f) + ButtonFlagBig.getButtonH() + CFG.PADD * 4, menuW, tempElemH * 14 + 1, menuElems, true, false);
+        }, AoCGame.LEFT, IMGManager.getIMG(Images.gameTop).getHeight() + CFG.PADD * 4 + (int)((float)CFG.TEXT_HEIGHT_DEFAULT * 0.6f) + ButtonFlagBig.getButtonH() + CFG.PADD * 4, menuW, tempElemH * 22 + 1, menuElems, true, false);
         this.updateLang();
         for (int i = 0; i < this.getMenuElemsSize(); ++i) this.getMenuElem(i).setCurr(i % 2);
         extraPosX = -this.getWidthM();
@@ -239,7 +290,7 @@ public class Menu_InGame_Civ_Decisions extends Menu {
     public void setPosY(int iPosY) {
         super.setPosY(iPosY);
         int tempElemH = Menu_InGame_Civ_Decisions.getButtonH();
-        this.setHeight(Math.max(CFG.GAMEHEIGHT - this.getPosY() - CFG.PADD, Math.min(this.getHeightM(), tempElemH * 14)));
+        this.setHeight(Math.max(CFG.GAMEHEIGHT - this.getPosY() - CFG.PADD, Math.min(this.getHeightM(), tempElemH * 22)));
         this.updateMenuElements_IsInView();
     }
 

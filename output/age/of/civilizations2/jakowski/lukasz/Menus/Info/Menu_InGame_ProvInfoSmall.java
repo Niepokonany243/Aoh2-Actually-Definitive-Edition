@@ -959,7 +959,11 @@ extends Menu {
         this.getMenuElem(3).setTextE(CFG.lang.get("Cores") + ":");
     }
 
+    private static int lastBuildingsListProvinceID = -1;
+
     public static final void updateBuildingsList(int nProvinceID) {
+        if (nProvinceID == lastBuildingsListProvinceID) return;
+        lastBuildingsListProvinceID = nProvinceID;
         lBuildingsImages.clear();
         if (CFG.core.getProv(nProvinceID).getLvlOfFort() > 0) {
             lBuildingsImages.add(Images.bFort);

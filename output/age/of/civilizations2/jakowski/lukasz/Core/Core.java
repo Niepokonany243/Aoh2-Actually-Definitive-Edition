@@ -109,6 +109,7 @@ import age.of.civilizations2.jakowski.lukasz.Province_Border_GameData;
 import age.of.civilizations2.jakowski.lukasz.Province_Cores_GameData;
 import age.of.civilizations2.jakowski.lukasz.Province_GameData2;
 import age.of.civilizations2.jakowski.lukasz.Province_GameData_Occupied;
+import age.of.civilizations2.jakowski.lukasz.ProvinceSelectionManager;
 import age.of.civilizations2.jakowski.lukasz.Province_Info_GameData3;
 import age.of.civilizations2.jakowski.lukasz.Province_Population;
 import age.of.civilizations2.jakowski.lukasz.ProvincesDrag;
@@ -431,7 +432,7 @@ public class Core {
     private long lMoveUnitsLineTime = 0L;
     private boolean drawMoveUnitsArmy_UpdateAnimation = false;
     private List<MoveUnits_JustDraw> lMoveUnits_JustDraw_AnotherArmies = new ArrayList<MoveUnits_JustDraw>();
-    private int iMoveUnits_JustDraw_AnotherArmiesSize;
+    private volatile int iMoveUnits_JustDraw_AnotherArmiesSize;
     public boolean SPECTATOR_MODE_DISABLE_PROVINCE_ACTION = false;
     public boolean breakWasteland = false;
     public static List<MoveUnits_DiplomacyLines> diplomacyLines = new ArrayList<MoveUnits_DiplomacyLines>();
@@ -9339,8 +9340,7 @@ lbl94:
                     }
                 }
                 catch (Exception ex) {
-                    if (!CFG.LOGs) break block39;
-                    CFG.exceptionStack(ex);
+                    break block39;
                 }
             }
             try {
@@ -9624,8 +9624,7 @@ lbl94:
                             }
                         }
                         catch (Exception ex) {
-                            if (!CFG.LOGs) break block40;
-                            CFG.exceptionStack(ex);
+                            break block40;
                         }
                     }
                     if (Core.this.getCiv(Core.this.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getAlliance() > 0) {
@@ -9807,9 +9806,6 @@ lbl94:
             this.drawMoveUnitsArmy.drawMoveUnitsArmy(oSB, nScale);
         }
         catch (NullPointerException ex) {
-            if (CFG.LOGs) {
-                CFG.exceptionStack(ex);
-            }
             this.updateDrawMoveUnitsArmy();
         }
     }
@@ -9966,25 +9962,18 @@ lbl94:
         if (CFG.chooseProvinceMode) {
             int i;
             for (i = 0; i < this.iHighlightedProvsSize; ++i) {
-                if (!this.ptCS(this.lHighlightedProvs.get(i), (int)Math.abs(this.checkPosOfClickX(CFG.map.getMpC().getPX() - nPosX)), -CFG.map.getMpC().getPY() + nPosY)) continue;
+                if (!this.ptCS(this.lHighlightedProvs.get(i), nPosX, nPosY)) continue;
                 this.setChosenProvinceID(this.lHighlightedProvs.get(i));
                 return;
             }
-            if (Math.abs(this.checkPosOfClickX(CFG.map.getMpC().getPX() - nPosX)) + (float)(500 * CFG.map.getMpB().getMapSc3()) / CFG.map.getMpS().getCurrSc() > (float)CFG.map.getMpB().getWidthM()) {
-                for (i = 0; i < this.iHighlightedProvsSize; ++i) {
-                    if (!this.getProv(this.lHighlightedProvs.get(i)).getIsBelowZero() || !this.ptCS(this.lHighlightedProvs.get(i), (int)Math.abs(this.checkPosOfClickX(CFG.map.getMpC().getPX() - nPosX)) - CFG.map.getMpB().getWidthM(), -CFG.map.getMpC().getPY() + nPosY)) continue;
-                    this.setChosenProvinceID(this.lHighlightedProvs.get(i));
-                    return;
-                }
-            }
             if (this.getProv(this.getActiveProvID()).getLvlOfPort() > 0) {
                 for (i = 0; i < this.getProv(this.getActiveProvID()).getNeighSeaProvincesSize(); ++i) {
-                    if (!this.getProv(this.getProv(this.getActiveProvID()).getNeighSeaProvinces(i)).getIsBelowZero() || !this.ptCS(this.getProv(this.getActiveProvID()).getNeighSeaProvinces(i), (int)(Math.abs(this.checkPosOfClickX(CFG.map.getMpC().getPX() - nPosX)) - (float)CFG.map.getMpB().getWidthM()), -CFG.map.getMpC().getPY() + nPosY)) continue;
+                    if (!this.ptCS(this.getProv(this.getActiveProvID()).getNeighSeaProvinces(i), nPosX, nPosY)) continue;
                     this.setChosenProvinceID(this.getProv(this.getActiveProvID()).getNeighSeaProvinces(i));
                     return;
                 }
             }
-            if (this.ptCS(this.getActiveProvID(), (int)Math.abs(this.checkPosOfClickX(CFG.map.getMpC().getPX() - nPosX)), -CFG.map.getMpC().getPY() + nPosY)) {
+            if (this.ptCS(this.getActiveProvID(), nPosX, nPosY)) {
                 if (CFG.chosenProvinceID < 0) {
                     this.setActiveProvID(this.getActiveProvID());
                     this.resetChooseProvinceData();
@@ -10004,38 +9993,30 @@ lbl94:
                 this.checkProvinceActionMenu();
             }
         } else if (CFG.regroupArmyMode) {
-            int nNewChosenProvinceID = this.setProvinceID_HoverAProvince(nPosX, nPosY);
+            int nNewChosenProvinceID = this.setProvinceID_HoverAProvince_Clean(nPosX, nPosY);
             if (nNewChosenProvinceID >= 0) {
                 this.setCurrentRegroupArmyID(nNewChosenProvinceID);
                 this.lTIME_HIGHLIGHTED_CITIES = System.currentTimeMillis();
             }
         } else {
-            int i;
-            int tPosX = 0;
-            for (i = 0; i < this.iProvincesSize; ++i) {
-                tPosX = (int)Math.abs(this.checkPosOfClickX(CFG.map.getMpC().getPX() - nPosX));
-                if (this.getProv(i).getMiX2() > tPosX || this.getProv(i).getMaX7() < tPosX || this.getProv(i).getMiY4() > -CFG.map.getMpC().getPY() + nPosY || this.getProv(i).getMaY6() < -CFG.map.getMpC().getPY() + nPosY || !this.ptCS(i, tPosX, -CFG.map.getMpC().getPY() + nPosY)) continue;
+            for (int i = 0; i < this.iProvincesSize; ++i) {
+                if (this.getProv(i).getMiX2() > nPosX || this.getProv(i).getMaX7() < nPosX || this.getProv(i).getMiY4() > nPosY || this.getProv(i).getMaY6() < nPosY || !this.ptCS(i, nPosX, nPosY)) continue;
                 if (i != this.iActiveProv) {
                     this.resetLastActiveProvince();
                     this.setActiveProvID(i);
                 }
                 return;
             }
-            if (Math.abs(this.checkPosOfClickX(CFG.map.getMpC().getPX() - nPosX)) + (float)(-MAX_BELOW_ZERO_POINT_X * CFG.map.getMpB().getMapSc3()) / CFG.map.getMpS().getCurrSc() > (float)CFG.map.getMpB().getWidthM()) {
-                tPosX = 0;
-                for (i = 0; i < this.iProvincesSize; ++i) {
-                    if (!this.getProv(i).getIsBelowZero()) continue;
-                    tPosX = (int)Math.abs(this.checkPosOfClickX(CFG.map.getMpC().getPX() - nPosX));
-                    if (this.getProv(i).getMiX2() > tPosX - CFG.map.getMpB().getWidthM() || this.getProv(i).getMaX7() < tPosX - CFG.map.getMpB().getWidthM() || this.getProv(i).getMiY4() > -CFG.map.getMpC().getPY() + nPosY || this.getProv(i).getMaY6() < -CFG.map.getMpC().getPY() + nPosY || !this.ptCS(i, tPosX - CFG.map.getMpB().getWidthM(), -CFG.map.getMpC().getPY() + nPosY)) continue;
-                    if (i != this.iActiveProv) {
-                        this.resetLastActiveProvince();
-                        this.setActiveProvID(i);
-                    }
-                    return;
-                }
-            }
             this.resetActiveProvincesINFO();
         }
+    }
+
+    public final int setProvinceID_HoverAProvince_Clean(int nPosX, int nPosY) {
+        for (int i = 0; i < this.iProvincesSize; ++i) {
+            if (this.getProv(i).getMiX2() > nPosX || this.getProv(i).getMaX7() < nPosX || this.getProv(i).getMiY4() > nPosY || this.getProv(i).getMaY6() < nPosY || !this.ptCS(i, nPosX, nPosY)) continue;
+            return i;
+        }
+        return -1;
     }
 
     public final void revoltDeclareIndependence() {
@@ -10098,9 +10079,8 @@ lbl94:
                                     canBeAdded = false;
                                 }
                             }
-                            catch (Exception ex) {
-                                CFG.exceptionStack(ex);
-                            }
+        catch (Exception ex) {
+        }
                             if (canBeAdded) {
                                 for (int k = 0; k < CFG.core.getCivsSize(); ++k) {
                                     if (!CFG.ideologiesMgr.getRealTag(CFG.core.getCiv(k).getCivTag()).equals(realTag)) continue;
@@ -11224,6 +11204,21 @@ lbl94:
         }
     }
 
+    private final void acceptPeaceForWar(int nWarID) {
+        try {
+            for (int d = 0; d < this.lWars.get(nWarID).getDefendersSize(); ++d) {
+                int defenderID = this.lWars.get(nWarID).getDefenderID(d).getCivID();
+                for (int a = 0; a < this.lWars.get(nWarID).getAggressorsSize(); ++a) {
+                    int aggressorID = this.lWars.get(nWarID).getAggressorID(a).getCivID();
+                    if (!this.getCivsAtWar(defenderID, aggressorID)) continue;
+                    this.acceptPeaceOffer(defenderID, aggressorID, GameValues.gvPeaceTreaty.PEACE_TREATY_DEFAULT_DURATION + 1);
+                }
+            }
+        }
+        catch (Exception ex) {
+        }
+    }
+
     public final void addWarData(int nAggressor, int nDefender) {
         int i;
         int j;
@@ -11287,12 +11282,14 @@ lbl94:
                     if (CFG.LOGs) {
                         System.out.println("Core: Removed empty war: " + this.lWars.get(i).WAR_TAG);
                     }
+                    this.acceptPeaceForWar(i);
                     this.removeWarData(i);
+                    continue;
                 }
+
             }
         }
         catch (Exception ex) {
-            CFG.exceptionStack(ex);
         }
     }
 
@@ -14454,6 +14451,14 @@ lbl94:
     }
 
     public final void setActiveProvID(int nActiveProvinceID) {
+        ProvinceSelectionManager.setSelectedProvinceID(nActiveProvinceID);
+    }
+
+    public final int getActiveProvID() {
+        return ProvinceSelectionManager.getSelectedProvinceID();
+    }
+
+    public final void setActiveProvID_Original(int nActiveProvinceID) {
         try {
             this.setActiveProv_ExtraAction.extraAction(nActiveProvinceID);
             if (this.iActiveProv >= 0) {
@@ -14687,8 +14692,16 @@ lbl94:
         return -1;
     }
 
-    public final int getActiveProvID() {
-        return this.iActiveProv;
+    public void iActiveProv(int newID) {
+        this.iActiveProv = newID;
+    }
+
+    public void resetActiveProvAnimationData() {
+        this.activeProvAnimationData.resetAnimationData();
+    }
+
+    public void updateLTimeActiveCities() {
+        this.lTIME_ACTIVE_CITIES = System.currentTimeMillis();
     }
 
     public final Game_Scenarios getGameScenars() {
@@ -15805,6 +15818,69 @@ lbl94:
             out += BuildingsManager.getSupply_BuildMovementCost(CFG.core.getProv(provinceID).getLvlOfSupply() + 1);
         }
         return (float)out / 10.0f;
+    }
+
+    public int airDefenseAllProvinces_Number(int civID) {
+        int out = 0;
+        int maxLVL = BuildingsManager.getAirDefense_MaxLevel();
+        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
+            int provinceID = CFG.core.getCiv(civID).getProvID(i);
+            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).provGD.iAirDefense >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.AIR_DEFENSE) != 0) continue;
+            ++out;
+        }
+        return out;
+    }
+
+    public int airDefenseAllProvinces_Cost(int civID) {
+        int out = 0;
+        int maxLVL = BuildingsManager.getAirDefense_MaxLevel();
+        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
+            int provinceID = CFG.core.getCiv(civID).getProvID(i);
+            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).provGD.iAirDefense >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.AIR_DEFENSE) != 0) continue;
+            out += BuildingsManager.getAirDefense_BuildCost(CFG.core.getProv(provinceID).provGD.iAirDefense + 1, provinceID);
+        }
+        return out;
+    }
+
+    public float airDefenseAllProvinces_CostMovement(int civID) {
+        int out = 0;
+        int maxLVL = BuildingsManager.getAirDefense_MaxLevel();
+        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
+            int provinceID = CFG.core.getCiv(civID).getProvID(i);
+            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).provGD.iAirDefense >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.AIR_DEFENSE) != 0) continue;
+            ++out;
+            out += BuildingsManager.getAirDefense_BuildMovementCost(CFG.core.getProv(provinceID).provGD.iAirDefense + 1);
+        }
+        return (float)out / 10.0f;
+    }
+
+    public int airDefenseAllProvinces(int civID) {
+        ArrayList<Integer> provinces = new ArrayList<Integer>();
+        int out = 0;
+        int maxLVL = BuildingsManager.getAirDefense_MaxLevel();
+        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
+            int provinceID = CFG.core.getCiv(civID).getProvID(i);
+            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).provGD.iAirDefense >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.AIR_DEFENSE) != 0) continue;
+            provinces.add(provinceID);
+        }
+        while (!provinces.isEmpty() && CFG.core.getCiv(civID).getGold() > 0L) {
+            int bestID = 0;
+            for (int i = provinces.size() - 1; i > 0; --i) {
+                if (CFG.core.getProv((Integer)provinces.get(bestID)).getPop().getPops() >= CFG.core.getProv((Integer)provinces.get(i)).getPop().getPops()) continue;
+                bestID = i;
+            }
+            if (!BuildingsManager.constructAirDefense((Integer)provinces.get(bestID), civID)) break;
+            ++out;
+            provinces.remove(bestID);
+        }
+        if (out > 0) {
+            CFG.menus.rebuildMenu_InGame_Infobox_AllAction(CFG.lang.get(BuildingsManager.getAirDefense_Name(1)), CFG.lang.get("Provinces") + ": " + out, Images.infoBuild);
+        } else {
+            CFG.toastM.addM(CFG.lang.get(BuildingsManager.getAirDefense_Name(1)) + ": " + CFG.lang.get("Provinces") + ": " + out, CFG.COLOR_TEXT_NUM_OF_PROVINCES);
+            CFG.toastM.setTimeInView(2500);
+        }
+        CFG.menus.updateInGameTopAll(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId());
+        return out;
     }
 
     public static void drawMenuBG(SpriteBatch oSB, int posX, int posY, int width, int height) {
