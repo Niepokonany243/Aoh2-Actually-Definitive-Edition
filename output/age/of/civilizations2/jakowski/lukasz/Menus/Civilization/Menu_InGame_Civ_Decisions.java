@@ -158,7 +158,13 @@ public class Menu_InGame_Civ_Decisions extends Menu {
 
         menuElems.add(new Button_DiplomacyAction(Images.pop, CFG.lang.get("RelocatePopulation"), 0, 0, tY += tempElemH, menuW - 2, tempElemH, true){
             @Override
-            public void actionElem(int iID) { CFG.menus.rebuildInGame_Build_RelocatePopulation(CFG.core.getActiveProvID()); }
+            public void actionElem(int iID) {
+                Menu_InGame_RelocatePopulation.fromProvinceIDs.clear();
+                Menu_InGame_RelocatePopulation.toProvinceID = -1;
+                Menu_InGame_RelocatePopulation.popToRelocate = 0;
+                Menu_InGame_RelocatePopulation.relocate.clear();
+                CFG.menus.rebuildInGame_Build_RelocatePopulation(CFG.core.getActiveProvID());
+            }
             @Override
             public boolean getIsClickable() { return CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() == CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId(); }
         });

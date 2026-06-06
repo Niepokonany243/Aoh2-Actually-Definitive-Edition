@@ -25,8 +25,6 @@ public class Menu_CreateScenario_Civilizations
 extends Menu_CreateScenario {
     private String selectAProvince;
     private int iStepWidth = 0;
-    private String selectAProvince2;
-    private int iStepWidth2 = 0;
     private String sCivilizations;
     private int iCivilizationsWidth;
     private int iLastKnownNumOfCivs = -1;
@@ -195,9 +193,6 @@ extends Menu_CreateScenario {
         this.selectAProvince = CFG.lang.get("ManageCivilizations");
         CFG.glyphLay.setText(CFG.fontMain.get(0), this.selectAProvince);
         this.iStepWidth = (int)CFG.glyphLay.width;
-        this.selectAProvince2 = CFG.lang.get("ClickAprovinceOnTheMapToAddOrRemoveCivilization") + ". - AoH2:DE";
-        CFG.glyphLay.setText(CFG.fontMain.get(0), this.selectAProvince2);
-        this.iStepWidth2 = (int)CFG.glyphLay.width;
         this.getMenuElem(3).setTextE(CFG.lang.get("AddCivilization"));
         this.getMenuElem(4).setTextE(CFG.lang.get("Remove"));
         this.getMenuElem(5).setTextE(CFG.lang.get("SetCapital"));
@@ -212,9 +207,7 @@ extends Menu_CreateScenario {
             CFG.drawEditorButtons_Bot_Edge_R(oSB, iTranslateX, this.getMenuElem(3).getPosY() - CFG.PADD + iTranslateY, this.getMenuElem(6).getPosXE() + this.getMenuElem(6).getWidthE() + CFG.PADD, CFG.BUTTON_H + CFG.PADD * 2);
         }
         CFG.drawTextDefaultWithShadow(oSB, this.selectAProvince, CFG.GAMEWIDTH / 2 - this.iStepWidth / 2 + iTranslateX, CFG.PADD + CFG.BUTTON_H / 2 - CFG.TEXT_HEIGHT_DEFAULT - CFG.PADD / 2 + this.getMenuPosY() + iTranslateY, new Color(CFG.COLOR_TEXT_CNG_TOP_SCENARIO_NAME.r, CFG.COLOR_TEXT_CNG_TOP_SCENARIO_NAME.g, CFG.COLOR_TEXT_CNG_TOP_SCENARIO_NAME.b, 0.95f));
-        CFG.fontMain.get(0).getData().setScale(0.8f);
-        CFG.drawTextDefaultWithShadow(oSB, this.selectAProvince2, CFG.GAMEWIDTH / 2 - (int)((float)this.iStepWidth2 * 0.8f / 2.0f) + iTranslateX, CFG.PADD + CFG.BUTTON_H / 2 + CFG.PADD + this.getMenuPosY() + iTranslateY, new Color(CFG.COLOR_TEXT_CNG_TOP_SCENARIO_INFO.r, CFG.COLOR_TEXT_CNG_TOP_SCENARIO_INFO.g, CFG.COLOR_TEXT_CNG_TOP_SCENARIO_INFO.b, 0.75f));
-        CFG.fontMain.get(0).getData().setScale(1.0f);
+
         if (this.iLastKnownNumOfCivs != CFG.core.getCivsSize()) {
             CFG.glyphLay.setText(CFG.fontMain.get(0), this.sCivilizations + ": " + (CFG.core.getCivsSize() - 1));
             this.iCivilizationsWidth = (int)CFG.glyphLay.width;

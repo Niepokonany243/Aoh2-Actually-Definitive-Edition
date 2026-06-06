@@ -1157,7 +1157,37 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Button_CNG_Options2(null, CFG.PADD * 2, 0, tempElemH * 45, tempW, tempElemH, true, CFG.AI_PLUNDER_ENABLED){
+        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 45 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 0, 100, (int)(CFG.PLUNDER_CHANCE * 100.0f)){
+
+            @Override
+            public String getDrawText() {
+                return this.getTextE() + this.getCurr() + "%";
+            }
+
+            @Override
+            public Color getColorLEFT() {
+                return new Color(CFG.COLOR_WAR_DARK.r, CFG.COLOR_WAR_DARK.g, CFG.COLOR_WAR_DARK.b, 0.65f);
+            }
+
+            @Override
+            public void buildElemHover() {
+                ArrayList<MEHover_2E> nElements = new ArrayList<MEHover_2E>();
+                ArrayList<ME_Hover_2Type> nData = new ArrayList<ME_Hover_2Type>();
+                nData.add(new ME_Hover_2Type_Text("Chance of Plunder" + ": "));
+                nData.add(new ME_Hover_2Type_Text("" + (int)(CFG.PLUNDER_CHANCE * 100.0f) + "%", CFG.COLOR_HOVER_TITLE));
+                nData.add(new ME_Hover_2Type_Image(Images.actPlunder, CFG.PADD, 0));
+                nElements.add(new MEHover_2E(nData));
+                nData.clear();
+                nData.add(new ME_Hover_2Type_Space());
+                nElements.add(new MEHover_2E(nData));
+                nData.clear();
+                nData.add(new ME_Hover_2Type_TextDesc("Chance that AI will plunder a province each turn. 0% = never, 100% = always."));
+                nElements.add(new MEHover_2E(nData));
+                nData.clear();
+                this.menuElemHover = new ME_Hover_v2(nElements);
+            }
+        });
+        menuElements.add(new Button_CNG_Options2(null, CFG.PADD * 2, 0, tempElemH * 46, tempW, tempElemH, true, CFG.AI_PLUNDER_ENABLED){
 
             @Override
             public boolean getCheckboxSt() {
@@ -1176,7 +1206,7 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 46 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 0, 200, CFG.WAR_CANT_BE_DECLARED_IN_FIRST_X_TURNS){
+        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 47 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 0, 200, CFG.WAR_CANT_BE_DECLARED_IN_FIRST_X_TURNS){
 
             @Override
             public String getDrawText() {
@@ -1199,7 +1229,7 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 47 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 10, GameValues.gvPeaceTreaty.CREATE_NEW_GAME_SLIDER_MAX_SCORE, (int)(CFG.PEACE_TREATY_VICTORY_POINTS_MODIFIER * 100.0f)){
+        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 48 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 10, GameValues.gvPeaceTreaty.CREATE_NEW_GAME_SLIDER_MAX_SCORE, (int)(CFG.PEACE_TREATY_VICTORY_POINTS_MODIFIER * 100.0f)){
 
             @Override
             public String getDrawText() {
@@ -1223,7 +1253,7 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 48 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 10, (int)(GameValues.gvTechnology.MAX_TECHNOLOGY_LEVEL * 100.0f), (int)(CFG.NUKES_REQUIRED_TECH_LVL * 100.0f)){
+        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 49 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 10, (int)(GameValues.gvTechnology.MAX_TECHNOLOGY_LEVEL * 100.0f), (int)(CFG.NUKES_REQUIRED_TECH_LVL * 100.0f)){
 
             @Override
             public String getDrawText() {
@@ -1247,7 +1277,7 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 49 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 5, GameValues.gvAssimilate.CREATE_NEW_GAME_MAX_ASSIMILATE_SPEED, (int)(CFG.ASSIMILATION_SPEED_MODIFIER * 100.0f)){
+        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 50 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 5, GameValues.gvAssimilate.CREATE_NEW_GAME_MAX_ASSIMILATE_SPEED, (int)(CFG.ASSIMILATION_SPEED_MODIFIER * 100.0f)){
 
             @Override
             public String getDrawText() {
@@ -1277,7 +1307,7 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 50 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 5, GameValues.gvAssimilate.CREATE_NEW_GAME_MAX_ASSIMILATE_SPEED, (int)(CFG.ASSIMILATION_COST_MODIFIER * 100.0f)){
+        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 51 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 5, GameValues.gvAssimilate.CREATE_NEW_GAME_MAX_ASSIMILATE_SPEED, (int)(CFG.ASSIMILATION_COST_MODIFIER * 100.0f)){
 
             @Override
             public String getDrawText() {
@@ -1301,7 +1331,7 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Button_CNG_Options2(null, CFG.PADD * 2, 0, tempElemH * 51, tempW, tempElemH, true, CFG.VASSALS_CAN_DECLARE_INDEPENDENCE){
+        menuElements.add(new Button_CNG_Options2(null, CFG.PADD * 2, 0, tempElemH * 52, tempW, tempElemH, true, CFG.VASSALS_CAN_DECLARE_INDEPENDENCE){
 
             @Override
             public boolean getCheckboxSt() {
@@ -1326,7 +1356,7 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Button_CNG_Options2(null, CFG.PADD * 2, 0, tempElemH * 52, tempW, tempElemH, true, CFG.NUKES_MIN_YEAR_ENABLED){
+        menuElements.add(new Button_CNG_Options2(null, CFG.PADD * 2, 0, tempElemH * 53, tempW, tempElemH, true, CFG.NUKES_MIN_YEAR_ENABLED){
 
             @Override
             public boolean getCheckboxSt() {
@@ -1345,7 +1375,7 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Button_CNG_Options2(null, CFG.PADD * 2, 0, tempElemH * 53, tempW, tempElemH, true, false){
+        menuElements.add(new Button_CNG_Options2(null, CFG.PADD * 2, 0, tempElemH * 54, tempW, tempElemH, true, false){
 
             @Override
             public void buildElemHover() {
@@ -1363,7 +1393,7 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 54 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 0, 100, CFG.COLONIZATION_AUTO_EXPAND_CHANCE){
+        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 55 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 0, 100, CFG.COLONIZATION_AUTO_EXPAND_CHANCE){
 
             @Override
             public String getDrawText() {
@@ -1393,7 +1423,7 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 55 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 0, 1000, CFG.GET_SPY_MESSAGE_ABOUT_AI_PREPARING_FOR_WAR_CHANCE_1000){
+        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 56 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 0, 1000, CFG.GET_SPY_MESSAGE_ABOUT_AI_PREPARING_FOR_WAR_CHANCE_1000){
 
             @Override
             public String getDrawText() {
@@ -1426,7 +1456,7 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Button_CNG_Options2(null, CFG.PADD * 2, 0, tempElemH * 56, tempW, tempElemH, true, CFG.LEADERS_CAN_DIE){
+        menuElements.add(new Button_CNG_Options2(null, CFG.PADD * 2, 0, tempElemH * 57, tempW, tempElemH, true, CFG.LEADERS_CAN_DIE){
 
             @Override
             public boolean getCheckboxSt() {
@@ -1445,7 +1475,7 @@ extends Menu {
             }
         });
         float btRatio = CFG.BAT_PLUS_BREAKTHROUGH_RATIO_GAME > 0.0f ? CFG.BAT_PLUS_BREAKTHROUGH_RATIO_GAME : CFG.settingsGD.BAT_PLUS_BREAKTHROUGH_RATIO;
-        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 57 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 0, 95, (int)((btRatio - 2.5f) / 0.5f)){
+        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 58 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 0, 95, (int)((btRatio - 2.5f) / 0.5f)){
 
             @Override
             public String getDrawText() {
@@ -1466,36 +1496,6 @@ extends Menu {
                 nElements.add(new MEHover_2E(nData));
                 nData.clear();
                 nData.add(new ME_Hover_2Type_TextDesc("The attacker must have this many times the defender's power to achieve a breakthrough."));
-                nElements.add(new MEHover_2E(nData));
-                nData.clear();
-                this.menuElemHover = new ME_Hover_v2(nElements);
-            }
-        });
-        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 58 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 0, 100, (int)(CFG.PLUNDER_CHANCE * 100.0f)){
-
-            @Override
-            public String getDrawText() {
-                return this.getTextE() + this.getCurr() + "%";
-            }
-
-            @Override
-            public Color getColorLEFT() {
-                return new Color(CFG.COLOR_WAR_DARK.r, CFG.COLOR_WAR_DARK.g, CFG.COLOR_WAR_DARK.b, 0.65f);
-            }
-
-            @Override
-            public void buildElemHover() {
-                ArrayList<MEHover_2E> nElements = new ArrayList<MEHover_2E>();
-                ArrayList<ME_Hover_2Type> nData = new ArrayList<ME_Hover_2Type>();
-                nData.add(new ME_Hover_2Type_Text("Chance of Plunder" + ": "));
-                nData.add(new ME_Hover_2Type_Text("" + (int)(CFG.PLUNDER_CHANCE * 100.0f) + "%", CFG.COLOR_HOVER_TITLE));
-                nData.add(new ME_Hover_2Type_Image(Images.actPlunder, CFG.PADD, 0));
-                nElements.add(new MEHover_2E(nData));
-                nData.clear();
-                nData.add(new ME_Hover_2Type_Space());
-                nElements.add(new MEHover_2E(nData));
-                nData.clear();
-                nData.add(new ME_Hover_2Type_TextDesc("Chance that AI will plunder a province each turn. 0% = never, 100% = always."));
                 nElements.add(new MEHover_2E(nData));
                 nData.clear();
                 this.menuElemHover = new ME_Hover_v2(nElements);
@@ -1973,38 +1973,42 @@ extends Menu {
                 break;
             }
             case 45: {
-                CFG.AI_PLUNDER_ENABLED = !CFG.AI_PLUNDER_ENABLED;
+                CFG.PLUNDER_CHANCE = (float)this.getMenuElem(iID).getCurr() / 100.0f;
                 break;
             }
             case 46: {
-                CFG.WAR_CANT_BE_DECLARED_IN_FIRST_X_TURNS = (int)this.getMenuElem(iID).getCurr();
+                CFG.AI_PLUNDER_ENABLED = !CFG.AI_PLUNDER_ENABLED;
                 break;
             }
             case 47: {
-                CFG.PEACE_TREATY_VICTORY_POINTS_MODIFIER = (float)this.getMenuElem(iID).getCurr() / 100.0f;
+                CFG.WAR_CANT_BE_DECLARED_IN_FIRST_X_TURNS = (int)this.getMenuElem(iID).getCurr();
                 break;
             }
             case 48: {
-                CFG.NUKES_REQUIRED_TECH_LVL = (float)this.getMenuElem(iID).getCurr() / 100.0f;
+                CFG.PEACE_TREATY_VICTORY_POINTS_MODIFIER = (float)this.getMenuElem(iID).getCurr() / 100.0f;
                 break;
             }
             case 49: {
-                CFG.ASSIMILATION_SPEED_MODIFIER = (float)this.getMenuElem(iID).getCurr() / 100.0f;
+                CFG.NUKES_REQUIRED_TECH_LVL = (float)this.getMenuElem(iID).getCurr() / 100.0f;
                 break;
             }
             case 50: {
-                CFG.ASSIMILATION_COST_MODIFIER = (float)this.getMenuElem(iID).getCurr() / 100.0f;
+                CFG.ASSIMILATION_SPEED_MODIFIER = (float)this.getMenuElem(iID).getCurr() / 100.0f;
                 break;
             }
             case 51: {
-                CFG.VASSALS_CAN_DECLARE_INDEPENDENCE = !CFG.VASSALS_CAN_DECLARE_INDEPENDENCE;
+                CFG.ASSIMILATION_COST_MODIFIER = (float)this.getMenuElem(iID).getCurr() / 100.0f;
                 break;
             }
             case 52: {
-                CFG.NUKES_MIN_YEAR_ENABLED = !CFG.NUKES_MIN_YEAR_ENABLED;
+                CFG.VASSALS_CAN_DECLARE_INDEPENDENCE = !CFG.VASSALS_CAN_DECLARE_INDEPENDENCE;
                 break;
             }
             case 53: {
+                CFG.NUKES_MIN_YEAR_ENABLED = !CFG.NUKES_MIN_YEAR_ENABLED;
+                break;
+            }
+            case 54: {
                 this.getMenuElem(iID).setCheckboxSt(true);
                 try {
                     for (int a = 1; a < CFG.core.getCivsSize(); ++a) {
@@ -2018,25 +2022,21 @@ extends Menu {
                     break;
                 }
             }
-            case 54: {
+            case 55: {
                 CFG.COLONIZATION_AUTO_EXPAND_CHANCE = (int)this.getMenuElem(iID).getCurr();
                 break;
             }
-            case 55: {
+            case 56: {
                 CFG.GET_SPY_MESSAGE_ABOUT_AI_PREPARING_FOR_WAR_CHANCE_1000 = (int)this.getMenuElem(iID).getCurr();
                 break;
             }
-            case 56: {
-                CFG.LEADERS_CAN_DIE = !CFG.LEADERS_CAN_DIE;
-                this.getMenuElem(56).setTextE(CFG.lang.get("LeadersCanDie") + ": " + (CFG.LEADERS_CAN_DIE ? CFG.lang.get("On") : CFG.lang.get("Off")));
-                break;
-            }
             case 57: {
-                CFG.BAT_PLUS_BREAKTHROUGH_RATIO_GAME = 2.5f + (float)this.getMenuElem(iID).getCurr() * 0.5f;
+                CFG.LEADERS_CAN_DIE = !CFG.LEADERS_CAN_DIE;
+                this.getMenuElem(57).setTextE(CFG.lang.get("LeadersCanDie") + ": " + (CFG.LEADERS_CAN_DIE ? CFG.lang.get("On") : CFG.lang.get("Off")));
                 break;
             }
             case 58: {
-                CFG.PLUNDER_CHANCE = (float)this.getMenuElem(iID).getCurr() / 100.0f;
+                CFG.BAT_PLUS_BREAKTHROUGH_RATIO_GAME = 2.5f + (float)this.getMenuElem(iID).getCurr() * 0.5f;
                 break;
             }
             case 59: {

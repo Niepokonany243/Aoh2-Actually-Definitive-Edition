@@ -17,8 +17,6 @@ public class Menu_CreateScenario_Cores
 extends Menu_CreateScenario {
     private String assignProvinces;
     private int iStepWidth;
-    private String assignProvinces2;
-    private int iStepWidth2;
 
     public Menu_CreateScenario_Cores() {
         ArrayList<MenuElemUI> menuElements = new ArrayList<MenuElemUI>();
@@ -78,9 +76,6 @@ extends Menu_CreateScenario {
         this.assignProvinces = CFG.lang.get("SetUpCores");
         CFG.glyphLay.setText(CFG.fontMain.get(0), this.assignProvinces);
         this.iStepWidth = (int)CFG.glyphLay.width;
-        this.assignProvinces2 = CFG.lang.get("ClickAprovinceOnTheMapToAddOrRemoveCore") + ".";
-        CFG.glyphLay.setText(CFG.fontMain.get(0), this.assignProvinces2);
-        this.iStepWidth2 = (int)CFG.glyphLay.width;
     }
 
     @Override
@@ -88,9 +83,7 @@ extends Menu_CreateScenario {
         CFG.drawEditorTitle_EdgeR(oSB, iTranslateX, this.getMenuPosY() + iTranslateY, CFG.GAMEWIDTH, CFG.BUTTON_H + CFG.PADD * 2);
         CFG.drawEditorButtons_Top_Edge_R_Reflected(oSB, this.getMenuElem(5).getPosXE() - CFG.PADD + iTranslateX, CFG.BUTTON_H + CFG.PADD * 2 + this.getMenuPosY() + iTranslateY, CFG.GAMEWIDTH - (this.getMenuElem(5).getPosXE() - CFG.PADD), CFG.BUTTON_H + CFG.PADD * 2);
         CFG.drawTextDefaultWithShadow(oSB, this.assignProvinces, CFG.GAMEWIDTH / 2 - (this.iStepWidth + CFG.CIV_FLAG_WIDTH + CFG.PADD) / 2 + CFG.PADD + CFG.CIV_FLAG_WIDTH + iTranslateX, CFG.PADD + CFG.BUTTON_H / 2 - CFG.TEXT_HEIGHT_DEFAULT - CFG.PADD / 2 + this.getMenuPosY() + iTranslateY, new Color(CFG.COLOR_TEXT_CNG_TOP_SCENARIO_NAME.r, CFG.COLOR_TEXT_CNG_TOP_SCENARIO_NAME.g, CFG.COLOR_TEXT_CNG_TOP_SCENARIO_NAME.b, 0.95f));
-        CFG.fontMain.get(0).getData().setScale(0.8f);
-        CFG.drawTextDefaultWithShadow(oSB, this.assignProvinces2, CFG.GAMEWIDTH / 2 - (int)((float)this.iStepWidth2 * 0.8f / 2.0f) + iTranslateX, CFG.PADD + CFG.BUTTON_H / 2 + CFG.PADD + this.getMenuPosY() + iTranslateY, new Color(CFG.COLOR_TEXT_CNG_TOP_SCENARIO_INFO.r, CFG.COLOR_TEXT_CNG_TOP_SCENARIO_INFO.g, CFG.COLOR_TEXT_CNG_TOP_SCENARIO_INFO.b, 0.75f));
-        CFG.fontMain.get(0).getData().setScale(1.0f);
+
         try {
             CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).getFlagC().drawO(oSB, CFG.GAMEWIDTH / 2 - (this.iStepWidth + CFG.CIV_FLAG_WIDTH + CFG.PADD) / 2 + iTranslateX, CFG.PADD + CFG.BUTTON_H / 2 - CFG.CIV_FLAG_HEIGHT - CFG.PADD / 2 + this.getMenuPosY() - CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).getFlagC().getHeight() + iTranslateY, CFG.CIV_FLAG_WIDTH, CFG.CIV_FLAG_HEIGHT);
             IMGManager.getIMG(Images.flagRectSmall).drawO(oSB, CFG.GAMEWIDTH / 2 - (this.iStepWidth + CFG.CIV_FLAG_WIDTH + CFG.PADD) / 2 + iTranslateX, CFG.PADD + CFG.BUTTON_H / 2 - CFG.CIV_FLAG_HEIGHT - CFG.PADD / 2 + this.getMenuPosY() + iTranslateY);

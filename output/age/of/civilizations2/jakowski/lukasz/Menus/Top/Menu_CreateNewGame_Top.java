@@ -1,7 +1,6 @@
 
 package age.of.civilizations2.jakowski.lukasz.Menus.Top;
 
-import age.of.civilizations2.jakowski.lukasz.BetterUI_Manager;
 import age.of.civilizations2.jakowski.lukasz.Button.Button_CreateNewGameScenario;
 import age.of.civilizations2.jakowski.lukasz.Button.MenuElemUI;
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -31,9 +30,6 @@ import java.util.ArrayList;
 
 public class Menu_CreateNewGame_Top
 extends Menu {
-    public static final float SCALE_OF_CLICK_TEXT = 0.6f;
-    private String sClickOnTheMap;
-    private int iClickOnTheMapWidth;
     public static int iBGWidth;
     public static float fMovePercentage;
     private long lTime;
@@ -343,11 +339,6 @@ extends Menu {
 
     @Override
     public void updateLang() {
-        this.sClickOnTheMap = CFG.lang.get("ClickOnTheMap");
-        CFG.fontMain.get(0).getData().setScale(0.6f);
-        CFG.glyphLay.setText(CFG.fontMain.get(0), this.sClickOnTheMap);
-        this.iClickOnTheMapWidth = (int)CFG.glyphLay.width;
-        CFG.fontMain.get(0).getData().setScale(1.0f);
         int tNumOfCivs = 0;
         for (int i = 1; i < CFG.core.getCivsSize(); ++i) {
             if (CFG.core.getCiv(i).getNumOfProvs() <= 0) continue;
@@ -359,8 +350,8 @@ extends Menu {
         this.getMenuElem(0).setHeightE((int)((float)this.getMenuElem(0).getTextHeight() * 0.9f) + CFG.PADD * 2);
         this.getMenuElem(1).setPosY(CFG.PADD + IMGManager.getIMG(Images.gameTop).getHeight() / 2 - ((int)((float)this.getMenuElem(0).getTextHeight() * 0.9f + (float)this.getMenuElem(1).getTextHeight() * 0.6f) + CFG.PADD * 3) / 2 + this.getMenuElem(0).getHeightE());
         this.getMenuElem(1).setHeightE((int)((float)this.getMenuElem(1).getTextHeight() * 0.6f + (float)CFG.PADD));
-        iBGWidth = this.getMenuElem(0).getTextWidthU() > this.iClickOnTheMapWidth - CFG.PADD * 4 ? this.getMenuElem(0).getTextWidthU() + CFG.PADD * 6 : this.iClickOnTheMapWidth + CFG.PADD * 4;
-        iBGWidth = (int)((float)this.getMenuElem(1).getTextWidthU() * 0.6f > (float)iBGWidth ? (float)this.getMenuElem(1).getTextWidthU() * 0.6f + (float)(CFG.PADD * 6) : (float)iBGWidth);
+        iBGWidth = this.getMenuElem(0).getTextWidthU() + CFG.PADD * 6;
+        iBGWidth = (int)((float)this.getMenuElem(1).getTextWidthU() * 0.6f + (float)(CFG.PADD * 6) > (float)iBGWidth ? (float)this.getMenuElem(1).getTextWidthU() * 0.6f + (float)(CFG.PADD * 6) : (float)iBGWidth);
         this.getMenuElem(0).setWidthE(iBGWidth);
         this.getMenuElem(1).setWidthE(iBGWidth);
         this.getMenuElem(0).setPosX(CFG.GAMEWIDTH / 2 - this.getMenuElem(0).getWidthE() / 2);
@@ -383,16 +374,6 @@ extends Menu {
         this.lTime = System.currentTimeMillis();
         iTranslateY -= (int)((float)this.getHeightM() * (100.0f - fMovePercentage) / 100.0f);
         
-        if (CFG.settingsGD.BETTER_UI) {
-            BetterUI_Manager.drawBetterMenuBG(oSB, this.getPosX() + iTranslateX, this.getPosY() + iTranslateY, this.getWidthM(), this.getHeightM());
-            super.draw(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);
-            
-            CFG.fontMain.get(0).getData().setScale(0.6f);
-            CFG.drawTextDefault(oSB, this.sClickOnTheMap, CFG.GAMEWIDTH / 2 - this.iClickOnTheMapWidth / 2 + iTranslateX, this.getHeightM() - CFG.PADD * 3 + iTranslateY, new Color(1.0f, 1.0f, 1.0f, 0.6f));
-            CFG.fontMain.get(0).getData().setScale(1.0f);
-            return;
-        }
-
         if (Menu_Civilization_Info.getUseMenu_UI2()) {
             IMGManager.getIMG(Images.topBar).draw2(oSB, this.getMenuElem(2).getPosXE() - CFG.topBox.topBarPaddingRight - CFG.PADD * 3 + iTranslateX, this.getMenuElem(2).getPosY() + iTranslateY, this.getMenuElem(2).getWidthE() + CFG.topBox.topBarPaddingRight * 2 + CFG.PADD * 3, IMGManager.getIMG(Images.topBar).getHeight(), true, false);
             IMGManager.getIMG(Images.topBar).draw2(oSB, this.getMenuElem(3).getPosXE() + iTranslateX, this.getMenuElem(3).getPosY() + iTranslateY, this.getMenuElem(3).getWidthE() + CFG.topBox.topBarPaddingRight, IMGManager.getIMG(Images.topBar).getHeight(), true, false);
@@ -400,18 +381,13 @@ extends Menu {
             IMGManager.getIMG(Images.topBar).draw2(oSB, this.getMenuElem(2).getPosXE() - CFG.topBox.topBarPaddingRight + iTranslateX, this.getMenuElem(2).getPosY() + iTranslateY, this.getMenuElem(2).getWidthE() + CFG.topBox.topBarPaddingRight, IMGManager.getIMG(Images.topBar).getHeight(), false, false);
             IMGManager.getIMG(Images.topBar).draw2(oSB, this.getMenuElem(3).getPosXE() + iTranslateX, this.getMenuElem(3).getPosY() + iTranslateY, this.getMenuElem(3).getWidthE() + CFG.topBox.topBarPaddingRight, IMGManager.getIMG(Images.topBar).getHeight(), true, false);
         }
-        oSB.setColor(new Color(0.0f, 0.0f, 0.0f, 0.6f));
-        IMGManager.getIMG(Images.gradient).drawO(oSB, iTranslateX, -IMGManager.getIMG(Images.gradient).getHeight(), CFG.GAMEWIDTH, CFG.PADD * 3);
         oSB.setColor(Color.WHITE);
         IMGManager.getIMG(Images.gameTop).drawO(oSB, CFG.GAMEWIDTH / 2 - iBGWidth / 2 - CFG.PADD * 2 + iTranslateX, CFG.PADD + iTranslateY, iBGWidth + CFG.PADD * 4 - IMGManager.getIMG(Images.gameTop).getWidth());
         IMGManager.getIMG(Images.gameTop).drawO(oSB, CFG.GAMEWIDTH / 2 + iBGWidth / 2 + CFG.PADD * 2 - IMGManager.getIMG(Images.gameTop).getWidth() + iTranslateX, CFG.PADD + iTranslateY, true);
-        oSB.setColor(new Color(CFG.COLOR_GRADIENT_BLUE.r, CFG.COLOR_GRADIENT_BLUE.g, CFG.COLOR_GRADIENT_BLUE.b, this.getMenuElem(0).getIsHovered() || this.getMenuElem(1).getIsHovered() ? 0.325f : 0.225f));
-        IMGManager.getIMG(Images.line32Off1).drawO(oSB, CFG.GAMEWIDTH / 2 - iBGWidth / 2 - CFG.PADD * 2 + iTranslateX, CFG.PADD + 2 - IMGManager.getIMG(Images.line32Off1).getHeight() + iTranslateY, iBGWidth + CFG.PADD * 4, IMGManager.getIMG(Images.gameTop).getHeight() - 4);
         oSB.setColor(Color.WHITE);
+
         super.draw(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);
-        CFG.fontMain.get(0).getData().setScale(0.6f);
-        CFG.drawTextDefault(oSB, this.sClickOnTheMap, CFG.GAMEWIDTH / 2 - this.iClickOnTheMapWidth / 2 + iTranslateX, CFG.PADD * 2 + IMGManager.getIMG(Images.gameTop).getHeight() + iTranslateY, new Color(1.0f, 1.0f, 1.0f, 0.4f));
-        CFG.fontMain.get(0).getData().setScale(1.0f);
+
     }
 
     public static final void clickChooseScenario() {

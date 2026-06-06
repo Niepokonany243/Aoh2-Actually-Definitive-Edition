@@ -42,7 +42,7 @@ extends ButtonStats {
         this.iIncome = nIncome;
         CFG.glyphLay.setText(CFG.fontMain.get(this.fontID), "" + this.iIncome);
         this.iIncomeWidth2 = (int)CFG.glyphLay.width;
-        this.sEfficiency = CFG.lang.get("Efficiency") + ": ";
+        this.sEfficiency = CFG.lang.get("Plunder") + ": ";
         CFG.glyphLay.setText(CFG.fontMain.get(this.fontID), "" + this.sEfficiency);
         this.iEfficiencyWidth = (int)CFG.glyphLay.width;
         this.setCurr(0);

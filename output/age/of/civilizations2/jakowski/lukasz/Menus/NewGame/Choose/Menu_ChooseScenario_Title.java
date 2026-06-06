@@ -162,14 +162,6 @@ extends Menu {
         oSB.setColor(new Color(0.0f, 0.01f, 0.012f, 0.65f));
         IMGManager.getIMG(Images.gradient).drawO(oSB, this.getPosX() + iTranslateX, this.getPosY() + CFG.PADD - IMGManager.getIMG(Images.gradient).getHeight() + iTranslateY, this.getWidthM(), CFG.PADD * 3);
         IMGManager.getIMG(Images.gradient).drawO(oSB, this.getPosX() + iTranslateX, this.getPosY() + this.getHeightM() - CFG.PADD * 3 - IMGManager.getIMG(Images.gradient).getHeight() + iTranslateY, this.getWidthM(), CFG.PADD * 3, false, true);
-        oSB.setColor(CFG.COLOR_CREATE_NEW_GAME_BOX_PLAYERS);
-        IMGManager.getIMG(Images.pix255).draw2O(oSB, this.getPosX() + iTranslateX, this.getPosY() + CFG.PADD - IMGManager.getIMG(Images.pix255).getHeight() + iTranslateY, this.getWidthM(), 1);
-        IMGManager.getIMG(Images.pix255).draw2O(oSB, this.getPosX() + iTranslateX, this.getPosY() + this.getHeightM() - 2 - IMGManager.getIMG(Images.pix255).getHeight() + iTranslateY, this.getWidthM(), 1);
-        oSB.setColor(new Color(CFG.COLOR_FLAG_FRAME.r, CFG.COLOR_FLAG_FRAME.g, CFG.COLOR_FLAG_FRAME.b, 0.75f));
-        IMGManager.getIMG(Images.line32Off1).drawO(oSB, this.getPosX() + iTranslateX, this.getPosY() + CFG.PADD - IMGManager.getIMG(Images.line32Off1).getHeight() + iTranslateY, this.getWidthM(), 1);
-        IMGManager.getIMG(Images.line32Off1).drawO(oSB, this.getPosX() + iTranslateX, this.getPosY() + this.getHeightM() - 2 - IMGManager.getIMG(Images.line32Off1).getHeight() + iTranslateY, this.getWidthM(), 1);
-        oSB.setColor(new Color(0.0f, 0.0f, 0.0f, 0.6f));
-        IMGManager.getIMG(Images.pix255).draw2O(oSB, this.getPosX() + iTranslateX, this.getPosY() + CFG.PADD - IMGManager.getIMG(Images.pix255).getHeight() - 1 + iTranslateY, this.getWidthM(), 1);
         oSB.setColor(new Color(CFG.COLOR_FLAG_FRAME.r, CFG.COLOR_FLAG_FRAME.g, CFG.COLOR_FLAG_FRAME.b, 0.75f));
         IMGManager.getIMG(Images.line32Vertical).drawO(oSB, this.getPosX() + this.getMenuElem(0).getPosXE() - CFG.PADD * 2 + iTranslateX, this.getPosY() + this.getMenuElem(0).getPosY() - IMGManager.getIMG(Images.line32Vertical).getHeight() + iTranslateY, 1, this.getMenuElem(1).getPosY() + this.getMenuElem(1).getHeightE() - this.getMenuElem(0).getPosY());
         oSB.setColor(new Color(0.0f, 0.0f, 0.0f, 0.6f));

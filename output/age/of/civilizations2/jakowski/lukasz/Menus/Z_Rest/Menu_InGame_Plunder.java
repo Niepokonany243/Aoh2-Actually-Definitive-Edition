@@ -254,7 +254,7 @@ extends Menu {
         if (iID == this.getMenuElemsSize() - 1) {
             if (this.getMenuElem(1).getCurr() >= 0) {
                 Plunder.plunderProvince(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId(), iProvinceID, this.getMenuElem(1).getCurr());
-                CFG.toastM.addM(this.getTitleM().getText(), CFG.COLOR_POSITIVE);
+                CFG.toastM.addM(CFG.lang.get("Plunder") + ": " + this.getMenuElem(0).getCurr() + "%", CFG.COLOR_POSITIVE);
                 CFG.core.resetChooseProvinceData();
                 CFG.core.resetRegroupArmy_Data();
                 CFG.menus.updateInGameTopAll(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId());

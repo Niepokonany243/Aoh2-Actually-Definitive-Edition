@@ -351,19 +351,47 @@ extends Menu {
             tRow = (tRow + 1) % 2;
             tPosY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE();
 
-            
-            menuElements.add(new Button_Build_Level(BuildingsManager.getAirDefense_Name(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).provGD.iAirDefense + 1), Images.bSupply, "" + CFG.core.getProv(BuildingsManager.iBuildInProvinceID).provGD.iAirDefense, BuildingsManager.getAirDefense_BuildCost(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).provGD.iAirDefense + 1, BuildingsManager.iBuildInProvinceID), BuildingsManager.getAirDefense_BuildMovementCost(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).provGD.iAirDefense + 1), 0, tPosY, tempW, true, CFG.core.getProv(BuildingsManager.iBuildInProvinceID).provGD.iAirDefense == BuildingsManager.getAirDefense_MaxLevel(), CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).isInConstruction(BuildingsManager.iBuildInProvinceID, ConstructionType.AIR_DEFENSE), BuildingsManager.getAirDefense_TechLevel(CFG.core.getProv(BuildingsManager.iBuildInProvinceID).provGD.iAirDefense + 1)){
+            final int airDefenseLevel = CFG.core.getProv(BuildingsManager.iBuildInProvinceID).provGD.iAirDefense;
+            final int airDefenseMaxLevel = BuildingsManager.getAirDefense_MaxLevel();
+            final boolean airDefenseMaxed = airDefenseLevel >= airDefenseMaxLevel;
+            final int airDefenseNextLevel = Math.min(airDefenseLevel + 1, airDefenseMaxLevel);
+            menuElements.add(new Button_Build_Level(airDefenseMaxed ? CFG.lang.get("MaximumLevel") : BuildingsManager.getAirDefense_Name(airDefenseNextLevel), Images.bSupply, "" + airDefenseLevel, airDefenseMaxed ? 0 : BuildingsManager.getAirDefense_BuildCost(airDefenseNextLevel, BuildingsManager.iBuildInProvinceID), airDefenseMaxed ? 0 : BuildingsManager.getAirDefense_BuildMovementCost(airDefenseNextLevel), 0, tPosY, tempW, true, airDefenseMaxed, CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).isInConstruction(BuildingsManager.iBuildInProvinceID, ConstructionType.AIR_DEFENSE), BuildingsManager.getAirDefense_TechLevel(airDefenseNextLevel)){
+                {
+                    if (airDefenseMaxed) {
+                        this.sCost = "";
+                        this.iCostWidth = 0;
+                        this.sMovementCost = "";
+                        this.iMovementCostWidth = 0;
+                        this.sTech = "";
+                        this.iTechWidth = 0;
+                    }
+                }
+
                 @Override
                 public void actionElem(int iID) {
-                    CFG.menus.rebuildInGame_BuildAirDefense(BuildingsManager.iBuildInProvinceID);
+                    if (!airDefenseMaxed) {
+                        CFG.menus.rebuildInGame_BuildAirDefense(BuildingsManager.iBuildInProvinceID);
+                    }
+                }
+
+                @Override
+                public boolean getIsClickable() {
+                    return !airDefenseMaxed && super.getIsClickable();
                 }
             });
             ((MenuElemUI)menuElements.get(menuElements.size() - 1)).setHeightE(buttonH);
             ((MenuElemUI)menuElements.get(menuElements.size() - 1)).setCurr(tRow);
-            menuElements.add(new Button_Build_Text(">>", tempW, tPosY, extraW, true, BuildingsManager.iBuildInProvinceID){
+            menuElements.add(new Button_Build_Text(">>", tempW, tPosY, extraW, !airDefenseMaxed, BuildingsManager.iBuildInProvinceID){
                 @Override
                 public void actionElem(int iID) {
-                    Menu_InGame_Province_More.quickBuild(BuildingsManager.iBuildInProvinceID, ConstructionType.AIR_DEFENSE);
+                    if (!airDefenseMaxed) {
+                        Menu_InGame_Province_More.quickBuild(BuildingsManager.iBuildInProvinceID, ConstructionType.AIR_DEFENSE);
+                    }
+                }
+
+                @Override
+                public boolean getIsClickable() {
+                    return !airDefenseMaxed && super.getIsClickable();
                 }
             });
             ((MenuElemUI)menuElements.get(menuElements.size() - 1)).setHeightE(buttonH);
@@ -1106,7 +1134,9 @@ extends Menu {
 
             @Override
             public void actionElem(int iID) {
+                Menu_InGame_RelocatePopulation.fromProvinceIDs.clear();
                 Menu_InGame_RelocatePopulation.toProvinceID = -1;
+                Menu_InGame_RelocatePopulation.popToRelocate = 0;
                 Menu_InGame_RelocatePopulation.relocate.clear();
                 CFG.menus.rebuildInGame_Build_RelocatePopulation(BuildingsManager.iBuildInProvinceID);
             }

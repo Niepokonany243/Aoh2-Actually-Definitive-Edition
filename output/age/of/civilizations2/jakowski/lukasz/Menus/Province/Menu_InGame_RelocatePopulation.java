@@ -207,6 +207,10 @@ extends Menu {
 
             @Override
             public void actionElem(int iID) {
+                fromProvinceIDs.clear();
+                toProvinceID = -1;
+                popToRelocate = 0;
+                relocate.clear();
                 Menu_InGame_RelocatePopulation.this.setVisibleM(false);
             }
         });
@@ -225,6 +229,10 @@ extends Menu {
             @Override
             public void actionElem(int iID) {
                 Menu_InGame_RelocatePopulation.this.relocatePopulation();
+                fromProvinceIDs.clear();
+                toProvinceID = -1;
+                popToRelocate = 0;
+                relocate.clear();
                 Menu_InGame_RelocatePopulation.this.setVisibleM(false);
             }
 

@@ -287,8 +287,8 @@ extends ButtonM {
                 nElements.add(new MEHover_2E(nData));
                 nData.clear();
                 nData.add(new ME_Hover_2Type_Text(" - "));
-                nData.add(new ME_Hover_2Type_Text("Interception Chance: "));
-                nData.add(new ME_Hover_2Type_Text("+" + (int)(age.of.civilizations2.jakowski.lukasz.GameValues.GameValues.gvAirDefense.AIR_DEFENSE_PROTECTION_CHANCE[CFG.core.getProv(this.iProvinceID).provGD.iAirDefense] * 100.0f) + "%", CFG.COLOR_POSITIVE));
+                nData.add(new ME_Hover_2Type_Text(CFG.lang.get("InterceptionChance") + ": "));
+                nData.add(new ME_Hover_2Type_Text("+" + (int)(BuildingsManager.getAirDefense_ProtectionChance(CFG.core.getProv(this.iProvinceID).provGD.iAirDefense) * 100.0f) + "%", CFG.COLOR_POSITIVE));
                 nElements.add(new MEHover_2E(nData));
                 nData.clear();
             }

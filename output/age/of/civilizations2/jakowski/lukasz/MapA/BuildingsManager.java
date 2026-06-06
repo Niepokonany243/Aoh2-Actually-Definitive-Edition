@@ -1421,7 +1421,7 @@ public class BuildingsManager {
             int iNumOfBuildings = BuildingsManager.getCivBuildingCount(CFG.core.getProv(nProvinceID).getCivId(), BUILDING_COUNT_AIR_DEFENSE);
             return Math.max(100, (int)(((float)CFG.core.getGameScenars().getScenario_StartingPopulation() * (age.of.civilizations2.jakowski.lukasz.GameValues.GameValues.gvAirDefense.AIR_DEFENSE_BUILD_COST[nLevel] + age.of.civilizations2.jakowski.lukasz.GameValues.GameValues.gvAirDefense.AIR_DEFENSE_EXTRA_COST_PER_BUILDING * (float)iNumOfBuildings) + (float)CFG.core.getGameScenars().getScenario_StartingPopulation() * (age.of.civilizations2.jakowski.lukasz.GameValues.GameValues.gvAirDefense.AIR_DEFENSE_COST_DEVELOPMENT_MODIFIER * (1.0f - CFG.core.getProv(nProvinceID).getDeveLvl()))) * (1.0f + CFG.terrainTypesManager.getBuildCost(CFG.core.getProv(nProvinceID).getTerrainTypeID()))));
         } catch (Exception e) {
-            return 1000;
+            return 0;
         }
     }
 
@@ -1438,6 +1438,14 @@ public class BuildingsManager {
             return age.of.civilizations2.jakowski.lukasz.GameValues.GameValues.gvAirDefense.AIR_DEFENSE_TECH_LEVEL[nLevel];
         } catch (Exception e) {
             return 0.5f;
+        }
+    }
+
+    public static final float getAirDefense_ProtectionChance(int nLevel) {
+        try {
+            return age.of.civilizations2.jakowski.lukasz.GameValues.GameValues.gvAirDefense.AIR_DEFENSE_PROTECTION_CHANCE[nLevel];
+        } catch (Exception e) {
+            return 0.0f;
         }
     }
 
