@@ -333,10 +333,7 @@ extends Menu {
         oSB.setColor(Color.WHITE);
         this.endClipM(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);
         try {
-            if (!(CFG.core.getActiveProvID() < 0 || CFG.core.getActiveProvID() == toProvinceID || fromProvinceIDs.contains(CFG.core.getActiveProvID()) || GameValues.gvPopRelocate.CAN_RELOCATE_TO_ONLY_OWN_PROVINCE && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() != CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId() && CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).getPuppetOfCiv() != CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId())) {
-                toProvinceID = CFG.core.getActiveProvID();
-                CFG.menus.rebuildInGame_Build_RelocatePopulation(fromProvinceIDs.get(0));
-            }
+            if (CFG.core.getActiveProvID() >= 0 && (CFG.core.getActiveProvID() == toProvinceID || fromProvinceIDs.contains(CFG.core.getActiveProvID()))) { }
         }
         catch (Exception exception) {
             

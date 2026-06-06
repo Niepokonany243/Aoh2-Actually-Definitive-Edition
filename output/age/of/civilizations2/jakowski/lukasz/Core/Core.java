@@ -2024,6 +2024,11 @@ public class Core {
             CFG.PLUNDER_CHANCE = tempSavedGame.PLUNDER_CHANCE;
             CFG.GENOCIDE_CHANCE = tempSavedGame.GENOCIDE_CHANCE;
             CFG.AI_GENOCIDE_ENABLED = tempSavedGame.AI_GENOCIDE_ENABLED;
+            CFG.TOTAL_WARMODE = tempSavedGame.TOTAL_WARMODE;
+            CFG.BAT_PLUS_BREAKTHROUGH_RATIO_GAME = tempSavedGame.BAT_PLUS_BREAKTHROUGH_RATIO_GAME;
+            CFG.MOVE_AND_RECRUIT_ARMY_AT_WAR_BY_AI = tempSavedGame.MOVE_AND_RECRUIT_ARMY_AT_WAR_BY_AI;
+            CFG.RECRUIT_AND_COUNTERATTACK = tempSavedGame.RECRUIT_AND_COUNTERATTACK;
+            CFG.SPECTATOR_MODE_LOCK_CIV = tempSavedGame.SPECTATOR_MODE_LOCK_CIV;
             CFG.WAR_CANT_BE_DECLARED_IN_FIRST_X_TURNS = tempSavedGame.WAR_CANT_BE_DECLARED_IN_FIRST_X_TURNS;
             CFG.PEACE_TREATY_VICTORY_POINTS_MODIFIER = tempSavedGame.PEACE_TREATY_VICTORY_POINTS_MODIFIER;
             CFG.AI_CONQUER_VASSALS = tempSavedGame.AI_CONQUER_VASSALS;
@@ -2031,7 +2036,6 @@ public class Core {
             CFG.AI_CONQUER_OWN_VASSALS_IF_OVER = tempSavedGame.AI_CONQUER_OWN_VASSALS_IF_OVER;
             CFG.DIFFICULTY = tempSavedGame.DIFFICULTY;
             CFG.SANDBOX_MODE = tempSavedGame.SANDBOX_MODE;
-            CFG.MOVE_AND_RECRUIT_ARMY_AT_WAR_BY_AI = false;
             GameCalendar.TURNID = tempSavedGame.iTurnID;
             GameCalendar.TURNS_SINCE_LAST_WAR = tempSavedGame.TURNS_SINCE_LAST_WAR;
             GameCalendar.currDay = tempSavedGame.iDay;

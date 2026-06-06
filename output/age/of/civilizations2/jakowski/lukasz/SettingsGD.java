@@ -65,7 +65,7 @@ implements Serializable {
     public int ANNEXATION_DELAY_TURNS = 5;
     public boolean AIR_DEFENCE_SYSTEMS = true;
     public boolean BAT_PLUS = true;
-    public float BAT_PLUS_BREAKTHROUGH_RATIO = 5.0f;
+    public float BAT_PLUS_BREAKTHROUGH_RATIO = 50.0f;
     public int UI_THEME = 0; 
     public boolean EXPERIMENTAL_BATTLE_SYSTEM = true;
     public boolean CAPITAL_FLAGS_HIGH = true;

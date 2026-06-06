@@ -5025,6 +5025,7 @@ public class MenuManager {
     }
 
     public final Menu getInGame_SendMessage() {
+        if (this.INGAME_SEND_MESSAGE < 0) return null;
         return this.menus.get(this.IN_GAME_MENU).get(this.INGAME_SEND_MESSAGE);
     }
 

@@ -103,8 +103,6 @@ extends Menu {
                 IMGManager.getIMG(Images.gameTopEdgeTitle).draw2O(oSB, Menu_CreateNewGame_Options_Pallets.this.getPosX() + iTranslateX, Menu_CreateNewGame_Options_Pallets.this.getPosY() - Core.PADDING - IMGManager.getIMG(Images.gameTopEdgeTitle).getHeight() - this.getHeightT(), Menu_CreateNewGame_Options_Pallets.this.getWidthM() + 2 + Core.PADDING, this.getHeightT() + Core.PADDING, true, false);
                 oSB.setColor(new Color(0.011f, 0.014f, 0.019f, 0.25f));
                 IMGManager.getIMG(Images.gradient).drawO(oSB, Menu_CreateNewGame_Options_Pallets.this.getPosX() + iTranslateX, Menu_CreateNewGame_Options_Pallets.this.getPosY() - IMGManager.getIMG(Images.gradient).getHeight() - this.getHeightT() * 3 / 4, Menu_CreateNewGame_Options_Pallets.this.getWidthM(), this.getHeightT() * 3 / 4, false, true);
-                oSB.setColor(CFG.COLOR_NEW_GAME_EDGE_LINE);
-                IMGManager.getIMG(Images.pix255).drawO(oSB, Menu_CreateNewGame_Options_Pallets.this.getPosX() + iTranslateX, Menu_CreateNewGame_Options_Pallets.this.getPosY() - IMGManager.getIMG(Images.pix255).getHeight(), Menu_CreateNewGame_Options_Pallets.this.getWidthM());
                 oSB.setColor(new Color(CFG.COLOR_FLAG_FRAME.r, CFG.COLOR_FLAG_FRAME.g, CFG.COLOR_FLAG_FRAME.b, 0.4f));
                 IMGManager.getIMG(Images.line32Off1).drawO(oSB, Menu_CreateNewGame_Options_Pallets.this.getPosX() + iTranslateX, Menu_CreateNewGame_Options_Pallets.this.getPosY() - IMGManager.getIMG(Images.pix255).getHeight() - IMGManager.getIMG(Images.line32Off1).getHeight(), Menu_CreateNewGame_Options_Pallets.this.getWidthM(), 1);
                 if (AoCGame.LEFT != 0) {
@@ -147,8 +145,6 @@ extends Menu {
         IMGManager.getIMG(Images.pix255).drawO(oSB, this.getPosX() + iTranslateX, this.getPosY() - IMGManager.getIMG(Images.pix255).getHeight() + this.getHeightM(), this.getWidthM());
         oSB.setColor(new Color(CFG.COLOR_FLAG_FRAME.r, CFG.COLOR_FLAG_FRAME.g, CFG.COLOR_FLAG_FRAME.b, 0.4f));
         IMGManager.getIMG(Images.line32Off1).drawO(oSB, this.getPosX() + iTranslateX, this.getPosY() - IMGManager.getIMG(Images.pix255).getHeight() - IMGManager.getIMG(Images.line32Off1).getHeight() + this.getHeightM(), this.getWidthM(), 1);
-        oSB.setColor(new Color(0.0f, 0.0f, 0.0f, 0.5f));
-        IMGManager.getIMG(Images.pix255).drawO(oSB, this.getPosX() + iTranslateX, this.getPosY() + this.getHeightM(), this.getWidthM() + 2);
         oSB.setColor(Color.WHITE);
     }
 

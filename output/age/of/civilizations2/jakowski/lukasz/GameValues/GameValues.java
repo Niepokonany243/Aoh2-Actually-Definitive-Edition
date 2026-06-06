@@ -338,6 +338,9 @@ public class GameValues {
         addGvTask(tasks, "gvRelationDecrease.json", GV_RelationDecrease.class, v -> gvRelationDecrease = v);
         addGvTask(tasks, "gvRelationImprove.json", GV_RelationImprove.class, v -> gvRelationImprove = v);
         addGvTask(tasks, "gvPlunder.json", GV_Plunder.class, v -> gvPlunder = v);
+        addGvTask(tasks, "gvGenocide.json", GV_Genocide.class, v -> gvGenocide = v);
+        addGvTask(tasks, "gvMissiles.json", GV_Missiles.class, v -> gvMissiles = v);
+        addGvTask(tasks, "gvAirDefense.json", GV_AirDefense.class, v -> gvAirDefense = v);
         addGvTask(tasks, "gvGovernment.json", GV_Government.class, v -> gvGovernment = v);
         addGvTask(tasks, "gvRelations.json", GV_Relations.class, v -> gvRelations = v);
         addGvTask(tasks, "gvUpdate.json", GV_Update.class, v -> gvUpdate = v);

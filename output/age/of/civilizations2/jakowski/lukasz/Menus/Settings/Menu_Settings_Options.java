@@ -301,6 +301,9 @@ extends Menu {
                 return CFG.settingsGD.AI_GROUP_UNITS;
             }
         });
+        menuElements.add(new Button_Classic("<<", -1, 0, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE() + CFG.PADD, CFG.BUTTON_W + CFG.BUTTON_W / 2, CFG.BUTTON_H, true));
+        menuElements.add(new Button_Classic_Classic(null, -1, CFG.BUTTON_W + CFG.BUTTON_W / 2, tY, menuW - (CFG.BUTTON_W + CFG.BUTTON_W / 2) * 2, CFG.BUTTON_H, true));
+        menuElements.add(new Button_Classic_ReflectedBG(">>", -1, menuW - (CFG.BUTTON_W + CFG.BUTTON_W / 2), tY, CFG.BUTTON_W + CFG.BUTTON_W / 2, CFG.BUTTON_H, true));
         if (CFG.settingsGD.BETTER_UI) {
             this.initMenu(null, CFG.GAMEWIDTH / 2 - menuW / 2 + AoCGame.LEFT, CFG.BUTTON_H, menuW, CFG.GAMEHEIGHT - CFG.BUTTON_H * 2, menuElements);
         } else {
@@ -373,6 +376,7 @@ extends Menu {
         this.getMenuElem(88).setTextE("Experimental Battle System: " + (CFG.settingsGD.EXPERIMENTAL_BATTLE_SYSTEM ? CFG.lang.get("On") : CFG.lang.get("Off")));
         this.getMenuElem(89).setTextE("Smart Bat+: " + (CFG.settingsGD.BAT_PLUS ? CFG.lang.get("On") : CFG.lang.get("Off")));
         this.getMenuElem(90).setTextE("AI: Group Units: " + (CFG.settingsGD.AI_GROUP_UNITS ? CFG.lang.get("On") : CFG.lang.get("Off")));
+        this.getMenuElem(92).setTextE("Bat+ Breakthrough: " + CFG.getPrecision2(CFG.settingsGD.BAT_PLUS_BREAKTHROUGH_RATIO, 2) + "x");
     }
 
     public static String getSettingsText_Names() {
@@ -413,6 +417,40 @@ extends Menu {
         super.drawMenuM(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);
         CFG.map.getIcon(CFG.map.getActiveMapIDN()).drawO(oSB, this.getMenuElem(0).getTextPosElem() / 2 - CFG.CIV_FLAG_WIDTH / 2 + iTranslateX, this.getMenuElem(0).getPosY() + this.getMenuElem(0).getHeightE() / 2 - CFG.map.getIcon(CFG.map.getActiveMapIDN()).getHeight() - CFG.CIV_FLAG_HEIGHT / 2 + this.getMenuPosY() + iTranslateY, CFG.CIV_FLAG_WIDTH, CFG.CIV_FLAG_HEIGHT);
         super.endClipM(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);
+    }
+
+    private void resetDefaults() {
+        CFG.settingsGD.PROV_ALPHA = 100;
+        CFG.settingsGD.OCCUPIED_PROV_ALPHA = 100;
+        CFG.settingsGD.OCCUPIED_STRIPES_SIZE = 2.0f;
+        CFG.settingsGD.ENABLE_INNERBORDERS = true;
+        CFG.settingsGD.DRAW_MOVE_UNITS_ARMY_IN_EVERYSINGLE_PROVINCE = true;
+        CFG.settingsGD.SHOW_COMBAT_MOVEMENT = true;
+        CFG.settingsGD.SHOW_BATTLE_REPORT = false;
+        CFG.settingsGD.CONTINUOUS_RENDERING = true;
+        CFG.settingsGD.CONFIRM_END_TURN = false;
+        CFG.settingsGD.CONFIRM_NO_ORDERS = false;
+        CFG.settingsGD.ANNEXATION_DELAY = true;
+        CFG.settingsGD.ANNEXATION_DELAY_TURNS = 5;
+        CFG.settingsGD.DISABLE_INFLATION = true;
+        CFG.settingsGD.DISABLE_AI_INVESTING = true;
+        CFG.settingsGD.AIR_DEFENCE_SYSTEMS = true;
+        CFG.settingsGD.MISSILES = true;
+        CFG.settingsGD.BETTER_UI = true;
+        CFG.settingsGD.AI_GROUP_UNITS = false;
+        CFG.settingsGD.ARMY_VISIBILITY_RANGE = 3;
+        CFG.settingsGD.ARMY_ICON_SCALE = 1;
+        CFG.settingsGD.BAT_PLUS = true;
+        CFG.settingsGD.EXPERIMENTAL_BATTLE_SYSTEM = true;
+        CFG.settingsGD.CAPITAL_FLAGS_HIGH = true;
+        CFG.settingsGD.SHIPS_ON_MAP = 10;
+        CFG.settingsGD.USE_OLD_PROVINCE_BORDER = false;
+        CFG.settingsGD.BORDER_EXTRA_THICKNESS = 0.0f;
+        CFG.settingsGD.SHORTEN_ARMY_OVER = 1000;
+        CFG.settingsGD.TURNS_BETWEEN_AUTOSAVEX = 200;
+        CFG.settingsGD.randomLeaders = false;
+        this.updateLang();
+        CFG.toastM.addM("Settings reset to defaults");
     }
 
     @Override
@@ -556,6 +594,10 @@ extends Menu {
                 AoCGame.loadCursor(false);
                 if (!CFG.settingsGD.loadCursor) break;
                 CFG.toastM.addM(" --- The cursor may disappear during video recording --- ", CFG.COLOR_NEGATIVE_2);
+                break;
+            }
+            case 23: {
+                this.resetDefaults();
                 break;
             }
             case 24: {
@@ -846,6 +888,18 @@ extends Menu {
             case 90: {
                 CFG.settingsGD.AI_GROUP_UNITS = !CFG.settingsGD.AI_GROUP_UNITS;
                 this.getMenuElem(90).setTextE("AI: Group Units: " + (CFG.settingsGD.AI_GROUP_UNITS ? CFG.lang.get("On") : CFG.lang.get("Off")));
+                break;
+            }
+            case 91: {
+                float newVal = CFG.settingsGD.BAT_PLUS_BREAKTHROUGH_RATIO - 0.5f;
+                CFG.settingsGD.BAT_PLUS_BREAKTHROUGH_RATIO = Math.max(2.5f, newVal);
+                this.getMenuElem(92).setTextE("Bat+ Breakthrough: " + CFG.getPrecision2(CFG.settingsGD.BAT_PLUS_BREAKTHROUGH_RATIO, 2) + "x");
+                break;
+            }
+            case 93: {
+                float newVal = CFG.settingsGD.BAT_PLUS_BREAKTHROUGH_RATIO + 0.5f;
+                CFG.settingsGD.BAT_PLUS_BREAKTHROUGH_RATIO = Math.min(50.0f, newVal);
+                this.getMenuElem(92).setTextE("Bat+ Breakthrough: " + CFG.getPrecision2(CFG.settingsGD.BAT_PLUS_BREAKTHROUGH_RATIO, 2) + "x");
                 break;
             }
         }

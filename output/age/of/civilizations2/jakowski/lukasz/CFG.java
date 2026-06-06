@@ -477,6 +477,7 @@ public class CFG {
     public static boolean AGE_OF_CHAOS_MODE;
     public static long AGE_OF_CHAOS_TURNS;
     public static int AGE_OF_CHAOS_CIVS;
+    public static float BAT_PLUS_BREAKTHROUGH_RATIO_GAME;
     public static boolean ENABLE_NUKES;
     public static boolean LEADERS_CAN_DIE;
     public static boolean USE_NEW_DECLARE_WAR_SYSTEM;
@@ -7941,6 +7942,7 @@ public class CFG {
         AGE_OF_CHAOS_MODE = false;
         AGE_OF_CHAOS_TURNS = 50;
         AGE_OF_CHAOS_CIVS = 4;
+        BAT_PLUS_BREAKTHROUGH_RATIO_GAME = 0.0f;
         ENABLE_NUKES = false;
         LEADERS_CAN_DIE = false;
         USE_NEW_DECLARE_WAR_SYSTEM = true;

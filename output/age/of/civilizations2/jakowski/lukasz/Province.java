@@ -476,7 +476,9 @@ public class Province {
 
     public final void drawProv_ActiveProv(SpriteBatch oSB) {
         if (this.iContinentID == CFG.map.getMapContinents().getOceanContinentID()) {
-            this.provBG.drawO(oSB, this.iTranslateProvincePosX + this.miX + this.miX * CFG.map.getMpB().getMapSc3() - this.miX, CFG.map.getMpC().getPY() + this.miY + this.miY * CFG.map.getMpB().getMapSc3() - this.miY + this.provBG.getHeight() * CFG.map.getMpB().getMapSc3() - this.provBG.getHeight(), (float)CFG.map.getMpB().getMapSc3());
+            if (this.provBG != null) {
+                this.provBG.drawO(oSB, this.iTranslateProvincePosX + this.miX + this.miX * CFG.map.getMpB().getMapSc3() - this.miX, CFG.map.getMpC().getPY() + this.miY + this.miY * CFG.map.getMpB().getMapSc3() - this.miY + this.provBG.getHeight() * CFG.map.getMpB().getMapSc3() - this.provBG.getHeight(), (float)CFG.map.getMpB().getMapSc3());
+            }
         } else {
             this.drawLandProv(oSB);
         }

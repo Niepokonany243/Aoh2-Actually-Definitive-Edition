@@ -24,7 +24,7 @@ public class ProvinceAtlas {
         initialized = true;
     }
 
-    public static void addProvince(int provinceID, Pixmap pixmap) {
+    public static synchronized void addProvince(int provinceID, Pixmap pixmap) {
         if (!initialized) init();
         if (pixmap != null) {
             packer.pack(String.valueOf(provinceID), pixmap);

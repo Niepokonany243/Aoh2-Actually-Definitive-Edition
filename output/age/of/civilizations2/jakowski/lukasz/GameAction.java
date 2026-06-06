@@ -2759,7 +2759,8 @@ public class GameAction {
             float attackerPower = (float)numOfAttackers * fOffensiveArmyModifiers;
             float defenderPower = (float)numOfDefenders * fDefensiveArmyModifiers;
             float powerRatio = attackerPower / Math.max(1.0f, defenderPower);
-            if (powerRatio < CFG.settingsGD.BAT_PLUS_BREAKTHROUGH_RATIO) {
+            float btRatio = CFG.BAT_PLUS_BREAKTHROUGH_RATIO_GAME > 0.0f ? CFG.BAT_PLUS_BREAKTHROUGH_RATIO_GAME : CFG.settingsGD.BAT_PLUS_BREAKTHROUGH_RATIO;
+            if (powerRatio < btRatio) {
                 return false;
             }
             float diceMod = 1.0f + (float)(this.diceAggressors - this.diceDefenders) * 0.025f;
@@ -2789,7 +2790,8 @@ public class GameAction {
             float attackerPower = (float)numOfAttackers * fOffensiveModifier;
             float defenderPower = (float)numOfDefenders * fDefensiveModifier;
             float powerRatio = attackerPower / Math.max(1.0f, defenderPower);
-            if (powerRatio < CFG.settingsGD.BAT_PLUS_BREAKTHROUGH_RATIO) {
+            float btRatio = CFG.BAT_PLUS_BREAKTHROUGH_RATIO_GAME > 0.0f ? CFG.BAT_PLUS_BREAKTHROUGH_RATIO_GAME : CFG.settingsGD.BAT_PLUS_BREAKTHROUGH_RATIO;
+            if (powerRatio < btRatio) {
                 return false;
             }
             float diceMod = 1.0f + (float)(this.diceAggressors - this.diceDefenders) * 0.025f;

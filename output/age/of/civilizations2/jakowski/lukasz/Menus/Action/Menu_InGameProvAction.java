@@ -823,14 +823,6 @@ extends Menu {
             @Override
             public void drawButtonBGE(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive) {
                 super.drawButtonBGE(oSB, iTranslateX, iTranslateY, isActive);
-                if (isActive) {
-                    oSB.setColor(Color.WHITE);
-                } else if (this.getIsHovered()) {
-                    oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.75f));
-                } else {
-                    oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.575f));
-                }
-                IMGManager.getIMG(Images.skull).drawO(oSB, this.getPosXE() + this.getWidthE() - IMGManager.getIMG(Images.skull).getWidth() - CFG.PADD + iTranslateX, this.getPosY() + this.getHeightE() - IMGManager.getIMG(Images.skull).getHeight() - CFG.PADD + iTranslateY);
                 oSB.setColor(Color.WHITE);
             }
 
@@ -840,7 +832,6 @@ extends Menu {
                     ArrayList<MEHover_2E> nElements = new ArrayList<MEHover_2E>();
                     ArrayList<ME_Hover_2Type> nData = new ArrayList<ME_Hover_2Type>();
                     nData.add(new ME_Hover_2Type_Text_Big("Genocide", CFG.COLOR_NEGATIVE_2));
-                    nData.add(new ME_Hover_2Type_Image_Big(Images.skull, CFG.PADD, 0));
                     nElements.add(new MEHover_2E(nData));
                     nData.clear();
                     nData.add(new ME_Hover_2Type_Space());

@@ -123,7 +123,6 @@ extends Menu {
                 ArrayList<MEHover_2E> nElements = new ArrayList<MEHover_2E>();
                 ArrayList<ME_Hover_2Type> nData = new ArrayList<ME_Hover_2Type>();
                 nData.add(new ME_Hover_2Type_Text_Big("Genocide", CFG.COLOR_NEGATIVE_2));
-                nData.add(new ME_Hover_2Type_Image_Big(Images.skull, CFG.PADD, 0));
                 nElements.add(new MEHover_2E(nData));
                 nData.clear();
                 nData.add(new ME_Hover_2Type_Text("Target: "));
@@ -156,8 +155,7 @@ extends Menu {
 
             @Override
             public void drawTextE(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive) {
-                IMGManager.getIMG(Images.skull).drawO(oSB, this.getPosXE() + this.getWidthE() / 2 - (this.getTextWidthU() + IMGManager.getIMG(Images.skull).getWidth() + CFG.PADD) / 2 + iTranslateX, this.getPosY() + this.getHeightE() / 2 - IMGManager.getIMG(Images.skull).getHeight() / 2 + iTranslateY);
-                Renderer.drawText(oSB, this.fontID, this.getTextE(), this.getPosXE() + (this.getTextPosElem() < 0 ? this.getWidthE() / 2 - (this.getTextWidthU() + IMGManager.getIMG(Images.skull).getWidth() + CFG.PADD) / 2 + IMGManager.getIMG(Images.skull).getWidth() + CFG.PADD : this.getTextPosElem()) + iTranslateX, this.getPosY() + this.getHeightE() / 2 - this.getTextHeight() / 2 + iTranslateY, this.getColorE(isActive));
+                Renderer.drawText(oSB, this.fontID, this.getTextE(), this.getPosXE() + (this.getTextPosElem() < 0 ? this.getWidthE() / 2 - this.getTextWidthU() / 2 : this.getTextPosElem()) + iTranslateX, this.getPosY() + this.getHeightE() / 2 - this.getTextHeight() / 2 + iTranslateY, this.getColorE(isActive));
             }
 
             @Override

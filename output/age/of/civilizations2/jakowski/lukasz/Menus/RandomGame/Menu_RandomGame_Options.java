@@ -221,7 +221,7 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Button_CNG_Options(null, CFG.PADD * 2, 0, tempElemH * 12, tempW, tempElemH, true, GameCalendar.ENABLE_COLONIZATION){
+        menuElements.add(new Button_CNG_Options(null, CFG.PADD * 2, 0, tempElemH * 12, tempW, tempElemH, true, CFG.SPECTATOR_MODE){
 
             @Override
             public boolean getCheckboxSt() {
@@ -291,8 +291,6 @@ extends Menu {
                 IMGManager.getIMG(Images.gameTopEdgeTitle).draw2O(oSB, Menu_RandomGame_Options.this.getPosX() + iTranslateX, Menu_RandomGame_Options.this.getPosY() - Core.PADDING - IMGManager.getIMG(Images.gameTopEdgeTitle).getHeight() - this.getHeightT(), Menu_RandomGame_Options.this.getWidthM() + 2 + Core.PADDING, this.getHeightT() + Core.PADDING, true, false);
                 oSB.setColor(new Color(0.011f, 0.014f, 0.019f, 0.25f));
                 IMGManager.getIMG(Images.gradient).drawO(oSB, Menu_RandomGame_Options.this.getPosX() + iTranslateX, Menu_RandomGame_Options.this.getPosY() - IMGManager.getIMG(Images.gradient).getHeight() - this.getHeightT() * 3 / 4, Menu_RandomGame_Options.this.getWidthM(), this.getHeightT() * 3 / 4, false, true);
-                oSB.setColor(CFG.COLOR_NEW_GAME_EDGE_LINE);
-                IMGManager.getIMG(Images.pix255).drawO(oSB, Menu_RandomGame_Options.this.getPosX() + iTranslateX, Menu_RandomGame_Options.this.getPosY() - IMGManager.getIMG(Images.pix255).getHeight(), Menu_RandomGame_Options.this.getWidthM());
                 oSB.setColor(new Color(CFG.COLOR_FLAG_FRAME.r, CFG.COLOR_FLAG_FRAME.g, CFG.COLOR_FLAG_FRAME.b, 0.4f));
                 IMGManager.getIMG(Images.line32Off1).drawO(oSB, Menu_RandomGame_Options.this.getPosX() + iTranslateX, Menu_RandomGame_Options.this.getPosY() - IMGManager.getIMG(Images.pix255).getHeight() - IMGManager.getIMG(Images.line32Off1).getHeight(), Menu_RandomGame_Options.this.getWidthM(), 1);
                 if (AoCGame.LEFT != 0) {
@@ -351,8 +349,7 @@ extends Menu {
         IMGManager.getIMG(Images.pix255).drawO(oSB, this.getPosX() + iTranslateX, this.getPosY() - IMGManager.getIMG(Images.pix255).getHeight() + this.getHeightM(), this.getWidthM());
         oSB.setColor(new Color(CFG.COLOR_FLAG_FRAME.r, CFG.COLOR_FLAG_FRAME.g, CFG.COLOR_FLAG_FRAME.b, 0.4f));
         IMGManager.getIMG(Images.line32Off1).drawO(oSB, this.getPosX() + iTranslateX, this.getPosY() - IMGManager.getIMG(Images.pix255).getHeight() - IMGManager.getIMG(Images.line32Off1).getHeight() + this.getHeightM(), this.getWidthM(), 1);
-        oSB.setColor(new Color(0.0f, 0.0f, 0.0f, 0.5f));
-        IMGManager.getIMG(Images.pix255).drawO(oSB, this.getPosX() + iTranslateX, this.getPosY() + this.getHeightM(), this.getWidthM() + 2);
+
         if (AoCGame.LEFT != 0) {
             oSB.setColor(CFG.COLOR_CREATE_NEW_GAME_BOX_PLAYERS);
             IMGManager.getIMG(Images.pix255).draw2O(oSB, this.getPosX() + iTranslateX, this.getPosY() - IMGManager.getIMG(Images.pix255).getHeight() + iTranslateY, 1, this.getHeightM(), true, true);

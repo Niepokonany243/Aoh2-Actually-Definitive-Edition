@@ -18,6 +18,7 @@ extends Menu {
         menuElements.add(new Button_Classic(null, (int)(50.0f * CFG.GUI_SCALE), 0, CFG.BUTTON_H + CFG.PADD * 2, CFG.GAMEWIDTH, CFG.BUTTON_H, true));
         menuElements.add(new Button_Classic(null, (int)(50.0f * CFG.GUI_SCALE), 0, CFG.BUTTON_H * 2 + CFG.PADD * 3, CFG.GAMEWIDTH, CFG.BUTTON_H, true));
         menuElements.add(new Button_Classic(null, (int)(50.0f * CFG.GUI_SCALE), 0, CFG.BUTTON_H * 3 + CFG.PADD * 4, CFG.GAMEWIDTH, CFG.BUTTON_H, true));
+        menuElements.add(new Button_Classic(null, (int)(50.0f * CFG.GUI_SCALE), 0, CFG.BUTTON_H * 4 + CFG.PADD * 5, CFG.GAMEWIDTH, CFG.BUTTON_H, true));
         this.initMenuWithBackButton(new TitleM(null, CFG.BUTTON_H * 3 / 4, false, false), 0, CFG.BUTTON_H * 3 / 4, CFG.GAMEWIDTH, CFG.GAMEHEIGHT - CFG.BUTTON_H * 3 / 4, menuElements);
         this.updateLang();
     }
@@ -29,6 +30,7 @@ extends Menu {
         this.getMenuElem(2).setTextE(CFG.lang.get("Normal"));
         this.getMenuElem(3).setTextE(CFG.lang.get("Hard"));
         this.getMenuElem(4).setTextE(CFG.lang.get("Extreme"));
+        this.getMenuElem(5).setTextE(CFG.lang.get("Legendary"));
         this.getTitleM().setText(CFG.lang.get("SelectDifficultyLevel"));
     }
 
@@ -57,6 +59,12 @@ extends Menu {
             case 4: {
                 CFG.DIFFICULTY = iID - 1;
                 this.onBackPressed();
+                break;
+            }
+            case 5: {
+                CFG.DIFFICULTY = iID - 1;
+                this.onBackPressed();
+                break;
             }
         }
     }

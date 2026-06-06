@@ -192,12 +192,25 @@ public class TouchManager {
         }
         if (bSMD && (button == 2 || !CFG.getIsDesktop())) {
             bSMD = false;
-            if (button == 2 && CFG.menus.getInGame_PeaceTreaty() && Menu_PeaceTreaty_Response.DRAW_TREATY_PROVINCES && Math.abs(nPosX - this.iSBXX) <= CFG.PADD && Math.abs(nPosY - this.iSBXY) <= CFG.PADD) {
-                this.actionUp_setActiveProvinceID(nPosX, nPosY);
-                if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0 && CFG.peaceTreatyData.drawProvOwners.get((int)CFG.core.getActiveProvID()).isTaken <= 0) {
-                    CFG.peaceTreatyData.takeProvince(CFG.core.getActiveProvID(), CFG.peaceTreatyData.brushCivID, CFG.core.getCiv(CFG.peaceTreatyData.brushCivID).getIsPlayer() ? CFG.peaceTreatyData.brushCivID : CFG.core.getPlayer(CFG.peaceTreatyData.playerTurnID).getCivId());
+            if (button == 2 && Math.abs(nPosX - this.iSBXX) <= CFG.PADD && Math.abs(nPosY - this.iSBXY) <= CFG.PADD) {
+                if (CFG.menus.getInGame_SendMessage() != null && CFG.menus.getInGame_SendMessage().getVisibleM() && CFG.menus.getInGame_SendMessage() instanceof Menu_InGame_RelocatePopulation) {
+                    this.actionUp_setActiveProvinceID(nPosX, nPosY);
+                    if (CFG.core.getActiveProvID() >= 0) {
+                        int clickProv = CFG.core.getActiveProvID();
+                        if (CFG.core.getProv(clickProv).getCivId() == CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId() || CFG.core.getCiv(CFG.core.getProv(clickProv).getCivId()).getPuppetOfCiv() == CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()) {
+                            Menu_InGame_RelocatePopulation.addFromProvince(clickProv);
+                            CFG.menus.rebuildInGame_Build_RelocatePopulation(clickProv);
+                        }
+                    }
+                    return;
                 }
-                return;
+                if (CFG.menus.getInGame_PeaceTreaty() && Menu_PeaceTreaty_Response.DRAW_TREATY_PROVINCES) {
+                    this.actionUp_setActiveProvinceID(nPosX, nPosY);
+                    if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0 && CFG.peaceTreatyData.drawProvOwners.get((int)CFG.core.getActiveProvID()).isTaken <= 0) {
+                        CFG.peaceTreatyData.takeProvince(CFG.core.getActiveProvID(), CFG.peaceTreatyData.brushCivID, CFG.core.getCiv(CFG.peaceTreatyData.brushCivID).getIsPlayer() ? CFG.peaceTreatyData.brushCivID : CFG.core.getPlayer(CFG.peaceTreatyData.playerTurnID).getCivId());
+                    }
+                    return;
+                }
             }
             this.aUSM(nPosX, nPosY);
             return;
@@ -219,6 +232,18 @@ public class TouchManager {
             return;
         }
         this.actionUp_setActiveProvinceID(nPosX, nPosY);
+        if (CFG.menus.getInGame_SendMessage() != null && CFG.menus.getInGame_SendMessage().getVisibleM() && CFG.menus.getInGame_SendMessage() instanceof Menu_InGame_RelocatePopulation && CFG.core.getActiveProvID() >= 0) {
+            int clickProv = CFG.core.getActiveProvID();
+            if (CFG.core.getProv(clickProv).getCivId() == CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId() || CFG.core.getCiv(CFG.core.getProv(clickProv).getCivId()).getPuppetOfCiv() == CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()) {
+                if (Menu_InGame_RelocatePopulation.fromProvinceIDs.isEmpty()) {
+                    Menu_InGame_RelocatePopulation.addFromProvince(clickProv);
+                    CFG.menus.rebuildInGame_Build_RelocatePopulation(clickProv);
+                } else if (!Menu_InGame_RelocatePopulation.fromProvinceIDs.contains(clickProv)) {
+                    Menu_InGame_RelocatePopulation.toProvinceID = clickProv;
+                    CFG.menus.rebuildInGame_Build_RelocatePopulation(Menu_InGame_RelocatePopulation.fromProvinceIDs.get(0));
+                }
+            }
+        }
         if (CFG.menus.getActiveMenuElemeID() < 0 && this.enableScaling) {
             CFG.map.getMpS().resetScaleOfMap(System.currentTimeMillis());
         }
@@ -481,7 +506,7 @@ public class TouchManager {
                         Core.dARA((int)CFG.menus.getInGame_ProvRecruitSlider().getCurrLong());
                         CFG.menus.updateInGame_ActionInfo_Recruit();
                     }
-                } else if (CFG.menus.getInGame_SendMessage().getVisibleM() && CFG.menus.getInGame_SendMessage() instanceof Menu_InGame_RelocatePopulation) {
+                } else if (CFG.menus.getInGame_SendMessage() != null && CFG.menus.getInGame_SendMessage().getVisibleM() && CFG.menus.getInGame_SendMessage() instanceof Menu_InGame_RelocatePopulation) {
                     int clickedProv = -1;
                     for (int i8 = 0; i8 < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i8) {
                         if (!TouchManager.aUSMIIBXC(CFG.core.getPIV(i8), this.iSBXX, this.iSBXY, nMaxX, nMaxY)) continue;
