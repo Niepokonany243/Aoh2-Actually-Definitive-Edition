@@ -18,6 +18,32 @@ public class GameUpdate {
     public static final float TAXES_INFLUENCE_POP = 0.3f;
     public long inflationMaxIncomeAllCivs = 100L;
     public static float LEAGUE_BUDGET = 1.0f;
+    private int[] administrationEfficiencyTurn = new int[0];
+    private int[] administrationEfficiencyProvs = new int[0];
+    private int[] administrationEfficiencyTechBits = new int[0];
+    private int[] administrationEfficiencyIdeology = new int[0];
+    private long[] administrationEfficiencyIncomeTaxation = new long[0];
+    private long[] administrationEfficiencyIncomeProduction = new long[0];
+    private long[] administrationEfficiencyAdministrationCosts = new long[0];
+    private float[] administrationEfficiencyValue = new float[0];
+
+    private void ensureAdministrationEfficiencyCache() {
+        int civsSize = CFG.core.getCivsSize();
+        if (this.administrationEfficiencyTurn.length >= civsSize) {
+            return;
+        }
+        int oldSize = this.administrationEfficiencyTurn.length;
+        int newSize = Math.max(civsSize, oldSize * 2 + 8);
+        this.administrationEfficiencyTurn = java.util.Arrays.copyOf(this.administrationEfficiencyTurn, newSize);
+        this.administrationEfficiencyProvs = java.util.Arrays.copyOf(this.administrationEfficiencyProvs, newSize);
+        this.administrationEfficiencyTechBits = java.util.Arrays.copyOf(this.administrationEfficiencyTechBits, newSize);
+        this.administrationEfficiencyIdeology = java.util.Arrays.copyOf(this.administrationEfficiencyIdeology, newSize);
+        this.administrationEfficiencyIncomeTaxation = java.util.Arrays.copyOf(this.administrationEfficiencyIncomeTaxation, newSize);
+        this.administrationEfficiencyIncomeProduction = java.util.Arrays.copyOf(this.administrationEfficiencyIncomeProduction, newSize);
+        this.administrationEfficiencyAdministrationCosts = java.util.Arrays.copyOf(this.administrationEfficiencyAdministrationCosts, newSize);
+        this.administrationEfficiencyValue = java.util.Arrays.copyOf(this.administrationEfficiencyValue, newSize);
+        java.util.Arrays.fill(this.administrationEfficiencyTurn, oldSize, newSize, -1);
+    }
 
     public final float getHappinessChange_ByTaxation(int nCivID) {
         return GameValues.gvTaxation.HAPPINESS_CHANGE_BASE + ((CFG.ideologiesMgr.getAcceptableTaxation(CFG.core.getCiv(nCivID).getIdeology(), nCivID) + CFG.ideologiesMgr.getAcceptableTaxation(CFG.core.getCiv(nCivID).getIdeology(), nCivID) * CFG.core.getCiv(nCivID).getTechLevel() / 21.73f) * 100.0f - CFG.core.getCiv(nCivID).getTaxationLvl() * 100.0f) * GameValues.gvTaxation.HAPPINESS_CHANGE_MODIFIER;
@@ -623,14 +649,19 @@ public class GameUpdate {
         if (nCivID <= 0) return 0.5f;
         Civilization civ = CFG.core.getCiv(nCivID);
         if (civ.getNumOfProvs() <= 0) return 0.5f;
+        this.ensureAdministrationEfficiencyCache();
+        int techBits = Float.floatToIntBits(civ.getTechLevel());
+        if (this.administrationEfficiencyTurn[nCivID] == GameCalendar.TURNID && this.administrationEfficiencyProvs[nCivID] == civ.getNumOfProvs() && this.administrationEfficiencyTechBits[nCivID] == techBits && this.administrationEfficiencyIdeology[nCivID] == civ.getIdeology() && this.administrationEfficiencyIncomeTaxation[nCivID] == civ.incomeTaxation && this.administrationEfficiencyIncomeProduction[nCivID] == civ.incomeProduction && this.administrationEfficiencyAdministrationCosts[nCivID] == civ.administrationCosts) {
+            return this.administrationEfficiencyValue[nCivID];
+        }
         float totalRatio = 0.0f;
-        int nCapital = this.getAdministration_Capital(nCivID);
         int count = 0;
         for (int i = 0; i < civ.getNumOfProvs(); ++i) {
             int provID = civ.getProvID(i);
-            if (CFG.core.getProv(provID).isOccupied()) continue;
-            float adminCost = this.getProvinceAdministrationCost(provID, nCapital);
-            float totalIncome = this.getProvIncomeTaxation(provID) + this.getProvIncomeProduction(provID);
+            Province province = CFG.core.getProv(provID);
+            if (province.isOccupied()) continue;
+            float adminCost = province.administrationCost;
+            float totalIncome = province.incomeTaxation + province.incomeProduction;
             if (totalIncome <= 0.0f || adminCost <= 0.0f) {
                 totalRatio += 0.5f;
             } else {
@@ -644,7 +675,16 @@ public class GameUpdate {
         float techFactor = 1.0f + 0.02f * civ.getTechLevel();
         float ideologyFactor = CFG.ideologiesMgr.getAdministration(civ.getIdeology(), nCivID);
         efficiency = efficiency * Math.max(0.5f, sizeFactor) * techFactor / ideologyFactor;
-        return Math.max(0.1f, Math.min(1.0f, efficiency));
+        efficiency = Math.max(0.1f, Math.min(1.0f, efficiency));
+        this.administrationEfficiencyTurn[nCivID] = GameCalendar.TURNID;
+        this.administrationEfficiencyProvs[nCivID] = civ.getNumOfProvs();
+        this.administrationEfficiencyTechBits[nCivID] = techBits;
+        this.administrationEfficiencyIdeology[nCivID] = civ.getIdeology();
+        this.administrationEfficiencyIncomeTaxation[nCivID] = civ.incomeTaxation;
+        this.administrationEfficiencyIncomeProduction[nCivID] = civ.incomeProduction;
+        this.administrationEfficiencyAdministrationCosts[nCivID] = civ.administrationCosts;
+        this.administrationEfficiencyValue[nCivID] = efficiency;
+        return efficiency;
     }
 
     public final void getBalance_UpdateBudgetPrepare(int nCivID) {

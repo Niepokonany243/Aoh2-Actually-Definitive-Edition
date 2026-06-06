@@ -194,6 +194,62 @@ public class Core {
     private int iProvincesSize = 0;
     private static Province_GameData2[] provCache = null;
     private static boolean provCacheLoaded = false;
+    private static final int APS_ASSIMILATE = 0;
+    private static final int APS_INVEST_ECO = 1;
+    private static final int APS_INVEST_DEV = 2;
+    private static final int APS_FESTIVAL = 3;
+    private static final int APS_FORT = 4;
+    private static final int APS_TOWER = 5;
+    private static final int APS_PORT = 6;
+    private static final int APS_FARM = 7;
+    private static final int APS_WORKSHOP = 8;
+    private static final int APS_MARKET = 9;
+    private static final int APS_LIBRARY = 10;
+    private static final int APS_ARMOURY = 11;
+    private static final int APS_SUPPLY = 12;
+    private static final int APS_AIR_DEFENSE = 13;
+    private static final int APS_SIZE = 14;
+    private AllProvinceStats allProvinceStatsCache = new AllProvinceStats();
+
+    private static final class AllProvinceStats {
+        int civID = -1;
+        int turnID = -1;
+        int numProvs = -1;
+        int constructionsSize = -1;
+        int assimilatesSize = -1;
+        int investsEcoSize = -1;
+        int investsDevSize = -1;
+        int festivalsSize = -1;
+        int movemPoints = -1;
+        int techBits = 0;
+        long gold = Long.MIN_VALUE;
+        int[] number = new int[APS_SIZE];
+        long[] goldCost = new long[APS_SIZE];
+        float[] movementRaw = new float[APS_SIZE];
+
+        boolean matches(Civilization civ, int nCivID) {
+            return this.civID == nCivID && this.turnID == GameCalendar.TURNID && this.numProvs == civ.getNumOfProvs() && this.constructionsSize == civ.getConstructionsSize() && this.assimilatesSize == civ.getAssimilatesSize() && this.investsEcoSize == civ.getInvestsSize() && this.investsDevSize == civ.getInvestsSize_Development() && this.festivalsSize == civ.getFestivalsSize() && this.gold == civ.getGold() && this.movemPoints == civ.getMovemPoints() && this.techBits == Float.floatToIntBits(civ.getTechLevel());
+        }
+
+        void reset(Civilization civ, int nCivID) {
+            this.civID = nCivID;
+            this.turnID = GameCalendar.TURNID;
+            this.numProvs = civ.getNumOfProvs();
+            this.constructionsSize = civ.getConstructionsSize();
+            this.assimilatesSize = civ.getAssimilatesSize();
+            this.investsEcoSize = civ.getInvestsSize();
+            this.investsDevSize = civ.getInvestsSize_Development();
+            this.festivalsSize = civ.getFestivalsSize();
+            this.gold = civ.getGold();
+            this.movemPoints = civ.getMovemPoints();
+            this.techBits = Float.floatToIntBits(civ.getTechLevel());
+            for (int i = 0; i < APS_SIZE; ++i) {
+                this.number[i] = 0;
+                this.goldCost[i] = 0L;
+                this.movementRaw[i] = 0.0f;
+            }
+        }
+    }
 
     public static boolean preloadProvinceCache() {
         provCacheLoaded = false;
@@ -276,48 +332,55 @@ public class Core {
         final boolean[] usedFallback = new boolean[numProvinces];
         final String baseDataPath = "map/" + CFG.map.getFileActiveMapPath() + "data/" + "provinces/";
         final String baseUpdatePath = "map/" + CFG.map.getFileActiveMapPath() + "update/";
-        java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(numProvinces);
+        final int chunks = Math.max(1, Math.min(Runtime.getRuntime().availableProcessors(), numProvinces));
+        final int chunkSize = Math.max(1, (numProvinces + chunks - 1) / chunks);
+        java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(chunks);
 
-        for (int i = 0; i < numProvinces; ++i) {
-            final int provinceID = i;
+        for (int c = 0; c < chunks; ++c) {
+            final int startProvince = c * chunkSize;
+            final int endProvince = Math.min(startProvince + chunkSize, numProvinces);
             EXECUTOR.execute(() -> {
                 try {
-                    FileHandle f = FileManager.loadFile(baseDataPath + provinceID);
-                    try {
-                        gdArray[provinceID] = (Province_GameData2)CFG.deserialize(f.readBytes());
-                    } catch (Exception e) {
+                    for (int provinceID = startProvince; provinceID < endProvince; ++provinceID) {
                         try {
-                            FileHandle uf = FileManager.loadFile(baseUpdatePath + provinceID);
-                            String text = uf.readString();
-                            int semi = text.indexOf(';');
-                            String xs = semi >= 0 ? text.substring(0, semi) : "";
-                            String ys = semi >= 0 ? text.substring(semi + 1) : "";
-                            int count = 0;
-                            int idx = 0, n;
-                            while ((n = xs.indexOf(',', idx)) >= 0) { count++; idx = n + 1; }
-                            if (xs.length() > 0) count++;
-                            ArrayList<Short> px = new ArrayList<Short>(count);
-                            ArrayList<Short> py = new ArrayList<Short>(count);
-                            idx = 0;
-                            for (int j = 0; j < count; ++j) {
-                                n = xs.indexOf(',', idx);
-                                px.add((short)Integer.parseInt(n >= 0 ? xs.substring(idx, n) : xs.substring(idx)));
-                                idx = n + 1;
+                            FileHandle f = FileManager.loadFile(baseDataPath + provinceID);
+                            try {
+                                gdArray[provinceID] = (Province_GameData2)CFG.deserialize(f.readBytes());
+                            } catch (Exception e) {
+                                try {
+                                    FileHandle uf = FileManager.loadFile(baseUpdatePath + provinceID);
+                                    String text = uf.readString();
+                                    int semi = text.indexOf(';');
+                                    String xs = semi >= 0 ? text.substring(0, semi) : "";
+                                    String ys = semi >= 0 ? text.substring(semi + 1) : "";
+                                    int count = 0;
+                                    int idx = 0, n;
+                                    while ((n = xs.indexOf(',', idx)) >= 0) { count++; idx = n + 1; }
+                                    if (xs.length() > 0) count++;
+                                    ArrayList<Short> px = new ArrayList<Short>(count);
+                                    ArrayList<Short> py = new ArrayList<Short>(count);
+                                    idx = 0;
+                                    for (int j = 0; j < count; ++j) {
+                                        n = xs.indexOf(',', idx);
+                                        px.add((short)Integer.parseInt(n >= 0 ? xs.substring(idx, n) : xs.substring(idx)));
+                                        idx = n + 1;
+                                    }
+                                    idx = 0;
+                                    for (int j = 0; j < count; ++j) {
+                                        n = ys.indexOf(',', idx);
+                                        py.add((short)Integer.parseInt(n >= 0 ? ys.substring(idx, n) : ys.substring(idx)));
+                                        idx = n + 1;
+                                    }
+                                    gdArray[provinceID] = new Province_GameData2(-1, px, py, null, new ArrayList<Short>(), new ArrayList<Short>());
+                                    usedFallback[provinceID] = true;
+                                } catch (Exception e2) {
+                                    usedFallback[provinceID] = true;
+                                }
                             }
-                            idx = 0;
-                            for (int j = 0; j < count; ++j) {
-                                n = ys.indexOf(',', idx);
-                                py.add((short)Integer.parseInt(n >= 0 ? ys.substring(idx, n) : ys.substring(idx)));
-                                idx = n + 1;
-                            }
-                            gdArray[provinceID] = new Province_GameData2(-1, px, py, null, new ArrayList<Short>(), new ArrayList<Short>());
-                            usedFallback[provinceID] = true;
-                        } catch (Exception e2) {
+                        } catch (Exception e) {
                             usedFallback[provinceID] = true;
                         }
                     }
-                } catch (Exception e) {
-                    usedFallback[provinceID] = true;
                 } finally {
                     latch.countDown();
                 }
@@ -1348,13 +1411,23 @@ public class Core {
     }
 
     private static boolean provinceTexturesLoaded = false;
+    private static boolean provinceBGLoaded = false;
 
     public static void resetProvinceTexturesLoaded() {
         provinceTexturesLoaded = false;
+        provinceBGLoaded = false;
     }
 
     public final void loadProvinceTextures() {
-        if (provinceTexturesLoaded) return;
+        if (provinceTexturesLoaded) {
+            if (CFG.getIsDesktop() && !provinceBGLoaded) {
+                for (int i = 0; i < this.iProvincesSize; ++i) {
+                    this.getProv(i).loadProvinceBG();
+                }
+                provinceBGLoaded = true;
+            }
+            return;
+        }
         ProvinceAtlas.init();
         
         int processors = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
@@ -1402,6 +1475,7 @@ public class Core {
             }
         }
         provinceTexturesLoaded = true;
+        provinceBGLoaded = true;
     }
 
     public final void loadProvinceTexture(int i) {
@@ -1414,31 +1488,81 @@ public class Core {
     }
 
     public final void loadProvinceTextures_BatchInit() {
+        if (provinceTexturesLoaded) return;
         ProvinceAtlas.init();
     }
 
     public final void loadProvinceTextures_Batch(int startProvince, int endProvince) {
-        for (int i = startProvince; i < endProvince && i < this.iProvincesSize; ++i) {
-            try {
-                Province p = this.getProv(i);
-                if (GameValues.gvInGame.LOAD_SEA_PROVINCES_IMAGES && CFG.getIsDesktop() || !p.getSeaProv()) {
-                    Pixmap pixmap = PixmapIO.readCIM(FileManager.loadFile("map/" + CFG.map.getFileActiveMapPath() + "data/scales/provinces/" + (p.getContinent() == CFG.map.getMapContinents().getOceanContinentID() ? 1 : CFG.map.getMpB().getMapScale_PreExtra()) + "/" + i));
-                    ProvinceAtlas.addProvince(i, pixmap);
-                    pixmap.dispose();
+        if (provinceTexturesLoaded) return;
+        final int start = Math.max(0, startProvince);
+        final int end = Math.min(endProvince, this.iProvincesSize);
+        final int count = end - start;
+        if (count <= 0) return;
+        if (count < 64) {
+            for (int i = start; i < end; ++i) {
+                try {
+                    Province p = this.getProv(i);
+                    if (GameValues.gvInGame.LOAD_SEA_PROVINCES_IMAGES && CFG.getIsDesktop() || !p.getSeaProv()) {
+                        Pixmap pixmap = PixmapIO.readCIM(FileManager.loadFile("map/" + CFG.map.getFileActiveMapPath() + "data/scales/provinces/" + (p.getContinent() == CFG.map.getMapContinents().getOceanContinentID() ? 1 : CFG.map.getMpB().getMapScale_PreExtra()) + "/" + i));
+                        ProvinceAtlas.addProvince(i, pixmap);
+                        pixmap.dispose();
+                    }
                 }
+                catch (Exception ex) {}
             }
-            catch (Exception ex) {}
+            return;
+        }
+        int processors = Math.max(1, Math.min(Runtime.getRuntime().availableProcessors() - 1, count));
+        int chunkSize = Math.max(1, (count + processors - 1) / processors);
+        java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(processors);
+        for (int t = 0; t < processors; ++t) {
+            final int chunkStart = start + t * chunkSize;
+            final int chunkEnd = Math.min(chunkStart + chunkSize, end);
+            if (chunkStart >= chunkEnd) {
+                latch.countDown();
+                continue;
+            }
+            EXECUTOR.execute(() -> {
+                try {
+                    for (int i = chunkStart; i < chunkEnd; ++i) {
+                        try {
+                            Province p = Core.this.getProv(i);
+                            if (GameValues.gvInGame.LOAD_SEA_PROVINCES_IMAGES && CFG.getIsDesktop() || !p.getSeaProv()) {
+                                Pixmap pixmap = PixmapIO.readCIM(FileManager.loadFile("map/" + CFG.map.getFileActiveMapPath() + "data/scales/provinces/" + (p.getContinent() == CFG.map.getMapContinents().getOceanContinentID() ? 1 : CFG.map.getMpB().getMapScale_PreExtra()) + "/" + i));
+                                synchronized (ProvinceAtlas.class) {
+                                    ProvinceAtlas.addProvince(i, pixmap);
+                                }
+                                pixmap.dispose();
+                            }
+                        }
+                        catch (Exception ex) {}
+                    }
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            CFG.exceptionStack(e);
         }
     }
 
     public final void loadProvinceTextures_BatchFinalise() {
+        if (provinceTexturesLoaded) return;
         ProvinceAtlas.finalise();
         ProvinceMesh.init();
+        provinceTexturesLoaded = true;
     }
 
     public final void loadProvinceBG_Batch(int startProvince, int endProvince) {
+        if (provinceBGLoaded) return;
         for (int i = startProvince; i < endProvince && i < this.iProvincesSize; ++i) {
             this.getProv(i).loadProvinceBG();
+        }
+        if (endProvince >= this.iProvincesSize) {
+            provinceBGLoaded = true;
         }
     }
 
@@ -2759,38 +2883,15 @@ public class Core {
 
     public final void loadScenario_3(boolean nEditor) {
         try {
-            int provSize = this.getProvinSize();
-            java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(provSize);
-            java.util.concurrent.ConcurrentLinkedQueue<int[]> civAssignments = new java.util.concurrent.ConcurrentLinkedQueue<int[]>();
-            
-            for (int i = 0; i < provSize; ++i) {
-                final int provinceID = i;
-                EXECUTOR.execute(() -> {
-                    try {
-                        Province p = Core.this.getProv(provinceID);
-                        for (int j = 0; j < p.getProvinceBordersLandByLandSize(); ++j) {
-                            p.getProvBordersLandByLand().get(j).setIsCivilizationBorder(p.getCivId() != Core.this.getProv(p.getProvBordersLandByLand().get(j).getWithProvinceID()).getCivId(), provinceID);
-                        }
-                        if (p.getCivId() > 0) {
-                            civAssignments.add(new int[]{p.getCivId(), provinceID});
-                        }
-                    } catch (Exception ex) {
-                        if (CFG.LOGs) CFG.exceptionStack(ex);
-                    } finally {
-                        latch.countDown();
-                    }
-                });
+            for (int provinceID = 0; provinceID < this.getProvinSize(); ++provinceID) {
+                Province p = this.getProv(provinceID);
+                for (int j = 0; j < p.getProvinceBordersLandByLandSize(); ++j) {
+                    p.getProvBordersLandByLand().get(j).setIsCivilizationBorder(p.getCivId() != this.getProv(p.getProvBordersLandByLand().get(j).getWithProvinceID()).getCivId(), provinceID);
+                }
+                if (p.getCivId() > 0) {
+                    this.getCiv(p.getCivId()).addProv_Just(provinceID);
+                }
             }
-            try {
-                latch.await();
-            } catch (InterruptedException e) {
-                CFG.exceptionStack(e);
-            }
-            
-            for (int[] assignment : civAssignments) {
-                this.getCiv(assignment[0]).addProv_Just(assignment[1]);
-            }
-            civAssignments.clear();
         }
         catch (Exception ex) {
             CFG.exceptionStack(ex);
@@ -14919,31 +15020,214 @@ lbl94:
         return (int)Math.max(3.0f, (1.0f - CFG.core.getProv(provinceID).getProviStability()) * 0.6f * 100.0f);
     }
 
-    public int assimilateAllProvinces_Number(int civID) {
-        int out = 0;
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            if (CFG.core.getProv(CFG.core.getCiv(civID).getProvID(i)).isOccupied() || !(CFG.core.getProv(CFG.core.getCiv(civID).getProvID(i)).getProviStability() < 1.0f) || CFG.core.getCiv(civID).isAssimilateOrganized(CFG.core.getCiv(civID).getProvID(i))) continue;
-            ++out;
+    private AllProvinceStats getAllProvinceStats(int civID) {
+        Civilization civ = CFG.core.getCiv(civID);
+        if (this.allProvinceStatsCache.matches(civ, civID)) {
+            return this.allProvinceStatsCache;
         }
+        AllProvinceStats out = this.allProvinceStatsCache;
+        out.reset(civ, civID);
+        int provinceArraySize = Math.max(1, this.iProvincesSize + 1);
+        boolean[] assimilating = new boolean[provinceArraySize];
+        boolean[] investingEco = new boolean[provinceArraySize];
+        boolean[] investingDev = new boolean[provinceArraySize];
+        boolean[] festival = new boolean[provinceArraySize];
+        int[] constructionMask = new int[provinceArraySize];
+        for (int i = 0; i < civ.getAssimilatesSize(); ++i) {
+            int provinceID = civ.getAssimilate(i).iProvinceID;
+            if (provinceID >= 0 && provinceID < provinceArraySize) {
+                assimilating[provinceID] = true;
+            }
+        }
+        for (int i = 0; i < civ.getInvestsSize(); ++i) {
+            int provinceID = civ.getInvest(i).provinceID;
+            if (provinceID >= 0 && provinceID < provinceArraySize) {
+                investingEco[provinceID] = true;
+            }
+        }
+        for (int i = 0; i < civ.getFestivalsSize(); ++i) {
+            int provinceID = civ.getFestival(i).iProvinceID;
+            if (provinceID >= 0 && provinceID < provinceArraySize) {
+                festival[provinceID] = true;
+            }
+        }
+        for (int i = 0; i < civ.getConstructionsSize(); ++i) {
+            int provinceID = civ.getConstruction(i).iProviID;
+            if (provinceID >= 0 && provinceID < provinceArraySize && civ.getConstruction(i).constructionType != null) {
+                constructionMask[provinceID] |= 1 << civ.getConstruction(i).constructionType.ordinal();
+            }
+        }
+        int fortMax = BuildingsManager.getFort_MaxLevel_CanBuild(civID);
+        int towerMax = BuildingsManager.getTower_MaxLevel_CanBuild(civID);
+        int portMax = BuildingsManager.getPort_MaxLevel();
+        int farmMax = BuildingsManager.getFarm_MaxLevel_CanBuild(civID);
+        int workshopMax = BuildingsManager.getWorkshop_MaxLevel_CanBuild(civID);
+        int marketMax = BuildingsManager.getMarket_MaxLevel_CanBuild(civID);
+        int libraryMax = BuildingsManager.getLibrary_MaxLevel_CanBuild(civID);
+        int armouryMax = BuildingsManager.getArmoury_MaxLevel();
+        int supplyMax = BuildingsManager.getSupply_MaxLevel();
+        int airDefenseMax = BuildingsManager.getAirDefense_MaxLevel_CanBuild(civID);
+        float investDevK = this.getAllProvinceStatsInvestDevK(civ, civID);
+        for (int i = 0; i < civ.getNumOfProvs(); ++i) {
+            int provinceID = civ.getProvID(i);
+            Province province = CFG.core.getProv(provinceID);
+            boolean occupied = province.isOccupied();
+            if (!occupied) {
+                if (province.getProviStability() < 1.0f && !this.getAllProvinceStatsFlag(assimilating, provinceID)) {
+                    ++out.number[APS_ASSIMILATE];
+                    out.goldCost[APS_ASSIMILATE] += this.getAllProvinceStatsAssimilateCost(civ, province, provinceID, this.getAssiNumOfTurns(provinceID));
+                    out.movementRaw[APS_ASSIMILATE] += GameValues.gvAssimilate.COST_ASSIMILATE_MOVEMENT;
+                }
+                if (!this.getAllProvinceStatsFlag(investingEco, provinceID)) {
+                    ++out.number[APS_INVEST_ECO];
+                    out.goldCost[APS_INVEST_ECO] += GameManager.invest_MaxEconomy_Gold(provinceID, civID);
+                    out.movementRaw[APS_INVEST_ECO] += GameValues.gvInvestEconomy.INVEST_ECO_COST_MOVEMENT_POINTS;
+                }
+                if (provinceID >= 0 && provinceID < investingDev.length) {
+                    investingDev[provinceID] = civ.isInvestOrganized_Devel(provinceID);
+                }
+                long investDevGold = this.getAllProvinceStatsInvestMaxDevGold(civ, province, investDevK);
+                if (!this.getAllProvinceStatsFlag(investingDev, provinceID) && investDevGold > 0 && civ.getTechLevel() > province.getDeveLvl()) {
+                    ++out.number[APS_INVEST_DEV];
+                    out.goldCost[APS_INVEST_DEV] += investDevGold;
+                    out.movementRaw[APS_INVEST_DEV] += GameValues.gvInvestDevelopment.INVEST_DEVELOPMENT_MOVEMENT_POINTS;
+                }
+                if (province.getHappi() < 1.0f && !this.getAllProvinceStatsFlag(festival, provinceID)) {
+                    ++out.number[APS_FESTIVAL];
+                    out.goldCost[APS_FESTIVAL] += this.getAllProvinceStatsFestivalCost(civ, province);
+                    out.movementRaw[APS_FESTIVAL] += GameValues.gvFestival.COST_FESTIVAL_MOVEMENT_POINTS;
+                }
+                if (province.getLvlOfFort() < fortMax && !this.getAllProvinceStatsConstruction(constructionMask, provinceID, ConstructionType.FORT)) {
+                    ++out.number[APS_FORT];
+                    out.goldCost[APS_FORT] += BuildingsManager.getFort_BuildCost(province.getLvlOfFort() + 1, provinceID);
+                    out.movementRaw[APS_FORT] += 1 + BuildingsManager.getFort_BuildMovementCost(province.getLvlOfFort() + 1);
+                }
+                if (province.getLvlOfWatchTower() < towerMax && !this.getAllProvinceStatsConstruction(constructionMask, provinceID, ConstructionType.TOWER)) {
+                    ++out.number[APS_TOWER];
+                    out.goldCost[APS_TOWER] += BuildingsManager.getTower_BuildCost(province.getLvlOfWatchTower() + 1, provinceID);
+                    out.movementRaw[APS_TOWER] += 1 + BuildingsManager.getTower_BuildMovementCost(province.getLvlOfWatchTower() + 1);
+                }
+                if (province.getNeighSeaProvincesSize() > 0 && province.getLvlOfPort() < portMax && !this.getAllProvinceStatsConstruction(constructionMask, provinceID, ConstructionType.PORT)) {
+                    ++out.number[APS_PORT];
+                    out.goldCost[APS_PORT] += BuildingsManager.getPort_BuildCost(province.getLvlOfPort() + 1, provinceID);
+                    out.movementRaw[APS_PORT] += 1 + BuildingsManager.getPort_BuildMovementCost(province.getLvlOfPort() + 1);
+                }
+                if (BuildingsManager.canBuildFarm_Terrain(provinceID) && province.getLvlOfFarm() < farmMax && !this.getAllProvinceStatsConstruction(constructionMask, provinceID, ConstructionType.FARM)) {
+                    ++out.number[APS_FARM];
+                    out.goldCost[APS_FARM] += BuildingsManager.getFarm_BuildCost(province.getLvlOfFarm() + 1, provinceID);
+                    out.movementRaw[APS_FARM] += 1 + BuildingsManager.getFarm_BuildMovementCost(province.getLvlOfFarm() + 1);
+                }
+                if (province.getLvlOfWorkshop() < workshopMax && !this.getAllProvinceStatsConstruction(constructionMask, provinceID, ConstructionType.WORKSHOP)) {
+                    ++out.number[APS_WORKSHOP];
+                    out.goldCost[APS_WORKSHOP] += BuildingsManager.getWorkshop_BuildCost(province.getLvlOfWorkshop() + 1, provinceID);
+                    out.movementRaw[APS_WORKSHOP] += 1 + BuildingsManager.getWorkshop_BuildMovementCost(province.getLvlOfWorkshop() + 1);
+                }
+                if (province.getLvlOfMarket() < marketMax && !this.getAllProvinceStatsConstruction(constructionMask, provinceID, ConstructionType.MARKET)) {
+                    ++out.number[APS_MARKET];
+                    out.goldCost[APS_MARKET] += BuildingsManager.getMarket_BuildCost(province.getLvlOfMarket() + 1, provinceID);
+                    out.movementRaw[APS_MARKET] += 1 + BuildingsManager.getMarket_BuildMovementCost(province.getLvlOfMarket() + 1);
+                }
+                if (province.getLvlOfLibrary() < libraryMax && !this.getAllProvinceStatsConstruction(constructionMask, provinceID, ConstructionType.LIBRARY)) {
+                    ++out.number[APS_LIBRARY];
+                    out.goldCost[APS_LIBRARY] += BuildingsManager.getLibrary_BuildCost(province.getLvlOfLibrary() + 1, provinceID);
+                    out.movementRaw[APS_LIBRARY] += 1 + BuildingsManager.getLibrary_BuildMovementCost(province.getLvlOfLibrary() + 1);
+                }
+                if (province.getLvlOfArmoury() < armouryMax && !this.getAllProvinceStatsConstruction(constructionMask, provinceID, ConstructionType.ARMOURY)) {
+                    ++out.number[APS_ARMOURY];
+                    out.goldCost[APS_ARMOURY] += BuildingsManager.getArmoury_BuildCost(province.getLvlOfArmoury() + 1, provinceID);
+                    out.movementRaw[APS_ARMOURY] += 1 + BuildingsManager.getArmoury_BuildMovementCost(province.getLvlOfArmoury() + 1);
+                }
+                if (province.getLvlOfSupply() < supplyMax && !this.getAllProvinceStatsConstruction(constructionMask, provinceID, ConstructionType.SUPPLY)) {
+                    ++out.number[APS_SUPPLY];
+                    out.goldCost[APS_SUPPLY] += BuildingsManager.getSupply_BuildCost(province.getLvlOfSupply() + 1, provinceID);
+                    out.movementRaw[APS_SUPPLY] += 1 + BuildingsManager.getSupply_BuildMovementCost(province.getLvlOfSupply() + 1);
+                }
+                if (!province.getSeaProv() && province.provGD.iAirDefense < airDefenseMax && !this.getAllProvinceStatsConstruction(constructionMask, provinceID, ConstructionType.AIR_DEFENSE)) {
+                    ++out.number[APS_AIR_DEFENSE];
+                    out.goldCost[APS_AIR_DEFENSE] += BuildingsManager.getAirDefense_BuildCost(province.provGD.iAirDefense + 1, provinceID);
+                    out.movementRaw[APS_AIR_DEFENSE] += 1 + BuildingsManager.getAirDefense_BuildMovementCost(province.provGD.iAirDefense + 1);
+                }
+            }
+        }
+        out.goldCost[APS_INVEST_ECO] = Math.max(0L, Math.min(out.goldCost[APS_INVEST_ECO], civ.getGold()));
+        out.goldCost[APS_INVEST_DEV] = Math.max(0L, Math.min(out.goldCost[APS_INVEST_DEV], civ.getGold()));
+        out.movementRaw[APS_INVEST_ECO] = Math.max(0.0f, Math.min(out.movementRaw[APS_INVEST_ECO], (float)civ.getMovemPoints()));
+        out.movementRaw[APS_INVEST_DEV] = Math.max(0.0f, Math.min(out.movementRaw[APS_INVEST_DEV], (float)civ.getMovemPoints()));
         return out;
+    }
+
+    private long getAllProvinceStatsAssimilateCost(Civilization civ, Province province, int provinceID, int numOfTurns) {
+        float incomeTaxation = province.incomeTaxation;
+        float incomeProduction = province.incomeProduction;
+        float populationShare = (float)province.getPop().getPopulationOfCivID(province.getCivId()) / (float)province.getPop().getPops();
+        float incomeCost = (incomeTaxation * GameValues.gvAssimilate.COST_OF_ASSIMILATE_INCOME_TAXATION + incomeProduction * GameValues.gvAssimilate.COST_OF_ASSIMILATE_INCOME_PRODUCTION) * (GameValues.gvAssimilate.COST_OF_ASSIMILATE_BASE_MODIFIER_DEVELOPMENT + GameValues.gvAssimilate.COST_OF_ASSIMILATE_MODIFIER_DEVELOPMENT * province.getDeveLvl() + GameValues.gvAssimilate.COST_OF_ASSIMILATE_MODIFIER_CIV_ASSIMILATION_IN_PROGRESS * (float)civ.getAssimilatesSize()) * (1.0f + GameValues.gvAssimilate.COST_OF_ASSIMILATE_MODIFIER_DISTANCE * Distance.getDistanceFromAToB_PercOfMax(civ.getCapitalProvID(), provinceID)) * (GameValues.gvAssimilate.COST_OF_ASSIMILATE_BASE_MODIFIER_POPULATION_PERC - populationShare);
+        return (long)((float)(GameValues.gvAssimilate.BASE_COST_OF_ASSIMILATE + (long)incomeCost) / (float)GameValues.gvAssimilate.ASSIMILATE_NUM_OF_TURNS_MIN * (float)numOfTurns * (1.0f + GameValues.gvTechnology.PER_POINT_ASSIMILATE * (float)civ.civGD.techPoints.POINTS_ASSIMILATE) * CFG.ASSIMILATION_COST_MODIFIER);
+    }
+
+    private long getAllProvinceStatsFestivalCost(Civilization civ, Province province) {
+        return (long)((float)GameValues.gvFestival.FESTIVAL_COST_GOLD_BASE + (province.incomeTaxation + province.incomeProduction) * (GameValues.gvFestival.FESTIVAL_COST_GOLD_BASE_MODIFIER + GameValues.gvFestival.FESTIVAL_COST_GOLD_TECH_LEVEL_MODIFIER * civ.getTechLevel() + GameValues.gvFestival.FESTIVAL_COST_GOLD_ACTIVE_FESTIVAL_MODIFIER * (float)civ.getFestivalsSize()));
+    }
+
+    private float getAllProvinceStatsInvestDevK(Civilization civ, int civID) {
+        float adminEff = this.getAllProvinceStatsAdministrationEfficiency(civ, civID);
+        float adminFactor = Math.max(0.1f, Math.min(10.0f, 0.36f / (adminEff * adminEff)));
+        return (1.0f / 12.0f) / ((float)CFG.core.getGameScenars().getScenario_StartingPopulation() * GameValues.gvInvestDevelopment.INVEST_COST_GOLD_STARTING_POPULATION_MODIFIER * (1.0f + Core.getOverInvestmentsPenalty(civID)) * adminFactor) * (GameValues.gvInvestDevelopment.INVEST_COST_GOLD_AGE_ECONOMY_GROWTH_RATE_BASE + GameValues.gvInvestDevelopment.INVEST_COST_GOLD_AGE_ECONOMY_GROWTH_RATE_MODIFIER * (CFG.gameAges.getAge_Economy_GrowthRate(GameCalendar.CURRENT_AGEID) * 100.0f));
+    }
+
+    private float getAllProvinceStatsAdministrationEfficiency(Civilization civ, int civID) {
+        if (civID <= 0 || civ.getNumOfProvs() <= 0) {
+            return 0.5f;
+        }
+        float totalRatio = 0.0f;
+        int count = 0;
+        for (int i = 0; i < civ.getNumOfProvs(); ++i) {
+            Province province = CFG.core.getProv(civ.getProvID(i));
+            if (province.isOccupied()) continue;
+            float adminCost = province.administrationCost;
+            float totalIncome = province.incomeTaxation + province.incomeProduction;
+            if (totalIncome <= 0.0f || adminCost <= 0.0f) {
+                totalRatio += 0.5f;
+            } else {
+                totalRatio += Math.min(4.0f, totalIncome / Math.max(1.0f, adminCost));
+            }
+            ++count;
+        }
+        float avgRatio = totalRatio / (float)Math.max(1, count);
+        float efficiency = Math.max(0.1f, Math.min(1.0f, avgRatio / 2.0f));
+        float sizeFactor = 1.0f - 0.05f * (float)Math.log(1.0f + (float)Math.max(1, civ.getNumOfProvs()) / 10.0f);
+        float techFactor = 1.0f + 0.02f * civ.getTechLevel();
+        float ideologyFactor = CFG.ideologiesMgr.getAdministration(civ.getIdeology(), civID);
+        efficiency = efficiency * Math.max(0.5f, sizeFactor) * techFactor / ideologyFactor;
+        return Math.max(0.1f, Math.min(1.0f, efficiency));
+    }
+
+    private long getAllProvinceStatsInvestMaxDevGold(Civilization civ, Province province, float investDevK) {
+        float requiredDevPoints = civ.getTechLevel() * 0.9999f - province.getDeveLvl();
+        if (requiredDevPoints <= 0.0f || investDevK <= 0.0f) {
+            return 0L;
+        }
+        long investAmount = (long)(requiredDevPoints / investDevK);
+        return Math.max(0L, Math.min(investAmount, civ.getGold()));
+    }
+
+    private boolean getAllProvinceStatsFlag(boolean[] flags, int provinceID) {
+        return provinceID >= 0 && provinceID < flags.length && flags[provinceID];
+    }
+
+    private boolean getAllProvinceStatsConstruction(int[] constructionMask, int provinceID, ConstructionType type) {
+        return provinceID >= 0 && provinceID < constructionMask.length && (constructionMask[provinceID] & 1 << type.ordinal()) != 0;
+    }
+
+    public int assimilateAllProvinces_Number(int civID) {
+        return this.getAllProvinceStats(civID).number[APS_ASSIMILATE];
     }
 
     public int assimilateAllProvinces_Cost(int civID) {
-        int out = 0;
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            if (CFG.core.getProv(CFG.core.getCiv(civID).getProvID(i)).isOccupied() || !(CFG.core.getProv(CFG.core.getCiv(civID).getProvID(i)).getProviStability() < 1.0f) || CFG.core.getCiv(civID).isAssimilateOrganized(CFG.core.getCiv(civID).getProvID(i))) continue;
-            out += GameManager.assimilateCost(CFG.core.getCiv(civID).getProvID(i), this.getAssiNumOfTurns(CFG.core.getCiv(civID).getProvID(i)));
-        }
-        return out;
+        return (int)this.getAllProvinceStats(civID).goldCost[APS_ASSIMILATE];
     }
 
     public float assimilateAllProvinces_CostDiplomacy(int civID) {
-        int out = 0;
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            if (CFG.core.getProv(CFG.core.getCiv(civID).getProvID(i)).isOccupied() || !(CFG.core.getProv(CFG.core.getCiv(civID).getProvID(i)).getProviStability() < 1.0f) || CFG.core.getCiv(civID).isAssimilateOrganized(CFG.core.getCiv(civID).getProvID(i))) continue;
-            ++out;
-        }
-        return (float)(out * GameValues.gvAssimilate.COST_ASSIMILATE_MOVEMENT) / 10.0f;
+        return this.getAllProvinceStats(civID).movementRaw[APS_ASSIMILATE] / 10.0f;
     }
 
     public int investEconomyAllProvinces(int civID) {
@@ -14971,30 +15255,15 @@ lbl94:
     }
 
     public int investEconomyAllProvinces_Number(int civID) {
-        int out = 0;
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            if (CFG.core.getProv(CFG.core.getCiv(civID).getProvID(i)).isOccupied() || CFG.core.getCiv(civID).isInvested(CFG.core.getCiv(civID).getProvID(i))) continue;
-            ++out;
-        }
-        return out;
+        return this.getAllProvinceStats(civID).number[APS_INVEST_ECO];
     }
 
     public int investEconomyAllProvinces_Cost(int civID) {
-        int out = 0;
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            if (CFG.core.getProv(CFG.core.getCiv(civID).getProvID(i)).isOccupied() || CFG.core.getCiv(civID).isInvested(CFG.core.getCiv(civID).getProvID(i))) continue;
-            out += GameManager.invest_MaxEconomy_Gold(CFG.core.getCiv(civID).getProvID(i), civID);
-        }
-        return (int)Math.max(0L, Math.min((long)out, CFG.core.getCiv(civID).getGold()));
+        return (int)this.getAllProvinceStats(civID).goldCost[APS_INVEST_ECO];
     }
 
     public float investEconomyAllProvinces_CostMovement(int civID) {
-        float out = 0.0f;
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            if (CFG.core.getProv(CFG.core.getCiv(civID).getProvID(i)).isOccupied() || CFG.core.getCiv(civID).isInvested(CFG.core.getCiv(civID).getProvID(i))) continue;
-            out += (float)GameValues.gvInvestEconomy.INVEST_ECO_COST_MOVEMENT_POINTS;
-        }
-        return Math.max(0.0f, Math.min(out, (float)CFG.core.getCiv(civID).getMovemPoints())) / 10.0f;
+        return this.getAllProvinceStats(civID).movementRaw[APS_INVEST_ECO] / 10.0f;
     }
 
     public int investDevAllProvinces(int civID) {
@@ -15022,30 +15291,15 @@ lbl94:
     }
 
     public int investDevAllProvinces_Number(int civID) {
-        int out = 0;
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            if (CFG.core.getProv(CFG.core.getCiv(civID).getProvID(i)).isOccupied() || CFG.core.getCiv(civID).isInvestedDev(CFG.core.getCiv(civID).getProvID(i)) || GameManager.investMaxDevGold(CFG.core.getCiv(civID).getProvID(i), civID) <= 0 || !(CFG.core.getCiv(civID).getTechLevel() > CFG.core.getProv(CFG.core.getCiv(civID).getProvID(i)).getDeveLvl())) continue;
-            ++out;
-        }
-        return out;
+        return this.getAllProvinceStats(civID).number[APS_INVEST_DEV];
     }
 
     public int investDevAllProvinces_Cost(int civID) {
-        int out = 0;
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            if (CFG.core.getProv(CFG.core.getCiv(civID).getProvID(i)).isOccupied() || CFG.core.getCiv(civID).isInvestedDev(CFG.core.getCiv(civID).getProvID(i)) || GameManager.investMaxDevGold(CFG.core.getCiv(civID).getProvID(i), civID) <= 0 || !(CFG.core.getCiv(civID).getTechLevel() > CFG.core.getProv(CFG.core.getCiv(civID).getProvID(i)).getDeveLvl())) continue;
-            out += GameManager.investMaxDevGold(CFG.core.getCiv(civID).getProvID(i), civID);
-        }
-        return (int)Math.max(0L, Math.min((long)out, CFG.core.getCiv(civID).getGold()));
+        return (int)this.getAllProvinceStats(civID).goldCost[APS_INVEST_DEV];
     }
 
     public float investDevAllProvinces_CostMovement(int civID) {
-        float out = 0.0f;
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            if (CFG.core.getProv(CFG.core.getCiv(civID).getProvID(i)).isOccupied() || CFG.core.getCiv(civID).isInvestedDev(CFG.core.getCiv(civID).getProvID(i)) || GameManager.investMaxDevGold(CFG.core.getCiv(civID).getProvID(i), civID) <= 0 || !(CFG.core.getCiv(civID).getTechLevel() > CFG.core.getProv(CFG.core.getCiv(civID).getProvID(i)).getDeveLvl())) continue;
-            out += (float)GameValues.gvInvestDevelopment.INVEST_DEVELOPMENT_MOVEMENT_POINTS;
-        }
-        return Math.max(0.0f, Math.min(out, (float)CFG.core.getCiv(civID).getMovemPoints())) / 10.0f;
+        return this.getAllProvinceStats(civID).movementRaw[APS_INVEST_DEV] / 10.0f;
     }
 
     public int festivalAllProvinces(int civID) {
@@ -15072,30 +15326,15 @@ lbl94:
     }
 
     public int festivalAllProvinces_Number(int civID) {
-        int out = 0;
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            if (CFG.core.getProv(CFG.core.getCiv(civID).getProvID(i)).isOccupied() || !(CFG.core.getProv(CFG.core.getCiv(civID).getProvID(i)).getHappi() < 1.0f) || CFG.core.getCiv(civID).isFestivalOrganized(CFG.core.getCiv(civID).getProvID(i))) continue;
-            ++out;
-        }
-        return out;
+        return this.getAllProvinceStats(civID).number[APS_FESTIVAL];
     }
 
     public long festivalAllProvinces_Cost(int civID) {
-        long out = 0L;
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            if (CFG.core.getProv(CFG.core.getCiv(civID).getProvID(i)).isOccupied() || !(CFG.core.getProv(CFG.core.getCiv(civID).getProvID(i)).getHappi() < 1.0f) || CFG.core.getCiv(civID).isFestivalOrganized(CFG.core.getCiv(civID).getProvID(i))) continue;
-            out += Festival.festivalCost(CFG.core.getCiv(civID).getProvID(i));
-        }
-        return out;
+        return this.getAllProvinceStats(civID).goldCost[APS_FESTIVAL];
     }
 
     public float festivalAllProvinces_CostMovement(int civID) {
-        int out = 0;
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            if (CFG.core.getProv(CFG.core.getCiv(civID).getProvID(i)).isOccupied() || !(CFG.core.getProv(CFG.core.getCiv(civID).getProvID(i)).getHappi() < 1.0f) || CFG.core.getCiv(civID).isFestivalOrganized(CFG.core.getCiv(civID).getProvID(i))) continue;
-            ++out;
-        }
-        return (float)(out * GameValues.gvFestival.COST_FESTIVAL_MOVEMENT_POINTS) / 10.0f;
+        return this.getAllProvinceStats(civID).movementRaw[APS_FESTIVAL] / 10.0f;
     }
 
     public int fortAllProvinces(int civID) {
@@ -15128,37 +15367,15 @@ lbl94:
     }
 
     public int fortAllProvinces_Number(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getFort_MaxLevel_CanBuild(civID);
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getLvlOfFort() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.FORT) != 0) continue;
-            ++out;
-        }
-        return out;
+        return this.getAllProvinceStats(civID).number[APS_FORT];
     }
 
     public int fortAllProvinces_Cost(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getFort_MaxLevel_CanBuild(civID);
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getLvlOfFort() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.FORT) != 0) continue;
-            out += BuildingsManager.getFort_BuildCost(CFG.core.getProv(provinceID).getLvlOfFort() + 1, provinceID);
-        }
-        return out;
+        return (int)this.getAllProvinceStats(civID).goldCost[APS_FORT];
     }
 
     public float fortAllProvinces_CostMovement(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getFort_MaxLevel_CanBuild(civID);
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getLvlOfFort() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.FORT) != 0) continue;
-            ++out;
-            out += BuildingsManager.getFort_BuildMovementCost(CFG.core.getProv(provinceID).getLvlOfFort() + 1);
-        }
-        return (float)out / 10.0f;
+        return this.getAllProvinceStats(civID).movementRaw[APS_FORT] / 10.0f;
     }
 
     public int towerAllProvinces(int civID) {
@@ -15191,37 +15408,15 @@ lbl94:
     }
 
     public int towerAllProvinces_Number(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getTower_MaxLevel_CanBuild(civID);
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getLvlOfWatchTower() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.TOWER) != 0) continue;
-            ++out;
-        }
-        return out;
+        return this.getAllProvinceStats(civID).number[APS_TOWER];
     }
 
     public int towerAllProvinces_Cost(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getTower_MaxLevel_CanBuild(civID);
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getLvlOfWatchTower() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.TOWER) != 0) continue;
-            out += BuildingsManager.getTower_BuildCost(CFG.core.getProv(provinceID).getLvlOfWatchTower() + 1, provinceID);
-        }
-        return out;
+        return (int)this.getAllProvinceStats(civID).goldCost[APS_TOWER];
     }
 
     public float towerAllProvinces_CostMovement(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getTower_MaxLevel_CanBuild(civID);
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getLvlOfWatchTower() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.TOWER) != 0) continue;
-            ++out;
-            out += BuildingsManager.getTower_BuildMovementCost(CFG.core.getProv(provinceID).getLvlOfWatchTower() + 1);
-        }
-        return (float)out / 10.0f;
+        return this.getAllProvinceStats(civID).movementRaw[APS_TOWER] / 10.0f;
     }
 
     public boolean getPeaceTreaty_GameData_AlreadySent(int nCivA, int nCivB) {
@@ -15381,37 +15576,15 @@ lbl94:
     }
 
     public int portAllProvinces_Number(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getPort_MaxLevel();
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getNeighSeaProvincesSize() <= 0 || CFG.core.getProv(provinceID).getLvlOfPort() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.PORT) != 0) continue;
-            ++out;
-        }
-        return out;
+        return this.getAllProvinceStats(civID).number[APS_PORT];
     }
 
     public int portAllProvinces_Cost(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getPort_MaxLevel();
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getNeighSeaProvincesSize() <= 0 || CFG.core.getProv(provinceID).getLvlOfPort() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.PORT) != 0) continue;
-            out += BuildingsManager.getPort_BuildCost(CFG.core.getProv(provinceID).getLvlOfPort() + 1, provinceID);
-        }
-        return out;
+        return (int)this.getAllProvinceStats(civID).goldCost[APS_PORT];
     }
 
     public float portAllProvinces_CostMovement(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getPort_MaxLevel();
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getNeighSeaProvincesSize() <= 0 || CFG.core.getProv(provinceID).getLvlOfPort() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.PORT) != 0) continue;
-            ++out;
-            out += BuildingsManager.getPort_BuildMovementCost(CFG.core.getProv(provinceID).getLvlOfPort() + 1);
-        }
-        return (float)out / 10.0f;
+        return this.getAllProvinceStats(civID).movementRaw[APS_PORT] / 10.0f;
     }
 
     public int farmAllProvinces(int civID) {
@@ -15444,37 +15617,15 @@ lbl94:
     }
 
     public int farmAllProvinces_Number(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getFarm_MaxLevel_CanBuild(civID);
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || !BuildingsManager.canBuildFarm_Terrain(provinceID) || CFG.core.getProv(provinceID).getLvlOfFarm() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.FARM) != 0) continue;
-            ++out;
-        }
-        return out;
+        return this.getAllProvinceStats(civID).number[APS_FARM];
     }
 
     public int farmAllProvinces_Cost(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getFarm_MaxLevel_CanBuild(civID);
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || !BuildingsManager.canBuildFarm_Terrain(provinceID) || CFG.core.getProv(provinceID).getLvlOfFarm() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.FARM) != 0) continue;
-            out += BuildingsManager.getFarm_BuildCost(CFG.core.getProv(provinceID).getLvlOfFarm() + 1, provinceID);
-        }
-        return out;
+        return (int)this.getAllProvinceStats(civID).goldCost[APS_FARM];
     }
 
     public float farmAllProvinces_CostMovement(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getFarm_MaxLevel_CanBuild(civID);
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || !BuildingsManager.canBuildFarm_Terrain(provinceID) || CFG.core.getProv(provinceID).getLvlOfFarm() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.FARM) != 0) continue;
-            ++out;
-            out += BuildingsManager.getFarm_BuildMovementCost(CFG.core.getProv(provinceID).getLvlOfFarm() + 1);
-        }
-        return (float)out / 10.0f;
+        return this.getAllProvinceStats(civID).movementRaw[APS_FARM] / 10.0f;
     }
 
     public int workshopAllProvinces(int civID) {
@@ -15507,37 +15658,15 @@ lbl94:
     }
 
     public int workshopAllProvinces_Number(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getWorkshop_MaxLevel_CanBuild(civID);
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getLvlOfWorkshop() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.WORKSHOP) != 0) continue;
-            ++out;
-        }
-        return out;
+        return this.getAllProvinceStats(civID).number[APS_WORKSHOP];
     }
 
     public int workshopAllProvinces_Cost(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getWorkshop_MaxLevel_CanBuild(civID);
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getLvlOfWorkshop() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.WORKSHOP) != 0) continue;
-            out += BuildingsManager.getWorkshop_BuildCost(CFG.core.getProv(provinceID).getLvlOfWorkshop() + 1, provinceID);
-        }
-        return out;
+        return (int)this.getAllProvinceStats(civID).goldCost[APS_WORKSHOP];
     }
 
     public float workshopAllProvinces_CostMovement(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getWorkshop_MaxLevel_CanBuild(civID);
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getLvlOfWorkshop() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.WORKSHOP) != 0) continue;
-            ++out;
-            out += BuildingsManager.getWorkshop_BuildMovementCost(CFG.core.getProv(provinceID).getLvlOfWorkshop() + 1);
-        }
-        return (float)out / 10.0f;
+        return this.getAllProvinceStats(civID).movementRaw[APS_WORKSHOP] / 10.0f;
     }
 
     public int marketAllProvinces(int civID) {
@@ -15570,37 +15699,15 @@ lbl94:
     }
 
     public int marketAllProvinces_Number(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getMarket_MaxLevel_CanBuild(civID);
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getLvlOfMarket() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.MARKET) != 0) continue;
-            ++out;
-        }
-        return out;
+        return this.getAllProvinceStats(civID).number[APS_MARKET];
     }
 
     public int marketAllProvinces_Cost(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getMarket_MaxLevel_CanBuild(civID);
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getLvlOfMarket() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.MARKET) != 0) continue;
-            out += BuildingsManager.getMarket_BuildCost(CFG.core.getProv(provinceID).getLvlOfMarket() + 1, provinceID);
-        }
-        return out;
+        return (int)this.getAllProvinceStats(civID).goldCost[APS_MARKET];
     }
 
     public float marketAllProvinces_CostMovement(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getMarket_MaxLevel_CanBuild(civID);
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getLvlOfMarket() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.MARKET) != 0) continue;
-            ++out;
-            out += BuildingsManager.getMarket_BuildMovementCost(CFG.core.getProv(provinceID).getLvlOfMarket() + 1);
-        }
-        return (float)out / 10.0f;
+        return this.getAllProvinceStats(civID).movementRaw[APS_MARKET] / 10.0f;
     }
 
     public int libraryAllProvinces(int civID) {
@@ -15633,37 +15740,15 @@ lbl94:
     }
 
     public int libraryAllProvinces_Number(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getLibrary_MaxLevel_CanBuild(civID);
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getLvlOfLibrary() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.LIBRARY) != 0) continue;
-            ++out;
-        }
-        return out;
+        return this.getAllProvinceStats(civID).number[APS_LIBRARY];
     }
 
     public int libraryAllProvinces_Cost(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getLibrary_MaxLevel_CanBuild(civID);
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getLvlOfLibrary() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.LIBRARY) != 0) continue;
-            out += BuildingsManager.getLibrary_BuildCost(CFG.core.getProv(provinceID).getLvlOfLibrary() + 1, provinceID);
-        }
-        return out;
+        return (int)this.getAllProvinceStats(civID).goldCost[APS_LIBRARY];
     }
 
     public float libraryAllProvinces_CostMovement(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getLibrary_MaxLevel_CanBuild(civID);
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getLvlOfLibrary() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.LIBRARY) != 0) continue;
-            ++out;
-            out += BuildingsManager.getLibrary_BuildMovementCost(CFG.core.getProv(provinceID).getLvlOfLibrary() + 1);
-        }
-        return (float)out / 10.0f;
+        return this.getAllProvinceStats(civID).movementRaw[APS_LIBRARY] / 10.0f;
     }
 
     public List<Integer> getPossibleUnions(int civID) {
@@ -15710,37 +15795,15 @@ lbl94:
     }
 
     public int armouryAllProvinces_Number(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getArmoury_MaxLevel();
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getLvlOfArmoury() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.ARMOURY) != 0) continue;
-            ++out;
-        }
-        return out;
+        return this.getAllProvinceStats(civID).number[APS_ARMOURY];
     }
 
     public int armouryAllProvinces_Cost(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getArmoury_MaxLevel();
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getLvlOfArmoury() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.ARMOURY) != 0) continue;
-            out += BuildingsManager.getArmoury_BuildCost(CFG.core.getProv(provinceID).getLvlOfArmoury() + 1, provinceID);
-        }
-        return out;
+        return (int)this.getAllProvinceStats(civID).goldCost[APS_ARMOURY];
     }
 
     public float armouryAllProvinces_CostMovement(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getArmoury_MaxLevel();
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getLvlOfArmoury() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.ARMOURY) != 0) continue;
-            ++out;
-            out += BuildingsManager.getArmoury_BuildMovementCost(CFG.core.getProv(provinceID).getLvlOfArmoury() + 1);
-        }
-        return (float)out / 10.0f;
+        return this.getAllProvinceStats(civID).movementRaw[APS_ARMOURY] / 10.0f;
     }
 
     public List<Integer> getPossibleAlliances(int civID) {
@@ -15787,71 +15850,27 @@ lbl94:
     }
 
     public int suppliesAllProvinces_Number(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getSupply_MaxLevel();
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getLvlOfSupply() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.SUPPLY) != 0) continue;
-            ++out;
-        }
-        return out;
+        return this.getAllProvinceStats(civID).number[APS_SUPPLY];
     }
 
     public int suppliesAllProvinces_Cost(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getSupply_MaxLevel();
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getLvlOfSupply() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.SUPPLY) != 0) continue;
-            out += BuildingsManager.getSupply_BuildCost(CFG.core.getProv(provinceID).getLvlOfSupply() + 1, provinceID);
-        }
-        return out;
+        return (int)this.getAllProvinceStats(civID).goldCost[APS_SUPPLY];
     }
 
     public float suppliesAllProvinces_CostMovement(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getSupply_MaxLevel();
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getLvlOfSupply() >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.SUPPLY) != 0) continue;
-            ++out;
-            out += BuildingsManager.getSupply_BuildMovementCost(CFG.core.getProv(provinceID).getLvlOfSupply() + 1);
-        }
-        return (float)out / 10.0f;
+        return this.getAllProvinceStats(civID).movementRaw[APS_SUPPLY] / 10.0f;
     }
 
     public int airDefenseAllProvinces_Number(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getAirDefense_MaxLevel_CanBuild(civID);
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getSeaProv() || CFG.core.getProv(provinceID).provGD.iAirDefense >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.AIR_DEFENSE) != 0) continue;
-            ++out;
-        }
-        return out;
+        return this.getAllProvinceStats(civID).number[APS_AIR_DEFENSE];
     }
 
     public int airDefenseAllProvinces_Cost(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getAirDefense_MaxLevel_CanBuild(civID);
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getSeaProv() || CFG.core.getProv(provinceID).provGD.iAirDefense >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.AIR_DEFENSE) != 0) continue;
-            out += BuildingsManager.getAirDefense_BuildCost(CFG.core.getProv(provinceID).provGD.iAirDefense + 1, provinceID);
-        }
-        return out;
+        return (int)this.getAllProvinceStats(civID).goldCost[APS_AIR_DEFENSE];
     }
 
     public float airDefenseAllProvinces_CostMovement(int civID) {
-        int out = 0;
-        int maxLVL = BuildingsManager.getAirDefense_MaxLevel_CanBuild(civID);
-        for (int i = 0; i < CFG.core.getCiv(civID).getNumOfProvs(); ++i) {
-            int provinceID = CFG.core.getCiv(civID).getProvID(i);
-            if (CFG.core.getProv(provinceID).isOccupied() || CFG.core.getProv(provinceID).getSeaProv() || CFG.core.getProv(provinceID).provGD.iAirDefense >= maxLVL || CFG.core.getCiv(civID).isInConstruction(provinceID, ConstructionType.AIR_DEFENSE) != 0) continue;
-            ++out;
-            out += BuildingsManager.getAirDefense_BuildMovementCost(CFG.core.getProv(provinceID).provGD.iAirDefense + 1);
-        }
-        return (float)out / 10.0f;
+        return this.getAllProvinceStats(civID).movementRaw[APS_AIR_DEFENSE] / 10.0f;
     }
 
     public int airDefenseAllProvinces(int civID) {

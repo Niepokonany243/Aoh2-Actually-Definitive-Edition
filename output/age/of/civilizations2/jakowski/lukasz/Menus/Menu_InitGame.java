@@ -66,8 +66,12 @@ extends Menu {
     private int iStepID = 0;
     private int iNumOfSteps = 38;
     public boolean initThread = true;
-    public int numToLoad_ProvinceData = 2000;
+    public int numToLoad_ProvinceData = 500;
     public int numToLoad_ProvinceBG = 500;
+    private boolean loadAssetsQueued = false;
+    private int startupTextureStep = -1;
+    private int startupProvinceBGStep = 0;
+    private boolean startupTextureFinalised = false;
     public static float bgAlpha = 0.0f;
     public static long bgTIME;
     public static long bgTIME_CHANGE;
@@ -160,6 +164,24 @@ extends Menu {
         return sUM.sUT.isOverlayEnabled();
     }
 
+    private void queueLoadAssets() {
+        if (this.loadAssetsQueued) {
+            return;
+        }
+        this.loadAssetsQueued = true;
+        Gdx.app.postRunnable(new Runnable(){
+            @Override
+            public void run() {
+                try {
+                    Menu_InitGame.this.loadAssets();
+                }
+                finally {
+                    Menu_InitGame.this.loadAssetsQueued = false;
+                }
+            }
+        });
+    }
+
     @Override
     public void draw(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean sliderMenuIsActive) {
         if (CFG.settingsGD.BETTER_UI) {
@@ -190,17 +212,7 @@ extends Menu {
             CFG.drawJakowskiGamesRIGHT_BOT(oSB, iTranslateX, (float)this.iStepID / (float)(this.iNumOfSteps + CFG.map.getMapNumOfProvinces(CFG.map.getActiveMapIDN()) * 2));
             CFG.drawVersionLB(oSB, iTranslateX);
             
-            new Thread(new Runnable(){
-                @Override
-                public void run() {
-                    Gdx.app.postRunnable(new Runnable(){
-                        @Override
-                        public void run() {
-                            Menu_InitGame.this.loadAssets();
-                        }
-                    });
-                }
-            }).start();
+            this.queueLoadAssets();
             return;
         }
         try {
@@ -235,19 +247,7 @@ extends Menu {
         CFG.drLOA(oSB, (int)((float)CFG.GAMEWIDTH * CFG.getLOAPAD()) + iTranslateX, CFG.GAMEHEIGHT - (int)((float)CFG.BUTTON_H * 0.8f) * 2 - CFG.PADD + iTranslateY, (int)((float)CFG.GAMEWIDTH * (1.0f - CFG.getLOAPAD() * 2.0f)), (int)((float)CFG.BUTTON_H * 0.8f), (float)this.iStepID / (float)(this.iNumOfSteps + CFG.map.getMapNumOfProvinces(CFG.map.getActiveMapIDN()) * 2));
         CFG.drawJakowskiGamesRIGHT_BOT(oSB, iTranslateX, (float)this.iStepID / (float)(this.iNumOfSteps + CFG.map.getMapNumOfProvinces(CFG.map.getActiveMapIDN()) * 2));
         CFG.drawVersionLB(oSB, iTranslateX);
-        new Thread(new Runnable(){
-
-            @Override
-            public void run() {
-                Gdx.app.postRunnable(new Runnable(){
-
-                    @Override
-                    public void run() {
-                        Menu_InitGame.this.loadAssets();
-                    }
-                });
-            }
-        }).start();
+        this.queueLoadAssets();
     }
 
     private final void loadAssets() {
@@ -454,11 +454,15 @@ extends Menu {
                 if (this.iStepID >= 16 && this.iStepID < 16 + CFG.map.getMapNumOfProvinces(CFG.map.getActiveMapIDN())) {
                     CFG.sLoading = CFG.lang.get("LoadingMap");
                     int nProv = CFG.map.getMapNumOfProvinces(CFG.map.getActiveMapIDN());
-                    for (int pv = 0; pv < nProv; ++pv) {
+                    int startProv = this.iStepID - 16;
+                    int endProv = Math.min(startProv + this.numToLoad_ProvinceData, nProv);
+                    for (int pv = startProv; pv < endProv; ++pv) {
                         CFG.core.loadProvince(pv);
                     }
-                    CFG.core.updateProvincesSize();
-                    this.iStepID = 16 + nProv;
+                    if (endProv >= nProv) {
+                        CFG.core.updateProvincesSize();
+                    }
+                    this.iStepID = 16 + endProv;
                     break block105;
                 }
                 if (this.iStepID == 16 + CFG.map.getMapNumOfProvinces(CFG.map.getActiveMapIDN())) {
@@ -467,10 +471,38 @@ extends Menu {
                     break block105;
                 }
                 if (this.iStepID >= 17 + CFG.map.getMapNumOfProvinces(CFG.map.getActiveMapIDN()) && this.iStepID < 17 + CFG.map.getMapNumOfProvinces(CFG.map.getActiveMapIDN()) * 2) {
-                    if (this.iStepID == 17 + CFG.map.getMapNumOfProvinces(CFG.map.getActiveMapIDN())) {
-                        CFG.sLoading = CFG.lang.get("LoadingProvinces");
-                        CFG.core.loadProvinceTextures();
+                    CFG.sLoading = CFG.lang.get("LoadingProvinces");
+                    int nProv = CFG.map.getMapNumOfProvinces(CFG.map.getActiveMapIDN());
+                    int textureProgressSize = Math.max(1, nProv / 2);
+                    int bgProgressSize = Math.max(1, nProv - textureProgressSize);
+                    if (this.startupTextureStep < 0) {
+                        CFG.core.loadProvinceTextures_BatchInit();
+                        this.startupTextureStep = 0;
+                        this.startupProvinceBGStep = 0;
+                        this.startupTextureFinalised = false;
                     }
+                    if (this.startupTextureStep < nProv) {
+                        int end = Math.min(this.startupTextureStep + this.numToLoad_ProvinceBG, nProv);
+                        CFG.core.loadProvinceTextures_Batch(this.startupTextureStep, end);
+                        this.startupTextureStep = end;
+                        this.iStepID = 17 + nProv + Math.min(textureProgressSize, this.startupTextureStep * textureProgressSize / Math.max(1, nProv));
+                        break block105;
+                    }
+                    if (!this.startupTextureFinalised) {
+                        CFG.core.loadProvinceTextures_BatchFinalise();
+                        this.startupTextureFinalised = true;
+                        break block105;
+                    }
+                    if (CFG.getIsDesktop() && this.startupProvinceBGStep < nProv) {
+                        int end = Math.min(this.startupProvinceBGStep + this.numToLoad_ProvinceBG, nProv);
+                        CFG.core.loadProvinceBG_Batch(this.startupProvinceBGStep, end);
+                        this.startupProvinceBGStep = end;
+                        this.iStepID = 17 + nProv + textureProgressSize + Math.min(bgProgressSize, this.startupProvinceBGStep * bgProgressSize / Math.max(1, nProv));
+                        break block105;
+                    }
+                    this.startupTextureStep = -1;
+                    this.startupProvinceBGStep = 0;
+                    this.startupTextureFinalised = false;
                     this.iStepID = 17 + CFG.map.getMapNumOfProvinces(CFG.map.getActiveMapIDN()) * 2;
                     break block105;
                 }
