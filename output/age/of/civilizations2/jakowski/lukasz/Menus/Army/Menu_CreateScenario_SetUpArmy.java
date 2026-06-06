@@ -120,6 +120,10 @@ extends Menu {
             }
             case 3: {
                 CFG.selectMode = !CFG.selectMode;
+                this.getMenuElem(2).setCheckboxSt(CFG.brushMode);
+                this.getMenuElem(3).setCheckboxSt(CFG.selectMode);
+                this.getMenuElem(6).setVisibleE(CFG.brushMode);
+                this.getMenuElem(6).setClickable(CFG.brushMode);
                 return;
             }
             case 4: {
@@ -127,12 +131,22 @@ extends Menu {
                 CFG.menus.setVisible_CreateScenario_SetUpArmies_Sliders(false);
                 CFG.menus.setVisible_CreateScenario_SetUpArmies_Civs(false);
                 CFG.selectMode = true;
+                CFG.brushMode = false;
+                this.getMenuElem(2).setCheckboxSt(CFG.brushMode);
+                this.getMenuElem(3).setCheckboxSt(CFG.selectMode);
+                this.getMenuElem(6).setVisibleE(CFG.brushMode);
+                this.getMenuElem(6).setClickable(CFG.brushMode);
                 return;
             }
             case 5: {
                 CFG.core.getProvSelected().popProvince();
                 if (CFG.core.getProvSelected().getProvSize() == 0) {
                     CFG.selectMode = true;
+                    CFG.brushMode = false;
+                    this.getMenuElem(2).setCheckboxSt(CFG.brushMode);
+                    this.getMenuElem(3).setCheckboxSt(CFG.selectMode);
+                    this.getMenuElem(6).setVisibleE(CFG.brushMode);
+                    this.getMenuElem(6).setClickable(CFG.brushMode);
                     CFG.menus.setVisible_CreateScenario_SetUpArmies_Sliders(false);
                     CFG.menus.setVisible_CreateScenario_SetUpArmies_Civs(false);
                 } else {

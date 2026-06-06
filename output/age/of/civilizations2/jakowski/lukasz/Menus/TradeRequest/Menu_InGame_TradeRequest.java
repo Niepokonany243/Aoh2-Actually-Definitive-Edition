@@ -609,6 +609,7 @@ public class Menu_InGame_TradeRequest extends Menu {
         Menu_InGame_SelectProvinces.typeOfAction = isLeft ? Menu_InGame_SelectProvinces.TypeOfAction.TRADE_LEFT : Menu_InGame_SelectProvinces.TypeOfAction.TRADE_RIGHT;
         CFG.VIEW_SHOW_VALUES = false;
         CFG.selectMode = true;
+        CFG.brushMode = false;
         CFG.core.getProvSelected().clearSelectedProvinces();
         CFG.menus.setMenuID(View.eINGAME_SELECT_PROVINCES);
         Render.updateRenderer();

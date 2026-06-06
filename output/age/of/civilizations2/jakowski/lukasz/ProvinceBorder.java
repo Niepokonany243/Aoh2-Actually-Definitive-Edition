@@ -530,8 +530,7 @@ public class ProvinceBorder {
     }
 
     public final void drawStraightBorder(SpriteBatch oSB, int nTranslateProvincePosX) {
-        
-        
+        this.drawStraightBorder_Classic(oSB, nTranslateProvincePosX);
     }
 
     public final void drawStraightBorder_PercWidth(SpriteBatch oSB, float fPercent, int nTranslateProvincePosX) {

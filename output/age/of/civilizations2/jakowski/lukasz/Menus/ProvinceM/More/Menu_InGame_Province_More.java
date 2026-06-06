@@ -355,7 +355,7 @@ extends Menu {
             final int airDefenseMaxLevel = BuildingsManager.getAirDefense_MaxLevel();
             final boolean airDefenseMaxed = airDefenseLevel >= airDefenseMaxLevel;
             final int airDefenseNextLevel = Math.min(airDefenseLevel + 1, airDefenseMaxLevel);
-            menuElements.add(new Button_Build_Level(airDefenseMaxed ? CFG.lang.get("MaximumLevel") : BuildingsManager.getAirDefense_Name(airDefenseNextLevel), Images.bSupply, "" + airDefenseLevel, airDefenseMaxed ? 0 : BuildingsManager.getAirDefense_BuildCost(airDefenseNextLevel, BuildingsManager.iBuildInProvinceID), airDefenseMaxed ? 0 : BuildingsManager.getAirDefense_BuildMovementCost(airDefenseNextLevel), 0, tPosY, tempW, true, airDefenseMaxed, CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).isInConstruction(BuildingsManager.iBuildInProvinceID, ConstructionType.AIR_DEFENSE), BuildingsManager.getAirDefense_TechLevel(airDefenseNextLevel)){
+            menuElements.add(new Button_Build_Level(BuildingsManager.getAirDefense_Name(airDefenseNextLevel), Images.bSupply, "" + airDefenseLevel, airDefenseMaxed ? 0 : BuildingsManager.getAirDefense_BuildCost(airDefenseNextLevel, BuildingsManager.iBuildInProvinceID), airDefenseMaxed ? 0 : BuildingsManager.getAirDefense_BuildMovementCost(airDefenseNextLevel), 0, tPosY, tempW, true, airDefenseMaxed, CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).isInConstruction(BuildingsManager.iBuildInProvinceID, ConstructionType.AIR_DEFENSE), BuildingsManager.getAirDefense_TechLevel(airDefenseNextLevel)){
                 {
                     if (airDefenseMaxed) {
                         this.sCost = "";

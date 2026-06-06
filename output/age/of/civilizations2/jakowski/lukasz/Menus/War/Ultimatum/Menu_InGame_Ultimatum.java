@@ -194,6 +194,7 @@ extends Menu {
                     Menu_InGame_SelectProvinces.typeOfAction = Menu_InGame_SelectProvinces.TypeOfAction.ULTIMATUM;
                     CFG.VIEW_SHOW_VALUES = false;
                     CFG.selectMode = true;
+                    CFG.brushMode = false;
                     CFG.core.getProvSelected().clearSelectedProvinces();
                     CFG.menus.setMenuID(View.eINGAME_SELECT_PROVINCES);
                     Render.updateRenderer();
@@ -206,6 +207,7 @@ extends Menu {
                     Menu_InGame_SelectProvinces.typeOfAction = Menu_InGame_SelectProvinces.TypeOfAction.ULTIMATUM;
                     CFG.VIEW_SHOW_VALUES = false;
                     CFG.selectMode = true;
+                    CFG.brushMode = false;
                     CFG.core.getProvSelected().clearSelectedProvinces();
                     for (int i = 0; i < CFG.ultimatum.demandProvinces.size(); ++i) {
                         CFG.core.getProvSelected().addProv(CFG.ultimatum.demandProvinces.get(i));

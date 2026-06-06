@@ -219,34 +219,38 @@ public class ProvinceMesh {
         
         boolean wasDrawing = oSB.isDrawing();
         if (wasDrawing) oSB.end();
-        
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        
-        shader.begin();
-        shader.setUniformMatrix("u_projTrans", oSB.getProjectionMatrix().cpy().mul(oSB.getTransformMatrix()));
-        shader.setUniformf("u_translateX", 0);
-        shader.setUniformf("u_translateY", -CFG.map.getMpC().getPY());
-        shader.setUniformi("u_texture", 0);
-        shader.setUniformi("u_colors", 1);
-        shader.setUniformf("u_colorStep", 1.0f / colorTexture.getWidth());
-        
-        ProvinceAtlas.getTexture().bind(0);
-        colorTexture.bind(1);
-        
-        mesh.render(shader, GL20.GL_TRIANGLES);
-        
-        if (CFG.map.getIsMapWorldMap(CFG.map.getActiveMapIDN())) {
-            shader.setUniformf("u_translateX", -CFG.map.getMpB().getWidthM());
+        boolean shaderBegun = false;
+        try {
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+            
+            shader.begin();
+            shaderBegun = true;
+            shader.setUniformMatrix("u_projTrans", oSB.getProjectionMatrix().cpy().mul(oSB.getTransformMatrix()));
+            shader.setUniformf("u_translateX", 0);
+            shader.setUniformf("u_translateY", -CFG.map.getMpC().getPY());
+            shader.setUniformi("u_texture", 0);
+            shader.setUniformi("u_colors", 1);
+            shader.setUniformf("u_colorStep", 1.0f / colorTexture.getWidth());
+            
+            ProvinceAtlas.getTexture().bind(0);
+            colorTexture.bind(1);
+            
             mesh.render(shader, GL20.GL_TRIANGLES);
             
-            shader.setUniformf("u_translateX", CFG.map.getMpB().getWidthM());
-            mesh.render(shader, GL20.GL_TRIANGLES);
+            if (CFG.map.getIsMapWorldMap(CFG.map.getActiveMapIDN())) {
+                shader.setUniformf("u_translateX", -CFG.map.getMpB().getWidthM());
+                mesh.render(shader, GL20.GL_TRIANGLES);
+                
+                shader.setUniformf("u_translateX", CFG.map.getMpB().getWidthM());
+                mesh.render(shader, GL20.GL_TRIANGLES);
+            }
         }
-        
-        shader.end();
-        
-        if (wasDrawing) oSB.begin();
+        finally {
+            if (shaderBegun) shader.end();
+            Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
+            if (wasDrawing) oSB.begin();
+        }
     }
 
     public static void dispose() {

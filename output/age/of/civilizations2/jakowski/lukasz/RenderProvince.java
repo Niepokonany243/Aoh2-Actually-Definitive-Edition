@@ -910,34 +910,26 @@ public class RenderProvince {
     }
 
     public static final void drawProvinces(SpriteBatch oSB) {
-        if (CFG.mapModesManager.getActiveMapModeID() < 0 && !CFG.VIEW_SHOW_VALUES) {
-            if (ProvinceMesh.needsUpdate) {
-                ProvinceMesh.updateAllStates();
-                ProvinceMesh.needsUpdate = false;
-            }
-            ProvinceMesh.draw(oSB);
-        } else {
-            CFG.core.updateProvincesInView();
-            for (int i = 0; i < CFG.NUM_OF_WASTELAND_PROVINCES_IN_VIEW; ++i) {
-                CFG.core.getProv(CFG.core.getWPIV(i)).drawWastelandProv(oSB);
-            }
-            int lastCivID = -1;
-            for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
-                int provID = CFG.core.sortedPIV.get(i);
-                Province province = CFG.core.getProv(provID);
-                int civID = province.getCivId();
-                if (civID == 0) continue;
-                if (province.isColorAnimated()) {
-                    province.setProvColor(oSB);
-                    province.drawLandProv(oSB);
-                    lastCivID = -1;
-                } else {
-                    if (civID != lastCivID) {
-                        province.setCivilizationProvinceColor(oSB, civID);
-                        lastCivID = civID;
-                    }
-                    province.drawLandProv(oSB);
+        CFG.core.updateProvincesInView();
+        for (int i = 0; i < CFG.NUM_OF_WASTELAND_PROVINCES_IN_VIEW; ++i) {
+            CFG.core.getProv(CFG.core.getWPIV(i)).drawWastelandProv(oSB);
+        }
+        int lastCivID = -1;
+        for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
+            int provID = CFG.core.sortedPIV.get(i);
+            Province province = CFG.core.getProv(provID);
+            int civID = province.getCivId();
+            if (civID == 0) continue;
+            if (province.isColorAnimated()) {
+                province.setProvColor(oSB);
+                province.drawLandProv(oSB);
+                lastCivID = -1;
+            } else {
+                if (civID != lastCivID) {
+                    province.setCivilizationProvinceColor(oSB, civID);
+                    lastCivID = civID;
                 }
+                province.drawLandProv(oSB);
             }
         }
     }
@@ -1391,17 +1383,9 @@ public class RenderProvince {
     }
 
     public static final void drawProvincesInGame(SpriteBatch oSB) {
-        if (CFG.mapModesManager.getActiveMapModeID() < 0 && !CFG.VIEW_SHOW_VALUES) {
-            if (ProvinceMesh.needsUpdate) {
-                ProvinceMesh.updateAllStates();
-                ProvinceMesh.needsUpdate = false;
-            }
-            ProvinceMesh.draw(oSB);
-        } else {
-            CFG.core.updateProvincesInView();
-            RenderProvince.drawProvincesInGame_StandardWasteland_FogOFWar(oSB);
-            drawProvinces.drawProvinces(oSB);
-        }
+        CFG.core.updateProvincesInView();
+        RenderProvince.drawProvincesInGame_StandardWasteland_FogOFWar(oSB);
+        drawProvinces.drawProvinces(oSB);
     }
 
     public static final void drawProvincesInGame_StandardWasteland(SpriteBatch oSB) {

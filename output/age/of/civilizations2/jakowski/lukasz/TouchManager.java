@@ -119,7 +119,9 @@ public class TouchManager {
             this.iSBXY = nPosY;
             this.iSBXW = 1;
             this.iSBXH = 1;
-            CFG.brushMode = false;
+            if (!CFG.menus.getInGame_SelectProvinces()) {
+                CFG.brushMode = false;
+            }
             bSMD = true;
             return;
         }
@@ -128,15 +130,15 @@ public class TouchManager {
     }
 
     public final void actionMove(int nPosX, int nPosY) {
+        if (bSMD) {
+            this.iSBXW = nPosX - this.iSBXX;
+            this.iSBXH = nPosY - this.iSBXY;
+            return;
+        }
         if (CFG.brushMode) {
             this.actDPoX = nPosX;
             this.actDPoY = nPosY;
             this.actionUp_setActiveProvinceID(nPosX, nPosY);
-            return;
-        }
-        if (bSMD) {
-            this.iSBXW = nPosX - this.iSBXX;
-            this.iSBXH = nPosY - this.iSBXY;
             return;
         }
         this.actionMoveMap(nPosX, nPosY);
@@ -199,6 +201,9 @@ public class TouchManager {
                     if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0 && CFG.peaceTreatyData.drawProvOwners.get((int)CFG.core.getActiveProvID()).isTaken <= 0) {
                         CFG.peaceTreatyData.takeProvince(CFG.core.getActiveProvID(), CFG.peaceTreatyData.brushCivID, CFG.core.getCiv(CFG.peaceTreatyData.brushCivID).getIsPlayer() ? CFG.peaceTreatyData.brushCivID : CFG.core.getPlayer(CFG.peaceTreatyData.playerTurnID).getCivId());
                     }
+                    return;
+                } else if (CFG.menus.getInGame_SelectProvinces()) {
+                    this.aUSM(nPosX, nPosY);
                     return;
                 } else {
                     this.aUSM(nPosX, nPosY);
@@ -453,6 +458,16 @@ public class TouchManager {
                         continue;
                     }
                     CFG.core.getProvSelected().removeProv(CFG.core.getPIV(i));
+                }
+            } else if (CFG.menus.getInGame_SelectProvinces()) {
+                for (i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
+                    int provinceID = CFG.core.getPIV(i);
+                    if (!TouchManager.aUSMIIBXC(provinceID, this.iSBXX, this.iSBXY, nMaxX, nMaxY) || CFG.core.getProv(provinceID).getSeaProv() || CFG.FOG_OF_WAR == 2 && !CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getMetProv(provinceID) || CFG.core.getProv(provinceID).getCivId() != CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID || CFG.core.getProv(provinceID).getTrueOwnerOfProv() != CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID) continue;
+                    if (CFG.selectMode) {
+                        CFG.core.getProvSelected().addProv(provinceID);
+                        continue;
+                    }
+                    CFG.core.getProvSelected().removeProv(provinceID);
                 }
             } else if (CFG.menus.getInCreateNewGame()) {
                 added = 0;
@@ -1723,13 +1738,7 @@ public class TouchManager {
                         TouchManager.this.actionBrush = true;
                     }
                     if (CFG.selectMode) {
-                        if (CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() == CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() == CFG.core.getProv(CFG.core.getActiveProvID()).getTrueOwnerOfProv()) {
-                            if (CFG.brushMode) {
-                                CFG.core.getProvSelected().addProv(CFG.core.getActiveProvID());
-                            } else {
-                                CFG.core.getProvSelected().addProv(CFG.core.getActiveProvID());
-                            }
-                        }
+                        CFG.core.getProvSelected().addProv(CFG.core.getActiveProvID());
                     } else {
                         CFG.core.getProvSelected().removeProv(CFG.core.getActiveProvID());
                     }

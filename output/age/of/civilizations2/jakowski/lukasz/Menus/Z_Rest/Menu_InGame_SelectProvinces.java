@@ -108,26 +108,36 @@ extends Menu {
             }
             case 1: {
                 CFG.brushMode = !CFG.brushMode;
+                this.updateSelectProvinceModeButtons();
                 break;
             }
             case 2: {
                 CFG.selectMode = !CFG.selectMode;
+                this.updateSelectProvinceModeButtons();
                 break;
             }
             case 3: {
                 CFG.setDialogType(DialogType.DESELET_ALL_SELECTED_PROVINCES);
+                this.updateSelectProvinceModeButtons();
                 break;
             }
             case 4: {
                 CFG.core.getProvSelected().popProvince();
                 if (CFG.core.getProvSelected().getProvSize() != 0) break;
                 CFG.selectMode = true;
+                CFG.brushMode = false;
+                this.updateSelectProvinceModeButtons();
                 break;
             }
             case 5: {
                 CFG.VIEW_SHOW_VALUES = !CFG.VIEW_SHOW_VALUES;
             }
         }
+    }
+
+    private final void updateSelectProvinceModeButtons() {
+        this.getMenuElem(1).setCheckboxSt(CFG.brushMode);
+        this.getMenuElem(2).setCheckboxSt(CFG.selectMode);
     }
 
     @Override
