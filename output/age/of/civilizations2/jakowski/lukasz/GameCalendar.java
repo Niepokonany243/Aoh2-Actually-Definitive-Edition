@@ -16,8 +16,8 @@ public class GameCalendar {
     public static float GAME_SPEED = 1.0f;
     public static float GAME_SPEED_MIN = 0.5f;
     public static float GAME_SPEED_MAX = 2.0f;
-    public static float AI_AGGRESSIVENESS = 1.25f;
-    public static float AI_AGGRESSIVENESS_DEFAULT = 1.25f;
+    public static float AI_AGGRESSIVENESS = 0.75f;
+    public static float AI_AGGRESSIVENESS_DEFAULT = 0.75f;
     public static int MAX_AI_AGGRESSIVENESS = 1000;
     public static boolean ENABLE_COLONIZATION = true;
     public static boolean ENABLE_COLONIZATION_NEUTRAL_PROVINCES = false;

@@ -1419,76 +1419,60 @@ public class Core {
     }
 
     public final void loadProvinceTextures() {
-        if (provinceTexturesLoaded) {
-            if (CFG.getIsDesktop() && !provinceBGLoaded) {
-                for (int i = 0; i < this.iProvincesSize; ++i) {
-                    this.getProv(i).loadProvinceBG();
-                }
-                provinceBGLoaded = true;
-            }
-            return;
+        if (!provinceTexturesLoaded) {
+            loadProvinceTextures_BatchInit();
+            loadProvinceTextures_Batch(0, this.iProvincesSize);
+            loadProvinceTextures_BatchFinalise();
         }
-        ProvinceAtlas.init();
-        
-        int processors = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
-        int chunkSize = Math.max(1, (this.iProvincesSize + processors - 1) / processors);
-        
-        java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(processors);
-        
-        for (int t = 0; t < processors; t++) {
-            final int start = t * chunkSize;
-            final int end = Math.min(start + chunkSize, this.iProvincesSize);
-            if (start >= end) { latch.countDown(); continue; }
-            
-            EXECUTOR.execute(() -> {
-                try {
-                    for (int i = start; i < end; ++i) {
-                        try {
-                            Province p = Core.this.getProv(i);
-                            if (GameValues.gvInGame.LOAD_SEA_PROVINCES_IMAGES && CFG.getIsDesktop() || !p.getSeaProv()) {
-                                Pixmap pixmap = PixmapIO.readCIM(FileManager.loadFile("map/" + CFG.map.getFileActiveMapPath() + "data/scales/provinces/" + (p.getContinent() == CFG.map.getMapContinents().getOceanContinentID() ? 1 : CFG.map.getMpB().getMapScale_PreExtra()) + "/" + i));
-                                synchronized (ProvinceAtlas.class) {
-                                    ProvinceAtlas.addProvince(i, pixmap);
-                                }
-                                pixmap.dispose();
-                            }
-                        } catch (Exception ex) {}
-                    }
-                } finally {
-                    latch.countDown();
-                }
-            });
-        }
-        
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            CFG.exceptionStack(e);
-        }
-        
-        ProvinceAtlas.finalise();
-        ProvinceMesh.init();
-        
-        if (CFG.getIsDesktop()) {
-            for (int i = 0; i < this.iProvincesSize; ++i) {
-                this.getProv(i).loadProvinceBG();
-            }
-        }
-        provinceTexturesLoaded = true;
-        provinceBGLoaded = true;
     }
 
     public final void loadProvinceTexture(int i) {
-        try {
-            this.getProv(i).loadProvinceBG();
+    }
+
+    private static byte[][] provinceTextureDataCache = null;
+    
+    public final void preloadProvinceTextureData() {
+        if (provinceTextureDataCache != null) return;
+        int nProv = this.iProvincesSize;
+        provinceTextureDataCache = new byte[nProv][];
+        for (int i = 0; i < nProv; ++i) {
+            try {
+                Province p = this.getProv(i);
+                if (p.getSeaProv()) continue;
+                FileHandle f = FileManager.loadFile("map/" + CFG.map.getFileActiveMapPath() + "data/scales/provinces/" + (p.getContinent() == CFG.map.getMapContinents().getOceanContinentID() ? 1 : CFG.map.getMpB().getMapScale_PreExtra()) + "/" + i);
+                if (f.exists()) provinceTextureDataCache[i] = f.readBytes();
+            } catch (Exception ex) {}
         }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
+    }
+    
+    public static Pixmap readCIMFromBytes(byte[] data) {
+        java.io.DataInputStream in = null;
+        try {
+            in = new java.io.DataInputStream(new java.util.zip.InflaterInputStream(new java.io.ByteArrayInputStream(data)));
+            int width = in.readInt();
+            int height = in.readInt();
+            int formatInt = in.readInt();
+            Pixmap.Format format = Pixmap.Format.fromGdx2DPixmapFormat(formatInt);
+            Pixmap pixmap = new Pixmap(width, height, format);
+            java.nio.ByteBuffer pixelBuf = pixmap.getPixels();
+            ((java.nio.Buffer)pixelBuf).position(0);
+            ((java.nio.Buffer)pixelBuf).limit(pixelBuf.capacity());
+            byte[] readBuffer = new byte[16 * 1024];
+            int readBytes;
+            while ((readBytes = in.read(readBuffer)) > 0) pixelBuf.put(readBuffer, 0, readBytes);
+            ((java.nio.Buffer)pixelBuf).position(0);
+            ((java.nio.Buffer)pixelBuf).limit(pixelBuf.capacity());
+            in.close();
+            return pixmap;
+        } catch (Exception ex) {
+            try { if (in != null) in.close(); } catch (Exception e) {}
+            return null;
         }
     }
 
     public final void loadProvinceTextures_BatchInit() {
         if (provinceTexturesLoaded) return;
+        preloadProvinceTextureData();
         ProvinceAtlas.init();
     }
 
@@ -1498,21 +1482,9 @@ public class Core {
         final int end = Math.min(endProvince, this.iProvincesSize);
         final int count = end - start;
         if (count <= 0) return;
-        if (count < 64) {
-            for (int i = start; i < end; ++i) {
-                try {
-                    Province p = this.getProv(i);
-                    if (GameValues.gvInGame.LOAD_SEA_PROVINCES_IMAGES && CFG.getIsDesktop() || !p.getSeaProv()) {
-                        Pixmap pixmap = PixmapIO.readCIM(FileManager.loadFile("map/" + CFG.map.getFileActiveMapPath() + "data/scales/provinces/" + (p.getContinent() == CFG.map.getMapContinents().getOceanContinentID() ? 1 : CFG.map.getMpB().getMapScale_PreExtra()) + "/" + i));
-                        ProvinceAtlas.addProvince(i, pixmap);
-                        pixmap.dispose();
-                    }
-                }
-                catch (Exception ex) {}
-            }
-            return;
-        }
-        int processors = Math.max(1, Math.min(Runtime.getRuntime().availableProcessors() - 1, count));
+        final byte[][] cache = provinceTextureDataCache;
+        if (cache == null) return;
+        int processors = Math.max(1, Math.min(Runtime.getRuntime().availableProcessors(), count));
         int chunkSize = Math.max(1, (count + processors - 1) / processors);
         java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(processors);
         for (int t = 0; t < processors; ++t) {
@@ -1526,13 +1498,12 @@ public class Core {
                 try {
                     for (int i = chunkStart; i < chunkEnd; ++i) {
                         try {
-                            Province p = Core.this.getProv(i);
-                            if (GameValues.gvInGame.LOAD_SEA_PROVINCES_IMAGES && CFG.getIsDesktop() || !p.getSeaProv()) {
-                                Pixmap pixmap = PixmapIO.readCIM(FileManager.loadFile("map/" + CFG.map.getFileActiveMapPath() + "data/scales/provinces/" + (p.getContinent() == CFG.map.getMapContinents().getOceanContinentID() ? 1 : CFG.map.getMpB().getMapScale_PreExtra()) + "/" + i));
-                                synchronized (ProvinceAtlas.class) {
+                            if (cache[i] != null) {
+                                Pixmap pixmap = Core.readCIMFromBytes(cache[i]);
+                                if (pixmap != null) {
                                     ProvinceAtlas.addProvince(i, pixmap);
+                                    pixmap.dispose();
                                 }
-                                pixmap.dispose();
                             }
                         }
                         catch (Exception ex) {}
@@ -1548,12 +1519,27 @@ public class Core {
             CFG.exceptionStack(e);
         }
     }
-
+    
     public final void loadProvinceTextures_BatchFinalise() {
         if (provinceTexturesLoaded) return;
+        if (provinceTextureDataCache != null) {
+            for (int i = 0; i < this.iProvincesSize && i < provinceTextureDataCache.length; ++i) {
+                if (provinceTextureDataCache[i] != null && this.getProv(i).getProvBG() == null) {
+                    try {
+                        Pixmap pixmap = Core.readCIMFromBytes(provinceTextureDataCache[i]);
+                        if (pixmap != null) {
+                            this.getProv(i).setProvBG(new Image(new Texture(pixmap), com.badlogic.gdx.graphics.Texture.TextureFilter.Nearest, com.badlogic.gdx.graphics.Texture.TextureWrap.ClampToEdge));
+                            pixmap.dispose();
+                        }
+                    } catch (Exception ex) {}
+                }
+            }
+        }
         ProvinceAtlas.finalise();
         ProvinceMesh.init();
         provinceTexturesLoaded = true;
+        provinceBGLoaded = true;
+        provinceTextureDataCache = null;
     }
 
     public final void loadProvinceBG_Batch(int startProvince, int endProvince) {

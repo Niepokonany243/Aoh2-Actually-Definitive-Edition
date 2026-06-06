@@ -274,6 +274,7 @@ public class MapBG {
     
     public final void drawMinimapTexture_Generate(SpriteBatch oSB) {
         if (!(this.minimapCivs != null || this.lGMI.isEmpty() || CFG.menus.getIn_InitMenu() || CFG.menus.getInLoadMap() || CFG.menus.getInLoadSave())) {
+            boolean batchEndedInTry = false;
             try {
                 int i;
                 try {
@@ -284,6 +285,7 @@ public class MapBG {
                     
                 }
                 oSB.end();
+                batchEndedInTry = true;
                 this.minimapIsBelowZero = false;
                 int tMinX = this.getWidthM();
                 int tMaxX = -this.getWidthM();
@@ -442,6 +444,7 @@ public class MapBG {
                 oSB.end();
             }
             finally {
+                try { oSB.end(); } catch (Exception e) {}
                 AoCGame.viewport.setWorldSize((float)CFG.GAMEWIDTH / CFG.map.getMpS().getCurrSc(), (float)CFG.GAMEHEIGHT / CFG.map.getMpS().getCurrSc());
                 AoCGame.viewport.apply();
                 AoCGame.cameraOrt.setToOrtho(true, (float)CFG.GAMEWIDTH / CFG.map.getMpS().getCurrSc(), (float)(-CFG.GAMEHEIGHT) / CFG.map.getMpS().getCurrSc());

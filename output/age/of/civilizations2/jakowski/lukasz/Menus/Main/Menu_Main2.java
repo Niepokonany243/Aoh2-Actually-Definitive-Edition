@@ -186,7 +186,7 @@ extends Menu {
         }
         CFG.AGE_OF_CHAOS_MODE = false;
         CFG.REBELS_POWER = 1.5f;
-        CFG.ENABLE_NUKES = true;
+        CFG.ENABLE_NUKES = false;
         CFG.MIN_ARMY_REQUIRED_TO_ATTACK = GameValues.gvMove.MIN_ARMY_REQUIRED_TO_ATTACK_DEFAULT;
         CFG.MAX_PROVINCES_FOR_ALLIANCE_PROPOSAL = 20;
         CFG.PROPOSE_ALLIANCE_CHANCE_100 = 62;

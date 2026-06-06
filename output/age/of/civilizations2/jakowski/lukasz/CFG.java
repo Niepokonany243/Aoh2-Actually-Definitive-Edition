@@ -7941,7 +7941,7 @@ public class CFG {
         AGE_OF_CHAOS_MODE = false;
         AGE_OF_CHAOS_TURNS = 50;
         AGE_OF_CHAOS_CIVS = 4;
-        ENABLE_NUKES = true;
+        ENABLE_NUKES = false;
         LEADERS_CAN_DIE = false;
         USE_NEW_DECLARE_WAR_SYSTEM = true;
         USE_OLD_DECLARE_WAR_CHANGE_100 = 0;

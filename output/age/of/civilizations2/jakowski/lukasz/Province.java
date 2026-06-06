@@ -2828,6 +2828,10 @@ public class Province {
         return this.provBG;
     }
 
+    public final void setProvBG(Image img) {
+        this.provBG = img;
+    }
+
     public final void disposeProvinceBG() {
         if (this.provBG != null) {
             this.provBG.getTexture().dispose();

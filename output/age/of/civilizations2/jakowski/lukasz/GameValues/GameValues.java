@@ -138,6 +138,11 @@ import age.of.civilizations2.jakowski.lukasz.GameValues.GV_WarPreparations;
 import age.of.civilizations2.jakowski.lukasz.GameValues.GV_WarWeariness;
 import age.of.civilizations2.jakowski.lukasz.GameValues.GV_Wonder;
 import com.badlogic.gdx.utils.Json;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import com.badlogic.gdx.files.FileHandle;
+import age.of.civilizations2.jakowski.lukasz.Core.Core;
 
 public class GameValues {
     public static GV_DefensivePosition gvDefensivePosition = new GV_DefensivePosition();
@@ -280,1101 +285,177 @@ public class GameValues {
     public static GV_RankingSystem gvRankingSystem = new GV_RankingSystem();
     public static int DEFAULT_FONT_SIZE = 18;
 
+    private static <T> void addGvTask(List<Runnable> tasks, String fileName, Class<T> type, java.util.function.Consumer<T> setter) {
+        tasks.add(() -> {
+            try {
+                FileHandle f = FileManager.loadFile("game/gameValues/" + fileName);
+                if (f.exists()) {
+                    T result = new Json().fromJson(type, f);
+                    if (result != null) setter.accept(result);
+                }
+            } catch (Exception ex) {
+                CFG.exceptionStack(ex);
+            }
+        });
+    }
+
+    private static void runParallel(List<Runnable> tasks) {
+        if (tasks.isEmpty()) return;
+        java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(tasks.size());
+        for (Runnable task : tasks) {
+            Core.EXECUTOR.execute(() -> {
+                try { task.run(); } finally { latch.countDown(); }
+            });
+        }
+        try { latch.await(); } catch (InterruptedException e) { CFG.exceptionStack(e); }
+    }
+
     public static final void init() {
-        if (!CFG.getIsDesktop()) {
-            return;
-        }
-        Json json = new Json();
-        try {
-            if (FileManager.loadFile("game/gameValues/gvDefensivePosition.json").exists()) {
-                gvDefensivePosition = json.fromJson(GV_DefensivePosition.class, FileManager.loadFile("game/gameValues/gvDefensivePosition.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvMilitary.json").exists()) {
-                gvMilitary = json.fromJson(GV_Military.class, FileManager.loadFile("game/gameValues/gvMilitary.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvAssimilate.json").exists()) {
-                gvAssimilate = json.fromJson(GV_Assimilate.class, FileManager.loadFile("game/gameValues/gvAssimilate.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvRebelsSupport.json").exists()) {
-                gvRebelsSupport = json.fromJson(GV_RebelsSupport.class, FileManager.loadFile("game/gameValues/gvRebelsSupport.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvRebels.json").exists()) {
-                gvRebels = json.fromJson(GV_Rebels.class, FileManager.loadFile("game/gameValues/gvRebels.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvTechnology.json").exists()) {
-                gvTechnology = json.fromJson(GV_Technology.class, FileManager.loadFile("game/gameValues/gvTechnology.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvCivilize.json").exists()) {
-                gvCivilize = json.fromJson(GV_Civilize.class, FileManager.loadFile("game/gameValues/gvCivilize.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvHappiness.json").exists()) {
-                gvHappiness = json.fromJson(GV_Happiness.class, FileManager.loadFile("game/gameValues/gvHappiness.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvStability.json").exists()) {
-                gvStability = json.fromJson(GV_Stability.class, FileManager.loadFile("game/gameValues/gvStability.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvDiplomacy.json").exists()) {
-                gvDiplomacy = json.fromJson(GV_Diplomacy.class, FileManager.loadFile("game/gameValues/gvDiplomacy.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvMovementPoints.json").exists()) {
-                gvMovementPoints = json.fromJson(GV_MovementPoints.class, FileManager.loadFile("game/gameValues/gvMovementPoints.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvAchievements.json").exists()) {
-                gvAchievements = json.fromJson(GV_Achievements.class, FileManager.loadFile("game/gameValues/gvAchievements.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvLogs.json").exists()) {
-                gvLogs = json.fromJson(GV_Logs.class, FileManager.loadFile("game/gameValues/gvLogs.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        boolean gvAiCivPersonalityTypeLoaded = false;
-        try {
-            if (FileManager.loadFile("game/gameValues/gvAiCivPersonalityType.json").exists()) {
-                gvAiCivPersonalityType = json.fromJson(GV_AI_CivPersonalityType.class, FileManager.loadFile("game/gameValues/gvAiCivPersonalityType.json"));
-                gvAiCivPersonalityTypeLoaded = true;
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvLoan.json").exists()) {
-                gvLoan = json.fromJson(GV_Loan.class, FileManager.loadFile("game/gameValues/gvLoan.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvCeasefire.json").exists()) {
-                gvCeasefire = json.fromJson(GV_Ceasefire.class, FileManager.loadFile("game/gameValues/gvCeasefire.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvTaxation.json").exists()) {
-                gvTaxation = json.fromJson(GV_Taxation.class, FileManager.loadFile("game/gameValues/gvTaxation.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvGoods.json").exists()) {
-                gvGoods = json.fromJson(GV_Goods.class, FileManager.loadFile("game/gameValues/gvGoods.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvDevelopment.json").exists()) {
-                gvDevelopment = json.fromJson(GV_Development.class, FileManager.loadFile("game/gameValues/gvDevelopment.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvPopulationGrowth.json").exists()) {
-                gvPopulationGrowth = json.fromJson(GV_PopulationGrowth.class, FileManager.loadFile("game/gameValues/gvPopulationGrowth.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvEconomyGrowth.json").exists()) {
-                gvEconomyGrowth = json.fromJson(GV_EconomyGrowth.class, FileManager.loadFile("game/gameValues/gvEconomyGrowth.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvRevolutionaryRisk.json").exists()) {
-                gvRevolutionaryRisk = json.fromJson(GV_RevolutionaryRisk.class, FileManager.loadFile("game/gameValues/gvRevolutionaryRisk.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvRelationDecrease.json").exists()) {
-                gvRelationDecrease = json.fromJson(GV_RelationDecrease.class, FileManager.loadFile("game/gameValues/gvRelationDecrease.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvRelationImprove.json").exists()) {
-                gvRelationImprove = json.fromJson(GV_RelationImprove.class, FileManager.loadFile("game/gameValues/gvRelationImprove.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvPlunder.json").exists()) {
-                gvPlunder = json.fromJson(GV_Plunder.class, FileManager.loadFile("game/gameValues/gvPlunder.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvGovernment.json").exists()) {
-                gvGovernment = json.fromJson(GV_Government.class, FileManager.loadFile("game/gameValues/gvGovernment.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvRelations.json").exists()) {
-                gvRelations = json.fromJson(GV_Relations.class, FileManager.loadFile("game/gameValues/gvRelations.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvUpdate.json").exists()) {
-                gvUpdate = json.fromJson(GV_Update.class, FileManager.loadFile("game/gameValues/gvUpdate.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvPeaceTreaty.json").exists()) {
-                gvPeaceTreaty = json.fromJson(GV_PeaceTreaty.class, FileManager.loadFile("game/gameValues/gvPeaceTreaty.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvUltimatum.json").exists()) {
-                gvUltimatum = json.fromJson(GV_Ultimatum.class, FileManager.loadFile("game/gameValues/gvUltimatum.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvGift.json").exists()) {
-                gvGift = json.fromJson(GV_Gift.class, FileManager.loadFile("game/gameValues/gvGift.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvProvince.json").exists()) {
-                gvProvince = json.fromJson(GV_Province.class, FileManager.loadFile("game/gameValues/gvProvince.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvColonize.json").exists()) {
-                gvColonize = json.fromJson(GV_Colonize.class, FileManager.loadFile("game/gameValues/gvColonize.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvFestival.json").exists()) {
-                gvFestival = json.fromJson(GV_Festival.class, FileManager.loadFile("game/gameValues/gvFestival.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvInvestDevelopment.json").exists()) {
-                gvInvestDevelopment = json.fromJson(GV_InvestDevelopment.class, FileManager.loadFile("game/gameValues/gvInvestDevelopment.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvInvestEconomy.json").exists()) {
-                gvInvestEconomy = json.fromJson(GV_InvestEconomy.class, FileManager.loadFile("game/gameValues/gvInvestEconomy.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvRelationsReactions.json").exists()) {
-                gvRelationsReactions = json.fromJson(GV_RelationsReactions.class, FileManager.loadFile("game/gameValues/gvRelationsReactions.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvDipTruce.json").exists()) {
-                gvDipTruce = json.fromJson(GV_DipTruce.class, FileManager.loadFile("game/gameValues/gvDipTruce.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvDipDefensivePact.json").exists()) {
-                gvDipDefensivePact = json.fromJson(GV_DipDefensivePact.class, FileManager.loadFile("game/gameValues/gvDipDefensivePact.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvDipNonAggression.json").exists()) {
-                gvDipNonAggression = json.fromJson(GV_DipNonAggression.class, FileManager.loadFile("game/gameValues/gvDipNonAggression.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvDipGuarantee.json").exists()) {
-                gvDipGuarantee = json.fromJson(GV_DipGuarantee.class, FileManager.loadFile("game/gameValues/gvDipGuarantee.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvDipMilitaryAccess.json").exists()) {
-                gvDipMilitaryAccess = json.fromJson(GV_DipMilitaryAccess.class, FileManager.loadFile("game/gameValues/gvDipMilitaryAccess.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvCapitulation.json").exists()) {
-                gvCapitulation = json.fromJson(GV_Capitulation.class, FileManager.loadFile("game/gameValues/gvCapitulation.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvDiplomacyPoints.json").exists()) {
-                gvDiplomacyPoints = json.fromJson(GV_DiplomacyPoints.class, FileManager.loadFile("game/gameValues/gvDiplomacyPoints.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvAllianceOffer.json").exists()) {
-                gvAllianceOffer = json.fromJson(GV_AllianceOffer.class, FileManager.loadFile("game/gameValues/gvAllianceOffer.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvDipVassalization.json").exists()) {
-                gvDipVassalization = json.fromJson(GV_DipVassalization.class, FileManager.loadFile("game/gameValues/gvDipVassalization.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvTrade.json").exists()) {
-                gvTrade = json.fromJson(GV_Trade.class, FileManager.loadFile("game/gameValues/gvTrade.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvWarPreparations.json").exists()) {
-                gvWarPreparations = json.fromJson(GV_WarPreparations.class, FileManager.loadFile("game/gameValues/gvWarPreparations.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvDipUnion.json").exists()) {
-                gvDipUnion = json.fromJson(GV_DipUnion.class, FileManager.loadFile("game/gameValues/gvDipUnion.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvDipTransferControl.json").exists()) {
-                gvDipTransferControl = json.fromJson(GV_DipTransferControl.class, FileManager.loadFile("game/gameValues/gvDipTransferControl.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvDipCallToArms.json").exists()) {
-                gvDipCallToArms = json.fromJson(GV_DipCallToArms.class, FileManager.loadFile("game/gameValues/gvDipCallToArms.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvGoldenAge.json").exists()) {
-                gvGoldenAge = json.fromJson(GV_GoldenAge.class, FileManager.loadFile("game/gameValues/gvGoldenAge.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvGoldenAgeProsperity.json").exists()) {
-                gvGoldenAgeProsperity = json.fromJson(GV_GoldenAgeProsperity.class, FileManager.loadFile("game/gameValues/gvGoldenAgeProsperity.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvGoldenAgeMilitary.json").exists()) {
-                gvGoldenAgeMilitary = json.fromJson(GV_GoldenAgeMilitary.class, FileManager.loadFile("game/gameValues/gvGoldenAgeMilitary.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvGoldenAgeScience.json").exists()) {
-                gvGoldenAgeScience = json.fromJson(GV_GoldenAgeScience.class, FileManager.loadFile("game/gameValues/gvGoldenAgeScience.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvDifficulty.json").exists()) {
-                gvDifficulty = json.fromJson(GV_Difficulty.class, FileManager.loadFile("game/gameValues/gvDifficulty.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvProvinceAnimation.json").exists()) {
-                gvProvinceAnimation = json.fromJson(GV_ProvinceAnimation.class, FileManager.loadFile("game/gameValues/gvProvinceAnimation.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvProvinceBorder.json").exists()) {
-                gvProvinceBorder = json.fromJson(GV_ProvinceBorder.class, FileManager.loadFile("game/gameValues/gvProvinceBorder.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvVassal.json").exists()) {
-                gvVassal = json.fromJson(GV_Vassal.class, FileManager.loadFile("game/gameValues/gvVassal.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvTimelapse.json").exists()) {
-                gvTimelapse = json.fromJson(GV_Timelapse.class, FileManager.loadFile("game/gameValues/gvTimelapse.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvHre.json").exists()) {
-                gvHre = json.fromJson(GV_HRE.class, FileManager.loadFile("game/gameValues/gvHre.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvRebelsIndependence.json").exists()) {
-                gvRebelsIndependence = json.fromJson(GV_RebelsIndependence.class, FileManager.loadFile("game/gameValues/gvRebelsIndependence.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvBattle.json").exists()) {
-                gvBattle = json.fromJson(GV_Battle.class, FileManager.loadFile("game/gameValues/gvBattle.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvArmyRecruitable.json").exists()) {
-                gvArmyRecruitable = json.fromJson(GV_ArmyRecruitable.class, FileManager.loadFile("game/gameValues/gvArmyRecruitable.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvRankingSystem.json").exists()) {
-                gvRankingSystem = json.fromJson(GV_RankingSystem.class, FileManager.loadFile("game/gameValues/gvRankingSystem.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvMove.json").exists()) {
-                gvMove = json.fromJson(GV_Move.class, FileManager.loadFile("game/gameValues/gvMove.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvEconomy.json").exists()) {
-                gvEconomy = json.fromJson(GV_Economy.class, FileManager.loadFile("game/gameValues/gvEconomy.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvDices.json").exists()) {
-                gvDices = json.fromJson(GV_Dices.class, FileManager.loadFile("game/gameValues/gvDices.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvCapital.json").exists()) {
-                gvCapital = json.fromJson(GV_Capital.class, FileManager.loadFile("game/gameValues/gvCapital.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvBuildings.json").exists()) {
-                gvBuildings = json.fromJson(GV_Buildings.class, FileManager.loadFile("game/gameValues/gvBuildings.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvProvinceNotSupplied.json").exists()) {
-                gvProvinceNotSupplied = json.fromJson(GV_ProvinceNotSupplied.class, FileManager.loadFile("game/gameValues/gvProvinceNotSupplied.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvArmyRecruit.json").exists()) {
-                gvArmyRecruit = json.fromJson(GV_ArmyRecruit.class, FileManager.loadFile("game/gameValues/gvArmyRecruit.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvFormCiv.json").exists()) {
-                gvFormCiv = json.fromJson(GV_FormCiv.class, FileManager.loadFile("game/gameValues/gvFormCiv.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvBuildingArmoury.json").exists()) {
-                gvBuildingArmoury = json.fromJson(GV_BuildingArmoury.class, FileManager.loadFile("game/gameValues/gvBuildingArmoury.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
+        if (!CFG.getIsDesktop()) return;
+        ArrayList<Runnable> tasks = new ArrayList<Runnable>();
+        addGvTask(tasks, "gvDefensivePosition.json", GV_DefensivePosition.class, v -> gvDefensivePosition = v);
+        addGvTask(tasks, "gvMilitary.json", GV_Military.class, v -> gvMilitary = v);
+        addGvTask(tasks, "gvAssimilate.json", GV_Assimilate.class, v -> gvAssimilate = v);
+        addGvTask(tasks, "gvRebelsSupport.json", GV_RebelsSupport.class, v -> gvRebelsSupport = v);
+        addGvTask(tasks, "gvRebels.json", GV_Rebels.class, v -> gvRebels = v);
+        addGvTask(tasks, "gvTechnology.json", GV_Technology.class, v -> gvTechnology = v);
+        addGvTask(tasks, "gvCivilize.json", GV_Civilize.class, v -> gvCivilize = v);
+        addGvTask(tasks, "gvHappiness.json", GV_Happiness.class, v -> gvHappiness = v);
+        addGvTask(tasks, "gvStability.json", GV_Stability.class, v -> gvStability = v);
+        addGvTask(tasks, "gvDiplomacy.json", GV_Diplomacy.class, v -> gvDiplomacy = v);
+        addGvTask(tasks, "gvMovementPoints.json", GV_MovementPoints.class, v -> gvMovementPoints = v);
+        addGvTask(tasks, "gvAchievements.json", GV_Achievements.class, v -> gvAchievements = v);
+        addGvTask(tasks, "gvLogs.json", GV_Logs.class, v -> gvLogs = v);
+        addGvTask(tasks, "gvAiCivPersonalityType.json", GV_AI_CivPersonalityType.class, v -> gvAiCivPersonalityType = v);
+        addGvTask(tasks, "gvLoan.json", GV_Loan.class, v -> gvLoan = v);
+        addGvTask(tasks, "gvCeasefire.json", GV_Ceasefire.class, v -> gvCeasefire = v);
+        addGvTask(tasks, "gvTaxation.json", GV_Taxation.class, v -> gvTaxation = v);
+        addGvTask(tasks, "gvGoods.json", GV_Goods.class, v -> gvGoods = v);
+        addGvTask(tasks, "gvDevelopment.json", GV_Development.class, v -> gvDevelopment = v);
+        addGvTask(tasks, "gvPopulationGrowth.json", GV_PopulationGrowth.class, v -> gvPopulationGrowth = v);
+        addGvTask(tasks, "gvEconomyGrowth.json", GV_EconomyGrowth.class, v -> gvEconomyGrowth = v);
+        addGvTask(tasks, "gvRevolutionaryRisk.json", GV_RevolutionaryRisk.class, v -> gvRevolutionaryRisk = v);
+        addGvTask(tasks, "gvRelationDecrease.json", GV_RelationDecrease.class, v -> gvRelationDecrease = v);
+        addGvTask(tasks, "gvRelationImprove.json", GV_RelationImprove.class, v -> gvRelationImprove = v);
+        addGvTask(tasks, "gvPlunder.json", GV_Plunder.class, v -> gvPlunder = v);
+        addGvTask(tasks, "gvGovernment.json", GV_Government.class, v -> gvGovernment = v);
+        addGvTask(tasks, "gvRelations.json", GV_Relations.class, v -> gvRelations = v);
+        addGvTask(tasks, "gvUpdate.json", GV_Update.class, v -> gvUpdate = v);
+        addGvTask(tasks, "gvPeaceTreaty.json", GV_PeaceTreaty.class, v -> gvPeaceTreaty = v);
+        addGvTask(tasks, "gvUltimatum.json", GV_Ultimatum.class, v -> gvUltimatum = v);
+        addGvTask(tasks, "gvGift.json", GV_Gift.class, v -> gvGift = v);
+        addGvTask(tasks, "gvProvince.json", GV_Province.class, v -> gvProvince = v);
+        addGvTask(tasks, "gvColonize.json", GV_Colonize.class, v -> gvColonize = v);
+        addGvTask(tasks, "gvFestival.json", GV_Festival.class, v -> gvFestival = v);
+        addGvTask(tasks, "gvInvestDevelopment.json", GV_InvestDevelopment.class, v -> gvInvestDevelopment = v);
+        addGvTask(tasks, "gvInvestEconomy.json", GV_InvestEconomy.class, v -> gvInvestEconomy = v);
+        addGvTask(tasks, "gvRelationsReactions.json", GV_RelationsReactions.class, v -> gvRelationsReactions = v);
+        addGvTask(tasks, "gvDipTruce.json", GV_DipTruce.class, v -> gvDipTruce = v);
+        addGvTask(tasks, "gvDipDefensivePact.json", GV_DipDefensivePact.class, v -> gvDipDefensivePact = v);
+        addGvTask(tasks, "gvDipNonAggression.json", GV_DipNonAggression.class, v -> gvDipNonAggression = v);
+        addGvTask(tasks, "gvDipGuarantee.json", GV_DipGuarantee.class, v -> gvDipGuarantee = v);
+        addGvTask(tasks, "gvDipMilitaryAccess.json", GV_DipMilitaryAccess.class, v -> gvDipMilitaryAccess = v);
+        addGvTask(tasks, "gvCapitulation.json", GV_Capitulation.class, v -> gvCapitulation = v);
+        addGvTask(tasks, "gvDiplomacyPoints.json", GV_DiplomacyPoints.class, v -> gvDiplomacyPoints = v);
+        addGvTask(tasks, "gvAllianceOffer.json", GV_AllianceOffer.class, v -> gvAllianceOffer = v);
+        addGvTask(tasks, "gvDipVassalization.json", GV_DipVassalization.class, v -> gvDipVassalization = v);
+        addGvTask(tasks, "gvTrade.json", GV_Trade.class, v -> gvTrade = v);
+        addGvTask(tasks, "gvWarPreparations.json", GV_WarPreparations.class, v -> gvWarPreparations = v);
+        addGvTask(tasks, "gvDipUnion.json", GV_DipUnion.class, v -> gvDipUnion = v);
+        addGvTask(tasks, "gvDipTransferControl.json", GV_DipTransferControl.class, v -> gvDipTransferControl = v);
+        addGvTask(tasks, "gvDipCallToArms.json", GV_DipCallToArms.class, v -> gvDipCallToArms = v);
+        addGvTask(tasks, "gvGoldenAge.json", GV_GoldenAge.class, v -> gvGoldenAge = v);
+        addGvTask(tasks, "gvGoldenAgeProsperity.json", GV_GoldenAgeProsperity.class, v -> gvGoldenAgeProsperity = v);
+        addGvTask(tasks, "gvGoldenAgeMilitary.json", GV_GoldenAgeMilitary.class, v -> gvGoldenAgeMilitary = v);
+        addGvTask(tasks, "gvGoldenAgeScience.json", GV_GoldenAgeScience.class, v -> gvGoldenAgeScience = v);
+        addGvTask(tasks, "gvDifficulty.json", GV_Difficulty.class, v -> gvDifficulty = v);
+        addGvTask(tasks, "gvProvinceAnimation.json", GV_ProvinceAnimation.class, v -> gvProvinceAnimation = v);
+        addGvTask(tasks, "gvProvinceBorder.json", GV_ProvinceBorder.class, v -> gvProvinceBorder = v);
+        addGvTask(tasks, "gvVassal.json", GV_Vassal.class, v -> gvVassal = v);
+        addGvTask(tasks, "gvTimelapse.json", GV_Timelapse.class, v -> gvTimelapse = v);
+        addGvTask(tasks, "gvHre.json", GV_HRE.class, v -> gvHre = v);
+        addGvTask(tasks, "gvRebelsIndependence.json", GV_RebelsIndependence.class, v -> gvRebelsIndependence = v);
+        addGvTask(tasks, "gvBattle.json", GV_Battle.class, v -> gvBattle = v);
+        addGvTask(tasks, "gvArmyRecruitable.json", GV_ArmyRecruitable.class, v -> gvArmyRecruitable = v);
+        addGvTask(tasks, "gvRankingSystem.json", GV_RankingSystem.class, v -> gvRankingSystem = v);
+        addGvTask(tasks, "gvMove.json", GV_Move.class, v -> gvMove = v);
+        addGvTask(tasks, "gvEconomy.json", GV_Economy.class, v -> gvEconomy = v);
+        addGvTask(tasks, "gvDices.json", GV_Dices.class, v -> gvDices = v);
+        addGvTask(tasks, "gvCapital.json", GV_Capital.class, v -> gvCapital = v);
+        addGvTask(tasks, "gvBuildings.json", GV_Buildings.class, v -> gvBuildings = v);
+        addGvTask(tasks, "gvProvinceNotSupplied.json", GV_ProvinceNotSupplied.class, v -> gvProvinceNotSupplied = v);
+        addGvTask(tasks, "gvArmyRecruit.json", GV_ArmyRecruit.class, v -> gvArmyRecruit = v);
+        addGvTask(tasks, "gvFormCiv.json", GV_FormCiv.class, v -> gvFormCiv = v);
+        addGvTask(tasks, "gvBuildingArmoury.json", GV_BuildingArmoury.class, v -> gvBuildingArmoury = v);
+        runParallel(tasks);
     }
 
     public static final void init2() {
-        if (!CFG.getIsDesktop()) {
-            return;
-        }
-        Json json = new Json();
-        try {
-            if (FileManager.loadFile("game/gameValues/gvRankStars.json").exists()) {
-                gvRankStars = json.fromJson(GV_RankStars.class, FileManager.loadFile("game/gameValues/gvRankStars.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvRankScore.json").exists()) {
-                gvRankScore = json.fromJson(GV_RankScore.class, FileManager.loadFile("game/gameValues/gvRankScore.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvMoveCapital.json").exists()) {
-                gvMoveCapital = json.fromJson(GV_MoveCapital.class, FileManager.loadFile("game/gameValues/gvMoveCapital.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvArmyDisband.json").exists()) {
-                gvArmyDisband = json.fromJson(GV_ArmyDisband.class, FileManager.loadFile("game/gameValues/gvArmyDisband.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvMigrate.json").exists()) {
-                gvMigrate = json.fromJson(GV_Migrate.class, FileManager.loadFile("game/gameValues/gvMigrate.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvResearch.json").exists()) {
-                gvResearch = json.fromJson(GV_Research.class, FileManager.loadFile("game/gameValues/gvResearch.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvBuildingFort.json").exists()) {
-                gvBuildingFort = json.fromJson(GV_BuildingFort.class, FileManager.loadFile("game/gameValues/gvBuildingFort.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvBuildingWatchTower.json").exists()) {
-                gvBuildingWatchTower = json.fromJson(GV_BuildingWatchTower.class, FileManager.loadFile("game/gameValues/gvBuildingWatchTower.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvBuildingPort.json").exists()) {
-                gvBuildingPort = json.fromJson(GV_BuildingPort.class, FileManager.loadFile("game/gameValues/gvBuildingPort.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvBuildingSupplyCamp.json").exists()) {
-                gvBuildingSupplyCamp = json.fromJson(GV_BuildingSupplyCamp.class, FileManager.loadFile("game/gameValues/gvBuildingSupplyCamp.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvBuildingFarm.json").exists()) {
-                gvBuildingFarm = json.fromJson(GV_BuildingFarm.class, FileManager.loadFile("game/gameValues/gvBuildingFarm.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvBuildingLibrary.json").exists()) {
-                gvBuildingLibrary = json.fromJson(GV_BuildingLibrary.class, FileManager.loadFile("game/gameValues/gvBuildingLibrary.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvBuildingWorkshop.json").exists()) {
-                gvBuildingWorkshop = json.fromJson(GV_BuildingWorkshop.class, FileManager.loadFile("game/gameValues/gvBuildingWorkshop.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvBuildingMarket.json").exists()) {
-                gvBuildingMarket = json.fromJson(GV_BuildingMarket.class, FileManager.loadFile("game/gameValues/gvBuildingMarket.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvIncome.json").exists()) {
-                gvIncome = json.fromJson(GV_Income.class, FileManager.loadFile("game/gameValues/gvIncome.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvIncomeTaxation.json").exists()) {
-                gvIncomeTaxation = json.fromJson(GV_IncomeTaxation.class, FileManager.loadFile("game/gameValues/gvIncomeTaxation.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvIncomeProduction.json").exists()) {
-                gvIncomeProduction = json.fromJson(GV_IncomeProduction.class, FileManager.loadFile("game/gameValues/gvIncomeProduction.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvInflation.json").exists()) {
-                gvInflation = json.fromJson(GV_Inflation.class, FileManager.loadFile("game/gameValues/gvInflation.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvAdministration.json").exists()) {
-                gvAdministration = json.fromJson(GV_Administration.class, FileManager.loadFile("game/gameValues/gvAdministration.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvServiceRibbon.json").exists()) {
-                gvServiceRibbon = json.fromJson(GV_ServiceRibbon.class, FileManager.loadFile("game/gameValues/gvServiceRibbon.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvWar.json").exists()) {
-                gvWar = json.fromJson(GV_War.class, FileManager.loadFile("game/gameValues/gvWar.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvProvinceValue.json").exists()) {
-                gvProvinceValue = json.fromJson(GV_ProvinceValue.class, FileManager.loadFile("game/gameValues/gvProvinceValue.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvLeader.json").exists()) {
-                gvLeader = json.fromJson(GV_Leader.class, FileManager.loadFile("game/gameValues/gvLeader.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvInGame.json").exists()) {
-                gvInGame = json.fromJson(GV_InGame.class, FileManager.loadFile("game/gameValues/gvInGame.json"));
-                CFG.map.getMpB().updateMinimapResolution(1);
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvMapOverlays.json").exists()) {
-                gvMapOverlays = json.fromJson(GV_MapOverlays.class, FileManager.loadFile("game/gameValues/gvMapOverlays.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvCore.json").exists()) {
-                gvCore = json.fromJson(GV_Core.class, FileManager.loadFile("game/gameValues/gvCore.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvAbout.json").exists()) {
-                gvAbout = json.fromJson(GV_About.class, FileManager.loadFile("game/gameValues/gvAbout.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvOutliner.json").exists()) {
-                gvOutliner = json.fromJson(GV_Outliner.class, FileManager.loadFile("game/gameValues/gvOutliner.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvWarWeariness.json").exists()) {
-                gvWarWeariness = json.fromJson(GV_WarWeariness.class, FileManager.loadFile("game/gameValues/gvWarWeariness.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvAtomic.json").exists()) {
-                gvAtomic = json.fromJson(GV_Atomic.class, FileManager.loadFile("game/gameValues/gvAtomic.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvPopRelocate.json").exists()) {
-                gvPopRelocate = json.fromJson(GV_PopRelocate.class, FileManager.loadFile("game/gameValues/gvPopRelocate.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvVassalLiberty.json").exists()) {
-                gvVassalLiberty = json.fromJson(GV_VassalLiberty.class, FileManager.loadFile("game/gameValues/gvVassalLiberty.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvCommands.json").exists()) {
-                gvCommands = json.fromJson(GV_Commands.class, FileManager.loadFile("game/gameValues/gvCommands.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvTribal.json").exists()) {
-                gvTribal = json.fromJson(GV_Tribal.class, FileManager.loadFile("game/gameValues/gvTribal.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvEnforcePeace.json").exists()) {
-                gvEnforcePeace = json.fromJson(GV_EnforcePeace.class, FileManager.loadFile("game/gameValues/gvEnforcePeace.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvInvestForeign.json").exists()) {
-                gvInvestForeign = json.fromJson(GV_InvestForeign.class, FileManager.loadFile("game/gameValues/gvInvestForeign.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvSummit.json").exists()) {
-                gvSummit = json.fromJson(GV_Summit.class, FileManager.loadFile("game/gameValues/gvSummit.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvPropaganda.json").exists()) {
-                gvPropaganda = json.fromJson(GV_Propaganda.class, FileManager.loadFile("game/gameValues/gvPropaganda.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvOverInvestment.json").exists()) {
-                gvOverInvestment = json.fromJson(GV_OverInvestment.class, FileManager.loadFile("game/gameValues/gvOverInvestment.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvShips.json").exists()) {
-                gvShips = json.fromJson(GV_Ships.class, FileManager.loadFile("game/gameValues/gvShips.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvWonder.json").exists()) {
-                gvWonder = json.fromJson(GV_Wonder.class, FileManager.loadFile("game/gameValues/gvWonder.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvSanctions.json").exists()) {
-                gvSanctions = json.fromJson(GV_Sanctions.class, FileManager.loadFile("game/gameValues/gvSanctions.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvAdministrationPolicy.json").exists()) {
-                gvAdministrationPolicy = json.fromJson(GV_AdministrationPolicy.class, FileManager.loadFile("game/gameValues/gvAdministrationPolicy.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvAiNuke.json").exists()) {
-                gvAiNuke = json.fromJson(GV_AI_Nuke.class, FileManager.loadFile("game/gameValues/gvAiNuke.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvAiDeclareWar.json").exists()) {
-                gvAiDeclareWar = json.fromJson(GV_AI_DeclareWar.class, FileManager.loadFile("game/gameValues/gvAiDeclareWar.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvAiRivals.json").exists()) {
-                gvAiRivals = json.fromJson(GV_AI_Rivals.class, FileManager.loadFile("game/gameValues/gvAiRivals.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvAiRelations.json").exists()) {
-                gvAiRelations = json.fromJson(GV_AI_Relations.class, FileManager.loadFile("game/gameValues/gvAiRelations.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvAiCivsInRange.json").exists()) {
-                gvAiCivsInRange = json.fromJson(GV_AI_CivsInRange.class, FileManager.loadFile("game/gameValues/gvAiCivsInRange.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvAiFormCiv.json").exists()) {
-                gvAiFormCiv = json.fromJson(GV_AI_FormCiv.class, FileManager.loadFile("game/gameValues/gvAiFormCiv.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvAiVassals.json").exists()) {
-                gvAiVassals = json.fromJson(GV_AI_Vassals.class, FileManager.loadFile("game/gameValues/gvAiVassals.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvAiAlliance.json").exists()) {
-                gvAiAlliance = json.fromJson(GV_AI_Alliance.class, FileManager.loadFile("game/gameValues/gvAiAlliance.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvAiColonization.json").exists()) {
-                gvAiColonization = json.fromJson(GV_AI_Colonization.class, FileManager.loadFile("game/gameValues/gvAiColonization.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvAiLoan.json").exists()) {
-                gvAiLoan = json.fromJson(GV_AI_Loan.class, FileManager.loadFile("game/gameValues/gvAiLoan.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvAiArmy.json").exists()) {
-                gvAiArmy = json.fromJson(GV_AI_Army.class, FileManager.loadFile("game/gameValues/gvAiArmy.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvAiProvince.json").exists()) {
-                gvAiProvince = json.fromJson(GV_AI_Province.class, FileManager.loadFile("game/gameValues/gvAiProvince.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvAiDiplomacy.json").exists()) {
-                gvAiDiplomacy = json.fromJson(GV_AI_Diplomacy.class, FileManager.loadFile("game/gameValues/gvAiDiplomacy.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvAiInvest.json").exists()) {
-                gvAiInvest = json.fromJson(GV_AI_Invest.class, FileManager.loadFile("game/gameValues/gvAiInvest.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvAiCivPersonality.json").exists()) {
-                gvAiCivPersonality = json.fromJson(GV_AI_CivPersonality.class, FileManager.loadFile("game/gameValues/gvAiCivPersonality.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvAiWar.json").exists()) {
-                gvAiWar = json.fromJson(GV_AI_War.class, FileManager.loadFile("game/gameValues/gvAiWar.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvAiBudget.json").exists()) {
-                gvAiBudget = json.fromJson(GV_AI_Budget.class, FileManager.loadFile("game/gameValues/gvAiBudget.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
-        try {
-            if (FileManager.loadFile("game/gameValues/gvMapScroll.json").exists()) {
-                gvMapScroll = json.fromJson(GV_MapScroll.class, FileManager.loadFile("game/gameValues/gvMapScroll.json"));
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
+        if (!CFG.getIsDesktop()) return;
+        ArrayList<Runnable> tasks = new ArrayList<Runnable>();
+        addGvTask(tasks, "gvRankStars.json", GV_RankStars.class, v -> gvRankStars = v);
+        addGvTask(tasks, "gvRankScore.json", GV_RankScore.class, v -> gvRankScore = v);
+        addGvTask(tasks, "gvMoveCapital.json", GV_MoveCapital.class, v -> gvMoveCapital = v);
+        addGvTask(tasks, "gvArmyDisband.json", GV_ArmyDisband.class, v -> gvArmyDisband = v);
+        addGvTask(tasks, "gvMigrate.json", GV_Migrate.class, v -> gvMigrate = v);
+        addGvTask(tasks, "gvResearch.json", GV_Research.class, v -> gvResearch = v);
+        addGvTask(tasks, "gvBuildingFort.json", GV_BuildingFort.class, v -> gvBuildingFort = v);
+        addGvTask(tasks, "gvBuildingWatchTower.json", GV_BuildingWatchTower.class, v -> gvBuildingWatchTower = v);
+        addGvTask(tasks, "gvBuildingPort.json", GV_BuildingPort.class, v -> gvBuildingPort = v);
+        addGvTask(tasks, "gvBuildingSupplyCamp.json", GV_BuildingSupplyCamp.class, v -> gvBuildingSupplyCamp = v);
+        addGvTask(tasks, "gvBuildingFarm.json", GV_BuildingFarm.class, v -> gvBuildingFarm = v);
+        addGvTask(tasks, "gvBuildingLibrary.json", GV_BuildingLibrary.class, v -> gvBuildingLibrary = v);
+        addGvTask(tasks, "gvBuildingWorkshop.json", GV_BuildingWorkshop.class, v -> gvBuildingWorkshop = v);
+        addGvTask(tasks, "gvBuildingMarket.json", GV_BuildingMarket.class, v -> gvBuildingMarket = v);
+        addGvTask(tasks, "gvIncome.json", GV_Income.class, v -> gvIncome = v);
+        addGvTask(tasks, "gvIncomeTaxation.json", GV_IncomeTaxation.class, v -> gvIncomeTaxation = v);
+        addGvTask(tasks, "gvIncomeProduction.json", GV_IncomeProduction.class, v -> gvIncomeProduction = v);
+        addGvTask(tasks, "gvInflation.json", GV_Inflation.class, v -> gvInflation = v);
+        addGvTask(tasks, "gvAdministration.json", GV_Administration.class, v -> gvAdministration = v);
+        addGvTask(tasks, "gvServiceRibbon.json", GV_ServiceRibbon.class, v -> gvServiceRibbon = v);
+        addGvTask(tasks, "gvWar.json", GV_War.class, v -> gvWar = v);
+        addGvTask(tasks, "gvProvinceValue.json", GV_ProvinceValue.class, v -> gvProvinceValue = v);
+        addGvTask(tasks, "gvLeader.json", GV_Leader.class, v -> gvLeader = v);
+        addGvTask(tasks, "gvInGame.json", GV_InGame.class, v -> gvInGame = v);
+        addGvTask(tasks, "gvMapOverlays.json", GV_MapOverlays.class, v -> gvMapOverlays = v);
+        addGvTask(tasks, "gvCore.json", GV_Core.class, v -> gvCore = v);
+        addGvTask(tasks, "gvAbout.json", GV_About.class, v -> gvAbout = v);
+        addGvTask(tasks, "gvOutliner.json", GV_Outliner.class, v -> gvOutliner = v);
+        addGvTask(tasks, "gvWarWeariness.json", GV_WarWeariness.class, v -> gvWarWeariness = v);
+        addGvTask(tasks, "gvAtomic.json", GV_Atomic.class, v -> gvAtomic = v);
+        addGvTask(tasks, "gvPopRelocate.json", GV_PopRelocate.class, v -> gvPopRelocate = v);
+        addGvTask(tasks, "gvVassalLiberty.json", GV_VassalLiberty.class, v -> gvVassalLiberty = v);
+        addGvTask(tasks, "gvCommands.json", GV_Commands.class, v -> gvCommands = v);
+        addGvTask(tasks, "gvTribal.json", GV_Tribal.class, v -> gvTribal = v);
+        addGvTask(tasks, "gvEnforcePeace.json", GV_EnforcePeace.class, v -> gvEnforcePeace = v);
+        addGvTask(tasks, "gvInvestForeign.json", GV_InvestForeign.class, v -> gvInvestForeign = v);
+        addGvTask(tasks, "gvSummit.json", GV_Summit.class, v -> gvSummit = v);
+        addGvTask(tasks, "gvPropaganda.json", GV_Propaganda.class, v -> gvPropaganda = v);
+        addGvTask(tasks, "gvOverInvestment.json", GV_OverInvestment.class, v -> gvOverInvestment = v);
+        addGvTask(tasks, "gvShips.json", GV_Ships.class, v -> gvShips = v);
+        addGvTask(tasks, "gvWonder.json", GV_Wonder.class, v -> gvWonder = v);
+        addGvTask(tasks, "gvSanctions.json", GV_Sanctions.class, v -> gvSanctions = v);
+        addGvTask(tasks, "gvAdministrationPolicy.json", GV_AdministrationPolicy.class, v -> gvAdministrationPolicy = v);
+        addGvTask(tasks, "gvAiNuke.json", GV_AI_Nuke.class, v -> gvAiNuke = v);
+        addGvTask(tasks, "gvAiDeclareWar.json", GV_AI_DeclareWar.class, v -> gvAiDeclareWar = v);
+        addGvTask(tasks, "gvAiRivals.json", GV_AI_Rivals.class, v -> gvAiRivals = v);
+        addGvTask(tasks, "gvAiRelations.json", GV_AI_Relations.class, v -> gvAiRelations = v);
+        addGvTask(tasks, "gvAiCivsInRange.json", GV_AI_CivsInRange.class, v -> gvAiCivsInRange = v);
+        addGvTask(tasks, "gvAiFormCiv.json", GV_AI_FormCiv.class, v -> gvAiFormCiv = v);
+        addGvTask(tasks, "gvAiVassals.json", GV_AI_Vassals.class, v -> gvAiVassals = v);
+        addGvTask(tasks, "gvAiAlliance.json", GV_AI_Alliance.class, v -> gvAiAlliance = v);
+        addGvTask(tasks, "gvAiColonization.json", GV_AI_Colonization.class, v -> gvAiColonization = v);
+        addGvTask(tasks, "gvAiLoan.json", GV_AI_Loan.class, v -> gvAiLoan = v);
+        addGvTask(tasks, "gvAiArmy.json", GV_AI_Army.class, v -> gvAiArmy = v);
+        addGvTask(tasks, "gvAiProvince.json", GV_AI_Province.class, v -> gvAiProvince = v);
+        addGvTask(tasks, "gvAiDiplomacy.json", GV_AI_Diplomacy.class, v -> gvAiDiplomacy = v);
+        addGvTask(tasks, "gvAiInvest.json", GV_AI_Invest.class, v -> gvAiInvest = v);
+        addGvTask(tasks, "gvAiCivPersonality.json", GV_AI_CivPersonality.class, v -> gvAiCivPersonality = v);
+        addGvTask(tasks, "gvAiWar.json", GV_AI_War.class, v -> gvAiWar = v);
+        addGvTask(tasks, "gvAiBudget.json", GV_AI_Budget.class, v -> gvAiBudget = v);
+        addGvTask(tasks, "gvMapScroll.json", GV_MapScroll.class, v -> gvMapScroll = v);
+        runParallel(tasks);
+        try { CFG.map.getMpB().updateMinimapResolution(1); } catch (Exception ex) { CFG.exceptionStack(ex); }
     }
 
     public static void updateCivPersonalityType() {

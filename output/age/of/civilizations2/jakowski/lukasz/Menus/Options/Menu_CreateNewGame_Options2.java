@@ -1176,7 +1176,7 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 48 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 0, 200, CFG.WAR_CANT_BE_DECLARED_IN_FIRST_X_TURNS){
+        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 50 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 0, 200, CFG.WAR_CANT_BE_DECLARED_IN_FIRST_X_TURNS){
 
             @Override
             public String getDrawText() {
@@ -1199,7 +1199,7 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 49 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 10, GameValues.gvPeaceTreaty.CREATE_NEW_GAME_SLIDER_MAX_SCORE, (int)(CFG.PEACE_TREATY_VICTORY_POINTS_MODIFIER * 100.0f)){
+        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 51 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 10, GameValues.gvPeaceTreaty.CREATE_NEW_GAME_SLIDER_MAX_SCORE, (int)(CFG.PEACE_TREATY_VICTORY_POINTS_MODIFIER * 100.0f)){
 
             @Override
             public String getDrawText() {
@@ -1223,7 +1223,7 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 45 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 10, (int)(GameValues.gvTechnology.MAX_TECHNOLOGY_LEVEL * 100.0f), (int)(CFG.NUKES_REQUIRED_TECH_LVL * 100.0f)){
+        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 47 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 10, (int)(GameValues.gvTechnology.MAX_TECHNOLOGY_LEVEL * 100.0f), (int)(CFG.NUKES_REQUIRED_TECH_LVL * 100.0f)){
 
             @Override
             public String getDrawText() {
@@ -1247,7 +1247,7 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 50 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 5, GameValues.gvAssimilate.CREATE_NEW_GAME_MAX_ASSIMILATE_SPEED, (int)(CFG.ASSIMILATION_SPEED_MODIFIER * 100.0f)){
+        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 52 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 5, GameValues.gvAssimilate.CREATE_NEW_GAME_MAX_ASSIMILATE_SPEED, (int)(CFG.ASSIMILATION_SPEED_MODIFIER * 100.0f)){
 
             @Override
             public String getDrawText() {
@@ -1277,7 +1277,7 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 51 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 5, GameValues.gvAssimilate.CREATE_NEW_GAME_MAX_ASSIMILATE_SPEED, (int)(CFG.ASSIMILATION_COST_MODIFIER * 100.0f)){
+        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 53 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 5, GameValues.gvAssimilate.CREATE_NEW_GAME_MAX_ASSIMILATE_SPEED, (int)(CFG.ASSIMILATION_COST_MODIFIER * 100.0f)){
 
             @Override
             public String getDrawText() {
@@ -1301,7 +1301,7 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Button_CNG_Options2(null, CFG.PADD * 2, 0, tempElemH * 52, tempW, tempElemH, true, CFG.VASSALS_CAN_DECLARE_INDEPENDENCE){
+        menuElements.add(new Button_CNG_Options2(null, CFG.PADD * 2, 0, tempElemH * 54, tempW, tempElemH, true, CFG.VASSALS_CAN_DECLARE_INDEPENDENCE){
 
             @Override
             public boolean getCheckboxSt() {
@@ -1326,7 +1326,7 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Button_CNG_Options2(null, CFG.PADD * 2, 0, tempElemH * 43, tempW, tempElemH, true, CFG.NUKES_MIN_YEAR_ENABLED){
+        menuElements.add(new Button_CNG_Options2(null, CFG.PADD * 2, 0, tempElemH * 45, tempW, tempElemH, true, CFG.NUKES_MIN_YEAR_ENABLED){
 
             @Override
             public boolean getCheckboxSt() {
@@ -1345,7 +1345,7 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Button_CNG_Options2(null, CFG.PADD * 2, 0, tempElemH * 53, tempW, tempElemH, true, false){
+        menuElements.add(new Button_CNG_Options2(null, CFG.PADD * 2, 0, tempElemH * 55, tempW, tempElemH, true, false){
 
             @Override
             public void buildElemHover() {
@@ -1363,7 +1363,7 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 54 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 0, 100, CFG.COLONIZATION_AUTO_EXPAND_CHANCE){
+        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 56 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 0, 100, CFG.COLONIZATION_AUTO_EXPAND_CHANCE){
 
             @Override
             public String getDrawText() {
@@ -1393,7 +1393,7 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 55 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 0, 1000, CFG.GET_SPY_MESSAGE_ABOUT_AI_PREPARING_FOR_WAR_CHANCE_1000){
+        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 57 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 0, 1000, CFG.GET_SPY_MESSAGE_ABOUT_AI_PREPARING_FOR_WAR_CHANCE_1000){
 
             @Override
             public String getDrawText() {
@@ -1426,7 +1426,7 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Button_CNG_Options2(null, CFG.PADD * 2, 0, tempElemH * 56, tempW, tempElemH, true, CFG.LEADERS_CAN_DIE){
+        menuElements.add(new Button_CNG_Options2(null, CFG.PADD * 2, 0, tempElemH * 58, tempW, tempElemH, true, CFG.LEADERS_CAN_DIE){
 
             @Override
             public boolean getCheckboxSt() {
@@ -1444,7 +1444,7 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 57 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 0, 95, (int)((CFG.settingsGD.BAT_PLUS_BREAKTHROUGH_RATIO - 2.5f) / 0.5f)){
+        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 59 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 0, 95, (int)((CFG.settingsGD.BAT_PLUS_BREAKTHROUGH_RATIO - 2.5f) / 0.5f)){
 
             @Override
             public String getDrawText() {
@@ -1470,7 +1470,7 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 58 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 0, 100, (int)(CFG.PLUNDER_CHANCE * 100.0f)){
+        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 60 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 0, 100, (int)(CFG.PLUNDER_CHANCE * 100.0f)){
 
             @Override
             public String getDrawText() {
@@ -1500,16 +1500,16 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 59 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 0, 100, (int)(CFG.GENOCIDE_CHANCE * 100.0f)){
+        menuElements.add(new Slider_CNG("", CFG.PADD * 2, tempElemH * 48 + CFG.PADD, tempW - CFG.PADD * 4, tempElemH - CFG.PADD * 2, 0, 100, (int)(CFG.GENOCIDE_CHANCE * 100.0f)){
 
             @Override
             public String getDrawText() {
-                return this.getTextE() + this.getCurr() + "%";
+                return "Genocide" + ": " + this.getCurr() + "%";
             }
 
             @Override
             public Color getColorLEFT() {
-                return new Color(CFG.COLOR_NEGATIVE_2.r, CFG.COLOR_NEGATIVE_2.g, CFG.COLOR_NEGATIVE_2.b, 0.65f);
+                return new Color(CFG.COLOR_NEGATIVE_2.r, CFG.COLOR_NEGATIVE_2.g, CFG.COLOR_NEGATIVE_2.b, CFG.AI_GENOCIDE_ENABLED ? 0.85f : 0.25f);
             }
 
             @Override
@@ -1530,11 +1530,23 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Button_CNG_Options2(null, CFG.PADD * 2, 0, tempElemH * 60, tempW, tempElemH, true, CFG.AI_GENOCIDE_ENABLED){
+        menuElements.add(new Button_CNG_Options2(null, CFG.PADD * 2, 0, tempElemH * 49, tempW, tempElemH, true, CFG.AI_GENOCIDE_ENABLED){
 
             @Override
             public boolean getCheckboxSt() {
                 return CFG.AI_GENOCIDE_ENABLED;
+            }
+
+            @Override
+            public void drawTextE(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive) {
+                oSB.setColor(Color.WHITE);
+                IMGManager.getIMG(Images.skull).drawO(oSB, this.getPosXE() + CFG.PADD + iTranslateX, this.getPosY() + this.getHeightE() / 2 - IMGManager.getIMG(Images.skull).getHeight() / 2 + iTranslateY);
+                super.drawTextE(oSB, iTranslateX, iTranslateY, isActive);
+                if (CFG.AI_GENOCIDE_ENABLED) {
+                    oSB.setColor(new Color(0.8f, 0.1f, 0.1f, 0.05f));
+                    IMGManager.getIMG(Images.pix255).drawO(oSB, this.getPosXE() + iTranslateX, this.getPosY() + iTranslateY, this.getWidthE(), this.getHeightE());
+                    oSB.setColor(Color.WHITE);
+                }
             }
 
             @Override
@@ -1544,6 +1556,12 @@ extends Menu {
                 nData.add(new ME_Hover_2Type_Text("AI: Genocide" + ": "));
                 nData.add(new ME_Hover_2Type_Text("" + (CFG.AI_GENOCIDE_ENABLED ? "Enabled" : "Disabled"), CFG.COLOR_HOVER_TITLE));
                 nData.add(new ME_Hover_2Type_Image(Images.skull, CFG.PADD, 0));
+                nElements.add(new MEHover_2E(nData));
+                nData.clear();
+                nData.add(new ME_Hover_2Type_Space());
+                nElements.add(new MEHover_2E(nData));
+                nData.clear();
+                nData.add(new ME_Hover_2Type_TextDesc("Allows or prevents AI from committing genocide against minority populations."));
                 nElements.add(new MEHover_2E(nData));
                 nData.clear();
                 this.menuElemHover = new ME_Hover_v2(nElements);
@@ -1645,6 +1663,8 @@ extends Menu {
         this.getMenuElem(55).setTextE(CFG.lang.get("SpyMessageChance") + ": ");
         this.getMenuElem(56).setTextE(CFG.lang.get("LeadersCanDie") + ": " + (CFG.LEADERS_CAN_DIE ? CFG.lang.get("On") : CFG.lang.get("Off")));
         this.getMenuElem(57).setTextE("Breakthrough Ratio" + ": ");
+        this.getMenuElem(59).setTextE("Genocide" + ": ");
+        this.getMenuElem(60).setTextE("AI: Genocide" + ": " + (CFG.AI_GENOCIDE_ENABLED ? "Enabled" : "Disabled"));
         this.getMenuElem(6).setVisibleE(!CFG.SANDBOX_MODE);
         this.getMenuElem(6).setClickable(!CFG.SANDBOX_MODE);
     }
@@ -2031,6 +2051,7 @@ extends Menu {
             }
             case 60: {
                 CFG.AI_GENOCIDE_ENABLED = !CFG.AI_GENOCIDE_ENABLED;
+                this.getMenuElem(60).setTextE("AI: Genocide" + ": " + (CFG.AI_GENOCIDE_ENABLED ? "Enabled" : "Disabled"));
                 break;
             }
         }

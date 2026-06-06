@@ -97,8 +97,11 @@ extends Menu {
     public Menu_InitGame() {
         ArrayList<MenuElemUI> menuElements = new ArrayList<MenuElemUI>();
         if (!CFG.getIsDesktop()) {
-            this.numToLoad_ProvinceData = 500;
-            this.numToLoad_ProvinceBG = 100;
+            this.numToLoad_ProvinceData = 2000;
+            this.numToLoad_ProvinceBG = 2000;
+        } else {
+            this.numToLoad_ProvinceData = 2000;
+            this.numToLoad_ProvinceBG = 2000;
         }
         this.initMenu(null, 0, 0, CFG.GAMEWIDTH, CFG.GAMEHEIGHT, menuElements);
     }
@@ -473,19 +476,16 @@ extends Menu {
                 if (this.iStepID >= 17 + CFG.map.getMapNumOfProvinces(CFG.map.getActiveMapIDN()) && this.iStepID < 17 + CFG.map.getMapNumOfProvinces(CFG.map.getActiveMapIDN()) * 2) {
                     CFG.sLoading = CFG.lang.get("LoadingProvinces");
                     int nProv = CFG.map.getMapNumOfProvinces(CFG.map.getActiveMapIDN());
-                    int textureProgressSize = Math.max(1, nProv / 2);
-                    int bgProgressSize = Math.max(1, nProv - textureProgressSize);
                     if (this.startupTextureStep < 0) {
                         CFG.core.loadProvinceTextures_BatchInit();
                         this.startupTextureStep = 0;
-                        this.startupProvinceBGStep = 0;
                         this.startupTextureFinalised = false;
                     }
                     if (this.startupTextureStep < nProv) {
                         int end = Math.min(this.startupTextureStep + this.numToLoad_ProvinceBG, nProv);
                         CFG.core.loadProvinceTextures_Batch(this.startupTextureStep, end);
                         this.startupTextureStep = end;
-                        this.iStepID = 17 + nProv + Math.min(textureProgressSize, this.startupTextureStep * textureProgressSize / Math.max(1, nProv));
+                        this.iStepID = 17 + nProv + (this.startupTextureStep * nProv / Math.max(1, nProv));
                         break block105;
                     }
                     if (!this.startupTextureFinalised) {
@@ -493,15 +493,7 @@ extends Menu {
                         this.startupTextureFinalised = true;
                         break block105;
                     }
-                    if (CFG.getIsDesktop() && this.startupProvinceBGStep < nProv) {
-                        int end = Math.min(this.startupProvinceBGStep + this.numToLoad_ProvinceBG, nProv);
-                        CFG.core.loadProvinceBG_Batch(this.startupProvinceBGStep, end);
-                        this.startupProvinceBGStep = end;
-                        this.iStepID = 17 + nProv + textureProgressSize + Math.min(bgProgressSize, this.startupProvinceBGStep * bgProgressSize / Math.max(1, nProv));
-                        break block105;
-                    }
                     this.startupTextureStep = -1;
-                    this.startupProvinceBGStep = 0;
                     this.startupTextureFinalised = false;
                     this.iStepID = 17 + CFG.map.getMapNumOfProvinces(CFG.map.getActiveMapIDN()) * 2;
                     break block105;
