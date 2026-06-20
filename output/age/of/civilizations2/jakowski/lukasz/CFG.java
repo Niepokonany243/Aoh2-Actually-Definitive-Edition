@@ -5914,7 +5914,6 @@ public class CFG {
                         civName = core.getCiv(core.getProv(core.getActiveProvID()).getCivId()).getCivName();
                     }
                     menus.getDialogMenu().getMenuElem(3).setTextE(lang.get("Select") + " " + civName + "?");
-                    System.out.println("TRADE_DEBUG: setDialogType TRADE_REQUEST_SELECT_CIV activeProvID=" + core.getActiveProvID() + " civName=" + civName + " MANAGE_ID=" + MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID);
                     break;
                 }
                 case SAVE_SCENARIO: {
@@ -6681,20 +6680,15 @@ public class CFG {
                     return;
                 }
                 case TRADE_REQUEST_SELECT_CIV: {
-                    System.out.println("TRADE_DEBUG: dialog_True entered. dialogType=" + dialogType + " typeOfAction=" + Menu_InGame_TradeRequest_SelectCiv.typeOfAction + " MANAGE_ID=" + CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID + " activeProvID=" + CFG.core.getActiveProvID());
                     int selectedCivID = CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID;
                     if (selectedCivID <= 0) {
                         selectedCivID = CFG.core.getActiveProvID() >= 0 ? CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() : -1;
-                        System.out.println("TRADE_DEBUG: fell back to activeProvID, selectedCivID=" + selectedCivID);
                     }
                     if (selectedCivID <= 0) {
-                        System.out.println("TRADE_DEBUG: selectedCivID <= 0, returning");
                         return;
                     }
-                    System.out.println("TRADE_DEBUG: selectedCivID=" + selectedCivID + " typeOfAction=" + Menu_InGame_TradeRequest_SelectCiv.typeOfAction + " TRADE_LEFT_DECLAREWAR=" + Menu_InGame_SelectProvinces.TypeOfAction.TRADE_LEFT_DECLAREWAR);
                     boolean handled = true;
                     if (Menu_InGame_TradeRequest_SelectCiv.typeOfAction == Menu_InGame_SelectProvinces.TypeOfAction.TRADE_LEFT_DECLAREWAR) {
-                        System.out.println("TRADE_DEBUG: matched TRADE_LEFT_DECLAREWAR");
                         if (CFG.tradeRequest.listLEFT.lDeclareWarOnCivID.contains(selectedCivID)) {
                             CFG.tradeRequest.listLEFT.lDeclareWarOnCivID.remove((Integer)selectedCivID);
                         } else {
@@ -6764,7 +6758,6 @@ public class CFG {
                         CFG.mapModesManager.setActiveMapModeID(CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).iACTIVE_VIEW_MODE);
                         return;
                     }
-                    System.out.println("TRADE_DEBUG: fallback - no matching typeOfAction, returning to eINGAME");
                     CFG.menus.setMenuID(View.eINGAME);
                     CFG.menus.rebuildInGame_TradeRequest_Just();
                     RenderProvince.updateDrawProvinces();

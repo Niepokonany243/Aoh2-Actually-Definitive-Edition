@@ -119,10 +119,8 @@ extends Menu {
             case 1: {
                 this.getMenuElem(1).setClickable(false);
                 this.getMenuElem(2).setClickable(false);
-                System.out.println("TRADE_DEBUG: Dialog Yes clicked, dialogType=" + CFG.dialogType + " calling dialog_True()");
                 CFG.dialog_True();
                 this.closeMenu();
-                System.out.println("TRADE_DEBUG: Dialog closed after Yes");
                 break;
             }
             case 2: {

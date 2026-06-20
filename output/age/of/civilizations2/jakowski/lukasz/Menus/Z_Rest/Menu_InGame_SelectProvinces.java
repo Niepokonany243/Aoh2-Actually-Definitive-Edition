@@ -7,12 +7,14 @@ import age.of.civilizations2.jakowski.lukasz.Button.Game.Button_Game_Checkbox;
 import age.of.civilizations2.jakowski.lukasz.Button.MenuElemUI;
 import age.of.civilizations2.jakowski.lukasz.CFG;
 import age.of.civilizations2.jakowski.lukasz.Menu;
+import age.of.civilizations2.jakowski.lukasz.Render;
 import age.of.civilizations2.jakowski.lukasz.RenderProvince;
 import age.of.civilizations2.jakowski.lukasz.View;
 import age.of.civilizations2.jakowski.lukasz.Z_Other.DialogType;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Menu_InGame_SelectProvinces
 extends Menu {
@@ -138,6 +140,26 @@ extends Menu {
     private final void updateSelectProvinceModeButtons() {
         this.getMenuElem(1).setCheckboxSt(CFG.brushMode);
         this.getMenuElem(2).setCheckboxSt(CFG.selectMode);
+    }
+
+    public static void openForCiv(TypeOfAction action, int civID, List<Integer> selectedProvinces) {
+        CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID = civID;
+        CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).iACTIVE_VIEW_MODE = CFG.mapModesManager.getActiveMapModeID();
+        CFG.mapModesManager.disableAllViews();
+        CFG.core.setActiveProvID(-1);
+        typeOfAction = action;
+        CFG.VIEW_SHOW_VALUES = false;
+        CFG.selectMode = true;
+        CFG.brushMode = false;
+        CFG.core.getProvSelected().clearSelectedProvinces();
+        if (selectedProvinces != null) {
+            for (int i = 0; i < selectedProvinces.size(); ++i) {
+                CFG.core.getProvSelected().addProv(selectedProvinces.get(i));
+            }
+        }
+        CFG.menus.setMenuID(View.eINGAME_SELECT_PROVINCES);
+        Render.updateRenderer();
+        RenderProvince.updateDrawProvinces();
     }
 
     @Override

@@ -4,6 +4,7 @@ package age.of.civilizations2.jakowski.lukasz.Menus.NewGame;
 import age.of.civilizations2.jakowski.lukasz.BetterUI_Manager;
 import age.of.civilizations2.jakowski.lukasz.Button.Game.Button_Game;
 import age.of.civilizations2.jakowski.lukasz.Button.Game.Button_Game_ExtraText;
+import age.of.civilizations2.jakowski.lukasz.Button.Game.Button_Game_NewGameBoxStyle;
 import age.of.civilizations2.jakowski.lukasz.Button.Game.Button_Game_PLAY;
 import age.of.civilizations2.jakowski.lukasz.Button.MenuElemUI;
 import age.of.civilizations2.jakowski.lukasz.CFG;
@@ -139,7 +140,7 @@ extends Menu {
 
             @Override
             public void drawButtonBGE(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive) {
-                super.drawButtonBGE(oSB, iTranslateX, iTranslateY, isActive);
+                Button_Game_NewGameBoxStyle.draw(oSB, this, iTranslateX, iTranslateY, isActive);
                 if (isActive) {
                     oSB.setColor(Color.WHITE);
                 } else if (this.getIsHovered()) {
@@ -164,11 +165,21 @@ extends Menu {
         menuElements.add(new Button_Game(null, -1, CFG.PADD, CFG.PADD, true){
 
             @Override
+            public void drawButtonBGE(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive) {
+                Button_Game_NewGameBoxStyle.draw(oSB, this, iTranslateX, iTranslateY, isActive);
+            }
+
+            @Override
             public Color getColorE(boolean isActive) {
                 return isActive ? CFG.COLOR_BUTTON_GAME_TEXT_IMPORTANT_ACTIVE : (this.getIsClickable() ? (this.getIsHovered() ? CFG.COLOR_BUTTON_GAME_TEXT_IMPORTANT_HOVER : CFG.COLOR_BUTTON_GAME_TEXT_IMPORTANT) : CFG.COLOR_BUTTON_GAME_TEXT_NOT_CLICKABLE);
             }
         });
         menuElements.add(new Button_Game(null, -1, CFG.PADD * 3 + CFG.BUTTON_W + (CFG.BUTTON_W + CFG.BUTTON_W / 2), CFG.PADD, CFG.BUTTON_W + CFG.BUTTON_W / 2, true){
+
+            @Override
+            public void drawButtonBGE(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive) {
+                Button_Game_NewGameBoxStyle.draw(oSB, this, iTranslateX, iTranslateY, isActive);
+            }
 
             @Override
             public Color getColorE(boolean isActive) {
@@ -268,12 +279,6 @@ extends Menu {
             BetterUI_Manager.drawBetterMenuBG(oSB, this.getPosX() + iTranslateX, this.getPosY() + iTranslateY, this.getWidthM(), this.getHeightM());
             super.draw(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);
             return;
-        }
-        if (CFG.getIsDesktop()) {
-            CFG.drawEditorButtons_Bot_Edge_R(oSB, iTranslateX, CFG.GAMEHEIGHT - CFG.BUTTON_H - CFG.PADD * 2 - 1 + iTranslateY, this.getMenuElem(3).getPosXE() + this.getMenuElem(3).getWidthE() + CFG.PADD + 1, CFG.BUTTON_H + CFG.PADD * 2 + 1);
-            CFG.drawEditorButtons_Bot_Edge_R_Reflected(oSB, this.getMenuElem(0).getPosXE() - CFG.PADD - 1 + iTranslateX, CFG.GAMEHEIGHT - CFG.BUTTON_H - CFG.PADD * 2 - 1 + iTranslateY, this.getMenuElem(0).getWidthE() + CFG.PADD * 2 + 1, CFG.BUTTON_H + CFG.PADD * 2 + 1);
-        } else {
-            CFG.drawEditorButtons_Bot_Edge_R(oSB, iTranslateX, CFG.GAMEHEIGHT - CFG.BUTTON_H - CFG.PADD * 2 - 1 + iTranslateY, this.getMenuElem(0).getPosXE() + this.getMenuElem(0).getWidthE() + CFG.PADD + 1, CFG.BUTTON_H + CFG.PADD * 2 + 1);
         }
         super.draw(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);
     }

@@ -693,7 +693,7 @@ extends Menu {
                 return isActive ? CFG.COLOR_TEXT_GRAY_NS_HOVER : (this.getIsClickable() ? (this.getIsHovered() ? CFG.COLOR_TEXT_GRAY_NS : Color.WHITE) : new Color(0.78f, 0.78f, 0.78f, 0.7f));
             }
         });
-        menuElements.add(new Slider_InGame_Goods(CFG.lang.get("Goods"), CFG.PADD * 3, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE() + CFG.PADD, tempWidth - CFG.PADD * 6, CFG.TEXT_HEIGHT_DEFAULT + CFG.PADD * 2 + CFG.PADD * 5, 0, 500, (int)(CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getSpendingGoodsB() * 100.0f)){
+        menuElements.add(new Slider_InGame_Goods(CFG.lang.get("Goods"), CFG.PADD * 3, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE() + CFG.PADD, tempWidth - CFG.PADD * 6, CFG.TEXT_HEIGHT_DEFAULT + CFG.PADD * 2 + CFG.PADD * 5, 0, GameValues.gvInGame.getBudgetSpendingSliderMax(), (int)(CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getSpendingGoodsB() * 100.0f)){
 
             @Override
             public String getDrawText() {
@@ -763,7 +763,7 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
-        menuElements.add(new Slider_InGame_Research(CFG.lang.get("Research"), CFG.PADD * 3, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE() + CFG.PADD * 2, tempWidth - CFG.PADD * 6, CFG.TEXT_HEIGHT_DEFAULT + CFG.PADD * 2 + CFG.PADD * 5, 0, 500, (int)(CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getSpendingResearchB() * 100.0f), CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getGold() >= (long)GameValues.gvTechnology.MIN_MONEY_REQUIRED_TO_ENABLE_RESEARCH){
+        menuElements.add(new Slider_InGame_Research(CFG.lang.get("Research"), CFG.PADD * 3, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE() + CFG.PADD * 2, tempWidth - CFG.PADD * 6, CFG.TEXT_HEIGHT_DEFAULT + CFG.PADD * 2 + CFG.PADD * 5, 0, GameValues.gvInGame.getBudgetSpendingSliderMax(), (int)(CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getSpendingResearchB() * 100.0f), CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getGold() >= (long)GameValues.gvTechnology.MIN_MONEY_REQUIRED_TO_ENABLE_RESEARCH){
 
             @Override
             public String getDrawText() {
@@ -833,7 +833,7 @@ extends Menu {
             }
         });
         ((MenuElemUI)menuElements.get(menuElements.size() - 1)).setMin((int)(CFG.gameUpdate.getResearchSpending(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId(), CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).iBudget) * (1.0f + CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getModifier_Research())));
-        menuElements.add(new Slider_InGame_Investments(CFG.lang.get("Investments"), CFG.PADD * 3, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE() + CFG.PADD * 2, tempWidth - CFG.PADD * 6, CFG.TEXT_HEIGHT_DEFAULT + CFG.PADD * 2 + CFG.PADD * 5, 0, 500, (int)(CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getSpendingInvestmentsB() * 100.0f)){
+        menuElements.add(new Slider_InGame_Investments(CFG.lang.get("Investments"), CFG.PADD * 3, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE() + CFG.PADD * 2, tempWidth - CFG.PADD * 6, CFG.TEXT_HEIGHT_DEFAULT + CFG.PADD * 2 + CFG.PADD * 5, 0, GameValues.gvInGame.getBudgetSpendingSliderMax(), (int)(CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getSpendingInvestmentsB() * 100.0f)){
 
             @Override
             public String getDrawText() {
@@ -1065,9 +1065,12 @@ extends Menu {
         this.getMenuElem(11).setTextE("" + (tFValue > 0.0f ? "+" : "") + tFValue);
         this.getMenuElem(11).setMax(tFValue >= 0.0f ? 0 : (tFValue <= -0.8f ? 2 : 1));
         this.getMenuElem(19).setCurr(CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).iBudget < 0 && CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getNumberOfUnits() > 0 ? 100 : CFG.gameUpdate.getMilitarySpending(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId(), CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).iBudget));
+        this.getMenuElem(13).setMax(GameValues.gvInGame.getBudgetSpendingSliderMax());
         this.getMenuElem(13).setCurr((int)(CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getSpendingGoodsB() * 100.0f));
+        this.getMenuElem(15).setMax(GameValues.gvInGame.getBudgetSpendingSliderMax());
         this.getMenuElem(15).setCurr((int)(CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getSpendingResearchB() * 100.0f));
         this.getMenuElem(16).setMin((int)(CFG.gameUpdate.getResearchSpending(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId(), CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).iBudget) * (1.0f + CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getModifier_Research())));
+        this.getMenuElem(17).setMax(GameValues.gvInGame.getBudgetSpendingSliderMax());
         this.getMenuElem(17).setCurr((int)(CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getSpendingInvestmentsB() * 100.0f));
         Menu_InGame_2.updateOverBudget();
     }

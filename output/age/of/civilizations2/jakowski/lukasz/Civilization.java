@@ -336,8 +336,8 @@ public class Civilization {
             this.civGD.spendingsResearch = fSpendings_Research;
             if (this.civGD.spendingsResearch < 0.0f) {
                 this.civGD.spendingsResearch = 0.0f;
-            } else if (this.civGD.spendingsResearch > 5.0f) {
-                this.civGD.spendingsResearch = 5.0f;
+            } else if (this.civGD.spendingsResearch > GameValues.gvInGame.getBudgetSpendingSliderMaxValue()) {
+                this.civGD.spendingsResearch = GameValues.gvInGame.getBudgetSpendingSliderMaxValue();
             }
         }
     }
@@ -350,8 +350,8 @@ public class Civilization {
         this.civGD.spendingsInvestments = fSpendings_Investments;
         if (this.civGD.spendingsInvestments < 0.0f) {
             this.civGD.spendingsInvestments = 0.0f;
-        } else if (this.civGD.spendingsInvestments > 5.0f) {
-            this.civGD.spendingsInvestments = 5.0f;
+        } else if (this.civGD.spendingsInvestments > GameValues.gvInGame.getBudgetSpendingSliderMaxValue()) {
+            this.civGD.spendingsInvestments = GameValues.gvInGame.getBudgetSpendingSliderMaxValue();
         }
     }
 
@@ -3071,8 +3071,8 @@ public class Civilization {
         this.civGD.spendingsGoods = fSpendings_Goods;
         if (this.civGD.spendingsGoods < 0.0f) {
             this.civGD.spendingsGoods = 0.0f;
-        } else if (this.civGD.spendingsGoods > 5.0f) {
-            this.civGD.spendingsGoods = 5.0f;
+        } else if (this.civGD.spendingsGoods > GameValues.gvInGame.getBudgetSpendingSliderMaxValue()) {
+            this.civGD.spendingsGoods = GameValues.gvInGame.getBudgetSpendingSliderMaxValue();
         }
     }
 

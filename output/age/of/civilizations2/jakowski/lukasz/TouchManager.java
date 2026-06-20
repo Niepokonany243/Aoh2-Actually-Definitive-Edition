@@ -1750,10 +1750,8 @@ public class TouchManager {
             public void extraAction(int nPX, int nPY) {
                 if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() != CFG.tradeRequest.iCivLEFT && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() != CFG.tradeRequest.iCivRIGHT && !CFG.core.getProv(CFG.core.getActiveProvID()).getSeaProv() && CFG.core.getProv(CFG.core.getActiveProvID()).getWastelandLvl() < 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0 && (CFG.FOG_OF_WAR != 2 || CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getMetProv(CFG.core.getActiveProvID()))) {
                     int clickedCivID = CFG.core.getProv(CFG.core.getActiveProvID()).getCivId();
-                    System.out.println("TRADE_DEBUG: province clicked, activeProvID=" + CFG.core.getActiveProvID() + " clickedCivID=" + clickedCivID + " typeOfAction=" + Menu_InGame_TradeRequest_SelectCiv.typeOfAction + " iCivLEFT=" + CFG.tradeRequest.iCivLEFT + " iCivRIGHT=" + CFG.tradeRequest.iCivRIGHT);
                     CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID = clickedCivID;
                     CFG.setDialogType(DialogType.TRADE_REQUEST_SELECT_CIV);
-                    System.out.println("TRADE_DEBUG: dialog set, MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID=" + CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID);
                 }
             }
         } : (CFG.menus.getInManageDiplomacy() ? (CFG.menus.getInManageDiplomacy_Relations_Interactive() ? new ExtraAction(){

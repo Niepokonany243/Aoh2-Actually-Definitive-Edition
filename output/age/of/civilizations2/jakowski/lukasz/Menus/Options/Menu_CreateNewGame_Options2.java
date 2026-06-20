@@ -38,7 +38,7 @@ import java.util.ArrayList;
 
 public class Menu_CreateNewGame_Options2
 extends Menu {
-    public static short NUM_OF_OPTIONS = (short)60;
+    public static short NUM_OF_OPTIONS = (short)61;
     public static final int ANIMATION_TIME = 125;
     public static long lTime = 0L;
     public static boolean hideAnimation = true;
@@ -1653,12 +1653,12 @@ extends Menu {
         this.getMenuElem(49).setTextE(CFG.lang.get("Assimilate") + ": ");
         this.getMenuElem(50).setTextE(CFG.lang.get("Assimilate") + ", " + CFG.lang.get("Cost") + ": ");
         this.getMenuElem(51).setTextE(CFG.lang.get("VassalIndependence"));
-        this.getMenuElem(52).setTextE(CFG.lang.get("MinimumYearForNukes") + ": " + GameValues.gvAtomic.ATOMIC_BOMB_MIN_YEAR);
-        this.getMenuElem(53).setTextE(CFG.lang.get("TurnOffLeaders"));
-        this.getMenuElem(54).setTextE(CFG.lang.get("ColonyAutoExpansion") + ": ");
-        this.getMenuElem(55).setTextE(CFG.lang.get("SpyMessageChance") + ": ");
-        this.getMenuElem(56).setTextE(CFG.lang.get("LeadersCanDie") + ": " + (CFG.LEADERS_CAN_DIE ? CFG.lang.get("On") : CFG.lang.get("Off")));
-        this.getMenuElem(57).setTextE("Breakthrough Ratio" + ": ");
+        this.getMenuElem(53).setTextE(CFG.lang.get("MinimumYearForNukes") + ": " + GameValues.gvAtomic.ATOMIC_BOMB_MIN_YEAR);
+        this.getMenuElem(54).setTextE(CFG.lang.get("TurnOffLeaders"));
+        this.getMenuElem(55).setTextE(CFG.lang.get("ColonyAutoExpansion") + ": ");
+        this.getMenuElem(56).setTextE(CFG.lang.get("SpyMessageChance") + ": ");
+        this.getMenuElem(57).setTextE(CFG.lang.get("LeadersCanDie") + ": " + (CFG.LEADERS_CAN_DIE ? CFG.lang.get("On") : CFG.lang.get("Off")));
+        this.getMenuElem(58).setTextE("Breakthrough Ratio" + ": ");
         this.getMenuElem(59).setTextE("Genocide" + ": ");
         this.getMenuElem(60).setTextE("AI: Genocide" + ": " + (CFG.AI_GENOCIDE_ENABLED ? "Enabled" : "Disabled"));
         this.getMenuElem(6).setVisibleE(!CFG.SANDBOX_MODE);

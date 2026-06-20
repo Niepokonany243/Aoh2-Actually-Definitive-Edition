@@ -72,6 +72,7 @@ public class GV_InGame {
     public boolean CIV_DECISIONS_UNION_SHOW_POSSIBLE_CIVS_NUM_MOBILE = false;
     public boolean CIV_DIPLOMACY_SHOW_CONQUERED_CIVS = true;
     public boolean CIV_DIPLOMACY_SHOW_NEIGH_AT_WAR = true;
+    public int BUDGET_SPENDING_SLIDER_MAX = 500;
     public float BUDGET_MENU_WIDTH_PERC_OF_MAX_WIDTH = 0.55f;
     public float BUDGET_MENU_WIDTH_PERC_OF_MAX_WIDTH_MOBILE = 0.65f;
     public int FLAG_MENU_GRAPH_BOT_NUM_OF_CIVS_TO_LOAD = 5;
@@ -82,5 +83,13 @@ public class GV_InGame {
     public boolean USE_REGROUP_BUILD_PATH_2 = false;
     public boolean ENABLE_PLAYER_CIV_INFO_NEW_TURN = false;
     public boolean ENABLE_DIPLOMACY_NEW_TURN = false;
+
+    public int getBudgetSpendingSliderMax() {
+        return Math.max(100, this.BUDGET_SPENDING_SLIDER_MAX);
+    }
+
+    public float getBudgetSpendingSliderMaxValue() {
+        return (float)this.getBudgetSpendingSliderMax() / 100.0f;
+    }
 }
 

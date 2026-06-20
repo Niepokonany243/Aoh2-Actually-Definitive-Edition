@@ -27,14 +27,11 @@ import age.of.civilizations2.jakowski.lukasz.MenuE_HoverP.ME_Hover_v2;
 import age.of.civilizations2.jakowski.lukasz.Menus.Messages.Diplomacy.Menu_InGame_Message_Alliance;
 import age.of.civilizations2.jakowski.lukasz.Menus.Relations.Actions.Menu_InGameOfferAlliance;
 import age.of.civilizations2.jakowski.lukasz.Menus.Z_Rest.Menu_InGame_SelectProvinces;
-import age.of.civilizations2.jakowski.lukasz.Render;
-import age.of.civilizations2.jakowski.lukasz.RenderProvince;
 import age.of.civilizations2.jakowski.lukasz.Renderer;
 import age.of.civilizations2.jakowski.lukasz.SFXManager;
 import age.of.civilizations2.jakowski.lukasz.Sliders.ZRest.Slider_CrossTheBorder;
 import age.of.civilizations2.jakowski.lukasz.Title.TitleM;
 import age.of.civilizations2.jakowski.lukasz.Title.TitleM_TextSmall;
-import age.of.civilizations2.jakowski.lukasz.View;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -186,36 +183,7 @@ extends Menu {
             public void actionElem(int iID) {
                 CFG.ultimatum.demandAnexation = false;
                 CFG.ultimatum.demandVasalization = false;
-                if (CFG.ultimatum.demandProvinces.size() == 0) {
-                    CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID = onCivID;
-                    CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).iACTIVE_VIEW_MODE = CFG.mapModesManager.getActiveMapModeID();
-                    CFG.mapModesManager.disableAllViews();
-                    CFG.core.setActiveProvID(-1);
-                    Menu_InGame_SelectProvinces.typeOfAction = Menu_InGame_SelectProvinces.TypeOfAction.ULTIMATUM;
-                    CFG.VIEW_SHOW_VALUES = false;
-                    CFG.selectMode = true;
-                    CFG.brushMode = false;
-                    CFG.core.getProvSelected().clearSelectedProvinces();
-                    CFG.menus.setMenuID(View.eINGAME_SELECT_PROVINCES);
-                    Render.updateRenderer();
-                    RenderProvince.updateDrawProvinces();
-                } else {
-                    CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID = onCivID;
-                    CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).iACTIVE_VIEW_MODE = CFG.mapModesManager.getActiveMapModeID();
-                    CFG.mapModesManager.disableAllViews();
-                    CFG.core.setActiveProvID(-1);
-                    Menu_InGame_SelectProvinces.typeOfAction = Menu_InGame_SelectProvinces.TypeOfAction.ULTIMATUM;
-                    CFG.VIEW_SHOW_VALUES = false;
-                    CFG.selectMode = true;
-                    CFG.brushMode = false;
-                    CFG.core.getProvSelected().clearSelectedProvinces();
-                    for (int i = 0; i < CFG.ultimatum.demandProvinces.size(); ++i) {
-                        CFG.core.getProvSelected().addProv(CFG.ultimatum.demandProvinces.get(i));
-                    }
-                    CFG.menus.setMenuID(View.eINGAME_SELECT_PROVINCES);
-                    Render.updateRenderer();
-                    RenderProvince.updateDrawProvinces();
-                }
+                Menu_InGame_SelectProvinces.openForCiv(Menu_InGame_SelectProvinces.TypeOfAction.ULTIMATUM, onCivID, CFG.ultimatum.demandProvinces);
             }
 
             @Override

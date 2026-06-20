@@ -12,6 +12,7 @@ import age.of.civilizations2.jakowski.lukasz.Button.MenuElemUI;
 import age.of.civilizations2.jakowski.lukasz.Button.NewGame.Button_NG;
 import age.of.civilizations2.jakowski.lukasz.CFG;
 import age.of.civilizations2.jakowski.lukasz.Core.Core;
+import age.of.civilizations2.jakowski.lukasz.GameValues.GameValues;
 import age.of.civilizations2.jakowski.lukasz.LangManager;
 import age.of.civilizations2.jakowski.lukasz.IMGManager;
 import age.of.civilizations2.jakowski.lukasz.Images;
@@ -304,6 +305,9 @@ extends Menu {
         menuElements.add(new Button_Classic("<<", -1, 0, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE() + CFG.PADD, CFG.BUTTON_W + CFG.BUTTON_W / 2, CFG.BUTTON_H, true));
         menuElements.add(new Button_Classic_Classic(null, -1, CFG.BUTTON_W + CFG.BUTTON_W / 2, tY, menuW - (CFG.BUTTON_W + CFG.BUTTON_W / 2) * 2, CFG.BUTTON_H, true));
         menuElements.add(new Button_Classic_ReflectedBG(">>", -1, menuW - (CFG.BUTTON_W + CFG.BUTTON_W / 2), tY, CFG.BUTTON_W + CFG.BUTTON_W / 2, CFG.BUTTON_H, true));
+        menuElements.add(new Button_Classic("<<", -1, 0, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE() + CFG.PADD, CFG.BUTTON_W + CFG.BUTTON_W / 2, CFG.BUTTON_H, true));
+        menuElements.add(new Button_Classic_Classic(null, -1, CFG.BUTTON_W + CFG.BUTTON_W / 2, tY, menuW - (CFG.BUTTON_W + CFG.BUTTON_W / 2) * 2, CFG.BUTTON_H, true));
+        menuElements.add(new Button_Classic_ReflectedBG(">>", -1, menuW - (CFG.BUTTON_W + CFG.BUTTON_W / 2), tY, CFG.BUTTON_W + CFG.BUTTON_W / 2, CFG.BUTTON_H, true));
         if (CFG.settingsGD.BETTER_UI) {
             this.initMenu(null, CFG.GAMEWIDTH / 2 - menuW / 2 + AoCGame.LEFT, CFG.BUTTON_H, menuW, CFG.GAMEHEIGHT - CFG.BUTTON_H * 2, menuElements);
         } else {
@@ -377,6 +381,7 @@ extends Menu {
         this.getMenuElem(89).setTextE("Smart Bat+: " + (CFG.settingsGD.BAT_PLUS ? CFG.lang.get("On") : CFG.lang.get("Off")));
         this.getMenuElem(90).setTextE("AI: Group Units: " + (CFG.settingsGD.AI_GROUP_UNITS ? CFG.lang.get("On") : CFG.lang.get("Off")));
         this.getMenuElem(92).setTextE("Bat+ Breakthrough: " + CFG.getPrecision2(CFG.settingsGD.BAT_PLUS_BREAKTHROUGH_RATIO, 2) + "x");
+        this.getMenuElem(95).setTextE("Budget Slider Max: " + GameValues.gvInGame.getBudgetSpendingSliderMax() + "%");
     }
 
     public static String getSettingsText_Names() {
@@ -453,9 +458,19 @@ extends Menu {
         CFG.toastM.addM("Settings reset to defaults");
     }
 
+    private void updateBudgetSliderMax(int delta) {
+        GameValues.gvInGame.BUDGET_SPENDING_SLIDER_MAX = Math.max(100, GameValues.gvInGame.getBudgetSpendingSliderMax() + delta);
+        this.getMenuElem(95).setTextE("Budget Slider Max: " + GameValues.gvInGame.getBudgetSpendingSliderMax() + "%");
+        try {
+            new Menu_Settings_GameValues.VariableEntry(GameValues.gvInGame, GameValues.gvInGame.getClass().getField("BUDGET_SPENDING_SLIDER_MAX"), "gvInGame", "game/gameValues/gvInGame.json", "UI & Display").save();
+        }
+        catch (Exception ex) {
+            CFG.exceptionStack(ex);
+        }
+    }
+
     @Override
     public final void actionEL(int iID) {
-        System.out.println("Menu_Settings_Options: actionEL " + iID);
         CFG.menus.getColorPicker().setVisible(false, null);
         switch (iID) {
             case 0: {
@@ -900,6 +915,14 @@ extends Menu {
                 float newVal = CFG.settingsGD.BAT_PLUS_BREAKTHROUGH_RATIO + 0.5f;
                 CFG.settingsGD.BAT_PLUS_BREAKTHROUGH_RATIO = Math.min(50.0f, newVal);
                 this.getMenuElem(92).setTextE("Bat+ Breakthrough: " + CFG.getPrecision2(CFG.settingsGD.BAT_PLUS_BREAKTHROUGH_RATIO, 2) + "x");
+                break;
+            }
+            case 94: {
+                this.updateBudgetSliderMax(-25);
+                break;
+            }
+            case 96: {
+                this.updateBudgetSliderMax(25);
                 break;
             }
         }
