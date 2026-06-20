@@ -56,6 +56,7 @@ extends Thread {
     public static List<Float> goodsUpdate;
     public static List<Float> devUpdate;
     public static List<Float> ecoUpdate;
+    private static final ThreadLocal<ArrayList<PopulationGrowth>> threadLocalPopGrowth = ThreadLocal.withInitial(() -> new ArrayList<PopulationGrowth>());
 
     @Override
     public void run() {
@@ -792,10 +793,11 @@ extends Thread {
             }
             
             if ((int)tempPopGrowth != 0) {
-                if (tempPopGrowth > -10.0f && tempPopGrowth < 16.0f) {
+                if (tempPopGrowth > -20.0f && tempPopGrowth < 60.0f) {
                     pop.setPopulationOfCivID(civId, pop.getPopulationOfCivID(civId) + (int)tempPopGrowth);
                 } else {
-                    ArrayList<PopulationGrowth> localTempCivs = new ArrayList<PopulationGrowth>();
+                    ArrayList<PopulationGrowth> localTempCivs = threadLocalPopGrowth.get();
+                    localTempCivs.clear();
                     localTempCivs.add(new PopulationGrowth(civId, GameValues.gvPopulationGrowth.POP_GROWTH_NATIONALITY_OWNER_X_STABILITY * province.getProviStability()));
                     if (civId != provinceCiv.getPuppetOfCiv()) {
                         localTempCivs.add(new PopulationGrowth(provinceCiv.getPuppetOfCiv(), GameValues.gvPopulationGrowth.POP_GROWTH_NATIONALITY_LORD));

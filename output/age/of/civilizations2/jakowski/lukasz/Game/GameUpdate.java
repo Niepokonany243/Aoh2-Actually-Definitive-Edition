@@ -614,6 +614,18 @@ public class GameUpdate {
     }
 
     public final float getProvinceAdministrationCost(int nProvinceID, int nCapital) {
+        float ti = CFG.core.getProv(nProvinceID).incomeTaxation;
+        if (ti <= 0.0f) ti = this.getProvIncomeTaxation_Internal(nProvinceID);
+        return this.getProvinceAdministrationCost(nProvinceID, nCapital, ti);
+    }
+
+    private final float getProvIncomeTaxation_Internal(int nProvinceID) {
+        int civID = CFG.core.getProv(nProvinceID).getCivId();
+        if (civID <= 0) return 1.0f;
+        return (float)(Math.pow((float)this.getProvince_EmploymentPopulation(nProvinceID) * (CFG.gameAges.getAge_IncomeTaxationBase(GameCalendar.CURRENT_AGEID) + CFG.gameAges.getAge_IncomeTaxation_PerTechnology(GameCalendar.CURRENT_AGEID) * CFG.core.getCiv(civID).getTechLevel() * GameValues.gvIncomeTaxation.TECHNOLOGY_LEVEL_TAX_INCOME_MULTIPLIER), GameValues.gvIncomeTaxation.EMPLOYED_POPULATION_TAX_EXPONENT) + Math.pow((float)this.getProvUnemploymentPopulation(nProvinceID) * (CFG.gameAges.getAge_IncomeTaxationBase(GameCalendar.CURRENT_AGEID) + CFG.gameAges.getAge_IncomeTaxation_PerTechnology(GameCalendar.CURRENT_AGEID) * CFG.core.getCiv(civID).getTechLevel() * GameValues.gvIncomeTaxation.TECHNOLOGY_LEVEL_TAX_INCOME_MULTIPLIER), GameValues.gvIncomeTaxation.UNEMPLOYED_TAX_EXPONENT)) * CFG.gameAges.getAge_TreasuryModifier(GameCalendar.CURRENT_AGEID) * (GameValues.gvIncomeTaxation.PROV_STABILITY_TAX_BASE + GameValues.gvIncomeTaxation.PROV_STABILITY_TAX_MODIFIER * CFG.core.getProv(nProvinceID).getProviStability()) * (CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)civID).getIdeology()).INCOME_TAXATION + BuildingsManager.getMarket_IncomeTaxation(CFG.core.getProv(nProvinceID).getLvlOfMarket()) + CFG.core.getCiv(civID).getModifier_IncomeTaxation() + (CFG.core.getProv(nProvinceID).isCapital() ? GameValues.gvIncomeTaxation.CAPITAL_TAX_BONUS_MODIFIER : 0.0f) + GameValues.gvIncomeTaxation.PROV_HAPPINESS_TAX_BASE_PENALTY + GameValues.gvIncomeTaxation.PROV_HAPPINESS_TAX_MODIFIER_PER_HAPPINESS * CFG.core.getProv(nProvinceID).getHappi()) * (0.7f + 0.3f * CFG.core.getCiv(civID).getTaxationLvl()) * this.taxIncome_Modifier(civID) * 0.5f * (1.0f - CFG.core.getCiv(civID).sanctionsImpact) * GameCalendar.GAME_SPEED;
+    }
+
+    public final float getProvinceAdministrationCost(int nProvinceID, int nCapital, float taxationIncome) {
         Province province = CFG.core.getProv(nProvinceID);
         if (province.isOccupied()) return 0.0f;
         Civilization civ = CFG.core.getCiv((int)province.getCivId());
@@ -632,7 +644,7 @@ public class GameUpdate {
         float stability = Math.max(0.001f, Math.min(1.0f, province.getProviStability()));
         int numProvs = Math.max(1, civ.getNumOfProvs());
         float adminPerc = 0.25f * devFactor * (1.0f + 0.3f * (1.0f - happiness)) * (1.0f + 0.3f * (1.0f - stability)) * (1.0f + 0.1f * (float)Math.log(1.0f + (float)numProvs / 10.0f)) / (1.0f + 0.03f * civ.getTechLevel()) * (1.0f + 0.3f * (1.0f - happiness) * CFG.ideologiesMgr.getIdeologyID((int)civ.getIdeology()).ADMINISTRATION_COST_DISTANCE) * (nProvinceID == nCapital ? 0.5f : 1.0f) * (CFG.ideologiesMgr.getAdministration(civ.getIdeology(), (int)province.getCivId()) + civ.getModifier_Administation()) * CFG.gameAges.getAge_TreasuryModifier_Administration(GameCalendar.CURRENT_AGEID) * GameCalendar.GAME_SPEED;
-        float taxationIncome = Math.max(1.0f, this.getProvIncomeTaxation(nProvinceID));
+        taxationIncome = Math.max(1.0f, taxationIncome);
         return Math.min(taxationIncome * adminPerc, 2.0f * taxationIncome);
     }
 
@@ -701,7 +713,7 @@ public class GameUpdate {
             Province province = CFG.core.getProv(provID);
             province.incomeTaxation = this.getProvIncomeTaxation(provID, nCivID, incomeModifier);
             province.incomeProduction = this.getProvIncomeProduction(provID, nCivID, incomeModifier);
-            province.administrationCost = Math.min(province.incomeTaxation + province.incomeProduction, this.getProvinceAdministrationCost(provID, nCapital));
+            province.administrationCost = Math.min(province.incomeTaxation + province.incomeProduction, this.getProvinceAdministrationCost(provID, nCapital, province.incomeTaxation));
             civ.incomeTaxation += (long)province.incomeTaxation;
             civ.incomeProduction += (long)province.incomeProduction;
         }

@@ -11,6 +11,7 @@ import age.of.civilizations2.jakowski.lukasz.Button.Classic.Button_Classic_Refle
 import age.of.civilizations2.jakowski.lukasz.Button.MenuElemUI;
 import age.of.civilizations2.jakowski.lukasz.Button.NewGame.Button_NG;
 import age.of.civilizations2.jakowski.lukasz.CFG;
+import age.of.civilizations2.jakowski.lukasz.Keyboard;
 import age.of.civilizations2.jakowski.lukasz.Core.Core;
 import age.of.civilizations2.jakowski.lukasz.GameValues.GameValues;
 import age.of.civilizations2.jakowski.lukasz.LangManager;
@@ -236,7 +237,7 @@ extends Menu {
         });
         menuElements.add(new Button_Classic(null, (int)(50.0f * CFG.GUI_SCALE), 0, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE() + CFG.PADD, menuW, CFG.BUTTON_H, CFG.settingsGD.BETTER_UI));
         menuElements.add(new Button_Classic("<<", -1, 0, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE() + CFG.PADD, CFG.BUTTON_W + CFG.BUTTON_W / 2, CFG.BUTTON_H, true));
-        menuElements.add(new Button_Classic_Classic(null, -1, CFG.BUTTON_W + CFG.BUTTON_W / 2, tY, menuW - (CFG.BUTTON_W + CFG.BUTTON_W / 2) * 2, CFG.BUTTON_H, true));
+        menuElements.add(new Button_Classic(null, -1, CFG.BUTTON_W + CFG.BUTTON_W / 2, tY, menuW - (CFG.BUTTON_W + CFG.BUTTON_W / 2) * 2, CFG.BUTTON_H, true));
         menuElements.add(new Button_Classic_ReflectedBG(">>", -1, menuW - (CFG.BUTTON_W + CFG.BUTTON_W / 2), tY, CFG.BUTTON_W + CFG.BUTTON_W / 2, CFG.BUTTON_H, true));
         menuElements.add(new Button_Classic("<<", -1, 0, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE() + CFG.PADD, CFG.BUTTON_W + CFG.BUTTON_W / 2, CFG.BUTTON_H, true));
         menuElements.add(new Button_Classic_Classic(null, -1, CFG.BUTTON_W + CFG.BUTTON_W / 2, tY, menuW - (CFG.BUTTON_W + CFG.BUTTON_W / 2) * 2, CFG.BUTTON_H, true));
@@ -308,12 +309,28 @@ extends Menu {
         menuElements.add(new Button_Classic("<<", -1, 0, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE() + CFG.PADD, CFG.BUTTON_W + CFG.BUTTON_W / 2, CFG.BUTTON_H, true));
         menuElements.add(new Button_Classic_Classic(null, -1, CFG.BUTTON_W + CFG.BUTTON_W / 2, tY, menuW - (CFG.BUTTON_W + CFG.BUTTON_W / 2) * 2, CFG.BUTTON_H, true));
         menuElements.add(new Button_Classic_ReflectedBG(">>", -1, menuW - (CFG.BUTTON_W + CFG.BUTTON_W / 2), tY, CFG.BUTTON_W + CFG.BUTTON_W / 2, CFG.BUTTON_H, true));
+        menuElements.add(new Button_Classic(null, (int)(50.0f * CFG.GUI_SCALE), 0, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE() + CFG.PADD, menuW, CFG.BUTTON_H, true, CFG.settingsGD.DYNAMIC_MIN_ARMY){
+            @Override
+            public boolean getCheckboxSt() {
+                return CFG.settingsGD.DYNAMIC_MIN_ARMY;
+            }
+        });
         if (CFG.settingsGD.BETTER_UI) {
             this.initMenu(null, CFG.GAMEWIDTH / 2 - menuW / 2 + AoCGame.LEFT, CFG.BUTTON_H, menuW, CFG.GAMEHEIGHT - CFG.BUTTON_H * 2, menuElements);
         } else {
             this.initMenu(null, 0 + AoCGame.LEFT, CFG.BUTTON_H * 3 / 4, Menu_InGame_FA_Top.getWindowWidth(), CFG.GAMEHEIGHT - CFG.BUTTON_H * 3 / 4 - CFG.BUTTON_H - CFG.PADD, menuElements);
         }
         this.updateLang();
+    }
+
+    @Override
+    public void setVisibleM(boolean visible) {
+        super.setVisibleM(visible);
+        if (visible) {
+            CFG.map.getMpC().addDisableMovingMapRef();
+        } else {
+            CFG.map.getMpC().removeDisableMovingMapRef();
+        }
     }
 
     @Override
@@ -382,6 +399,7 @@ extends Menu {
         this.getMenuElem(90).setTextE("AI: Group Units: " + (CFG.settingsGD.AI_GROUP_UNITS ? CFG.lang.get("On") : CFG.lang.get("Off")));
         this.getMenuElem(92).setTextE("Bat+ Breakthrough: " + CFG.getPrecision2(CFG.settingsGD.BAT_PLUS_BREAKTHROUGH_RATIO, 2) + "x");
         this.getMenuElem(95).setTextE("Budget Slider Max: " + GameValues.gvInGame.getBudgetSpendingSliderMax() + "%");
+        this.getMenuElem(97).setTextE("Dynamic Minimum Army: " + (CFG.settingsGD.DYNAMIC_MIN_ARMY ? CFG.lang.get("On") : CFG.lang.get("Off")));
     }
 
     public static String getSettingsText_Names() {
@@ -576,6 +594,7 @@ extends Menu {
             }
             case 16: {
                 CFG.settingsGD.CONTINUOUS_RENDERING = !CFG.settingsGD.CONTINUOUS_RENDERING;
+                Gdx.graphics.setContinuousRendering(CFG.settingsGD.CONTINUOUS_RENDERING);
                 break;
             }
             case 17: {
@@ -911,6 +930,45 @@ extends Menu {
                 this.getMenuElem(92).setTextE("Bat+ Breakthrough: " + CFG.getPrecision2(CFG.settingsGD.BAT_PLUS_BREAKTHROUGH_RATIO, 2) + "x");
                 break;
             }
+            case 92: {
+                CFG.keybMess = "" + CFG.settingsGD.BAT_PLUS_BREAKTHROUGH_RATIO;
+                Keyboard.colorPickerMode = false;
+                Keyboard.commandsMode = false;
+                Keyboard.mapModeSearch = false;
+                Keyboard.rankSearch = false;
+                Keyboard.numbers = true;
+                CFG.keyboardSave = new CFG.Keyboard_Action(){
+                    @Override
+                    public void action() {
+                        try {
+                            float val = Float.parseFloat(CFG.keybMess.replace(',', '.'));
+                            CFG.settingsGD.BAT_PLUS_BREAKTHROUGH_RATIO = Math.max(2.5f, Math.min(50.0f, val));
+                            Menu_Settings_Options.this.getMenuElem(92).setTextE("Bat+ Breakthrough: " + CFG.getPrecision2(CFG.settingsGD.BAT_PLUS_BREAKTHROUGH_RATIO, 2) + "x");
+                            CFG.keybMess = "";
+                        } catch (NumberFormatException e) {}
+                    }
+                };
+                CFG.keyboardDelete = new CFG.Keyboard_Action(){
+                    @Override
+                    public void action() {
+                        CFG.keybMess = CFG.keybMess.length() > 1 ? CFG.keybMess.substring(0, CFG.keybMess.length() - 1) : "";
+                    }
+                };
+                CFG.keyboardWrite = new CFG.Keyboard_Action_Write(){
+                    @Override
+                    public void action(String nChar) {
+                        char c = nChar.charAt(0);
+                        if ((c >= '0' && c <= '9') || c == '.' || c == ',') {
+                            if (c == ',') c = '.';
+                            if (c == '.' && CFG.keybMess.contains(".")) return;
+                            CFG.keybMess += c;
+                        }
+                    }
+                };
+                CFG.menus.setKeyboardActiveMenuElementID(CFG.menus.getActiveMenuElemeID());
+                CFG.menus.getKeyboard().setVisibleM(true);
+                break;
+            }
             case 93: {
                 float newVal = CFG.settingsGD.BAT_PLUS_BREAKTHROUGH_RATIO + 0.5f;
                 CFG.settingsGD.BAT_PLUS_BREAKTHROUGH_RATIO = Math.min(50.0f, newVal);
@@ -923,6 +981,11 @@ extends Menu {
             }
             case 96: {
                 this.updateBudgetSliderMax(25);
+                break;
+            }
+            case 97: {
+                CFG.settingsGD.DYNAMIC_MIN_ARMY = !CFG.settingsGD.DYNAMIC_MIN_ARMY;
+                this.getMenuElem(97).setTextE("Dynamic Minimum Army: " + (CFG.settingsGD.DYNAMIC_MIN_ARMY ? CFG.lang.get("On") : CFG.lang.get("Off")));
                 break;
             }
         }

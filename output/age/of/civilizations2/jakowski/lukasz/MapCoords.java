@@ -15,6 +15,7 @@ public class MapCoords {
     private boolean secondSideOfMap = false;
     private int iSecondSideOfMap_TranslateX = 0;
     private boolean disableMovingTheMap = false;
+    private int disableMovingMapRefCount = 0;
     private int iMinPosY;
     private int iMaxPosY;
     private int iMinPosScaledY;
@@ -397,11 +398,21 @@ public class MapCoords {
     }
 
     public final boolean getDisableMovingMap() {
-        return this.disableMovingTheMap;
+        return this.disableMovingTheMap || this.disableMovingMapRefCount > 0;
     }
 
     public final void setDisableMovingMap(boolean disableMovingTheMap) {
         this.disableMovingTheMap = disableMovingTheMap;
+    }
+
+    public final void addDisableMovingMapRef() {
+        ++this.disableMovingMapRefCount;
+    }
+
+    public final void removeDisableMovingMapRef() {
+        if (this.disableMovingMapRefCount > 0) {
+            --this.disableMovingMapRefCount;
+        }
     }
 
     private static interface WorldMap {

@@ -231,6 +231,17 @@ public class TouchManager {
             return;
         }
         this.actionUp_setActiveProvinceID(nPosX, nPosY);
+        if (CFG.menus.getInGameView() && CFG.core.getActiveProvID() >= 0) {
+            try {
+                if (CFG.menus.getInGame_ProvinceRecruit_Visible() && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() == CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId() && !CFG.core.getProv(CFG.core.getActiveProvID()).isOccupied()) {
+                    Core.MRPRV(CFG.core.getActiveProvID());
+                    CFG.gameAction.IEU();
+                    Core.dARA((int)CFG.menus.getInGame_ProvRecruitSlider().getCurrLong());
+                    CFG.menus.updateInGame_ActionInfo_Recruit();
+                    return;
+                }
+            } catch (Exception e) {}
+        }
         if (CFG.menus.getInGame_SendMessage() != null && CFG.menus.getInGame_SendMessage().getVisibleM() && CFG.menus.getInGame_SendMessage() instanceof Menu_InGame_RelocatePopulation && CFG.core.getActiveProvID() >= 0) {
             int clickProv = CFG.core.getActiveProvID();
             if (CFG.core.getProv(clickProv).getCivId() == CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId() || CFG.core.getCiv(CFG.core.getProv(clickProv).getCivId()).getPuppetOfCiv() == CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()) {

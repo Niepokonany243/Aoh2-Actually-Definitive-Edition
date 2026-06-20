@@ -78,9 +78,8 @@ public class NewGameManager {
         if (!CFG.FILL_THE_MAP) {
             GameCalendar.ENABLE_COLONIZATION_NEUTRAL_PROVINCES = false;
         }
-        if (CFG.RANDOM_FILL || CFG.RANDOM_PLACEMENT || !CFG.FILL_THE_MAP) {
-            CFG.core.getGameScenars().buildProvincePopulationAndEconomy(false, false);
-        } else {
+        CFG.core.getGameScenars().buildProvincePopulationAndEconomy(false, false);
+        if (!CFG.RANDOM_FILL && !CFG.RANDOM_PLACEMENT && CFG.FILL_THE_MAP) {
             CFG.core.getGameScenars().loadArmiesData();
         }
         if (CFG.TOTAL_WARMODE) {

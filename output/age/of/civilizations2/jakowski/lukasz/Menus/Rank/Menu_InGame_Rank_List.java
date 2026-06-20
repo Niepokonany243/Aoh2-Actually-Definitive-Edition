@@ -514,8 +514,8 @@ extends Menu {
                 return;
             }
             case 2: {
-                if (iSort != iID) {
-                    iSort = iID;
+                if (iSort != 3) {
+                    iSort = 3;
                     ArrayList<Integer> nCivsAll = new ArrayList<Integer>();
                     for (int a = 0; a < rankCivsAll.size(); ++a) {
                         nCivsAll.add(rankCivsAll.get(a));
@@ -525,19 +525,8 @@ extends Menu {
                 return;
             }
             case 3: {
-                if (iSort != iID) {
-                    iSort = iID;
-                    ArrayList<Integer> nCivsAll = new ArrayList<Integer>();
-                    for (int a = 0; a < rankCivsAll.size(); ++a) {
-                        nCivsAll.add(rankCivsAll.get(a));
-                    }
-                    CFG.menus.rebuildInGame_Rank_List(nCivsAll);
-                }
-                return;
-            }
-            case 4: {
-                if (iSort != iID) {
-                    iSort = iID;
+                if (iSort != 4) {
+                    iSort = 4;
                     ArrayList<Integer> nCivsAll = new ArrayList<Integer>();
                     for (int a = 0; a < rankCivsAll.size(); ++a) {
                         nCivsAll.add(rankCivsAll.get(a));
@@ -547,7 +536,7 @@ extends Menu {
                 return;
             }
         }
-        if (iID % 5 == 0) {
+        if (iID >= 4 && (iID - 4) % 4 == 0) {
             if (this.getMenuElem(iID).getCurr() > 0) {
                 CFG.map.getMpC().centerToProvID(CFG.core.getCiv(this.getMenuElem(iID).getCurr()).getCapitalProvID());
             } else {

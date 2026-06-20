@@ -593,7 +593,10 @@ extends Menu {
     @Override
     public void setVisibleM(boolean visible) {
         super.setVisibleM(visible);
-        if (!visible) {
+        if (visible) {
+            CFG.map.getMpC().addDisableMovingMapRef();
+        } else {
+            CFG.map.getMpC().removeDisableMovingMapRef();
             Keyboard.rankSearch = false;
         }
     }
@@ -629,20 +632,13 @@ extends Menu {
                 return;
             }
             case 3: {
-                if (iSort != 2) {
-                    iSort = 2;
-                    CFG.menus.rebuildInGame_Rank();
-                }
-                return;
-            }
-            case 4: {
                 if (iSort != 3) {
                     iSort = 3;
                     CFG.menus.rebuildInGame_Rank();
                 }
                 return;
             }
-            case 5: {
+            case 4: {
                 if (iSort != 4) {
                     iSort = 4;
                     CFG.menus.rebuildInGame_Rank();
@@ -650,7 +646,7 @@ extends Menu {
                 return;
             }
         }
-        if ((iID - 1) % 5 == 0) {
+        if (iID >= 5 && (iID - 5) % 4 == 0) {
             if (this.getMenuElem(iID).getCurr() > 0) {
                 CFG.map.getMpC().centerToProvID(CFG.core.getCiv((int)this.getMenuElem(iID).getCurr()).getCapitalProvID());
             } else {

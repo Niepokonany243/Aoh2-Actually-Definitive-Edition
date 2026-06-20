@@ -197,6 +197,7 @@ public class AoCGame {
         Renderer.init();
         this.updateRequestRendering(true);
         CFG.loadSettings();
+        Gdx.graphics.setContinuousRendering(true);
         RankingSettings.load();
         CFG.DENSITY = Gdx.graphics.getDensity();
         if (CFG.DENSITY < 1.0f) {
@@ -1553,6 +1554,7 @@ public class AoCGame {
 
     public void resume() {
         this.updateRequestRendering(true);
+        Gdx.graphics.setContinuousRendering(CFG.settingsGD.CONTINUOUS_RENDERING);
         Gdx.graphics.requestRendering();
     }
 

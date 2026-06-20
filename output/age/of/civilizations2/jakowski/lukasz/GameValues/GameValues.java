@@ -195,6 +195,7 @@ public class GameValues {
     public static GV_AllianceOffer gvAllianceOffer = new GV_AllianceOffer();
     public static GV_DipVassalization gvDipVassalization = new GV_DipVassalization();
     public static GV_Trade gvTrade = new GV_Trade();
+    public static GV_Combat gvCombat = new GV_Combat();
     public static GV_WarPreparations gvWarPreparations = new GV_WarPreparations();
     public static GV_DipUnion gvDipUnion = new GV_DipUnion();
     public static GV_DipTransferControl gvDipTransferControl = new GV_DipTransferControl();
@@ -366,6 +367,7 @@ public class GameValues {
         addGvTask(tasks, "gvAllianceOffer.json", GV_AllianceOffer.class, v -> gvAllianceOffer = v);
         addGvTask(tasks, "gvDipVassalization.json", GV_DipVassalization.class, v -> gvDipVassalization = v);
         addGvTask(tasks, "gvTrade.json", GV_Trade.class, v -> gvTrade = v);
+        addGvTask(tasks, "gvCombat.json", GV_Combat.class, v -> gvCombat = v);
         addGvTask(tasks, "gvWarPreparations.json", GV_WarPreparations.class, v -> gvWarPreparations = v);
         addGvTask(tasks, "gvDipUnion.json", GV_DipUnion.class, v -> gvDipUnion = v);
         addGvTask(tasks, "gvDipTransferControl.json", GV_DipTransferControl.class, v -> gvDipTransferControl = v);

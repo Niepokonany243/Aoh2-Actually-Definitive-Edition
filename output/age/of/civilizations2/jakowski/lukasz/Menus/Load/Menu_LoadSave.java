@@ -51,6 +51,9 @@ extends Menu {
         CFG.drawVersionLB(oSB, iTranslateX);
         CFG.setRenderO(true);
         this.loadSave();
+        if (loadStepID <= 41) {
+            Gdx.graphics.requestRendering();
+        }
     }
 
     public final void loadSave() {

@@ -138,6 +138,7 @@ public class Menu_Settings_GameValues extends Menu {
         CATEGORY_MAP.put("gvArmyRecruitable", "Military & Warfare");
         CATEGORY_MAP.put("gvArmyDisband", "Military & Warfare");
         CATEGORY_MAP.put("gvBattle", "Military & Warfare");
+        CATEGORY_MAP.put("gvCombat", "Military & Warfare");
         CATEGORY_MAP.put("gvDices", "Military & Warfare");
         CATEGORY_MAP.put("gvWar", "Military & Warfare");
         CATEGORY_MAP.put("gvWarPreparations", "Diplomacy & Relations");

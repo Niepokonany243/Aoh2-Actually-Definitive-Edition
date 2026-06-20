@@ -7729,24 +7729,26 @@ public class AIPlaystyle {
             return -1;
         }
         if (tradeRequest.listRight.lProvinces.size() > 0) {
+            boolean haveACore = false;
+            long totalCost = 0L;
+            for (int z = 0; z < tradeRequest.listRight.lProvinces.size(); ++z) {
+                if (CFG.core.getProv(tradeRequest.listRight.lProvinces.get(z)).getCores().getHaveACore(nCivID)) {
+                    haveACore = true;
+                }
+                totalCost = (int)((float)totalCost + Math.max(GameValues.gvTrade.AI_TRADE_PROVINCE_MIN_COST, CFG.core.getProv((int)tradeRequest.listRight.lProvinces.get((int)z).intValue()).incomeTaxation * GameValues.gvTrade.AI_TRADE_PROVINCE_INCOME_TAXATION_WEIGHT + CFG.core.getProv((int)tradeRequest.listRight.lProvinces.get((int)z).intValue()).incomeProduction * GameValues.gvTrade.AI_TRADE_PROVINCE_INCOME_PRODUCTION_WEIGHT));
+            }
+            totalCost = (int)Math.ceil((float)totalCost * GameValues.gvTrade.AI_TRADE_PROVINCE_COST_MULTIPLIER);
+            if (haveACore) {
+                return -1;
+            }
+            if (tradeRequest.listLEFT.iGold > (long)((float)totalCost * GameValues.gvTrade.AI_TRADE_PROVINCE_SHARE_GOLD_OVERRIDE_MULTIPLIER)) {
+                return 2;
+            }
             if ((float)tradeRequest.listRight.lProvinces.size() / (float)civ.getNumOfProvs() > GameValues.gvTrade.AI_TRADE_MAX_PROVINCE_SHARE_TO_ACCEPT) {
                 return -1;
             }
-            boolean haveACore = false;
-            for (int z = 0; z < tradeRequest.listRight.lProvinces.size(); ++z) {
-                if (!CFG.core.getProv(tradeRequest.listRight.lProvinces.get(z)).getCores().getHaveACore(nCivID)) continue;
-                haveACore = true;
-                break;
-            }
-            if (!haveACore) {
-                long totalCost = 0L;
-                for (int z = 0; z < tradeRequest.listRight.lProvinces.size(); ++z) {
-                    totalCost = (int)((float)totalCost + Math.max(GameValues.gvTrade.AI_TRADE_PROVINCE_MIN_COST, CFG.core.getProv((int)tradeRequest.listRight.lProvinces.get((int)z).intValue()).incomeTaxation * GameValues.gvTrade.AI_TRADE_PROVINCE_INCOME_TAXATION_WEIGHT + CFG.core.getProv((int)tradeRequest.listRight.lProvinces.get((int)z).intValue()).incomeProduction * GameValues.gvTrade.AI_TRADE_PROVINCE_INCOME_PRODUCTION_WEIGHT));
-                }
-                if (tradeRequest.listLEFT.iGold > (totalCost = (int)Math.ceil((float)totalCost * GameValues.gvTrade.AI_TRADE_PROVINCE_COST_MULTIPLIER))) {
-                    return 2;
-                }
-                return -1;
+            if (tradeRequest.listLEFT.iGold > totalCost) {
+                return 2;
             }
             return -1;
         }

@@ -586,8 +586,16 @@ public class GameManager {
             return;
         }
         Civilization civ = CFG.core.getCiv(nCivID);
-        for (int i = 0; i < civ.getNumOfProvs(); ++i) {
-            int provinceID = civ.getProvID(i);
+        if (civ.provincesWithLowStability.isEmpty() && civ.getAssimilatesSize() <= 0) {
+            return;
+        }
+        int processedSize = civ.provincesWithLowStability.isEmpty() ? civ.getNumOfProvs() : civ.provincesWithLowStability.size();
+        boolean useFullScan = civ.provincesWithLowStability.isEmpty();
+        int cap = useFullScan ? civ.getNumOfProvs() : processedSize;
+        for (int idx = 0; idx < cap; ++idx) {
+            int provinceID = useFullScan ? civ.getProvID(idx) : civ.provincesWithLowStability.get(idx);
+            if (provinceID < 0 || provinceID >= CFG.core.getProvinSize()) continue;
+            if (CFG.core.getProv(provinceID).getProviStability() >= 1.0f) continue;
             float rate = GameManager.getArmyStabilizationRate(nCivID, provinceID);
             if (rate <= 0.0f) continue;
             GameManager.tryStartArmyStabilization(nCivID, provinceID, rate);

@@ -462,43 +462,46 @@ public class GameAction {
     }
 
     public final void updateIsSupplied() {
-        int i2;
         try {
-            for (i2 = 1; i2 < CFG.core.getCivsSize(); ++i2) {
-                Civilization civI = CFG.core.getCiv(i2);
-                if (civI.getNumOfProvs() <= 0) continue;
-                for (int j = 0; j < civI.getCivRegionsSize(); ++j) {
-                    Civilization_Region civRegionJ = civI.getCivRegion(j);
-                    if (civRegionJ.setIsSupplied(civRegionJ.getSeaAccess() || civRegionJ.getHaveNotOccupiedProvince())) continue;
-                    try {
-                        block6: for (int k = 0; k < civRegionJ.getProvincesSize(); ++k) {
+            Parallel.range(1, CFG.core.getCivsSize(), (int civIndex) -> {
+                try {
+                    Civilization civI = CFG.core.getCiv(civIndex);
+                    if (civI == null || civI.getNumOfProvs() <= 0) return;
+                    for (int j = 0; j < civI.getCivRegionsSize(); ++j) {
+                        Civilization_Region civRegionJ = civI.getCivRegion(j);
+                        if (civRegionJ.setIsSupplied(civRegionJ.getSeaAccess() || civRegionJ.getHaveNotOccupiedProvince())) continue;
+                        for (int k = 0; k < civRegionJ.getProvincesSize(); ++k) {
                             Province provinceK = CFG.core.getProv(civRegionJ.getProvince(k));
+                            if (provinceK == null) continue;
+                            boolean supplied = false;
                             for (int o = 0; o < provinceK.getNeighProvincesSize(); ++o) {
                                 Province provinceO = CFG.core.getProv(provinceK.getNeighProvinces(o));
-                                if (provinceO.getWastelandLvl() >= 0) continue;
-                                if (provinceO.getCivId() == 0) {
-                                    civRegionJ.setIsSupplied(true);
-                                    k = civRegionJ.getProvincesSize();
-                                    continue block6;
-                                }
-                                if (provinceO.getCivId() == i2 || !CFG.core.getCiv(provinceO.getCivId()).getCivRegion(provinceO.getCivRegionID()).getSeaAccess() && !CFG.core.getCiv(provinceO.getCivId()).getCivRegion(provinceO.getCivRegionID()).getHaveNotOccupiedProvince() || CFG.core.getCiv(provinceO.getCivId()).getPuppetOfCiv() != i2 && CFG.core.getCiv(i2).getPuppetOfCiv() != provinceO.getCivId() && (CFG.core.getCiv(i2).getAlliance() <= 0 || CFG.core.getCiv(i2).getAlliance() != CFG.core.getCiv(provinceO.getCivId()).getAlliance()) && CFG.core.getMilitaryAccess(i2, provinceO.getCivId()) <= 0) continue;
-                                civRegionJ.setIsSupplied(true);
-                                k = civRegionJ.getProvincesSize();
-                                continue block6;
+                                if (provinceO == null || provinceO.getWastelandLvl() >= 0) continue;
+                                int neighCivID = provinceO.getCivId();
+                                if (neighCivID == 0) { supplied = true; break; }
+                                if (neighCivID == civIndex) continue;
+                                try {
+                                    Civilization neighCiv = CFG.core.getCiv(neighCivID);
+                                    if (neighCiv == null) continue;
+                                    Civilization_Region neighRegion = neighCiv.getCivRegion(provinceO.getCivRegionID());
+                                    if (neighRegion == null) continue;
+                                    if (neighRegion.getSeaAccess() || neighRegion.getHaveNotOccupiedProvince()) {
+                                        if (neighCiv.getPuppetOfCiv() == civIndex || CFG.core.getCiv(civIndex).getPuppetOfCiv() == neighCivID || (CFG.core.getCiv(civIndex).getAlliance() > 0 && CFG.core.getCiv(civIndex).getAlliance() == neighCiv.getAlliance()) || CFG.core.getMilitaryAccess(civIndex, neighCivID) > 0) {
+                                            supplied = true;
+                                            break;
+                                        }
+                                    }
+                                } catch (Exception e) {}
                             }
+                            if (supplied) { civRegionJ.setIsSupplied(true); break; }
                         }
-                        continue;
                     }
-                    catch (Exception ex) {
-                        CFG.exceptionStack(ex);
-                    }
-                }
-            }
+                } catch (Exception e) {}
+            });
         }
         catch (Exception ex2) {
-            
         }
-        for (i2 = 0; i2 < CFG.core.getProvinSize(); ++i2) {
+        for (int i2 = 0; i2 < CFG.core.getProvinSize(); ++i2) {
             Province province = CFG.core.getProv(i2);
             if (province.getSeaProv() || province.getWastelandLvl() >= 0 || province.getCivId() <= 0) continue;
             province.updateIsNotSuppliedForXTurns();
@@ -2101,7 +2104,12 @@ public class GameAction {
                                     CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(tempAttackersCivID.get(i4), (long)Math.floor((double)tempAttackersArmy.get(i4) / (double)tempNumOfUnits * (double)(attackersArmy - defendersArmy)));
                                     CFG.core.getCiv(tempAttackersCivID.get(i4)).setNumberOfUnits(CFG.core.getCiv(tempAttackersCivID.get(i4)).getNumberOfUnits() - Math.min(tempAttackersArmy.get(i4), tempAttackersArmy.get(i4) - (long)Math.floor((double)tempAttackersArmy.get(i4) / (double)tempNumOfUnits * (double)(attackersArmy - defendersArmy))));
                                 }
-                                if (CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() > 0 && CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).getCivId()).getIdeology()).REVOLUTIONARY) {
+                                int battleProvID = this.currentMoveUnits.getMoveUnits(0).getToProvID();
+                                long mainAttackerRemaining = (long)Math.ceil((double)((Long)tempAttackersArmy.get(0)).longValue() / (double)tempNumOfUnits * (double)(attackersArmy - defendersArmy));
+                                boolean dynSkip = !checkDynamicMinArmy(battleProvID, ((Integer)tempAttackersCivID.get(0)).intValue(), mainAttackerRemaining);
+                                if (dynSkip) {
+                                    if (battleProvID == CFG.core.getActiveProvID()) this.updateInGame_ProvinceInfo();
+                                } else if (CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() > 0 && CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).getCivId()).getIdeology()).REVOLUTIONARY) {
                                     if (CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() != this.currentMoveUnits.getCivID(0) && !CFG.core.getCivsAtWar(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), this.currentMoveUnits.getCivID(0))) {
                                         tArmy = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0);
                                         tArmyTrueOwner = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyCivID1(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv());
@@ -2213,7 +2221,14 @@ public class GameAction {
                                 this.armyRetreat(this.currentMoveUnits.getMoveUnits(0).getToProvID(), this.currentMoveUnits.getCivID(0), defendersArmy);
                                 CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(attackersArmy - defendersArmy);
                                 CFG.core.getCiv(this.currentMoveUnits.getCivID(0)).setNumberOfUnits(CFG.core.getCiv(this.currentMoveUnits.getCivID(0)).getNumberOfUnits() - defendersArmy);
-                                if (CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() > 0 && CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).getCivId()).getIdeology()).REVOLUTIONARY) {
+                                int battleProvID = this.currentMoveUnits.getMoveUnits(0).getToProvID();
+                                long attackerRemainingAfterBattle = Math.max(0L, attackersArmy - defendersArmy);
+                                boolean dynamicPopulationBlockedCapture = !checkDynamicMinArmy(battleProvID, this.currentMoveUnits.getCivID(0), attackerRemainingAfterBattle);
+                                if (dynamicPopulationBlockedCapture) {
+                                    if (battleProvID == CFG.core.getActiveProvID()) {
+                                        this.updateInGame_ProvinceInfo();
+                                    }
+                                } else if (CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() > 0 && CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).getCivId()).getIdeology()).REVOLUTIONARY) {
                                     if (CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() != this.currentMoveUnits.getCivID(0) && !CFG.core.getCivsAtWar(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), this.currentMoveUnits.getCivID(0))) {
                                         tArmy = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0);
                                         tArmyTrueOwner = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyCivID1(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv());
@@ -2280,15 +2295,15 @@ public class GameAction {
                                         }
                                     }
                                 }
+                                 }
+                                } else {
+                                if (this.SHOW_REPORT) {
+                                    CFG.reportData.attackersWon = false;
                                 }
-                            } else {
-                            if (this.SHOW_REPORT) {
-                                CFG.reportData.attackersWon = false;
-                            }
-                            if (this.SAVE_REPORT) {
-                                this.battleReportSave.attackersWon = false;
-                            }
-                            CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).setWasAttacked(GameValues.gvAiProvince.PROVINCE_WAS_ATTACKED_TURNS);
+                                if (this.SAVE_REPORT) {
+                                    this.battleReportSave.attackersWon = false;
+                                }
+                                CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).setWasAttacked(GameValues.gvAiProvince.PROVINCE_WAS_ATTACKED_TURNS);
                         long attackersArmy = tempNumOfUnits;
                         long defendersArmy2 = this.turnMoves_MoveCurrentArmy_Attack_NumOfDefeningUnits(this.currentMoveUnits.getMoveUnits(0).getToProvID());
                             int numOfDefenders = this.turnMoves_MoveCurrentArmy_Attack_NumOfDefenders(this.currentMoveUnits.getMoveUnits(0).getToProvID());
@@ -5354,6 +5369,51 @@ public class GameAction {
         RESULTS_STANDINGS,
         END_OF_THE_GAME;
 
+    }
+
+    public final boolean checkDynamicMinArmy(int provinceID, int attackerCivID, long remainingArmy) {
+        if (!GameValues.gvCombat.DYNAMIC_MIN_ARMY_ENABLED || !CFG.settingsGD.DYNAMIC_MIN_ARMY) return true;
+        Province prov = CFG.core.getProv(provinceID);
+        if (prov == null || prov.getSeaProv() || prov.getWastelandLvl() >= 0) return true;
+        long pop = prov.getPop().getPops();
+        if (pop <= 0 || remainingArmy <= 0L) return remainingArmy > 0L;
+        long required = Math.max(1L, (long)Math.ceil((float)pop * GameValues.gvCombat.DYNAMIC_MIN_ARMY_POP_PERCENT));
+        if (remainingArmy > required) return true;
+
+        float dev = prov.getDeveLvl();
+        float popMult;
+        if (dev < 0.1f) popMult = GameValues.gvCombat.DYNAMIC_POP_ARMY_DEV_LT_01;
+        else if (dev < 0.3f) popMult = GameValues.gvCombat.DYNAMIC_POP_ARMY_DEV_01_TO_03;
+        else if (dev < 0.5f) popMult = GameValues.gvCombat.DYNAMIC_POP_ARMY_DEV_04_TO_05;
+        else if (dev < 0.7f) popMult = GameValues.gvCombat.DYNAMIC_POP_ARMY_DEV_05_TO_07;
+        else popMult = GameValues.gvCombat.DYNAMIC_POP_ARMY_DEV_GT_07;
+
+        long effectivePopArmy = Math.max(1L, (long)Math.ceil((float)pop * popMult));
+        long effectiveAttacker = Math.max(1L, (long)Math.ceil((float)remainingArmy * Math.max(0.01f, GameValues.gvCombat.DYNAMIC_MIN_ARMY_ATTACKER_BONUS)));
+
+        if (CFG.settingsGD.EXPERIMENTAL_BATTLE_SYSTEM && effectivePopArmy > 0 && effectiveAttacker > 0) {
+            float ratio = (float)effectivePopArmy / (float)effectiveAttacker;
+            effectiveAttacker = Math.max(1, (long)((float)effectiveAttacker / Math.max(1.0f, ratio)));
+        }
+
+        if (effectiveAttacker <= effectivePopArmy) {
+            CFG.core.getProv(provinceID).updateArmy4(0L);
+            CFG.core.getCiv(attackerCivID).setNumberOfUnits(Math.max(0L, CFG.core.getCiv(attackerCivID).getNumberOfUnits() - remainingArmy));
+            return false;
+        }
+
+        long attackerLosses;
+        if (CFG.settingsGD.BAT_PLUS) {
+            float effRatio = (float)effectiveAttacker / Math.max(1.0f, (float)effectivePopArmy);
+            float diceMod = Math.max(0.65f, Math.min(1.45f, 1.0f + (float)(this.diceDefenders - this.diceAggressors) * 0.025f));
+            float attackerLossRate = Math.min(0.85f, Math.max(0.025f, 0.22f / (float)Math.sqrt(Math.max(0.05f, effRatio)))) * diceMod;
+            attackerLosses = remainingArmy > 1L ? Math.max(1L, Math.min(remainingArmy - 1L, (long)Math.ceil((double)remainingArmy * (double)attackerLossRate))) : 0L;
+        } else {
+            attackerLosses = remainingArmy > 1L ? Math.max(1L, Math.min(remainingArmy - 1L, (long)Math.ceil((double)effectivePopArmy / (double)Math.max(1.0f, GameValues.gvCombat.DYNAMIC_MIN_ARMY_ATTACKER_BONUS)))) : 0L;
+        }
+        CFG.core.getProv(provinceID).updateArmy4(Math.max(1L, remainingArmy - attackerLosses));
+        CFG.core.getCiv(attackerCivID).setNumberOfUnits(Math.max(0L, CFG.core.getCiv(attackerCivID).getNumberOfUnits() - attackerLosses));
+        return true;
     }
 }
 

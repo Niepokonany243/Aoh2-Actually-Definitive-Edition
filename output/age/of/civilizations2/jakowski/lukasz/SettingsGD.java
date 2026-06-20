@@ -87,6 +87,7 @@ implements Serializable {
     public Color_GameData borderDashed = new Color_GameData(0.0f, 0.0f, 0.0f);
     public boolean AI_GROUP_UNITS = false;
     public boolean DISABLE_AI_INVESTING = true;
+    public boolean DYNAMIC_MIN_ARMY = true;
     public int ARMY_VISIBILITY_RANGE = 3; 
     public int ARMY_ICON_SCALE = 1; 
 

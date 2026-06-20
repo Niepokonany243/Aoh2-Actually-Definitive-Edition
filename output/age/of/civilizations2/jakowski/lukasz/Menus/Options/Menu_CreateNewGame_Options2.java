@@ -1670,13 +1670,14 @@ extends Menu {
         this.getMenuElem(42).setTextE(CFG.lang.get("SandboxMode") + ": AI");
         this.getMenuElem(43).setTextE(CFG.lang.get("AtomicBombCost") + ": " + CFG.lang.get("Extra") + ": ");
         this.getMenuElem(44).setTextE(CFG.lang.get("Plunder") + ": ");
-        this.getMenuElem(45).setTextE("AI: " + CFG.lang.get("Plunder"));
-        this.getMenuElem(46).setTextE(CFG.lang.get("WarDeclarationDelay") + ": ");
-        this.getMenuElem(47).setTextE(CFG.lang.get("PeaceTreaty") + ", " + CFG.lang.get("Score") + ": ");
-        this.getMenuElem(48).setTextE(CFG.lang.get("Nuke") + ", " + CFG.lang.get("RequiredTechnology") + ": ");
-        this.getMenuElem(49).setTextE(CFG.lang.get("Assimilate") + ": ");
-        this.getMenuElem(50).setTextE(CFG.lang.get("Assimilate") + ", " + CFG.lang.get("Cost") + ": ");
-        this.getMenuElem(51).setTextE(CFG.lang.get("VassalIndependence"));
+        this.getMenuElem(45).setTextE(CFG.lang.get("Plunder") + ": ");
+        this.getMenuElem(46).setTextE("AI: " + CFG.lang.get("Plunder"));
+        this.getMenuElem(47).setTextE(CFG.lang.get("WarDeclarationDelay") + ": ");
+        this.getMenuElem(48).setTextE(CFG.lang.get("PeaceTreaty") + ", " + CFG.lang.get("Score") + ": ");
+        this.getMenuElem(49).setTextE(CFG.lang.get("Nuke") + ", " + CFG.lang.get("RequiredTechnology") + ": ");
+        this.getMenuElem(50).setTextE(CFG.lang.get("Assimilate") + ": ");
+        this.getMenuElem(51).setTextE(CFG.lang.get("Assimilate") + ", " + CFG.lang.get("Cost") + ": ");
+        this.getMenuElem(52).setTextE(CFG.lang.get("VassalIndependence"));
         this.getMenuElem(53).setTextE(CFG.lang.get("MinimumYearForNukes") + ": " + GameValues.gvAtomic.ATOMIC_BOMB_MIN_YEAR);
         this.getMenuElem(54).setTextE(CFG.lang.get("TurnOffLeaders"));
         this.getMenuElem(55).setTextE(CFG.lang.get("ColonyAutoExpansion") + ": ");
@@ -2086,8 +2087,10 @@ extends Menu {
         if (visible) {
             super.setVisibleM(visible);
             this.setHideAnimation(false);
+            CFG.map.getMpC().addDisableMovingMapRef();
         } else {
             this.setHideAnimation(true);
+            CFG.map.getMpC().removeDisableMovingMapRef();
         }
     }
 
