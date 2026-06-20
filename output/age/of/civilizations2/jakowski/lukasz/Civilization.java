@@ -1133,6 +1133,9 @@ public class Civilization {
                 for (int j = CFG.core.getProv(this.civGD.assimilates.get((int)i).iProvinceID).getPop().getNatsSize() - 1; j >= 0; --j) {
                     if (CFG.core.getProv(this.civGD.assimilates.get((int)i).iProvinceID).getPop().getCivID(j) == CFG.core.getProv(this.civGD.assimilates.get((int)i).iProvinceID).getCivId()) continue;
                     float tPerc = (GameValues.gvAssimilate.BASE_ASSIMILATION_RATE + (GameValues.gvAssimilate.ASSIMILATION_SCALING_BASE + (float)CFG.oR.nextInt(GameValues.gvAssimilate.ASSIMILATION_SCALING_RANDOM_10000) / 10000.0f) * (ownerPop / (popToAssimilate + ownerPop)) * CFG.core.getProv(this.civGD.assimilates.get((int)i).iProvinceID).getHappi() * Math.min(1.0f - CFG.core.getProv(this.civGD.assimilates.get((int)i).iProvinceID).getDeveLvl() / GameValues.gvAssimilate.ASSIMILATION_DEVELOPMENT_DIVIDER, 1.0f)) * (1.0f - GameValues.gvAssimilate.ASSIMILATION_INSTABILITY_PENALTY * (1.0f - CFG.core.getCiv(this.getCivId()).getStabilityCiv()) - GameValues.gvAssimilate.ASSIMILATION_REVOLUTION_RISK_PENALTY * CFG.core.getProv(this.civGD.assimilates.get((int)i).iProvinceID).getRevRisk()) * GameValues.gvAssimilate.ASSIMILATION_FINAL_MULTIPLIER * CFG.ASSIMILATION_SPEED_MODIFIER;
+                    if (this.civGD.assimilates.get((int)i).armyStabilization) {
+                        tPerc *= this.civGD.assimilates.get((int)i).armyStabilizationRate > 0.0f ? this.civGD.assimilates.get((int)i).armyStabilizationRate : 0.5f;
+                    }
                     tCurrentPopChange = (float)CFG.core.getProv(this.civGD.assimilates.get((int)i).iProvinceID).getPop().getPopulationID(j) * tPerc;
                     if (tCurrentPopChange < 1.0f) {
                         tCurrentPopChange = (float)CFG.oR.nextInt(2);
@@ -1141,7 +1144,8 @@ public class Civilization {
                     CFG.core.getProv(this.civGD.assimilates.get((int)i).iProvinceID).getPop().setPopulationOfCivID(CFG.core.getProv(this.civGD.assimilates.get((int)i).iProvinceID).getPop().getCivID(j), (int)((float)CFG.core.getProv(this.civGD.assimilates.get((int)i).iProvinceID).getPop().getPopulationID(j) - tCurrentPopChange));
                 }
                 CFG.core.getProv(this.civGD.assimilates.get((int)i).iProvinceID).getPop().setPopulationOfCivID(this.getCivId(), (int)((float)CFG.core.getProv(this.civGD.assimilates.get((int)i).iProvinceID).getPop().getPopulationOfCivID(this.getCivId()) + assimilatedPop));
-                CFG.core.getProv(this.civGD.assimilates.get((int)i).iProvinceID).setHappi(CFG.core.getProv(this.civGD.assimilates.get((int)i).iProvinceID).getHappi() + GameValues.gvAssimilate.ASSIMILATE_HAPPINESS_CHANGE_PER_TURN);
+                float armyStabilizationRate = this.civGD.assimilates.get((int)i).armyStabilizationRate > 0.0f ? this.civGD.assimilates.get((int)i).armyStabilizationRate : 0.5f;
+                CFG.core.getProv(this.civGD.assimilates.get((int)i).iProvinceID).setHappi(CFG.core.getProv(this.civGD.assimilates.get((int)i).iProvinceID).getHappi() + GameValues.gvAssimilate.ASSIMILATE_HAPPINESS_CHANGE_PER_TURN * (this.civGD.assimilates.get((int)i).armyStabilization ? armyStabilizationRate : 1.0f));
                 if (this.civGD.assimilates.get((int)i).iTurnsLeft > 0) continue;
                 if (CFG.core.getCiv(this.iCivId).getIsPlayer()) {
                     CFG.core.getCiv((int)this.iCivId).getCivDiploGD().messageBox.addMessage(new Message_AssimilationEnd(this.iCivId, this.civGD.assimilates.get((int)i).iProvinceID));
@@ -1227,7 +1231,7 @@ public class Civilization {
                     if (CFG.core.getProv(this.civGD.recruitArmy.get(i).getProvinceID()).getCivId() == this.getCivId()) {
                         CFG.gameAction.recruitArmy(this.civGD.recruitArmy.get(i).getProvinceID(), this.civGD.recruitArmy.get(i).getArmy(), this.getCivId());
                     } else {
-                        CFG.core.getCiv(this.getCivId()).setGold(CFG.core.getCiv(this.getCivId()).getGold() + (long)((int)((float)(this.civGD.recruitArmy.get(i).getArmy() * CFG.gCARR(this.civGD.recruitArmy.get(i).getProvinceID())) * GameValues.gvArmyRecruit.RECRUIT_ARMY_PROVINCE_LOST_RETURN_PERC_GOLD)));
+                        CFG.core.getCiv(this.getCivId()).setGold(CFG.core.getCiv(this.getCivId()).getGold() + (long)((int)((float)(this.civGD.recruitArmy.get(i).getArmy() * CFG.gCARR(this.civGD.recruitArmy.get(i).getProvinceID(), this.getCivId())) * GameValues.gvArmyRecruit.RECRUIT_ARMY_PROVINCE_LOST_RETURN_PERC_GOLD)));
                     }
 
                     if (this.getIsPlayer() && CFG.RECRUIT_AND_COUNTERATTACK) {
@@ -2212,12 +2216,12 @@ public class Civilization {
             if (this.civGD.recruitArmy.get(i).getProvinceID() != nProvinceID) continue;
             if (nArmy == 0 && this.civGD.recruitArmy.get(i).getArmy() > 0) {
                 CFG.core.getCiv(this.getCivId()).setMovementPoints(CFG.core.getCiv(this.getCivId()).getMovemPoints() + CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)this.getCivId()).getIdeology()).COST_OF_RECRUIT);
-                CFG.core.getCiv(this.getCivId()).setGold(CFG.core.getCiv(this.getCivId()).getGold() + (long)(this.civGD.recruitArmy.get(i).getArmy() * CFG.gCARR(nProvinceID)));
+                CFG.core.getCiv(this.getCivId()).setGold(CFG.core.getCiv(this.getCivId()).getGold() + (long)(this.civGD.recruitArmy.get(i).getArmy() * CFG.gCARR(nProvinceID, this.getCivId())));
                 this.removeRecruitArmy(i);
                 return true;
             }
             long currentArmy = this.civGD.recruitArmy.get(i).getArmy();
-            long recruitCost = Math.max(1L, (long)CFG.gCARR(nProvinceID));
+            long recruitCost = Math.max(1L, (long)CFG.gCARR(nProvinceID, this.getCivId()));
             if (nArmy > currentArmy) {
                 nArmy = currentArmy + Math.min(nArmy - currentArmy, CFG.core.getCiv(this.getCivId()).getGold() / recruitCost);
             }
@@ -2229,14 +2233,14 @@ public class Civilization {
         if (CFG.core.getCiv(this.getCivId()).getMovemPoints() < CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)this.getCivId()).getIdeology()).COST_OF_RECRUIT) {
             return false;
         }
-        if (nArmy >= CFG.core.getCiv(this.getCivId()).getGold() / (long)CFG.gCARR(nProvinceID)) {
-            nArmy = CFG.core.getCiv(this.getCivId()).getGold() / (long)CFG.gCARR(nProvinceID);
+        if (nArmy >= CFG.core.getCiv(this.getCivId()).getGold() / (long)CFG.gCARR(nProvinceID, this.getCivId())) {
+            nArmy = CFG.core.getCiv(this.getCivId()).getGold() / (long)CFG.gCARR(nProvinceID, this.getCivId());
         }
         if (nArmy <= 0) {
             return false;
         }
         CFG.core.getCiv(this.getCivId()).setMovementPoints(CFG.core.getCiv(this.getCivId()).getMovemPoints() - CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)this.getCivId()).getIdeology()).COST_OF_RECRUIT);
-        CFG.core.getCiv(this.getCivId()).setGold(CFG.core.getCiv(this.getCivId()).getGold() - (long)(nArmy * CFG.gCARR(nProvinceID)));
+        CFG.core.getCiv(this.getCivId()).setGold(CFG.core.getCiv(this.getCivId()).getGold() - (long)(nArmy * CFG.gCARR(nProvinceID, this.getCivId())));
         float tech = this.getTechLevel();
         int turns = GameValues.gvArmyRecruit.RECRUIT_ARMY_BASE_TURNS;
         if (tech > 0.9f) {

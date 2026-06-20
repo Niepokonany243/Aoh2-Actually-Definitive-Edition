@@ -82,6 +82,9 @@ implements Serializable {
     public List<AI_ImproveRelations> civsToImproveRelationsWith;
     public int civsToImproveRelationsWithSize;
     public int policyID;
+    public int mobilizationLevel;
+    public int mobilizationLastChangeTurnID;
+    public int mobilizationManualLevel;
     public int iNukes;
     public List<Integer> nukesConstruction;
     public int iMissiles;
@@ -229,6 +232,9 @@ implements Serializable {
         this.civsToImproveRelationsWith = new ArrayList<AI_ImproveRelations>();
         this.civsToImproveRelationsWithSize = 0;
         this.policyID = 0;
+        this.mobilizationLevel = 0;
+        this.mobilizationLastChangeTurnID = 0;
+        this.mobilizationManualLevel = 0;
         this.iNukes = 0;
         this.nukesConstruction = new ArrayList<Integer>();
         this.iMissiles = 0;

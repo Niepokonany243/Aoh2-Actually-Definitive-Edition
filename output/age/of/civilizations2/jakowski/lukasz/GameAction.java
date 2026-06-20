@@ -1283,6 +1283,7 @@ public class GameAction {
                     }
                     CFG.core.getCiv(civRTO).removePlunder(i--);
                 }
+                GameManager.processAIGenocide(civRTO);
                 GameManager.processGenocideOperations(civRTO);
                 for (i = 0; i < CFG.core.getCiv(civRTO).getMigrateSize(); ++i) {
                     this.migrateFromTo(civRTO, CFG.core.getCiv(civRTO).getMigrateMU(i).getFromProviID(), CFG.core.getCiv(civRTO).getMigrateMU(i).getToProvID());
@@ -1496,7 +1497,7 @@ public class GameAction {
             numOfTrueOwnerProvinces = 0;
             for (j = 0; j < civI.getNumOfProvs(); ++j) {
                 Province provinceJ = CFG.core.getProv(civI.getProvID(j));
-                if (provinceJ.getCivId() != provinceJ.getTrueOwnerOfProv()) continue;
+                if (!GameManager.canProvinceRevoltAgainstCiv(i, civI.getProvID(j))) continue;
                 ++numOfTrueOwnerProvinces;
                 if (!(provinceJ.getRevRisk() > 1.0f) || provinceJ.isCapital()) continue;
                 float modRisk = this.getModifiedRevolutionsRisk(civI.getProvID(j));
@@ -1586,6 +1587,7 @@ public class GameAction {
                     CFG.core.getCiv(i).civGD.iTurnsSinceLastAttack = 100;
                     for (j = 0; j < tempSorted.size(); ++j) {
                         int theBestProvinceID = tempSorted.get(j);
+                        if (!GameManager.canProvinceRevoltAgainstCiv(nCivID, theBestProvinceID)) continue;
                         long nArmy0 = CFG.core.getProv(theBestProvinceID).getArmyID(0);
                         if (nArmy0 > 0) {
                             long rebelArmy = this.getRevolutionaryArmySize(theBestProvinceID, nCivID, i);
@@ -2843,7 +2845,7 @@ public class GameAction {
     public final float getDefenseBonusFromTechnology(int nCivID) {
         float techBonus = nCivID > 0 ? Math.min(CFG.core.getCiv(nCivID).getTechLevel() * (float)CFG.TECHNOLOGY_LEVEL_BONUS_ARMY_DEFENSE, (float)GameValues.gvBattle.TECHNOLOGY_LEVEL_BONUS_ARMY_DEFENSE_LIMIT) + this.getDefenseBonusFromMilitaryExpertise(nCivID) : 0.0f;
         float adminEff = CFG.gameUpdate.getAdministrationEfficiency(nCivID);
-        return Math.max(0.0f, techBonus + (adminEff - 0.5f) * 200.0f);
+        return Math.max(0.0f, techBonus + (adminEff - 0.5f) * 200.0f + MilitaryRealism.getDefenseBonusPercent(nCivID));
     }
 
     public final float getDefenseBonusFromMilitaryExpertise(int nCivID) {
@@ -3113,7 +3115,7 @@ public class GameAction {
     public final float getAttackersBonusFromTechnology(int nCivID) {
         float techBonus = Math.min(CFG.core.getCiv(nCivID).getTechLevel() * (float)CFG.TECHNOLOGY_LEVEL_BONUS_ARMY_ATTACK, (float)GameValues.gvBattle.TECHNOLOGY_LEVEL_BONUS_ARMY_ATTACK_LIMIT) + this.getAttackBonusFromMilitaryExpertise(nCivID);
         float adminEff = CFG.gameUpdate.getAdministrationEfficiency(nCivID);
-        return Math.max(0.0f, techBonus + (adminEff - 0.5f) * 200.0f);
+        return Math.max(0.0f, techBonus + (adminEff - 0.5f) * 200.0f + MilitaryRealism.getAttackBonusPercent(nCivID));
     }
 
     public final float getAttackBonusFromMilitaryExpertise(int nCivID) {
@@ -3682,15 +3684,15 @@ public class GameAction {
         if (CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getMovemPoints() < CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)nCivID).getIdeology()).COST_OF_RECRUIT) {
             return;
         }
-        if (nNumOfUnits >= CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getGold() / (long)CFG.getCostOfRecruitArmyMoney_Instantly(nProvinceID)) {
-            nNumOfUnits = CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getGold() / (long)CFG.getCostOfRecruitArmyMoney_Instantly(nProvinceID);
+        if (nNumOfUnits >= CFG.core.getCiv(nCivID).getGold() / (long)CFG.getCostOfRecruitArmyMoney_Instantly(nProvinceID, nCivID)) {
+            nNumOfUnits = CFG.core.getCiv(nCivID).getGold() / (long)CFG.getCostOfRecruitArmyMoney_Instantly(nProvinceID, nCivID);
         }
         if (nNumOfUnits >= this.gMARY(nProvinceID)) {
             nNumOfUnits = this.gMARY(nProvinceID);
         }
         if (nNumOfUnits > 0) {
             CFG.core.getCiv(nCivID).setMovementPoints(CFG.core.getCiv(nCivID).getMovemPoints() - CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)nCivID).getIdeology()).COST_OF_RECRUIT);
-            CFG.core.getCiv(nCivID).setGold(CFG.core.getCiv(nCivID).getGold() - (long)(nNumOfUnits * CFG.getCostOfRecruitArmyMoney_Instantly(nProvinceID)));
+            CFG.core.getCiv(nCivID).setGold(CFG.core.getCiv(nCivID).getGold() - (long)(nNumOfUnits * CFG.getCostOfRecruitArmyMoney_Instantly(nProvinceID, nCivID)));
             this.recruitArmy(nProvinceID, nNumOfUnits, nCivID);
         }
     }
@@ -5210,6 +5212,9 @@ public class GameAction {
     }
 
     public final void spawnRevolutionInProvinceID(int nCivID, int nRebelsCivID, int nProvinceID, List<Integer> nProvinces, List<Integer> nOverMin) {
+        if (!GameManager.canProvinceRevoltAgainstCiv(nCivID, nProvinceID)) {
+            return;
+        }
         int i;
         int j;
         int i2;
@@ -5299,6 +5304,7 @@ public class GameAction {
         }
         for (i = 0; i < joinProvinces.size(); ++i) {
             int joinProvID = (Integer)joinProvinces.get(i);
+            if (!GameManager.canProvinceRevoltAgainstCiv(nCivID, joinProvID)) continue;
             if (CFG.core.getProv(joinProvID).getCivId() == nRebelsCivID) continue;
             if (CFG.core.getProv(joinProvID).getArmyID(0) > 0) {
                 long defenderArmy = CFG.core.getProv(joinProvID).getArmyID(0);

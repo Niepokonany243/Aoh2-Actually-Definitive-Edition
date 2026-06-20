@@ -93,6 +93,7 @@ import age.of.civilizations2.jakowski.lukasz.GameValues.GV_MapOverlays;
 import age.of.civilizations2.jakowski.lukasz.GameValues.GV_MapScroll;
 import age.of.civilizations2.jakowski.lukasz.GameValues.GV_Migrate;
 import age.of.civilizations2.jakowski.lukasz.GameValues.GV_Military;
+import age.of.civilizations2.jakowski.lukasz.GameValues.GV_MilitaryRealism;
 import age.of.civilizations2.jakowski.lukasz.GameValues.GV_Move;
 import age.of.civilizations2.jakowski.lukasz.GameValues.GV_MoveCapital;
 import age.of.civilizations2.jakowski.lukasz.GameValues.GV_MovementPoints;
@@ -147,6 +148,7 @@ import age.of.civilizations2.jakowski.lukasz.Core.Core;
 public class GameValues {
     public static GV_DefensivePosition gvDefensivePosition = new GV_DefensivePosition();
     public static GV_Military gvMilitary = new GV_Military();
+    public static GV_MilitaryRealism gvMilitaryRealism = new GV_MilitaryRealism();
     public static GV_Assimilate gvAssimilate = new GV_Assimilate();
     public static GV_RebelsSupport gvRebelsSupport = new GV_RebelsSupport();
     public static GV_Rebels gvRebels = new GV_Rebels();
@@ -315,6 +317,7 @@ public class GameValues {
         ArrayList<Runnable> tasks = new ArrayList<Runnable>();
         addGvTask(tasks, "gvDefensivePosition.json", GV_DefensivePosition.class, v -> gvDefensivePosition = v);
         addGvTask(tasks, "gvMilitary.json", GV_Military.class, v -> gvMilitary = v);
+        addGvTask(tasks, "gvMilitaryRealism.json", GV_MilitaryRealism.class, v -> gvMilitaryRealism = v);
         addGvTask(tasks, "gvAssimilate.json", GV_Assimilate.class, v -> gvAssimilate = v);
         addGvTask(tasks, "gvRebelsSupport.json", GV_RebelsSupport.class, v -> gvRebelsSupport = v);
         addGvTask(tasks, "gvRebels.json", GV_Rebels.class, v -> gvRebels = v);

@@ -29,6 +29,7 @@ public class Touch {
         if (nPointer == 0) {
             CFG.menus.resetMobileHover();
             if (!CFG.menus.actionDown(nPosX, nPosY)) {
+                if (CFG.map == null) return;
                 if (sAMD) {
                     CFG.map.getTouchMgr().iSBXX = nPosX;
                     CFG.map.getTouchMgr().iSBXY = nPosY;
@@ -46,10 +47,12 @@ public class Touch {
     }
 
     public final void actionMove(int nPosX, int nPosY, int nPosX2, int nPosY2) {
+        if (CFG.map == null) return;
         CFG.map.getTouchMgr().actionMove(nPosX, nPosY, nPosX2, nPosY2);
     }
 
     public final void actionMove(int nPosX, int nPosY, int nPointer) {
+        if (CFG.map == null) return;
         if (nPointer == 0 && !CFG.map.getMpS().getScaleMode() && !CFG.menus.actionMove(nPosX, nPosY)) {
             CFG.map.getTouchMgr().actionMove(nPosX, nPosY);
         }
@@ -58,10 +61,14 @@ public class Touch {
     public final void actionUp(int nPosX, int nPosY, int nPointer, int button) {
         if (nPointer == 0) {
             if (!CFG.menus.actionUp(nPosX, nPosY, nPointer, button)) {
+                if (CFG.map == null) {
+                    Touch.resetAllModes();
+                    return;
+                }
                 CFG.map.getTouchMgr().actionUp(nPosX, nPosY, nPointer, button);
             }
             Touch.resetAllModes();
-        } else if (CFG.map.getMpS().getScaleMode()) {
+        } else if (CFG.map != null && CFG.map.getMpS().getScaleMode()) {
             Touch.resetAllModes();
         }
     }
@@ -70,7 +77,9 @@ public class Touch {
         if (CFG.menus.getFromViewID() < 0) {
             CFG.menus.actionMove_Hover(nPosX, nPosY);
             CFG.menus.updateHoveredMenuElement_Hover(nPosX, nPosY);
-            CFG.menus.updateHoveredProvince_Hover(nPosX, nPosY);
+            if (CFG.map != null) {
+                CFG.menus.updateHoveredProvince_Hover(nPosX, nPosY);
+            }
             if (CFG.menus.get_MenuElementHover_IsInView()) {
                 CFG.setRenderO(true);
             }
@@ -94,9 +103,11 @@ public class Touch {
         CFG.menus.setGraphButtonModeX(false);
         CFG.menus.setGraphButtonMode2(false);
         CFG.menus.setColorPickerMode(false);
-        CFG.map.getTouchMgr().setActionMap(false);
-        CFG.map.getMpS().resetScaleInfo();
-        CFG.map.getMpSl().resetScrollInfo();
+        if (CFG.map != null) {
+            CFG.map.getTouchMgr().setActionMap(false);
+            CFG.map.getMpS().resetScaleInfo();
+            CFG.map.getMpSl().resetScrollInfo();
+        }
     }
 }
 

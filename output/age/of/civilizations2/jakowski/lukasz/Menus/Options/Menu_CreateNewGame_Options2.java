@@ -1565,6 +1565,30 @@ extends Menu {
                 this.menuElemHover = new ME_Hover_v2(nElements);
             }
         });
+        menuElements.add(new Button_CNG_Options2(null, CFG.PADD * 2, 0, tempElemH * 61, tempW, tempElemH, true, CFG.REBELS_GENOCIDE_ENABLED){
+
+            @Override
+            public boolean getCheckboxSt() {
+                return CFG.REBELS_GENOCIDE_ENABLED;
+            }
+
+            @Override
+            public void buildElemHover() {
+                ArrayList<MEHover_2E> nElements = new ArrayList<MEHover_2E>();
+                ArrayList<ME_Hover_2Type> nData = new ArrayList<ME_Hover_2Type>();
+                nData.add(new ME_Hover_2Type_Text("Rebels: Genocide" + ": "));
+                nData.add(new ME_Hover_2Type_Text("" + (CFG.REBELS_GENOCIDE_ENABLED ? "Enabled" : "Disabled"), CFG.COLOR_HOVER_TITLE));
+                nElements.add(new MEHover_2E(nData));
+                nData.clear();
+                nData.add(new ME_Hover_2Type_Space());
+                nElements.add(new MEHover_2E(nData));
+                nData.clear();
+                nData.add(new ME_Hover_2Type_TextDesc("Allows or prevents rebel civilizations from committing genocide."));
+                nElements.add(new MEHover_2E(nData));
+                nData.clear();
+                this.menuElemHover = new ME_Hover_v2(nElements);
+            }
+        });
         this.initMenu(new TitleM_TextSmall(null, CFG.BUTTON_H * 3 / 4, false, false){
 
             @Override
@@ -1661,6 +1685,7 @@ extends Menu {
         this.getMenuElem(58).setTextE("Breakthrough Ratio" + ": ");
         this.getMenuElem(59).setTextE("Genocide" + ": ");
         this.getMenuElem(60).setTextE("AI: Genocide" + ": " + (CFG.AI_GENOCIDE_ENABLED ? "Enabled" : "Disabled"));
+        this.getMenuElem(61).setTextE("Rebels: Genocide" + ": " + (CFG.REBELS_GENOCIDE_ENABLED ? "Enabled" : "Disabled"));
         this.getMenuElem(6).setVisibleE(!CFG.SANDBOX_MODE);
         this.getMenuElem(6).setClickable(!CFG.SANDBOX_MODE);
     }
@@ -2046,6 +2071,11 @@ extends Menu {
             case 60: {
                 CFG.AI_GENOCIDE_ENABLED = !CFG.AI_GENOCIDE_ENABLED;
                 this.getMenuElem(60).setTextE("AI: Genocide" + ": " + (CFG.AI_GENOCIDE_ENABLED ? "Enabled" : "Disabled"));
+                break;
+            }
+            case 61: {
+                CFG.REBELS_GENOCIDE_ENABLED = !CFG.REBELS_GENOCIDE_ENABLED;
+                this.getMenuElem(61).setTextE("Rebels: Genocide" + ": " + (CFG.REBELS_GENOCIDE_ENABLED ? "Enabled" : "Disabled"));
                 break;
             }
         }

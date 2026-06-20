@@ -8,6 +8,7 @@ import age.of.civilizations2.jakowski.lukasz.GameValues.GameValues;
 import age.of.civilizations2.jakowski.lukasz.MapA.BuildingsManager;
 import age.of.civilizations2.jakowski.lukasz.MapA.Distance;
 import age.of.civilizations2.jakowski.lukasz.Messages.Info.Message_HighInflation;
+import age.of.civilizations2.jakowski.lukasz.MilitaryRealism;
 import age.of.civilizations2.jakowski.lukasz.Parallel;
 import age.of.civilizations2.jakowski.lukasz.Province;
 import age.of.civilizations2.jakowski.lukasz.Z_Other.ST.sUM;
@@ -127,17 +128,17 @@ public class GameUpdate {
     public final float getMilitaryUpkeepP(int nProvinceID, long nArmy, int nCivID) {
         Province province = CFG.core.getProv(nProvinceID);
         Civilization civ = CFG.core.getCiv(nCivID);
-        return (float)Math.pow((float)nArmy * CFG.gameAges.getAge_MilitaryUpkeep(GameCalendar.CURRENT_AGEID), GameValues.gvMilitary.UPKEEP_MIN + GameValues.gvMilitary.UPKEEP_DEVELOPMENT * province.getDeveLvl() + GameValues.gvMilitary.UPKEEP_TECHNOLOGY_LEVEL * civ.getTechLevel()) * (1.0f + CFG.terrainTypesManager.getMilitaryUpkeep(province.getTerrainTypeID())) * CFG.ideologiesMgr.getMilitaryUpkeep(civ.getIdeology(), nCivID) * CFG.gameAges.getAge_TreasuryModifier_MilitaryUpkeep(GameCalendar.CURRENT_AGEID) * (1.0f + (float)civ.getNumOfProvs() / (float)CFG.core.getProvinSize() * GameValues.gvMilitary.UPKEEP_CIV_PROVINCES_SHARE_PERC_OF_ALL + civ.getWarWeariness() + civ.getModifier_MilitaryUpkeep() - BuildingsManager.getSupply_Bonus(province.getLvlOfSupply())) * GameCalendar.GAME_SPEED * (1.0f - (civ.isAtWarC() || civ.civGD.civPlans.isPreparingForTheWar() ? 0.0f : this.getMilitaryUpkeepDefensivePosition(nProvinceID)));
+        return (float)Math.pow((float)nArmy * CFG.gameAges.getAge_MilitaryUpkeep(GameCalendar.CURRENT_AGEID), GameValues.gvMilitary.UPKEEP_MIN + GameValues.gvMilitary.UPKEEP_DEVELOPMENT * province.getDeveLvl() + GameValues.gvMilitary.UPKEEP_TECHNOLOGY_LEVEL * civ.getTechLevel()) * (1.0f + CFG.terrainTypesManager.getMilitaryUpkeep(province.getTerrainTypeID())) * CFG.ideologiesMgr.getMilitaryUpkeep(civ.getIdeology(), nCivID) * CFG.gameAges.getAge_TreasuryModifier_MilitaryUpkeep(GameCalendar.CURRENT_AGEID) * (1.0f + (float)civ.getNumOfProvs() / (float)CFG.core.getProvinSize() * GameValues.gvMilitary.UPKEEP_CIV_PROVINCES_SHARE_PERC_OF_ALL + civ.getWarWeariness() + civ.getModifier_MilitaryUpkeep() - BuildingsManager.getSupply_Bonus(province.getLvlOfSupply())) * MilitaryRealism.getMilitaryUpkeepFactor(nCivID) * GameCalendar.GAME_SPEED;
     }
 
     public final float getMilitaryUpkeep_WithoutDefensivePosition(int nProvinceID, long nArmy, int nCivID) {
         Province province = CFG.core.getProv(nProvinceID);
         Civilization civ = CFG.core.getCiv(nCivID);
-        return (float)Math.pow((float)nArmy * CFG.gameAges.getAge_MilitaryUpkeep(GameCalendar.CURRENT_AGEID), GameValues.gvMilitary.UPKEEP_MIN + GameValues.gvMilitary.UPKEEP_DEVELOPMENT * province.getDeveLvl() + GameValues.gvMilitary.UPKEEP_TECHNOLOGY_LEVEL * civ.getTechLevel()) * (1.0f + CFG.terrainTypesManager.getMilitaryUpkeep(province.getTerrainTypeID())) * CFG.ideologiesMgr.getMilitaryUpkeep(civ.getIdeology(), nCivID) * CFG.gameAges.getAge_TreasuryModifier_MilitaryUpkeep(GameCalendar.CURRENT_AGEID) * (1.0f + (float)civ.getNumOfProvs() / (float)CFG.core.getProvinSize() * GameValues.gvMilitary.UPKEEP_CIV_PROVINCES_SHARE_PERC_OF_ALL + civ.getWarWeariness() + civ.getModifier_MilitaryUpkeep() - BuildingsManager.getSupply_Bonus(province.getLvlOfSupply())) * GameCalendar.GAME_SPEED;
+        return (float)Math.pow((float)nArmy * CFG.gameAges.getAge_MilitaryUpkeep(GameCalendar.CURRENT_AGEID), GameValues.gvMilitary.UPKEEP_MIN + GameValues.gvMilitary.UPKEEP_DEVELOPMENT * province.getDeveLvl() + GameValues.gvMilitary.UPKEEP_TECHNOLOGY_LEVEL * civ.getTechLevel()) * (1.0f + CFG.terrainTypesManager.getMilitaryUpkeep(province.getTerrainTypeID())) * CFG.ideologiesMgr.getMilitaryUpkeep(civ.getIdeology(), nCivID) * CFG.gameAges.getAge_TreasuryModifier_MilitaryUpkeep(GameCalendar.CURRENT_AGEID) * (1.0f + (float)civ.getNumOfProvs() / (float)CFG.core.getProvinSize() * GameValues.gvMilitary.UPKEEP_CIV_PROVINCES_SHARE_PERC_OF_ALL + civ.getWarWeariness() + civ.getModifier_MilitaryUpkeep() - BuildingsManager.getSupply_Bonus(province.getLvlOfSupply())) * MilitaryRealism.getMilitaryUpkeepFactor(nCivID) * GameCalendar.GAME_SPEED;
     }
 
     public final float getMilitaryUpkeepDefensivePosition(int nProvinceID) {
-        return GameValues.gvDefensivePosition.DEFENSIVE_POSITION_MILITARY_UPKEEP_PER_TUR * (float)CFG.core.getProv(nProvinceID).getDefensivePosition();
+        return 0.0f;
     }
 
     public final float getProvIncomeAndExpenses_Total(int nProvinceID) {

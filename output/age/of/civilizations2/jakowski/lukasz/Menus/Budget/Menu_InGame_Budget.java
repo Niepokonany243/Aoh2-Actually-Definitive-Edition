@@ -477,7 +477,7 @@ extends Menu {
                 ArrayList<ME_Hover_2Type> nData = new ArrayList<ME_Hover_2Type>();
                 nData.add(new ME_Hover_2Type_Flag_Big(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId(), 0, CFG.PADD));
                 float fEff = CFG.gameUpdate.getAdministrationEfficiency(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId());
-                int nAtk = (int)((fEff - 0.5f) * 100.0f);
+                int nAtk = (int)((fEff - 0.5f) * 200.0f);
                 int nDef = nAtk;
                 nData.add(new ME_Hover_2Type_Text_Big(CFG.lang.get("Administration") + ": " + (int)(fEff * 100.0f) + "%", fEff > 0.6f ? CFG.COLOR_POSITIVE : (fEff > 0.3f ? CFG.COLOR_NEUTRAL2 : CFG.COLOR_NEGATIVE_2)));
                 nData.add(new ME_Hover_2Type_Text_Big(" (" + CFG.lang.get("Attack") + ": " + (nAtk >= 0 ? "+" : "") + nAtk + "%, " + CFG.lang.get("Defense") + ": " + (nDef >= 0 ? "+" : "") + nDef + "%)", CFG.COLOR_NEUTRAL));

@@ -1,6 +1,9 @@
+
 package age.of.civilizations2.jakowski.lukasz.Menus.Civilization;
 
 import age.of.civilizations2.jakowski.lukasz.*;
+import age.of.civilizations2.jakowski.lukasz.GameValues.GameValues;
+import age.of.civilizations2.jakowski.lukasz.MenuE_HoverP.*;
 import age.of.civilizations2.jakowski.lukasz.Button.*;
 import age.of.civilizations2.jakowski.lukasz.Button.Game.*;
 import age.of.civilizations2.jakowski.lukasz.Button2.*;
@@ -11,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.ArrayList;
 
 public class Menu_InGame_Strategy extends Menu {
+    public static boolean mobilizationExpanded = false;
     public Menu_InGame_Strategy() {
         ArrayList<MenuElemUI> menuElements = new ArrayList<MenuElemUI>();
         int fixedStrategyWidth = (int)((float)CFG.CIV_INFO_MENU_WIDTH * 1.5f);
@@ -46,6 +50,53 @@ public class Menu_InGame_Strategy extends Menu {
 
         menuElements.add(new Text_Static("-------------------", -1, CFG.PADD, tY, fixedStrategyWidth - CFG.PADD * 2, CFG.BUTTON_H / 2));
         tY += CFG.BUTTON_H / 2 + CFG.PADD;
+
+        if (MilitaryRealism.isEnabled()) {
+            String currName = civ.civGD.mobilizationManualLevel <= 0 ? "Auto" : GameValues.gvMilitaryRealism.MOBILIZATION_NAME[civ.civGD.mobilizationManualLevel - 1];
+            menuElements.add(new Button_Game("Mobilisation: " + currName, -1, CFG.PADD, tY, fixedStrategyWidth - CFG.PADD * 2, CFG.BUTTON_H * 3 / 4, true) {
+                @Override
+                public void actionElem(int iID) {
+                    Menu_InGame_Strategy.mobilizationExpanded = !Menu_InGame_Strategy.mobilizationExpanded;
+                    CFG.menus.rebuildInGame_Strategy();
+                }
+                @Override
+                public Color getColorE(boolean isActive) {
+                    return Menu_InGame_Strategy.mobilizationExpanded ? CFG.COLOR_TEXT_GREEN : super.getColorE(isActive);
+                }
+            });
+            tY += CFG.BUTTON_H * 3 / 4 + CFG.PADD;
+
+            if (Menu_InGame_Strategy.mobilizationExpanded) {
+                int rowH = CFG.BUTTON_H * 3 / 5;
+                for (int mi = -1; mi < GameValues.gvMilitaryRealism.MOBILIZATION_NAME.length; ++mi) {
+                    final int mobIdx = mi;
+                    int currManual = civ.civGD.mobilizationManualLevel;
+                    boolean isSelected = mobIdx < 0 ? currManual == 0 : currManual == mobIdx + 1;
+                    float rCost = mobIdx < 0 ? 1.0f : (mobIdx < GameValues.gvMilitaryRealism.MOBILIZATION_RECRUIT_COST.length ? GameValues.gvMilitaryRealism.MOBILIZATION_RECRUIT_COST[mobIdx] : 1.0f);
+                    float upkeep = mobIdx < 0 ? 1.0f : (mobIdx < GameValues.gvMilitaryRealism.MOBILIZATION_UPKEEP.length ? GameValues.gvMilitaryRealism.MOBILIZATION_UPKEEP[mobIdx] : 1.0f);
+                    float atk = mobIdx < 0 ? 0.0f : (mobIdx < GameValues.gvMilitaryRealism.MOBILIZATION_ATTACK_BONUS.length ? GameValues.gvMilitaryRealism.MOBILIZATION_ATTACK_BONUS[mobIdx] : 0.0f);
+                    float def = mobIdx < 0 ? 0.0f : (mobIdx < GameValues.gvMilitaryRealism.MOBILIZATION_DEFENSE_BONUS.length ? GameValues.gvMilitaryRealism.MOBILIZATION_DEFENSE_BONUS[mobIdx] : 0.0f);
+                    String label = (mobIdx < 0 ? "Auto" : GameValues.gvMilitaryRealism.MOBILIZATION_NAME[mobIdx])
+                        + "   Recruit: " + (int)(rCost * 100.0f) + "%"
+                        + "   Upkeep: " + (int)(upkeep * 100.0f) + "%"
+                        + "   Atk: " + (atk >= 0.0f ? "+" : "") + CFG.getPrecision2(atk, 100) + "%"
+                        + "   Def: " + (def >= 0.0f ? "+" : "") + CFG.getPrecision2(def, 100) + "%";
+                    menuElements.add(new Button_Game(label, -1, CFG.PADD, tY, fixedStrategyWidth - CFG.PADD * 2, rowH, true) {
+                        @Override
+                        public void actionElem(int iID) {
+                            MilitaryRealism.setManualMobilization(civ.getCivId(), mobIdx);
+                            Menu_InGame_Strategy.mobilizationExpanded = false;
+                            CFG.menus.rebuildInGame_Strategy();
+                        }
+                        @Override
+                        public Color getColorE(boolean isActive) {
+                            return isSelected ? CFG.COLOR_TEXT_GREEN : super.getColorE(isActive);
+                        }
+                    });
+                    tY += rowH + CFG.PADD / 2;
+                }
+            }
+        }
 
         
         menuElements.add(new Button_Game_Checkbox("Auto-Assimilation", CFG.PADD, CFG.PADD, tY, fixedStrategyWidth - CFG.PADD * 2, true, civ.civGD.autoAssimilation) {

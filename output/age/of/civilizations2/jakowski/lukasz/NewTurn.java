@@ -127,6 +127,7 @@ extends Thread {
                     }
                 });
             }
+            MilitaryRealism.updateMobilizationAllCivs();
             CFG.gameUpdate.updateCivs_Money();
             long perfNow = System.currentTimeMillis(); if (perfNow - perfMark > 50) { CFG.LOG("PERF", "[doAction] updateCivs_Money: " + (perfNow - perfMark) + "ms"); } perfMark = perfNow;
 
@@ -138,6 +139,7 @@ extends Thread {
                     civI.runFestivals();
                     civI.runInvests_Development();
                     civI.runInvests();
+                    GameManager.processArmyStabilization(civIndex);
                     civI.runAssimilates();
                     civI.runWarReparations();
                     civI.runStrategy();

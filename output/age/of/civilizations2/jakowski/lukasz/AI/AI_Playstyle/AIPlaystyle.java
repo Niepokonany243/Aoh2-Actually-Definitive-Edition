@@ -57,6 +57,7 @@ import age.of.civilizations2.jakowski.lukasz.GameCalendar;
 import age.of.civilizations2.jakowski.lukasz.GameManager;
 import age.of.civilizations2.jakowski.lukasz.GameValues.GameValues;
 import age.of.civilizations2.jakowski.lukasz.Managers.RivalsManager;
+import age.of.civilizations2.jakowski.lukasz.MilitaryRealism;
 import age.of.civilizations2.jakowski.lukasz.MapA.Distance;
 import age.of.civilizations2.jakowski.lukasz.MapA.BuildingsManager;
 import age.of.civilizations2.jakowski.lukasz.MapA.Distance;
@@ -331,6 +332,9 @@ public class AIPlaystyle {
             return;
         }
         long maxSpend = civ.civGD.sandboxMilitarySpendInfinite || civ.civGD.sandboxMilitarise ? civ.getGold() : (long)((float)civ.getGold() * 0.4f);
+        if (MilitaryRealism.isEnabled() && MilitaryRealism.getMobilizationLevel(nCivID) > 0) {
+            maxSpend = Math.max(maxSpend, (long)((float)civ.getGold() * Math.min(1.0f, 0.4f + 0.12f * (float)MilitaryRealism.getMobilizationLevel(nCivID))));
+        }
         if (maxSpend <= 0L) {
             return;
         }
@@ -344,7 +348,7 @@ public class AIPlaystyle {
             int provinceID = shuffledProvinces.get(i);
             if (CFG.core.getProv(provinceID).isOccupied() || Core.ISIP(provinceID)) continue;
             if (civ.isAtWarC() && !this.isValidAIWarRecruitProvince(nCivID, provinceID)) continue;
-            long cost = Math.max(1L, (long)CFG.gCARR(provinceID));
+            long cost = Math.max(1L, (long)CFG.gCARR(provinceID, nCivID));
             long recruitable = CFG.gameAction.gMARY(provinceID);
             if (recruitable <= 0L) continue;
             float upkeepPerUnit = Math.max(0.001f, CFG.gameUpdate.getMilitaryUpkeepP(provinceID, 1, nCivID));
@@ -2173,6 +2177,9 @@ public class AIPlaystyle {
         }
 
         long maxSpend = civ.isAtWarC() || preparingForWar ? civ.getGold() : (long)((float)civ.getGold() * 0.4f);
+        if (MilitaryRealism.isEnabled() && MilitaryRealism.getMobilizationLevel(n) > 0) {
+            maxSpend = Math.max(maxSpend, (long)((float)civ.getGold() * Math.min(1.0f, 0.4f + 0.12f * (float)MilitaryRealism.getMobilizationLevel(n))));
+        }
         long spent = 0L;
         if (maxSpend > 0L) {
             java.util.ArrayList<Integer> shuffledProvinces = new java.util.ArrayList<Integer>();
@@ -2187,7 +2194,7 @@ public class AIPlaystyle {
 
                 long recruitable = CFG.gameAction.gMARY(provinceID);
                 if (recruitable > 0) {
-                    long cost = Math.max(1L, (long)CFG.gCARR(provinceID));
+                    long cost = Math.max(1L, (long)CFG.gCARR(provinceID, n));
                     long toRecruit = Math.min(recruitable, Math.min(civ.getGold(), maxSpend - spent) / cost);
                     
                     if (!civ.isAtWarC() && !preparingForWar) {
@@ -3393,7 +3400,7 @@ public class AIPlaystyle {
                                 n22 = (int)Math.max(Plunder.plunderEfficiency_RequiredMAX(n, arrayList.get((int)arrayList2.get((int)((Integer)arrayList5.get((int)n5)).intValue()).intValue()).iProvinceID), (float)n22);
                                 Plunder.plunderProvince(n, arrayList.get((int)arrayList2.get((int)((Integer)arrayList5.get((int)n5)).intValue()).intValue()).iProvinceID, n22);
                             }
-                            if (CFG.AI_GENOCIDE_ENABLED && !CFG.core.getCiv(n).getIsPlayer() && CFG.oR.nextInt(100) < (int)(CFG.GENOCIDE_CHANCE * 100.0f) && CFG.core.getProv((int)arrayList.get((int)arrayList2.get((int)((Integer)arrayList5.get((int)n5)).intValue()).intValue()).iProvinceID).getCivId() != n && GameManager.hasGenocidablePopulation(n, arrayList.get((int)arrayList2.get((int)((Integer)arrayList5.get((int)n5)).intValue()).intValue()).iProvinceID)) {
+                            if (CFG.AI_GENOCIDE_ENABLED && !CFG.core.getCiv(n).getIsPlayer() && CFG.oR.nextInt(100) < (int)(CFG.GENOCIDE_CHANCE * 100.0f) && GameManager.hasAIGenocideTarget(n, arrayList.get((int)arrayList2.get((int)((Integer)arrayList5.get((int)n5)).intValue()).intValue()).iProvinceID)) {
                                 GameManager.genocideAllMinorities(n, arrayList.get((int)arrayList2.get((int)((Integer)arrayList5.get((int)n5)).intValue()).intValue()).iProvinceID);
                             }
                             if (arrayList6.isEmpty()) continue;

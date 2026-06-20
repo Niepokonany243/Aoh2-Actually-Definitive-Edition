@@ -48,6 +48,7 @@ implements Serializable {
     public float PLUNDER_CHANCE = 0.0f;
     public float GENOCIDE_CHANCE = 0.0f;
     public boolean AI_GENOCIDE_ENABLED = true;
+    public boolean REBELS_GENOCIDE_ENABLED = false;
     public boolean TOTAL_WARMODE = false;
     public float BAT_PLUS_BREAKTHROUGH_RATIO_GAME = 0.0f;
     public boolean MOVE_AND_RECRUIT_ARMY_AT_WAR_BY_AI = false;
@@ -139,6 +140,7 @@ implements Serializable {
         this.PLUNDER_CHANCE = CFG.PLUNDER_CHANCE;
         this.GENOCIDE_CHANCE = CFG.GENOCIDE_CHANCE;
         this.AI_GENOCIDE_ENABLED = CFG.AI_GENOCIDE_ENABLED;
+        this.REBELS_GENOCIDE_ENABLED = CFG.REBELS_GENOCIDE_ENABLED;
         this.TOTAL_WARMODE = CFG.TOTAL_WARMODE;
         this.BAT_PLUS_BREAKTHROUGH_RATIO_GAME = CFG.BAT_PLUS_BREAKTHROUGH_RATIO_GAME;
         this.MOVE_AND_RECRUIT_ARMY_AT_WAR_BY_AI = CFG.MOVE_AND_RECRUIT_ARMY_AT_WAR_BY_AI;

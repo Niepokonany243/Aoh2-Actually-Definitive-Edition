@@ -11,6 +11,7 @@ import age.of.civilizations2.jakowski.lukasz.GameCalendar;
 import age.of.civilizations2.jakowski.lukasz.IMGManager;
 import age.of.civilizations2.jakowski.lukasz.Images;
 import age.of.civilizations2.jakowski.lukasz.Menu;
+import age.of.civilizations2.jakowski.lukasz.MilitaryRealism;
 import age.of.civilizations2.jakowski.lukasz.Sliders.Slider;
 import age.of.civilizations2.jakowski.lukasz.Title.TitleM;
 import com.badlogic.gdx.graphics.Color;
@@ -48,6 +49,10 @@ public class Menu_InGame_Civ_Control extends Menu {
         String goldText = CFG.getNumberWthSpaces("" + civ.getGold());
         menuElements.add(new Text_Static("Gold: " + goldText + "    Net: " + netText + "    Mil: " + milPerc + "%", -1, contentX, tY, contentW, CFG.BUTTON_H / 2));
         tY += CFG.BUTTON_H / 2 + CFG.PADD;
+        if (MilitaryRealism.isEnabled()) {
+            menuElements.add(new Text_Static("Mobilization: " + MilitaryRealism.getMobilizationName(civID) + "    Recruit: " + (int)(MilitaryRealism.getRecruitCostFactor(civID) * 100.0f) + "%    Upkeep: " + (int)(MilitaryRealism.getMilitaryUpkeepFactor(civID) * 100.0f) + "%", -1, contentX, tY, contentW, CFG.BUTTON_H / 2));
+            tY += CFG.BUTTON_H / 2 + CFG.PADD;
+        }
 
         int target = civ.civGD.sandboxMilitarySpendTarget > 0.0f ? (int)(civ.civGD.sandboxMilitarySpendTarget * 100.0f) : (int)(civ.civGD.civPers.MIN_MILITARY_SPENDINGS * 100.0f);
         menuElements.add(new Slider(contentX, tY, contentW, CFG.BUTTON_H / 2, 0, 250, Math.min(250, target)) {
@@ -84,6 +89,9 @@ public class Menu_InGame_Civ_Control extends Menu {
                 civ.civGD.sandboxMilitarise = !civ.civGD.sandboxMilitarise;
                 if (civ.civGD.sandboxMilitarise && civ.civGD.sandboxMilitarySpendTarget <= 0.0f) {
                     civ.civGD.sandboxMilitarySpendTarget = 1.0f;
+                }
+                if (MilitaryRealism.isEnabled()) {
+                    MilitaryRealism.forceMobilization(civID, civ.civGD.sandboxMilitarise ? 4 : 0);
                 }
                 this.setCheckboxSt(civ.civGD.sandboxMilitarise);
             }

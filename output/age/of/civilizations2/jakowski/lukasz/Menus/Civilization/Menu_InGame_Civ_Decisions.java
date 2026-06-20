@@ -45,6 +45,7 @@ import age.of.civilizations2.jakowski.lukasz.MenuE_HoverP.ME_Hover_2Type_Text;
 import age.of.civilizations2.jakowski.lukasz.MenuE_HoverP.ME_Hover_2Type_TextDesc;
 import age.of.civilizations2.jakowski.lukasz.MenuE_HoverP.ME_Hover_2Type_Text_Big;
 import age.of.civilizations2.jakowski.lukasz.MenuE_HoverP.ME_Hover_v2;
+import age.of.civilizations2.jakowski.lukasz.MilitaryRealism;
 import age.of.civilizations2.jakowski.lukasz.Menus.Civilization.Menu_InGame_Civ;
 import age.of.civilizations2.jakowski.lukasz.Menus.Civilization.Menu_InGame_Civ_DiplomacyORActions;
 import age.of.civilizations2.jakowski.lukasz.Menus.Continents.Menu_InGame_LeaderC;

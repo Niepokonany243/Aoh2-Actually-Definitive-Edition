@@ -4224,7 +4224,7 @@ public class Province {
         this.provinceStability -= this.updateStability_Score_RevRisk();
         this.provinceStability += this.updateStability_Score_Core();
         this.provinceStability += this.updateStability_Score_Occupied();
-        if (this.provinceStability < 1.0f) {
+        if (this.provinceStability < 1.0f && !this.isOccupied()) {
             this.provinceStability += this.updateStability_Score_Army();
         }
         this.provinceStability = Math.min(this.provinceStability, 1.0f);

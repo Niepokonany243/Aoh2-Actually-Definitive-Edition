@@ -510,6 +510,7 @@ public class CFG {
     public static float PLUNDER_CHANCE;
     public static float GENOCIDE_CHANCE;
     public static boolean AI_GENOCIDE_ENABLED;
+    public static boolean REBELS_GENOCIDE_ENABLED;
     public static boolean VASSALS_CAN_DECLARE_INDEPENDENCE;
     public static float ASSIMILATION_COST_MODIFIER;
     public static List<Integer> AGE_OF_CHAOS_CIVS_LIST;
@@ -1609,7 +1610,11 @@ public class CFG {
     }
 
     public static final int getCostOfRecruitArmyMoney_Instantly(int nProvinceID) {
-        return (int)((float)GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT * GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT_CONSCRIPT_EXTRA - (float)(core.getProv(nProvinceID).getLvlOfArmoury() > 0 ? GameValues.gvBuildingArmoury.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT_REDUCTION * core.getProv(nProvinceID).getLvlOfArmoury() : 0));
+        return MilitaryRealism.getRecruitCost(nProvinceID, core.getProv(nProvinceID).getCivId(), true);
+    }
+
+    public static final int getCostOfRecruitArmyMoney_Instantly(int nProvinceID, int nCivID) {
+        return MilitaryRealism.getRecruitCost(nProvinceID, nCivID, true);
     }
 
     public static final int getCostOfRecruitArmyMoney_Mercenaries() {
@@ -7541,7 +7546,11 @@ public class CFG {
     }
 
     public static final int gCARR(int nProvinceID) {
-        return GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT - (core.getProv(nProvinceID).getLvlOfArmoury() > 0 ? GameValues.gvBuildingArmoury.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT_REDUCTION * core.getProv(nProvinceID).getLvlOfArmoury() : 0);
+        return MilitaryRealism.getRecruitCost(nProvinceID, core.getProv(nProvinceID).getCivId(), false);
+    }
+
+    public static final int gCARR(int nProvinceID, int nCivID) {
+        return MilitaryRealism.getRecruitCost(nProvinceID, nCivID, false);
     }
 
     public static void mvTFL(int fromProvID, int byCivID, int toCivID) {
@@ -7968,6 +7977,7 @@ public class CFG {
         PLUNDER_CHANCE = 0.0f;
         GENOCIDE_CHANCE = 0.0f;
         AI_GENOCIDE_ENABLED = true;
+        REBELS_GENOCIDE_ENABLED = false;
         VASSALS_CAN_DECLARE_INDEPENDENCE = true;
         ASSIMILATION_COST_MODIFIER = 1.0f;
         AGE_OF_CHAOS_CIVS_LIST = new ArrayList<Integer>();

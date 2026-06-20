@@ -570,6 +570,71 @@ public class GameManager {
         return false;
     }
 
+    public static final boolean addArmyStabilization(int nCivID, int nProvinceID, float rate) {
+        if (GameManager.canArmyStabilizeProvince(nCivID, nProvinceID) && CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).addAssimilate(new CivTask(nProvinceID, 100, true, rate))) {
+            ++CFG.core.getCiv((int)nCivID).civGD.aACS;
+            if (CFG.core.getCiv(nCivID).getIsPlayer()) {
+                Core.addDiplomacyLines(CFG.core.getCapitalOrProvince(nCivID), nProvinceID, CFG.COLOR_PROVINCE_STABILITY_MAX);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public static final void processArmyStabilization(int nCivID) {
+        if (nCivID <= 0 || nCivID >= CFG.core.getCivsSize() || CFG.core.getCiv(nCivID).getNumOfProvs() <= 0) {
+            return;
+        }
+        Civilization civ = CFG.core.getCiv(nCivID);
+        for (int i = 0; i < civ.getNumOfProvs(); ++i) {
+            int provinceID = civ.getProvID(i);
+            float rate = GameManager.getArmyStabilizationRate(nCivID, provinceID);
+            if (rate <= 0.0f) continue;
+            GameManager.tryStartArmyStabilization(nCivID, provinceID, rate);
+            for (int j = 0; j < CFG.core.getProv(provinceID).getNeighProvincesSize(); ++j) {
+                int neighborID = CFG.core.getProv(provinceID).getNeighProvinces(j);
+                GameManager.tryStartArmyStabilization(nCivID, neighborID, rate);
+            }
+        }
+    }
+
+    private static final float getArmyStabilizationRate(int nCivID, int nProvinceID) {
+        if (!GameManager.canArmyStabilizeProvince(nCivID, nProvinceID)) return 0.0f;
+        long population = GameManager.getArmyStabilizationAreaPopulation(nCivID, nProvinceID);
+        long army = CFG.gameAction.getControlledArmySizeInProvince(nProvinceID, nCivID);
+        if (army * 5L > population) return 0.5f;
+        if (army * 10L > population) return 0.25f;
+        if (army * 20L > population) return 0.05f;
+        return 0.0f;
+    }
+
+    private static final long getArmyStabilizationAreaPopulation(int nCivID, int nProvinceID) {
+        long population = Math.max(1L, CFG.core.getProv(nProvinceID).getPop().getPops());
+        for (int i = 0; i < CFG.core.getProv(nProvinceID).getNeighProvincesSize(); ++i) {
+            int neighborID = CFG.core.getProv(nProvinceID).getNeighProvinces(i);
+            if (!GameManager.canArmyStabilizeProvince(nCivID, neighborID)) continue;
+            population += Math.max(1L, CFG.core.getProv(neighborID).getPop().getPops());
+        }
+        return Math.max(1L, population);
+    }
+
+    private static final void tryStartArmyStabilization(int nCivID, int nProvinceID, float rate) {
+        if (!GameManager.canArmyStabilizeProvince(nCivID, nProvinceID)) return;
+        if (!(CFG.core.getProv(nProvinceID).getProviStability() < 1.0f)) return;
+        CivTask existing = CFG.core.getCiv(nCivID).isAssimilateOrganized_GET(nProvinceID);
+        if (existing != null) {
+            if (existing.armyStabilization && rate > existing.armyStabilizationRate) {
+                existing.armyStabilizationRate = rate;
+            }
+            return;
+        }
+        GameManager.addArmyStabilization(nCivID, nProvinceID, rate);
+    }
+
+    private static final boolean canArmyStabilizeProvince(int nCivID, int nProvinceID) {
+        return nProvinceID >= 0 && nProvinceID < CFG.core.getProvinSize() && !CFG.core.getProv(nProvinceID).getSeaProv() && CFG.core.getProv(nProvinceID).getCivId() == nCivID;
+    }
+
     public static final boolean hasGenocidablePopulation(int nCivID, int nProvinceID) {
         if (nProvinceID < 0 || nProvinceID >= CFG.core.getProvinSize() || nCivID <= 0 || nCivID >= CFG.core.getCivsSize()) {
             return false;
@@ -586,6 +651,48 @@ public class GameManager {
             }
         }
         return false;
+    }
+
+    public static final boolean hasAIGenocideTarget(int nCivID, int nProvinceID) {
+        if (!GameManager.hasGenocidablePopulation(nCivID, nProvinceID)) {
+            return false;
+        }
+        if (!CFG.core.getProv(nProvinceID).isOccupied() || CFG.core.getProv(nProvinceID).getTrueOwnerOfProv() == nCivID) {
+            return false;
+        }
+        if (CFG.core.getCiv(nCivID).getIdeology() == CFG.ideologiesMgr.REBELS_ID && !CFG.REBELS_GENOCIDE_ENABLED) {
+            return false;
+        }
+        if (GameManager.isGenocideActive(nCivID, nProvinceID) || CFG.core.getCiv(nCivID).isPlundred(nProvinceID)) {
+            return false;
+        }
+        for (int i = 0; i < CFG.core.getProv(nProvinceID).getPop().getNatsSize(); ++i) {
+            int natCivID = CFG.core.getProv(nProvinceID).getPop().getCivID(i);
+            if (natCivID == nCivID || CFG.core.getProv(nProvinceID).getPop().getPopulationID(i) <= 0L) continue;
+            return true;
+        }
+        return false;
+    }
+
+    public static final void processAIGenocide(int nCivID) {
+        if (!CFG.AI_GENOCIDE_ENABLED || CFG.GENOCIDE_CHANCE <= 0.0f || nCivID <= 0 || nCivID >= CFG.core.getCivsSize() || CFG.core.getCiv(nCivID).getIsPlayer()) {
+            return;
+        }
+        int chance = Math.max(0, Math.min(100, (int)(CFG.GENOCIDE_CHANCE * 100.0f)));
+        if (chance <= 0) return;
+        Civilization civ = CFG.core.getCiv(nCivID);
+        for (int i = 0; i < civ.getNumOfProvs(); ++i) {
+            GameManager.tryAIGenocideProvince(nCivID, civ.getProvID(i), chance);
+        }
+        for (int i = 0; i < civ.getArmyInAnotherProvinceSize(); ++i) {
+            GameManager.tryAIGenocideProvince(nCivID, civ.getArmyInAnotherProviP(i), chance);
+        }
+    }
+
+    private static final void tryAIGenocideProvince(int nCivID, int nProvinceID, int chance) {
+        if (!GameManager.hasAIGenocideTarget(nCivID, nProvinceID)) return;
+        if (CFG.oR.nextInt(100) >= chance) return;
+        GameManager.genocideAllMinorities(nCivID, nProvinceID);
     }
 
     public static final boolean canGenocidePopulation(int nCivID, int nProvinceID, int targetCivID, long nArmy) {
@@ -659,9 +766,11 @@ public class GameManager {
             op.setCurrentArmy(newArmy);
             op.setEffectivePower(effectivePower);
             op.setResistancePower(resistancePower);
-            float removedShare = Math.min(1.0f, (float)removedPop / (float)Math.max(1L, province.getPop().getPops()));
-            province.setHappi(province.getHappi() - 0.02f - removedShare * 0.05f);
-            province.setRevRisk(province.getRevRisk() + 0.01f + removedShare * 0.05f);
+            if (op.getCivID() == province.getTrueOwnerOfProv() && !province.isOccupied()) {
+                float removedShare = Math.min(1.0f, (float)removedPop / (float)Math.max(1L, province.getPop().getPops()));
+                province.setHappi(province.getHappi() - 0.02f - removedShare * 0.05f);
+                province.setRevRisk(province.getRevRisk() + 0.01f + removedShare * 0.05f);
+            }
             long tempPopulationBefore = province.getPop().getPops() + removedPop;
             int tempWarID = CFG.core.getWarID(nCivID, province.getTrueOwnerOfProv());
             if (tempWarID >= 0) {
@@ -695,7 +804,7 @@ public class GameManager {
         for (int i = 0; i < CFG.core.getProv(nProvinceID).getPop().getNatsSize(); ++i) {
             int natCivID = CFG.core.getProv(nProvinceID).getPop().getCivID(i);
             long pop = CFG.core.getProv(nProvinceID).getPop().getPopulationID(i);
-            if (pop <= bestPop) continue;
+            if (natCivID == nCivID || pop <= bestPop) continue;
             bestPop = pop;
             targetCivID = natCivID;
         }
@@ -705,11 +814,19 @@ public class GameManager {
     public static final void genocideAllMinorities(int nCivID, int nProvinceID) {
         long totalArmy = CFG.gameAction.getControlledArmySizeInProvince(nProvinceID, nCivID);
         if (totalArmy <= 0L) return;
-        long armyPerTarget = Math.max(1L, totalArmy / (long)Math.max(1, CFG.core.getProv(nProvinceID).getPop().getNatsSize()));
+        int targetCount = 0;
         for (int i = 0; i < CFG.core.getProv(nProvinceID).getPop().getNatsSize(); ++i) {
             int natCivID = CFG.core.getProv(nProvinceID).getPop().getCivID(i);
             long pop = CFG.core.getProv(nProvinceID).getPop().getPopulationID(i);
-            if (pop <= 0L) continue;
+            if (natCivID == nCivID || pop <= 0L) continue;
+            ++targetCount;
+        }
+        if (targetCount <= 0) return;
+        long armyPerTarget = Math.max(1L, totalArmy / (long)targetCount);
+        for (int i = 0; i < CFG.core.getProv(nProvinceID).getPop().getNatsSize(); ++i) {
+            int natCivID = CFG.core.getProv(nProvinceID).getPop().getCivID(i);
+            long pop = CFG.core.getProv(nProvinceID).getPop().getPopulationID(i);
+            if (natCivID == nCivID || pop <= 0L) continue;
             GameManager.genocidePopulation(nCivID, nProvinceID, natCivID, armyPerTarget);
         }
     }
@@ -761,9 +878,14 @@ public class GameManager {
         return byCivID > 0 && iOnCivID > 0 && supportCivID > 0 && supportCivID < CFG.core.getCivsSize() && supportCivID != iOnCivID && supportCivID != byCivID && CFG.core.getProv(provinceID).getPop().getPopulationOfCivID(supportCivID) > 0;
     }
 
+    public static final boolean canProvinceRevoltAgainstCiv(int nCivID, int nProvinceID) {
+        return nCivID > 0 && nCivID < CFG.core.getCivsSize() && nProvinceID >= 0 && nProvinceID < CFG.core.getProvinSize() && !CFG.core.getProv(nProvinceID).getSeaProv() && !CFG.core.getProv(nProvinceID).isOccupied() && CFG.core.getProv(nProvinceID).getCivId() == nCivID && CFG.core.getProv(nProvinceID).getTrueOwnerOfProv() == nCivID;
+    }
+
     public static final List<Integer> supportRebels_Provinces(int iOnCivID, int iRebelsID) {
         ArrayList<Integer> outProvinces = new ArrayList<Integer>();
         block0: for (int i = 0; i < CFG.core.getCiv(iOnCivID).getNumOfProvs(); ++i) {
+            if (!GameManager.canProvinceRevoltAgainstCiv(iOnCivID, CFG.core.getCiv(iOnCivID).getProvID(i))) continue;
             for (int j = 0; j < CFG.core.getProv(CFG.core.getCiv(iOnCivID).getProvID(i)).getCores().getCivsSize(); ++j) {
                 if (CFG.core.getProv(CFG.core.getCiv(iOnCivID).getProvID(i)).getCores().getCivID(j) != iRebelsID) continue;
                 outProvinces.add(CFG.core.getCiv(iOnCivID).getProvID(i));
@@ -864,7 +986,7 @@ public class GameManager {
             int bestID = -1;
             for (int i = 0; i < CFG.core.getCiv(iOnCivID).getNumOfProvs(); ++i) {
                 int provID = CFG.core.getCiv(iOnCivID).getProvID(i);
-                if (CFG.core.getProv(provID).getSeaProv()) continue;
+                if (!GameManager.canProvinceRevoltAgainstCiv(iOnCivID, provID)) continue;
                 boolean alreadyAdded = false;
                 for (int j = 0; j < revoltProvinces.size(); ++j) {
                     if (revoltProvinces.get(j) != provID) continue;
@@ -882,7 +1004,7 @@ public class GameManager {
         }
         for (int i = 0; i < CFG.core.getCiv(iOnCivID).getNumOfProvs(); ++i) {
             int provID = CFG.core.getCiv(iOnCivID).getProvID(i);
-            if (CFG.core.getProv(provID).getSeaProv()) continue;
+            if (!GameManager.canProvinceRevoltAgainstCiv(iOnCivID, provID)) continue;
             boolean alreadyAdded = false;
             for (int j = 0; j < revoltProvinces.size(); ++j) {
                 if (revoltProvinces.get(j) != provID) continue;

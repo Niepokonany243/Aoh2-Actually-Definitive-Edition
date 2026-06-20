@@ -1364,6 +1364,10 @@ public class AoCGame {
             @Override
             public boolean touchDragged(int screenX, int screenY, int pointer) {
                 try {
+                    if (CFG.map == null) {
+                        Touch.setMousePosXY(screenX, screenY);
+                        return true;
+                    }
                     CFG.map.getMpSl().setScrollPos(screenX, screenY);
                     Touch.setMousePosXY(screenX, screenY);
                     if (Gdx.input.isTouched(1) && pointer == 0 && !CFG.getIsDesktop()) {
@@ -1440,6 +1444,11 @@ public class AoCGame {
                     block14: {
                         Touch.setMousePosXY(screenX, screenY);
                         try {
+                            if (CFG.map == null) {
+                                CFG.menus.actionUp(screenX, screenY, pointer, button);
+                                Touch.resetAllModes();
+                                break block14;
+                            }
                             if (CFG.getIsDesktop()) {
                                 if (CFG.menus.getInGameView() && CFG.map.getMpS().getCurrSc() >= 0.01f) {
                                     if (button == 1 && CFG.gameAction.getActiveTurnStateID() == GameAction.TurnStates.INPUT_ORDERS && !CFG.menus.getVisible_InGame_FlagAction()) {

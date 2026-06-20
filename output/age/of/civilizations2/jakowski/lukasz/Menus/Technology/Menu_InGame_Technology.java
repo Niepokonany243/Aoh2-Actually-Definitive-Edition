@@ -1774,7 +1774,7 @@ extends Menu {
                 nElements.add(new MEHover_2E(nData));
                 nData.clear();
                 float fEff = CFG.gameUpdate.getAdministrationEfficiency(Menu_InGame_Technology.this.iCivID);
-                int nAdmin = (int)((fEff - 0.5f) * 100.0f);
+                int nAdmin = (int)((fEff - 0.5f) * 200.0f);
                 nData.add(new ME_Hover_2Type_Text(CFG.lang.get("Administration") + ": "));
                 nData.add(new ME_Hover_2Type_Text((nAdmin >= 0 ? "+" : "") + nAdmin + "%", nAdmin >= 0 ? CFG.COLOR_POSITIVE : CFG.COLOR_NEGATIVE_2));
                 nData.add(new ME_Hover_2Type_Image(Images.administration, CFG.PADD, 0));
