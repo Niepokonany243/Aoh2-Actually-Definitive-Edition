@@ -191,7 +191,7 @@ public class AIPlaystyle {
             this.assimilateProvinces(nCivID);
         }
         if (!this.isAtWarOnlyWithWeakRebels(nCivID)) {
-            if ((!this.armyOverBudget || CFG.core.getCiv(nCivID).getBordersWithEnemy() == 0 || sandboxMilitaryControl) && CFG.core.getCiv(nCivID).getGold() > 0L && this.getMinMilitarySpending(nCivID) > CFG.core.getCiv((int)nCivID).iMilitaryUpkeep_PERC) {
+            if (CFG.core.getCiv(nCivID).getGold() > 0L && (isAtWar || isPreparingForWar || sandboxMilitaryControl || this.getMinMilitarySpending(nCivID) > CFG.core.getCiv((int)nCivID).iMilitaryUpkeep_PERC)) {
                 this.recruitMilitary_MinSpending(nCivID);
             }
             if (sandboxMilitaryControl) {
@@ -2048,107 +2048,70 @@ public class AIPlaystyle {
     public final void recruitMilitary_MinSpending(int n) {
         try {
             Civilization civ = CFG.core.getCiv(n);
-            if (!civ.isAtWarC() && !civ.civGD.civPlans.isPreparingForTheWar()) {
+            
+            long minReserve = (civ.isAtWarC() || civ.civGD.civPlans.isPreparingForTheWar()) ? 0L : AIPlaystyle.getMoney_MinReserve(n);
+            if (civ.getGold() <= minReserve) {
                 this.billionaireRecruitment(n);
                 return;
             }
-            long n2 = (long)((float)CFG.core.getCiv((int)n).iBudget * this.getMinMilitarySpending(n) - (float)CFG.core.getCiv((int)n).iBudget * CFG.core.getCiv((int)n).iMilitaryUpkeep_PERC);
-            if (n2 > 0 && !CFG.core.getCiv((int)n).lFrontLines.isEmpty()) {
-                int n3;
-                int n4;
-                int n5 = 1;
-                float f = 1.0f;
-                ArrayList<AI_ProvinceInfo> arrayList = new ArrayList<AI_ProvinceInfo>();
-                for (n4 = CFG.core.getCiv((int)n).lFrontLines.size() - 1; n4 >= 0; --n4) {
-                    for (n3 = CFG.core.getCiv((int)n).lFrontLines.get((int)n4).lProvinces.size() - 1; n3 >= 0; --n3) {
-                        boolean bl = false;
-                        for (int i = arrayList.size() - 1; i >= 0; --i) {
-                            if (((AI_ProvinceInfo)arrayList.get((int)i)).iProvinceID != CFG.core.getCiv((int)n).lFrontLines.get((int)n4).lProvinces.get(n3)) continue;
-                            bl = true;
-                            break;
-                        }
-                        if (bl) continue;
-                        arrayList.add(new AI_ProvinceInfo(CFG.core.getCiv((int)n).lFrontLines.get((int)n4).lProvinces.get(n3), this.getPotential_BasedOnNeighboringProvs(CFG.core.getCiv((int)n).lFrontLines.get((int)n4).lProvinces.get(n3), n), CFG.gameAction.gMARY(CFG.core.getCiv((int)n).lFrontLines.get((int)n4).lProvinces.get(n3))));
-                    }
-                }
-                if (CFG.core.getCiv(n).getCapitalProvID() >= 0 && CFG.core.getProv(CFG.core.getCiv(n).getCapitalProvID()).getNeighSeaProvincesSize() > 0 && CFG.core.getProv(CFG.core.getCiv(n).getCapitalProvID()).getCivId() == n) {
-                    n4 = 0;
-                    for (n3 = arrayList.size() - 1; n3 >= 0; --n3) {
-                        if (((AI_ProvinceInfo)arrayList.get((int)n3)).iProvinceID != CFG.core.getCiv(n).getCapitalProvID()) continue;
-                        n4 = 1;
+            
+            int recruitCost = CFG.ideologiesMgr.getIdeologyID((int)civ.getIdeology()).COST_OF_RECRUIT;
+            
+            java.util.ArrayList<Integer> safeProvinces = new java.util.ArrayList<Integer>();
+            java.util.ArrayList<Integer> borderProvinces = new java.util.ArrayList<Integer>();
+            for (int pi = 0; pi < civ.getNumOfProvs(); pi++) {
+                int pid = civ.getProvID(pi);
+                if (CFG.core.getProv(pid).isOccupied() || Core.ISIP(pid)) continue;
+                boolean bordersEnemy = false;
+                Province prov = CFG.core.getProv(pid);
+                for (int ni = 0; ni < prov.getNeighProvincesSize(); ni++) {
+                    int nProvID = prov.getNeighProvinces(ni);
+                    int nCivID = CFG.core.getProv(nProvID).getCivId();
+                    if (nCivID > 0 && nCivID != n && CFG.core.getCivsAtWar(n, nCivID)) {
+                        bordersEnemy = true;
                         break;
                     }
-                    if (n4 == 0) {
-                        arrayList.add(new AI_ProvinceInfo(CFG.core.getCiv(n).getCapitalProvID(), this.getPotential_BasedOnNeighboringProvs(CFG.core.getCiv(n).getCapitalProvID(), n), CFG.gameAction.gMARY(CFG.core.getCiv(n).getCapitalProvID())));
-                    }
                 }
-                if (!arrayList.isEmpty()) {
-                    int n6;
-                    int n7;
-                    int n8;
-                    long maxArmyCount = 1L;
-                    float f2 = 1.0f;
-                    float f3 = 1.0f;
-                    ArrayList<Integer> arrayList2 = new ArrayList<Integer>();
-                    int n9 = arrayList.size();
-                    int n10 = 0;
-                    for (n8 = 0; n8 < n9; ++n8) {
-                        if (((AI_ProvinceInfo)arrayList.get((int)n8)).iValue > f) {
-                            f = ((AI_ProvinceInfo)arrayList.get((int)n8)).iValue;
-                        }
-                        if (CFG.core.getProv(((AI_ProvinceInfo)arrayList.get((int)n8)).iProvinceID).getDangerLevel_WithArmy() > n5) {
-                            n5 = CFG.core.getProv(((AI_ProvinceInfo)arrayList.get((int)n8)).iProvinceID).getDangerLevel_WithArmy();
-                        }
-                        if ((float)CFG.core.getProv(((AI_ProvinceInfo)arrayList.get((int)n8)).iProvinceID).getRegion_NumOfProvinces() > f2) {
-                            f2 = CFG.core.getProv(((AI_ProvinceInfo)arrayList.get((int)n8)).iProvinceID).getRegion_NumOfProvinces();
-                        }
-                        if ((float)CFG.core.getProv(((AI_ProvinceInfo)arrayList.get((int)n8)).iProvinceID).getPotentialRegion() > f3) {
-                            f3 = CFG.core.getProv(arrayList.get((int)n8).iProvinceID).getPotentialRegion();
-                        }
-                        arrayList2.add(n10 += this.getMovingArmyToProvinceID(n, arrayList.get((int)n8).iProvinceID));
-                        if (CFG.core.getProv(arrayList.get((int)n8).iProvinceID).getArmyID(0) + (long)n10 <= maxArmyCount) continue;
-                        maxArmyCount = CFG.core.getProv(arrayList.get((int)n8).iProvinceID).getArmyID(0) + (long)n10;
-                    }
-                    long n8_l = (long)((float)n2 / (CFG.gameUpdate.getMilitaryUpkeep_WithoutDefensivePosition(((AI_ProvinceInfo)arrayList.get((int)0)).iProvinceID, 1000, n) / 1000.0f));
-                    int n11 = arrayList.size();
-                    for (int i = 0; i < n11; ++i) {
-                        ((AI_ProvinceInfo)arrayList.get((int)i)).iValue = this.getValue_PositionOfArmy(n, arrayList, i, (Integer)arrayList2.get(i), f, f3, n5, maxArmyCount, n8_l, f2);
-                    }
-                    ArrayList<AI_ProvinceInfo> arrayList3 = new ArrayList<AI_ProvinceInfo>();
-                    while (!arrayList.isEmpty()) {
-                        n7 = 0;
-                        int n12 = arrayList.size();
-                        for (int i = 1; i < n12; ++i) {
-                            if (!(arrayList.get((int)n7).iValue < arrayList.get((int)i).iValue)) continue;
-                            n7 = i;
-                        }
-                        arrayList3.add(arrayList.get(n7));
-                        arrayList.remove(n7);
-                    }
-                    n7 = Math.max(1, Math.min((CFG.core.getCiv(n).getMovemPoints() - CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)n).getIdeology()).COST_OF_MOVE_OWN_PROVINCE) / CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)n).getIdeology()).COST_OF_RECRUIT, CFG.core.getCiv(n).getNumOfProvs()));
-                    ArrayList<AI_ProvinceInfo> arrayList4 = new ArrayList<AI_ProvinceInfo>();
-                    float f4 = 0.0f;
-                    for (n6 = 0; n6 < n7 && n6 < arrayList3.size(); ++n6) {
-                        arrayList4.add((AI_ProvinceInfo)arrayList3.get(n6));
-                        f4 += ((AI_ProvinceInfo)arrayList3.get((int)n6)).iValue;
-                    }
-                    long currentGold = CFG.core.getCiv(n).getGold();
-                    for (int i = 0; i < arrayList4.size(); ++i) {
-                        int n13 = (int)((float)Math.min(n8_l, (float)currentGold / (float)(CFG.core.getProv(((AI_ProvinceInfo)arrayList4.get((int)i)).iProvinceID).getLvlOfArmoury() > 0 ? GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT - 1 : GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT)) * ((AI_ProvinceInfo)arrayList4.get((int)i)).iValue / f4);
-                        List<AI_NeighProvinces> list = CFG.oAI.getAllNeighboringProvincesInRange_Recruit(((AI_ProvinceInfo)arrayList4.get((int)i)).iProvinceID, n, 5, true, false, new ArrayList<AI_NeighProvinces>(), new ArrayList<Integer>());
-                        java.util.List<AI_NeighProvinces> filteredList = this.filterAIWarRecruitProvinces(n, list);
-                        if (!filteredList.isEmpty()) {
-                            int n16 = CFG.oR.nextInt(filteredList.size());
-                            int n15 = (int)((float)Math.min(n8_l, Math.min(CFG.gameAction.gMARY(filteredList.get((int)n16).iProvinceID), (float)n6 / (float)(CFG.core.getProv(filteredList.get((int)n16).iProvinceID).getLvlOfArmoury() > 0 ? GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT - 1 : GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT))) * ((AI_ProvinceInfo)arrayList4.get((int)i)).iValue / f4);
-                            CFG.core.getCiv(n).recruitArmy_AI(filteredList.get((int)n16).iProvinceID, (long)n15);
-                            long n14 = CFG.core.getCiv(n).getRecruitArmy_BasedOnProvinceID(filteredList.get((int)n16).iProvinceID);
-                            if (n14 > 0) {
-                                CFG.core.getCiv((int)n).civGD.civPlans.armiesMissions.add(new CivArmyMission_RegroupAfterRecruitment(n, filteredList.get((int)n16).iProvinceID, ((AI_ProvinceInfo)arrayList4.get((int)i)).iProvinceID, n14));
-                            }
-                        }
+                if (bordersEnemy) {
+                    borderProvinces.add(pid);
+                } else {
+                    safeProvinces.add(pid);
+                }
+            }
+            
+            java.util.Collections.shuffle(safeProvinces, CFG.oR);
+            java.util.Collections.shuffle(borderProvinces, CFG.oR);
+            
+            boolean recruited = false;
+            
+            // Phase 1: recruit from safe (non-border) provinces
+            for (int pi = 0; pi < safeProvinces.size() && civ.getMovemPoints() >= recruitCost; pi++) {
+                int pid = safeProvinces.get(pi);
+                long maxRecruitable = CFG.gameAction.gMARY(pid);
+                if (maxRecruitable <= 0) continue;
+                long costPerUnit = Math.max(1L, (long)CFG.gCARR(pid, n));
+                if (civ.getGold() - minReserve < costPerUnit) continue;
+                long toRecruit = Math.min(maxRecruitable, (civ.getGold() - minReserve) / costPerUnit);
+                if (toRecruit > 0 && CFG.core.getCiv(n).recruitArmy_AI(pid, toRecruit)) {
+                    recruited = true;
+                }
+            }
+            
+            // Phase 2: if nothing was recruited (all provinces border enemy), use border provinces
+            if (!recruited && !borderProvinces.isEmpty()) {
+                for (int pi = 0; pi < borderProvinces.size() && civ.getMovemPoints() >= recruitCost; pi++) {
+                    int pid = borderProvinces.get(pi);
+                    long maxRecruitable = CFG.gameAction.gMARY(pid);
+                    if (maxRecruitable <= 0) continue;
+                    long costPerUnit = Math.max(1L, (long)CFG.gCARR(pid, n));
+                    if (civ.getGold() - minReserve < costPerUnit) continue;
+                    long toRecruit = Math.min(maxRecruitable, (civ.getGold() - minReserve) / costPerUnit);
+                    if (toRecruit > 0 && CFG.core.getCiv(n).recruitArmy_AI(pid, toRecruit)) {
+                        recruited = true;
                     }
                 }
             }
+            
             this.billionaireRecruitment(n);
         }
         catch (Exception exception) {
@@ -2159,6 +2122,7 @@ public class AIPlaystyle {
     public final void billionaireRecruitment(int n) {
         Civilization civ = CFG.core.getCiv(n);
         
+        boolean atWar = civ.isAtWarC();
         boolean preparingForWar = false;
         for (int i = 1; i < CFG.core.getCivsSize(); i++) {
             if (civ.civGD.civPlans.isPreparingForTheWar(i)) {
@@ -2167,54 +2131,32 @@ public class AIPlaystyle {
             }
         }
         
-        long income = Math.max(1L, CFG.core.getCiv((int)n).iBudget);
-        long currentUpkeep = CFG.gameUpdate.getMilitaryUpkeep_Total(n);
-        float targetPerc = civ.isAtWarC() ? civ.civGD.civPers.MIN_MILITARY_SPENDINGS_WAR : this.getMinMilitarySpending(n);
-        long targetUpkeep = (long)(income * targetPerc);
-
-        if (!civ.isAtWarC() && !preparingForWar && currentUpkeep >= targetUpkeep) {
-            return;
+        long minReserve = (atWar || preparingForWar) ? 0L : AIPlaystyle.getMoney_MinReserve(n);
+        long spendable = Math.max(0L, civ.getGold() - minReserve);
+        if (spendable <= 0L) return;
+        
+        int recruitCost = CFG.ideologiesMgr.getIdeologyID((int)civ.getIdeology()).COST_OF_RECRUIT;
+        
+        java.util.ArrayList<Integer> shuffledProvinces = new java.util.ArrayList<Integer>();
+        for (int i = 0; i < civ.getNumOfProvs(); i++) {
+            shuffledProvinces.add(civ.getProvID(i));
         }
-
-        long maxSpend = civ.isAtWarC() || preparingForWar ? civ.getGold() : (long)((float)civ.getGold() * 0.4f);
-        if (MilitaryRealism.isEnabled() && MilitaryRealism.getMobilizationLevel(n) > 0) {
-            maxSpend = Math.max(maxSpend, (long)((float)civ.getGold() * Math.min(1.0f, 0.4f + 0.12f * (float)MilitaryRealism.getMobilizationLevel(n))));
-        }
-        long spent = 0L;
-        if (maxSpend > 0L) {
-            java.util.ArrayList<Integer> shuffledProvinces = new java.util.ArrayList<Integer>();
-            for (int i = 0; i < civ.getNumOfProvs(); i++) {
-                shuffledProvinces.add(civ.getProvID(i));
-            }
-            java.util.Collections.shuffle(shuffledProvinces, CFG.oR);
-            for (int i = 0; i < shuffledProvinces.size(); i++) {
-                int provinceID = shuffledProvinces.get(i);
-                if (CFG.core.getProv(provinceID).isOccupied() || Core.ISIP(provinceID)) continue;
-                if (civ.isAtWarC() && !this.isValidAIWarRecruitProvince(n, provinceID)) continue;
-
-                long recruitable = CFG.gameAction.gMARY(provinceID);
-                if (recruitable > 0) {
-                    long cost = Math.max(1L, (long)CFG.gCARR(provinceID, n));
-                    long toRecruit = Math.min(recruitable, Math.min(civ.getGold(), maxSpend - spent) / cost);
-                    
-                    if (!civ.isAtWarC() && !preparingForWar) {
-                        float upkeepPerUnit = CFG.gameUpdate.getMilitaryUpkeepP(provinceID, 1, n);
-                        long neededUnits = (long)((targetUpkeep - currentUpkeep) / Math.max(0.001f, upkeepPerUnit));
-                        if (neededUnits <= 0) break;
-                        toRecruit = Math.min(toRecruit, neededUnits);
-                    }
-
-                    if (toRecruit > 0) {
-                        civ.recruitArmy_AI(provinceID, toRecruit);
-                        spent += toRecruit * cost;
-                        civ.civGD.aiNoDisbandUntilTurnID = Math.max(civ.civGD.aiNoDisbandUntilTurnID, GameCalendar.TURNID + 10);
-                        currentUpkeep += (long)(toRecruit * CFG.gameUpdate.getMilitaryUpkeepP(provinceID, 1, n));
-                        if (civ.getMovemPoints() < CFG.ideologiesMgr.getIdeologyID(civ.getIdeology()).COST_OF_RECRUIT) return;
-                        if (!civ.isAtWarC() && !preparingForWar && currentUpkeep >= targetUpkeep) return;
-                        if (civ.getGold() <= 0L || spent >= maxSpend) return;
-                    }
-                }
-            }
+        java.util.Collections.shuffle(shuffledProvinces, CFG.oR);
+        
+        for (int i = 0; i < shuffledProvinces.size() && spendable > 0L && civ.getMovemPoints() >= recruitCost; i++) {
+            int provinceID = shuffledProvinces.get(i);
+            if (CFG.core.getProv(provinceID).isOccupied() || Core.ISIP(provinceID)) continue;
+            if ((atWar || preparingForWar) && !this.isValidAIWarRecruitProvince(n, provinceID)) continue;
+            
+            long recruitable = CFG.gameAction.gMARY(provinceID);
+            if (recruitable <= 0) continue;
+            
+            long cost = Math.max(1L, (long)CFG.gCARR(provinceID, n));
+            long toRecruit = Math.min(recruitable, spendable / cost);
+            if (toRecruit <= 0) continue;
+            
+            civ.recruitArmy_AI(provinceID, toRecruit);
+            spendable -= toRecruit * cost;
         }
     }
 
@@ -3312,15 +3254,10 @@ public class AIPlaystyle {
                                     ++n6;
                                 }
                                 this.moveAtWar_Regroup(n, arrayList, arrayList2);
-                                if (civilization.getGold() <= (long)GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT) break block102;
-                                n5 = (float)arrayList2.size() * 1.75f * (float)CFG.ideologiesMgr.getIdeologyID((int)civilization.getIdeology()).COST_OF_MOVE <= (float)(civilization.getMovemPoints() - CFG.ideologiesMgr.getIdeologyID((int)civilization.getIdeology()).COST_OF_RECRUIT) ? 1 : 0;
-                                n8 = n5;
-                                if (n5 != 0) break block103;
-                                float f5 = civilization.getGold() / (long)GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT;
-                                float f6 = civilization.civGD.moveAtWar_ProvincesLostAndConquered_LastTurn < 0 ? 0.16f + 0.03f * (float)civilization.civGD.moveAtWar_ProvincesLostAndConquered_LastTurn : (f2 = civilization.civGD.moveAtWar_ArmyFullyRecruitedLastTurn ? 0.6f : 0.75f);
-                                if (!(f5 * f2 > (float)civilization.getNumberOfUnits()) && civilization.civGD.moveAtWar_ProvincesLostAndConquered_LastTurn >= -3 && civilization.getNumOfProvs() >= 3 && CFG.oR.nextInt(100) >= 6) break block104;
+                                if (civilization.getGold() > (long)GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT) {
+                                    this.moveAtWar_Recruit(n, arrayList, arrayList2, false);
+                                }
                             }
-                            this.moveAtWar_Recruit(n, arrayList, arrayList2, false);
                         }
                         civilization.civGD.moveAtWar_ArmyFullyRecruitedLastTurn = false;
                     }
@@ -4895,204 +4832,174 @@ public class AIPlaystyle {
     }
 
     public final void prepareForWar_Recruit(int n, List<AI_ProvinceInfo_War> list, List<Integer> list2, boolean bl) {
-        int n2;
-        int n3;
-        int n4;
         if (this.isAtWarOnlyWithWeakRebels(n)) {
             return;
         }
-        if (CFG.core.getCiv(n).getMovemPoints() < CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)n).getIdeology()).COST_OF_RECRUIT) {
+        Civilization civ = CFG.core.getCiv(n);
+        int recruitCost = CFG.ideologiesMgr.getIdeologyID((int)civ.getIdeology()).COST_OF_RECRUIT;
+        if (civ.getMovemPoints() < recruitCost) {
             return;
         }
-        if (list2.size() * CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)n).getIdeology()).COST_OF_MOVE > CFG.core.getCiv(n).getMovemPoints() && Math.max((float)(CFG.core.getCiv(n).getGold() / (long)GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT) / (float)CFG.core.getCiv(n).getNumberOfUnits(), 0.001f) < 0.048f && CFG.oR.nextInt(100) < 85) {
+        if (list2.size() * CFG.ideologiesMgr.getIdeologyID((int)civ.getIdeology()).COST_OF_MOVE > civ.getMovemPoints() && Math.max((float)(civ.getGold() / (long)GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT) / (float)civ.getNumberOfUnits(), 0.001f) < 0.048f && CFG.oR.nextInt(100) < 85) {
             return;
         }
-        if (!bl && CFG.core.getCiv(n).getCapitalProvID() >= 0 && CFG.core.getProv(CFG.core.getCiv(n).getCapitalProvID()).getCivId() == n && CFG.core.getProv(CFG.core.getCiv(n).getCapitalProvID()).getNeighSeaProvincesSize() > 0) {
-            n4 = 0;
-            for (n3 = list.size() - 1; n3 >= 0; --n3) {
-                if (list.get((int)n3).iProvinceID != CFG.core.getCiv(n).getCapitalProvID()) continue;
-                n4 = 1;
-                break;
+        if (!bl && civ.getCapitalProvID() >= 0 && CFG.core.getProv(civ.getCapitalProvID()).getCivId() == n && CFG.core.getProv(civ.getCapitalProvID()).getNeighSeaProvincesSize() > 0) {
+            boolean hasCapital = false;
+            for (int i = list.size() - 1; i >= 0; --i) {
+                if (list.get(i).iProvinceID == civ.getCapitalProvID()) {
+                    hasCapital = true;
+                    break;
+                }
             }
-            if (n4 == 0) {
-                list.add(new AI_ProvinceInfo_War(CFG.core.getCiv(n).getCapitalProvID(), this.getPotential_BasedOnNeighboringProvs(CFG.core.getCiv(n).getCapitalProvID(), n), true));
+            if (!hasCapital) {
+                list.add(new AI_ProvinceInfo_War(civ.getCapitalProvID(), this.getPotential_BasedOnNeighboringProvs(civ.getCapitalProvID(), n), true));
             }
         }
-        n4 = (int)(CFG.core.getCiv(n).getGold() / (long)GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT);
-        n3 = list.size();
-        ArrayList<AI_ProvinceInfo_War> arrayList = new ArrayList<AI_ProvinceInfo_War>();
-        float f = 0.0f;
-        for (n2 = 0; n2 < n3 && n2 < list.size(); ++n2) {
-            arrayList.add(list.get(n2));
-            f += list.get((int)n2).iValue;
-        }
-        long currentGold_War = CFG.core.getCiv(n).getGold();
-        boolean bl2 = false;
-        for (int i = 0; i < arrayList.size(); ++i) {
-            int n6;
-            int n7 = ((AI_ProvinceInfo_War)arrayList.get(i)).getRecruitableArmy(n);
-            boolean bl3 = false;
-            if (CFG.core.getProv(((AI_ProvinceInfo_War)arrayList.get((int)i)).iProvinceID).isOccupied() || CFG.core.getProv(((AI_ProvinceInfo_War)arrayList.get((int)i)).iProvinceID).getCivId() != n || bl3) {
-                int n8;
-                List<AI_NeighProvinces> list3 = CFG.oAI.getAllNeighboringProvincesInRange_RecruitAtWAr(((AI_ProvinceInfo_War)arrayList.get((int)i)).iProvinceID, n, Math.max(10, CFG.core.getCiv(n).getNumOfProvs() / 8), true, false, new ArrayList<AI_NeighProvinces>(), new ArrayList<Integer>());
-                list3 = this.filterAIWarRecruitProvinces(n, list3);
-                if (list3.size() <= 0) continue;
-                int n9 = 0;
-                if (bl3 || CFG.oR.nextInt(100) < 90) {
-                    int n10 = 0;
-                    int n11 = CFG.gameAction.gMARY(list3.get((int)n10).iProvinceID);
-                    for (int j = 1; j < list3.size(); ++j) {
-                        if (n11 >= CFG.gameAction.gMARY(list3.get((int)j).iProvinceID)) continue;
-                        n10 = j;
-                        n11 = CFG.gameAction.gMARY(list3.get((int)j).iProvinceID);
+        
+        int limit = Math.min(list.size(), Math.max(1, civ.getNumOfProvs()));
+        boolean recruited = false;
+        for (int i = 0; i < limit && civ.getGold() > 0L && civ.getMovemPoints() >= recruitCost; i++) {
+            int frontProvinceID = list.get(i).iProvinceID;
+            int recruitProvinceID = frontProvinceID;
+            boolean fromFallback = false;
+            
+            if (CFG.core.getProv(frontProvinceID).isOccupied() || CFG.core.getProv(frontProvinceID).getCivId() != n || !this.isValidAIWarRecruitProvince(n, frontProvinceID)) {
+                List<AI_NeighProvinces> neighbors = CFG.oAI.getAllNeighboringProvincesInRange_RecruitAtWAr(frontProvinceID, n, Math.max(10, civ.getNumOfProvs() / 8), true, false, new ArrayList<AI_NeighProvinces>(), new ArrayList<Integer>());
+                neighbors = this.filterAIWarRecruitProvinces(n, neighbors);
+                if (neighbors.isEmpty()) continue;
+                int bestID = 0;
+                int bestRecruitable = CFG.gameAction.gMARY(neighbors.get(0).iProvinceID, n);
+                for (int j = 1; j < neighbors.size(); ++j) {
+                    int rec = CFG.gameAction.gMARY(neighbors.get(j).iProvinceID, n);
+                    if (bestRecruitable >= rec) continue;
+                    bestID = j;
+                    bestRecruitable = rec;
+                }
+                recruitProvinceID = neighbors.get(bestID).iProvinceID;
+                fromFallback = true;
+            }
+            
+            long recruitable = CFG.gameAction.gMARY(recruitProvinceID, n);
+            if (recruitable <= 0) continue;
+            long costPerUnit = Math.max(1L, (long)CFG.gCARR(recruitProvinceID, n));
+            if (civ.getGold() < costPerUnit) continue;
+            long toRecruit = Math.min(recruitable, civ.getGold() / costPerUnit);
+            if (toRecruit <= 0) continue;
+            
+            if (civ.recruitArmy_AI(recruitProvinceID, toRecruit)) {
+                recruited = true;
+                if (fromFallback || recruitProvinceID != frontProvinceID) {
+                    int recruitedArmy = (int)civ.getRecruitArmy_BasedOnProvinceID(recruitProvinceID);
+                    if (recruitedArmy > 0) {
+                        civ.civGD.civPlans.armiesMissions.add(new CivArmyMission_RegroupAfterRecruitment(n, recruitProvinceID, frontProvinceID, recruitedArmy));
                     }
-                    n9 = n10;
-                } else {
-                    n9 = CFG.oR.nextInt(list3.size());
-                }
-                n8 = Math.min(CFG.gameAction.gMARY(list3.get((int)n9).iProvinceID, n), ((AI_ProvinceInfo_War)arrayList.get(i)).getRecruitableArmy(n));
-                if (CFG.core.getCiv(n).recruitArmy_AI(list3.get((int)n9).iProvinceID, n8)) {
-                    bl2 = true;
-                }
-                if ((n6 = (int)CFG.core.getCiv(n).getRecruitArmy_BasedOnProvinceID(list3.get((int)n9).iProvinceID)) <= 0) continue;
-                CFG.core.getCiv((int)n).civGD.civPlans.armiesMissions.add(new CivArmyMission_RegroupAfterRecruitment(n, list3.get((int)n9).iProvinceID, ((AI_ProvinceInfo_War)arrayList.get((int)i)).iProvinceID, n6));
-                continue;
-            }
-            int recruitProvinceID = ((AI_ProvinceInfo_War)arrayList.get((int)i)).iProvinceID;
-            if (!this.isValidAIWarRecruitProvince(n, recruitProvinceID)) {
-                AI_NeighProvinces fallbackRecruitProvince = this.getBestAIWarRecruitProvince(n, recruitProvinceID, 5);
-                if (fallbackRecruitProvince == null) continue;
-                recruitProvinceID = fallbackRecruitProvince.iProvinceID;
-            }
-            n6 = (int)((float)Math.min(n4, Math.min((long)n4, currentGold_War / (long)(CFG.core.getProv(recruitProvinceID).getLvlOfArmoury() > 0 ? GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT - 1 : GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT))) * ((AI_ProvinceInfo_War)arrayList.get((int)i)).iValue / f);
-            if (!CFG.core.getCiv(n).recruitArmy_AI(recruitProvinceID, n6)) continue;
-            if (recruitProvinceID != ((AI_ProvinceInfo_War)arrayList.get((int)i)).iProvinceID) {
-                int recruitedArmy = (int)CFG.core.getCiv(n).getRecruitArmy_BasedOnProvinceID(recruitProvinceID);
-                if (recruitedArmy > 0) {
-                    CFG.core.getCiv((int)n).civGD.civPlans.armiesMissions.add(new CivArmyMission_RegroupAfterRecruitment(n, recruitProvinceID, ((AI_ProvinceInfo_War)arrayList.get((int)i)).iProvinceID, recruitedArmy));
                 }
             }
-            bl2 = true;
         }
-        if (bl2 && CFG.core.getCiv(n).getGold() < (long)(GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT * 5)) {
-            CFG.core.getCiv((int)n).civGD.moveAtWar_ArmyFullyRecruitedLastTurn = true;
+        if (recruited && civ.getGold() < (long)(GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT * 5)) {
+            civ.civGD.moveAtWar_ArmyFullyRecruitedLastTurn = true;
         }
     }
 
     public final void moveAtWar_Recruit(int n, List<AI_ProvinceInfo_War> list, List<Integer> list2, boolean bl) {
-        int n2;
-        int n3;
-        int n4;
         if (this.isAtWarOnlyWithWeakRebels(n)) {
             return;
         }
-        Civilization civilization = CFG.core.getCiv(n);
-        if (civilization.getMovemPoints() < CFG.ideologiesMgr.getIdeologyID((int)civilization.getIdeology()).COST_OF_RECRUIT) {
+        Civilization civ = CFG.core.getCiv(n);
+        int recruitCost = CFG.ideologiesMgr.getIdeologyID((int)civ.getIdeology()).COST_OF_RECRUIT;
+        if (civ.getMovemPoints() < recruitCost) {
             return;
         }
-        if (list2.size() * CFG.ideologiesMgr.getIdeologyID((int)civilization.getIdeology()).COST_OF_MOVE > civilization.getMovemPoints() && Math.max((float)(civilization.getGold() / (long)GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT) / (float)civilization.getNumberOfUnits(), 0.001f) < 0.048f && CFG.oR.nextInt(100) < 85) {
+        if (list2.size() * CFG.ideologiesMgr.getIdeologyID((int)civ.getIdeology()).COST_OF_MOVE > civ.getMovemPoints() && Math.max((float)(civ.getGold() / (long)GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT) / (float)civ.getNumberOfUnits(), 0.001f) < 0.048f && CFG.oR.nextInt(100) < 85) {
             return;
         }
-        if (!bl && civilization.getCapitalProvID() >= 0 && CFG.core.getProv(civilization.getCapitalProvID()).getCivId() == n && CFG.core.getProv(civilization.getCapitalProvID()).getNeighSeaProvincesSize() > 0) {
-            n4 = 0;
-            for (n3 = list.size() - 1; n3 >= 0; --n3) {
-                if (list.get((int)n3).iProvinceID != civilization.getCapitalProvID()) continue;
-                n4 = 1;
-                break;
-            }
-            if (n4 == 0) {
-                list.add(new AI_ProvinceInfo_War(civilization.getCapitalProvID(), this.getPotential_BasedOnNeighboringProvs(civilization.getCapitalProvID(), n), true));
-            }
-        }
-        n4 = (int)(civilization.getGold() / (long)GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT);
-        n3 = list.size();
-        ArrayList<AI_ProvinceInfo_War> arrayList = new ArrayList<AI_ProvinceInfo_War>();
-        float f = 0.0f;
-        for (n2 = 0; n2 < n3 && n2 < list.size(); ++n2) {
-            arrayList.add(list.get(n2));
-            f += list.get((int)n2).iValue;
-        }
-        long currentGold_War = civilization.getGold();
-        boolean bl2 = false;
-        for (int i = 0; i < arrayList.size(); ++i) {
-            int n6 = ((AI_ProvinceInfo_War)arrayList.get(i)).getRecruitableArmy(n);
-            boolean bl3 = false;
-            if (CFG.core.getProv(((AI_ProvinceInfo_War)arrayList.get((int)i)).iProvinceID).isOccupied() || CFG.core.getProv(((AI_ProvinceInfo_War)arrayList.get((int)i)).iProvinceID).getCivId() != n || bl3) {
-                int n7;
-                int n8;
-                int n9;
-                int n10;
-                List<AI_NeighProvinces> list3 = CFG.oAI.getAllNeighboringProvincesInRange_RecruitAtWAr(((AI_ProvinceInfo_War)arrayList.get((int)i)).iProvinceID, n, Math.max(10, civilization.getNumOfProvs() / 8), true, false, new ArrayList<AI_NeighProvinces>(), new ArrayList<Integer>());
-                list3 = this.filterAIWarRecruitProvinces(n, list3);
-                if (!list3.isEmpty()) {
-                    n10 = 0;
-                    if (bl3 || CFG.oR.nextInt(100) < 90) {
-                        n9 = 0;
-                        int n11 = CFG.gameAction.gMARY(list3.get((int)n9).iProvinceID);
-                        for (int j = 1; j < list3.size(); ++j) {
-                            if (n11 >= CFG.gameAction.gMARY(list3.get((int)j).iProvinceID)) continue;
-                            n9 = j;
-                            n11 = CFG.gameAction.gMARY(list3.get((int)j).iProvinceID);
-                        }
-                        n10 = n9;
-                    } else {
-                        n10 = CFG.oR.nextInt(list3.size());
-                    }
-                    n8 = Math.min(CFG.gameAction.gMARY(list3.get((int)n10).iProvinceID, n), ((AI_ProvinceInfo_War)arrayList.get(i)).getRecruitableArmy(n));
-                    if (civilization.recruitArmy_AI(list3.get((int)n10).iProvinceID, n8)) {
-                        bl2 = true;
-                    }
-                    if ((n7 = (int)civilization.getRecruitArmy_BasedOnProvinceID(list3.get((int)n10).iProvinceID)) <= 0) continue;
-                    civilization.civGD.civPlans.armiesMissions.add(new CivArmyMission_RegroupAfterRecruitment_War(n, list3.get((int)n10).iProvinceID, ((AI_ProvinceInfo_War)arrayList.get((int)i)).iProvinceID, n7));
-                    continue;
-                }
-                if (bl) continue;
-                n7 = 1;
-                for (n8 = civilization.civGD.civPlans.armiesMissions.size() - 1; n8 >= 0; --n8) {
-                    if (civilization.civGD.civPlans.armiesMissions.get((int)n8).MISSION_TYPE != CivArmyMission_Type.NAVAL_INVASION || civilization.civGD.civPlans.armiesMissions.get((int)n8).toProvinceID != ((AI_ProvinceInfo_War)arrayList.get((int)i)).iProvinceID) continue;
-                    n7 = 0;
+        if (!bl && civ.getCapitalProvID() >= 0 && CFG.core.getProv(civ.getCapitalProvID()).getCivId() == n && CFG.core.getProv(civ.getCapitalProvID()).getNeighSeaProvincesSize() > 0) {
+            boolean hasCapital = false;
+            for (int i = list.size() - 1; i >= 0; --i) {
+                if (list.get(i).iProvinceID == civ.getCapitalProvID()) {
+                    hasCapital = true;
                     break;
                 }
-                if (n7 == 0) continue;
-                n8 = ((AI_ProvinceInfo_War)arrayList.get((int)i)).iProvinceID;
-                if (CFG.core.getProv(((AI_ProvinceInfo_War)arrayList.get((int)i)).iProvinceID).getNeighSeaProvincesSize() == 0) {
-                    n10 = 0;
-                    for (n9 = 0; n9 < CFG.core.getProv(((AI_ProvinceInfo_War)arrayList.get((int)i)).iProvinceID).getNeighSeaProvincesSize(); ++n9) {
-                        if (CFG.core.getProv(CFG.core.getProv(((AI_ProvinceInfo_War)arrayList.get((int)i)).iProvinceID).getNeighProvinces(n9)).getLvlOfPort() < 0 || CFG.core.getProv(CFG.core.getProv(((AI_ProvinceInfo_War)arrayList.get((int)i)).iProvinceID).getNeighProvinces(n9)).getCivId() != n && !CFG.core.getCivsAtWar(n, CFG.core.getProv(CFG.core.getProv(((AI_ProvinceInfo_War)arrayList.get((int)i)).iProvinceID).getNeighProvinces(n9)).getCivId())) continue;
-                        if (n10 != 0) {
-                            if (CFG.oR.nextInt(100) >= 50) continue;
-                            n8 = CFG.core.getProv(((AI_ProvinceInfo_War)arrayList.get((int)i)).iProvinceID).getNeighProvinces(n9);
-                            continue;
+            }
+            if (!hasCapital) {
+                list.add(new AI_ProvinceInfo_War(civ.getCapitalProvID(), this.getPotential_BasedOnNeighboringProvs(civ.getCapitalProvID(), n), true));
+            }
+        }
+        
+        int limit = Math.min(list.size(), Math.max(1, civ.getNumOfProvs()));
+        boolean recruited = false;
+        for (int i = 0; i < limit && civ.getGold() > 0L && civ.getMovemPoints() >= recruitCost; i++) {
+            int frontProvinceID = list.get(i).iProvinceID;
+            int recruitProvinceID = frontProvinceID;
+            boolean fromFallback = false;
+            
+            if (CFG.core.getProv(frontProvinceID).isOccupied() || CFG.core.getProv(frontProvinceID).getCivId() != n || !this.isValidAIWarRecruitProvince(n, frontProvinceID)) {
+                List<AI_NeighProvinces> neighbors = CFG.oAI.getAllNeighboringProvincesInRange_RecruitAtWAr(frontProvinceID, n, Math.max(10, civ.getNumOfProvs() / 8), true, false, new ArrayList<AI_NeighProvinces>(), new ArrayList<Integer>());
+                neighbors = this.filterAIWarRecruitProvinces(n, neighbors);
+                if (neighbors.isEmpty()) {
+                    if (bl) continue;
+                    // Check for naval invasion mission
+                    boolean hasNavalMission = false;
+                    for (int mi = civ.civGD.civPlans.armiesMissions.size() - 1; mi >= 0; --mi) {
+                        if (civ.civGD.civPlans.armiesMissions.get(mi).MISSION_TYPE == CivArmyMission_Type.NAVAL_INVASION && civ.civGD.civPlans.armiesMissions.get(mi).toProvinceID == frontProvinceID) {
+                            hasNavalMission = true;
+                            break;
                         }
-                        n8 = CFG.core.getProv(((AI_ProvinceInfo_War)arrayList.get((int)i)).iProvinceID).getNeighProvinces(n9);
-                        n10 = 1;
                     }
-                }
-                if (GameValues.gvAiWar.USE_NEW_NAVAL_INVASION) {
-                    this.moveAtWar_AtSea_ToProvinceID_New(n, n8);
+                    if (hasNavalMission) continue;
+                    int seaProvID = frontProvinceID;
+                    if (CFG.core.getProv(frontProvinceID).getNeighSeaProvincesSize() == 0) {
+                        int pick = 0;
+                        for (int ni = 0; ni < CFG.core.getProv(frontProvinceID).getNeighProvincesSize(); ++ni) {
+                            int nid = CFG.core.getProv(frontProvinceID).getNeighProvinces(ni);
+                            if (CFG.core.getProv(nid).getLvlOfPort() < 0 || (CFG.core.getProv(nid).getCivId() != n && !CFG.core.getCivsAtWar(n, CFG.core.getProv(nid).getCivId()))) continue;
+                            if (pick != 0) {
+                                if (CFG.oR.nextInt(100) >= 50) continue;
+                                seaProvID = nid;
+                                continue;
+                            }
+                            seaProvID = nid;
+                            pick = 1;
+                        }
+                    }
+                    if (GameValues.gvAiWar.USE_NEW_NAVAL_INVASION) {
+                        this.moveAtWar_AtSea_ToProvinceID_New(n, seaProvID);
+                    } else {
+                        this.moveAtWar_AtSea_ToProvinceID(n, seaProvID);
+                    }
                     continue;
                 }
-                this.moveAtWar_AtSea_ToProvinceID(n, n8);
-                continue;
+                int bestID = 0;
+                int bestRecruitable = CFG.gameAction.gMARY(neighbors.get(0).iProvinceID, n);
+                for (int j = 1; j < neighbors.size(); ++j) {
+                    int rec = CFG.gameAction.gMARY(neighbors.get(j).iProvinceID, n);
+                    if (bestRecruitable >= rec) continue;
+                    bestID = j;
+                    bestRecruitable = rec;
+                }
+                recruitProvinceID = neighbors.get(bestID).iProvinceID;
+                fromFallback = true;
             }
-            int recruitProvinceID = ((AI_ProvinceInfo_War)arrayList.get((int)i)).iProvinceID;
-            if (!this.isValidAIWarRecruitProvince(n, recruitProvinceID)) {
-                AI_NeighProvinces fallbackRecruitProvince = this.getBestAIWarRecruitProvince(n, recruitProvinceID, 5);
-                if (fallbackRecruitProvince == null) continue;
-                recruitProvinceID = fallbackRecruitProvince.iProvinceID;
-            }
-            int n12 = (int)((float)Math.min(n4, Math.min((long)n4, currentGold_War / (long)(CFG.core.getProv(recruitProvinceID).getLvlOfArmoury() > 0 ? GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT - 1 : GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT))) * ((AI_ProvinceInfo_War)arrayList.get((int)i)).iValue / f);
-            if (!civilization.recruitArmy_AI(recruitProvinceID, n12)) continue;
-            if (recruitProvinceID != ((AI_ProvinceInfo_War)arrayList.get((int)i)).iProvinceID) {
-                int recruitedArmy = (int)civilization.getRecruitArmy_BasedOnProvinceID(recruitProvinceID);
-                if (recruitedArmy > 0) {
-                    civilization.civGD.civPlans.armiesMissions.add(new CivArmyMission_RegroupAfterRecruitment_War(n, recruitProvinceID, ((AI_ProvinceInfo_War)arrayList.get((int)i)).iProvinceID, recruitedArmy));
+            
+            long recruitable = CFG.gameAction.gMARY(recruitProvinceID, n);
+            if (recruitable <= 0) continue;
+            long costPerUnit = Math.max(1L, (long)CFG.gCARR(recruitProvinceID, n));
+            if (civ.getGold() < costPerUnit) continue;
+            long toRecruit = Math.min(recruitable, civ.getGold() / costPerUnit);
+            if (toRecruit <= 0) continue;
+            
+            if (civ.recruitArmy_AI(recruitProvinceID, toRecruit)) {
+                recruited = true;
+                if (fromFallback || recruitProvinceID != frontProvinceID) {
+                    int recruitedArmy = (int)civ.getRecruitArmy_BasedOnProvinceID(recruitProvinceID);
+                    if (recruitedArmy > 0) {
+                        civ.civGD.civPlans.armiesMissions.add(new CivArmyMission_RegroupAfterRecruitment_War(n, recruitProvinceID, frontProvinceID, recruitedArmy));
+                    }
                 }
             }
-            bl2 = true;
         }
-        if (bl2 && civilization.getGold() < (long)(GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT * 5)) {
-            civilization.civGD.moveAtWar_ArmyFullyRecruitedLastTurn = true;
+        if (recruited && civ.getGold() < (long)(GameValues.gvArmyRecruit.COST_OF_RECRUIT_ARMY_GOLD_PER_UNIT * 5)) {
+            civ.civGD.moveAtWar_ArmyFullyRecruitedLastTurn = true;
         }
         this.billionaireRecruitment(n);
     }

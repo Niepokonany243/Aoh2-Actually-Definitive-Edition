@@ -41,6 +41,7 @@ import age.of.civilizations2.jakowski.lukasz.Province;
 import age.of.civilizations2.jakowski.lukasz.Save.SaveGameManager;
 import com.badlogic.gdx.Gdx;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -115,11 +116,8 @@ extends Thread {
                     @Override
                     public void run() {
                         try {
-                            for (int i = 1; i < CFG.core.getCivsSize(); ++i) {
-                                Civilization civ = CFG.core.getCiv(i);
-                                if (civ != null) {
-                                    civ.setCivName(civ.getCivName());
-                                }
+                            for (int i = CFG.core.getNextAliveCiv(1); i >= 0; i = CFG.core.getNextAliveCiv(i + 1)) {
+                                CFG.core.getCiv(i).setCivName(CFG.core.getCiv(i).getCivName());
                             }
                             CFG.menus.updateLang();
                         } catch (Exception ex) {
@@ -132,10 +130,14 @@ extends Thread {
             CFG.gameUpdate.updateCivs_Money();
             long perfNow = System.currentTimeMillis(); if (perfNow - perfMark > 50) { CFG.LOG("PERF", "[doAction] updateCivs_Money: " + (perfNow - perfMark) + "ms"); } perfMark = perfNow;
 
-            for (int civIndex = 1; civIndex < CFG.core.getCivsSize(); ++civIndex) {
+            int[] playerCivToIdx = new int[CFG.core.getCivsSize()];
+            for (int pIdx = 0; pIdx < CFG.core.getPlayersSize(); ++pIdx) {
+                playerCivToIdx[CFG.core.getPlayer(pIdx).getCivId()] = pIdx;
+            }
+
+            for (int civIndex = CFG.core.getAliveCivCount() > 0 ? CFG.core.getNextAliveCiv(1) : -1; civIndex >= 0; civIndex = CFG.core.getNextAliveCiv(civIndex + 1)) {
                 try {
                     Civilization civI = CFG.core.getCiv(civIndex);
-                    if (civI == null || (civI.getNumOfProvs() <= 0 && civI.getGold() <= 0 && civI.getNumberOfUnits() <= 0)) continue;
 
                     civI.runFestivals();
                     civI.runInvests_Development();
@@ -155,22 +157,9 @@ extends Thread {
                     civI.updateRevolutionaryTransition();
 
                     if (!CFG.SPECTATOR_MODE) {
-                        for (int pIdx = 0; pIdx < CFG.core.getPlayersSize(); ++pIdx) {
-                            if (CFG.core.getPlayer(pIdx).getCivId() == civIndex) {
-                                if (civI.getNumOfProvs() > 0) {
-                                    CFG.core.getPlayer((int)pIdx).statsCiv.setTurns(CFG.core.getPlayer((int)pIdx).statsCiv.getTurns() + 1);
-                                }
-                            }
-                        }
-                    }
-                    
-                    if (civI.getNumOfProvs() > 0) {
-                        for (int j = civI.provincesWithLowStability.size() - 1; j >= 0; --j) {
-                            int provID = civI.provincesWithLowStability.get(j);
-                            Province p = CFG.core.getProv(provID);
-                            if (p.getProviStability() < GameValues.gvRebels.RISE_REVOLT_RISK_IN_PROVINCE_IF_STABILITY_BELOW && !p.isOccupied() && p.getRevRisk() < 0.55f) {
-                                p.setRevRisk(p.getRevRisk() + ageRiskModifier * (GameValues.gvRebels.RISE_REVOLT_RISK_IN_PROVINCE_IF_STABILITY_BELOW - p.getProviStability()) * 0.0155f);
-                            }
+                        int pIdx = playerCivToIdx[civIndex];
+                        if (pIdx > 0) {
+                            CFG.core.getPlayer(pIdx).statsCiv.setTurns(CFG.core.getPlayer(pIdx).statsCiv.getTurns() + 1);
                         }
                     }
                 } catch (Exception ex) {}
@@ -259,7 +248,9 @@ extends Thread {
                         catch (Exception exception) {}
                     }
                     
-                    if (pCiv.getCapitalProvID() >= 0 && (CFG.core.getProv(pCiv.getCapitalProvID()).getCivId() == pCivID || CFG.core.getProv(pCiv.getCapitalProvID()).isOccupied())) continue;
+                    if (pCiv.getCapitalProvID() < 0) continue;
+                    Province capitalProv = CFG.core.getProv(pCiv.getCapitalProvID());
+                    if (capitalProv.getCivId() == pCivID || capitalProv.isOccupied()) continue;
                     pCiv.getCivDiploGD().messageBox.addMessage(new Message_RelocateCapital(pCivID));
                 }
             }
@@ -276,10 +267,6 @@ extends Thread {
             Core.updateOverInvestment();
             GameManager.checkCivsHatedCivilizations_IfStillExists();
             GameManager.updatePlayersFriendlyCivs();
-            
-            for (int warID = 0; warID < CFG.core.getWarsSize(); ++warID) {
-                CFG.core.getWar(warID).iLastFight_InTurns++;
-            }
             
             NewTurn.updateProvinceVolunteerArmySent();
             try {
@@ -313,132 +300,116 @@ extends Thread {
             for (int i = 0; i < CFG.core.getPlayersSize(); ++i) {
                 Player player = CFG.core.getPlayer(i);
                 if (player == null || player.playerGD == null) continue;
-                
-                boolean useNew = player.playerGD.migrationOrders != null && !player.playerGD.migrationOrders.isEmpty();
-                boolean useOld = !useNew && player.playerGD.migrationF != null && !player.playerGD.migrationF.isEmpty();
+
+                List<MigrationOrder> migrationOrders = player.playerGD.migrationOrders;
+                List<Integer> migrationF = player.playerGD.migrationF;
+                boolean useNew = migrationOrders != null && !migrationOrders.isEmpty();
+                boolean useOld = !useNew && migrationF != null && !migrationF.isEmpty();
                 if (!useNew && !useOld) continue;
-                
+
                 int playerCivID = player.getCivId();
                 Civilization playerCiv = CFG.core.getCiv(playerCivID);
                 if (playerCiv == null) continue;
-                
+                if (playerCiv.getNumOfProvs() <= 0) continue;
+
+                Map<Integer, Integer> orderByNatCivID = useNew ? new HashMap<Integer, Integer>() : new HashMap<Integer, Integer>();
+                boolean[] completedNew = useNew ? new boolean[migrationOrders.size()] : null;
+                boolean[] completedOld = useOld ? new boolean[migrationF.size()] : null;
+                int[] origTargetCivIDs = null;
                 if (useNew) {
-                    List<MigrationOrder> migrationOrders = player.playerGD.migrationOrders;
-                    boolean[] removed = new boolean[migrationOrders.size()];
-                    for(int r = 0; r < removed.length; r++) removed[r] = true;
-                    
-                    for (int k = 0; k < playerCiv.getNumOfProvs(); ++k) {
-                        int provID = playerCiv.getProvID(k);
-                        Province province = CFG.core.getProv(provID);
-                        Province_Population pop = province.getPop();
-                        
-                        for (int o = pop.getNatsSize() - 1; o >= 0; --o) {
-                            int natCivID = pop.getCivID(o);
-                            long maxPop = pop.getPopulationID(o);
-                            if (maxPop <= 0) continue;
-                            
-                            for(int m = 0; m < migrationOrders.size(); m++) {
-                                MigrationOrder order = migrationOrders.get(m);
-                                if (order.getNationalityCivID() == natCivID) {
-                                    int popTM = (int)Math.min((float)maxPop, Math.max((float)GameValues.gvPopRelocate.MIGRATE_MIN, (float)maxPop * GameValues.gvPopRelocate.MIGRATE_PERC));
-                                    float perc = (float)popTM / (float)pop.getPops();
-                                    
-                                    province.setEco((int)((float)province.getEco() * (1.0f - perc * GameValues.gvPopRelocate.MIGRATE_ECO_MODIFIER)));
-                                    province.setRevRisk(province.getRevRisk() + perc * GameValues.gvPopRelocate.MIGRATE_REV_RISK_MODIFIER);
-                                    pop.setPopulationOfCivID(natCivID, pop.getPopulationID(o) - popTM);
-                                    
-                                    int targetCivID = order.getTargetCivID();
-                                    if (targetCivID > 0 && CFG.core.getCiv(targetCivID).getNumOfProvs() > 0) {
-                                        int toPr = CFG.core.getCiv(targetCivID).getProvID(ThreadLocalRandom.current().nextInt(CFG.core.getCiv(targetCivID).getNumOfProvs()));
-                                        CFG.core.getProv(toPr).getPop().setPopulationOfCivID(natCivID, CFG.core.getProv(toPr).getPop().getPopulationOfCivID(natCivID) + popTM);
-                                    } else {
-                                        Civilization natCiv = CFG.core.getCiv(natCivID);
-                                        if (natCiv.getNumOfProvs() > 0) {
-                                            int toPr = natCiv.getProvID(ThreadLocalRandom.current().nextInt(natCiv.getNumOfProvs()));
-                                            CFG.core.getProv(toPr).getPop().setPopulationOfCivID(natCivID, CFG.core.getProv(toPr).getPop().getPopulationOfCivID(natCivID) + popTM);
-                                        } else {
-                                            for (int y = 0; y < 25; ++y) {
-                                                int rand = ThreadLocalRandom.current().nextInt(CFG.core.getProvinSize());
-                                                Province randProv = CFG.core.getProv(rand);
-                                                if (randProv.getSeaProv() || randProv.getWastelandLvl() >= 0) continue;
-                                                randProv.getPop().setPopulationOfCivID(natCivID, randProv.getPop().getPopulationOfCivID(natCivID) + popTM);
-                                                break;
-                                            }
-                                        }
-                                    }
-                                    removed[m] = false;
-                                }
+                    origTargetCivIDs = new int[migrationOrders.size()];
+                    for (int m = 0; m < migrationOrders.size(); ++m) {
+                        MigrationOrder ord = migrationOrders.get(m);
+                        orderByNatCivID.put(ord.getNationalityCivID(), m);
+                        origTargetCivIDs[m] = ord.getTargetCivID();
+                    }
+                } else {
+                    for (int m = 0; m < migrationF.size(); ++m) {
+                        orderByNatCivID.put(migrationF.get(m), m);
+                    }
+                }
+
+                for (int k = 0; k < playerCiv.getNumOfProvs(); ++k) {
+                    int provID = playerCiv.getProvID(k);
+                    Province province = CFG.core.getProv(provID);
+                    Province_Population pop = province.getPop();
+
+                    for (int o = pop.getNatsSize() - 1; o >= 0; --o) {
+                        int natCivID = pop.getCivID(o);
+                        long maxPop = pop.getPopulationID(o);
+                        if (maxPop <= 0) continue;
+
+                        int orderIdx = -1;
+                        int targetCivID = -1;
+                        if (useNew) {
+                            Integer idx = orderByNatCivID.get(natCivID);
+                            if (idx == null) continue;
+                            orderIdx = idx;
+                            targetCivID = migrationOrders.get(orderIdx).getTargetCivID();
+                        } else {
+                            Integer idx = orderByNatCivID.get(natCivID);
+                            if (idx == null) continue;
+                            orderIdx = idx;
+                        }
+
+                        int popTM = (int)Math.min((float)maxPop, Math.max((float)GameValues.gvPopRelocate.MIGRATE_MIN, (float)maxPop * GameValues.gvPopRelocate.MIGRATE_PERC));
+                        float perc = (float)popTM / (float)pop.getPops();
+
+                        province.setEco((int)((float)province.getEco() * (1.0f - perc * GameValues.gvPopRelocate.MIGRATE_ECO_MODIFIER)));
+                        province.setRevRisk(province.getRevRisk() + perc * GameValues.gvPopRelocate.MIGRATE_REV_RISK_MODIFIER);
+                        pop.setPopulationOfCivID(natCivID, pop.getPopulationID(o) - popTM);
+
+                        if (useNew && targetCivID > 0 && CFG.core.isAlive(targetCivID)) {
+                            Civilization targetCiv = CFG.core.getCiv(targetCivID);
+                            int toPr = targetCiv.getProvID(ThreadLocalRandom.current().nextInt(targetCiv.getNumOfProvs()));
+                            CFG.core.getProv(toPr).getPop().setPopulationOfCivID(natCivID, CFG.core.getProv(toPr).getPop().getPopulationOfCivID(natCivID) + popTM);
+                        } else if (CFG.core.isAlive(natCivID)) {
+                            Civilization natCiv = CFG.core.getCiv(natCivID);
+                            int toPr = natCiv.getProvID(ThreadLocalRandom.current().nextInt(natCiv.getNumOfProvs()));
+                            CFG.core.getProv(toPr).getPop().setPopulationOfCivID(natCivID, CFG.core.getProv(toPr).getPop().getPopulationOfCivID(natCivID) + popTM);
+                        } else {
+                            for (int y = 0; y < 3; ++y) {
+                                int rand = ThreadLocalRandom.current().nextInt(CFG.core.getProvinSize());
+                                Province randProv = CFG.core.getProv(rand);
+                                if (randProv.getSeaProv() || randProv.getWastelandLvl() >= 0) continue;
+                                randProv.getPop().setPopulationOfCivID(natCivID, randProv.getPop().getPopulationOfCivID(natCivID) + popTM);
+                                break;
                             }
                         }
+
+                        if (useNew) {
+                            completedNew[orderIdx] = true;
+                        } else {
+                            completedOld[orderIdx] = true;
+                        }
                     }
-                    
-                    for(int m = migrationOrders.size() - 1; m >= 0; m--) {
+                }
+
+                if (useNew) {
+                    for (int m = migrationOrders.size() - 1; m >= 0; --m) {
                         MigrationOrder order = migrationOrders.get(m);
                         int natCivID = order.getNationalityCivID();
-                        int targetCivID = order.getTargetCivID();
-                        
+                        int targetCivID = origTargetCivIDs[m];
+
                         CFG.core.getCiv(natCivID).setRelationD(playerCivID, CFG.core.getCiv(natCivID).getRelationD(playerCivID) + GameValues.gvPopRelocate.MIGRATE_RELATIONS_CHANGE_PER_TURN);
                         CFG.core.getCiv(playerCivID).setRelationD(natCivID, CFG.core.getCiv(playerCivID).getRelationD(natCivID) + GameValues.gvPopRelocate.MIGRATE_RELATIONS_CHANGE_PER_TURN);
-                        
+
                         if (targetCivID > 0 && targetCivID != natCivID) {
                             CFG.core.getCiv(targetCivID).setRelationD(playerCivID, CFG.core.getCiv(targetCivID).getRelationD(playerCivID) + GameValues.gvPopRelocate.MIGRATE_DEPORT_TARGET_RELATIONS_CHANGE_PER_TURN);
                             CFG.core.getCiv(playerCivID).setRelationD(targetCivID, CFG.core.getCiv(playerCivID).getRelationD(targetCivID) + GameValues.gvPopRelocate.MIGRATE_DEPORT_TARGET_RELATIONS_CHANGE_PER_TURN);
                         }
-                        
-                        if (removed[m]) {
-                            CFG.core.getCiv(playerCivID).getCivDiploGD().messageBox.addMessage(new Message_MigrationComplete(natCivID, targetCivID));
+
+                        if (!completedNew[m]) {
+                            CFG.core.getCiv(playerCivID).getCivDiploGD().messageBox.addMessage(new Message_MigrationComplete(natCivID, Math.max(targetCivID, 0)));
                             player.playerGD.migrationOrders.remove(m);
                         }
                     }
                 } else {
-                    List<Integer> migrationF = player.playerGD.migrationF;
-                    boolean[] removed = new boolean[migrationF.size()];
-                    for(int r = 0; r < removed.length; r++) removed[r] = true;
-                    
-                    for (int k = 0; k < playerCiv.getNumOfProvs(); ++k) {
-                        int provID = playerCiv.getProvID(k);
-                        Province province = CFG.core.getProv(provID);
-                        Province_Population pop = province.getPop();
-                        
-                        for (int o = pop.getNatsSize() - 1; o >= 0; --o) {
-                            int natCivID = pop.getCivID(o);
-                            long maxPop = pop.getPopulationID(o);
-                            if (maxPop <= 0) continue;
-                            
-                            for(int m = 0; m < migrationF.size(); m++) {
-                                if (migrationF.get(m) == natCivID) {
-                                    int popTM = (int)Math.min((float)maxPop, Math.max((float)GameValues.gvPopRelocate.MIGRATE_MIN, (float)maxPop * GameValues.gvPopRelocate.MIGRATE_PERC));
-                                    float perc = (float)popTM / (float)pop.getPops();
-                                    
-                                    province.setEco((int)((float)province.getEco() * (1.0f - perc * GameValues.gvPopRelocate.MIGRATE_ECO_MODIFIER)));
-                                    province.setRevRisk(province.getRevRisk() + perc * GameValues.gvPopRelocate.MIGRATE_REV_RISK_MODIFIER);
-                                    pop.setPopulationOfCivID(natCivID, pop.getPopulationID(o) - popTM);
-                                    
-                                    Civilization natCiv = CFG.core.getCiv(natCivID);
-                                    if (natCiv.getNumOfProvs() > 0) {
-                                        int toPr = natCiv.getProvID(ThreadLocalRandom.current().nextInt(natCiv.getNumOfProvs()));
-                                        CFG.core.getProv(toPr).getPop().setPopulationOfCivID(natCivID, CFG.core.getProv(toPr).getPop().getPopulationOfCivID(natCivID) + popTM);
-                                    } else {
-                                        for (int y = 0; y < 25; ++y) {
-                                            int rand = ThreadLocalRandom.current().nextInt(CFG.core.getProvinSize());
-                                            Province randProv = CFG.core.getProv(rand);
-                                            if (randProv.getSeaProv() || randProv.getWastelandLvl() >= 0) continue;
-                                            randProv.getPop().setPopulationOfCivID(natCivID, randProv.getPop().getPopulationOfCivID(natCivID) + popTM);
-                                            break;
-                                        }
-                                    }
-                                    removed[m] = false;
-                                }
-                            }
-                        }
-                    }
-                    
-                    for(int m = migrationF.size() - 1; m >= 0; m--) {
+                    for (int m = migrationF.size() - 1; m >= 0; --m) {
                         int targetCiv = migrationF.get(m);
                         CFG.core.getCiv(targetCiv).setRelationD(playerCivID, CFG.core.getCiv(targetCiv).getRelationD(playerCivID) + GameValues.gvPopRelocate.MIGRATE_RELATIONS_CHANGE_PER_TURN);
                         CFG.core.getCiv(playerCivID).setRelationD(targetCiv, CFG.core.getCiv(playerCivID).getRelationD(targetCiv) + GameValues.gvPopRelocate.MIGRATE_RELATIONS_CHANGE_PER_TURN);
-                        
-                        if (removed[m]) {
+                        if (!completedOld[m]) {
                             CFG.core.getCiv(playerCivID).getCivDiploGD().messageBox.addMessage(new Message_MigrationComplete(targetCiv, -1));
                             player.playerGD.migrationF.remove(m);
                         }
@@ -490,7 +461,7 @@ extends Thread {
             }
             CFG.gameAction.moveRegroupArmy();
             long perfNow = System.currentTimeMillis(); if (perfNow - perfMark > 50) { CFG.LOG("PERF", "[doAction_End] moveRegroupArmy: " + (perfNow - perfMark) + "ms"); } perfMark = perfNow;
-            for (int civID = 1; civID < CFG.core.getCivsSize(); ++civID) {
+            for (int civID = CFG.core.getNextAliveCiv(1); civID >= 0; civID = CFG.core.getNextAliveCiv(civID + 1)) {
                 if (CFG.core.getCiv(civID).getUpdateRegions()) {
                     final int id = civID;
                     Core.addSimpleTask(new Core.SimpleTask("buildCivilizationRegions" + id, id){
@@ -541,8 +512,9 @@ extends Thread {
     public static void updateNukes() {
         try {
             Parallel.range(1, CFG.core.getCivsSize(), (int i) -> {
+                if (!CFG.core.isAlive(i)) return;
                 Civilization civ = CFG.core.getCiv(i);
-                if (civ == null || civ.civGD == null || civ.civGD.nukesConstruction.isEmpty()) return;
+                if (civ.civGD.nukesConstruction.isEmpty()) return;
                 for (int a = civ.civGD.nukesConstruction.size() - 1; a >= 0; --a) {
                     civ.civGD.nukesConstruction.set(a, civ.civGD.nukesConstruction.get(a) - 1);
                     if (civ.civGD.nukesConstruction.get(a) <= 0) {
@@ -561,8 +533,8 @@ extends Thread {
         if (!CFG.settingsGD.MISSILES) return;
         try {
             Parallel.range(1, CFG.core.getCivsSize(), (int i) -> {
+                if (!CFG.core.isAlive(i)) return;
                 Civilization civ = CFG.core.getCiv(i);
-                if (civ == null || civ.civGD == null) return;
                 
                 if (civ.civGD.iMissiles > 0) {
                     civ.setGold(civ.getGold() - (long)((float)civ.civGD.iMissiles * GameValues.gvMissiles.MISSILE_MAINTENANCE_COST));
@@ -608,6 +580,7 @@ extends Thread {
         if (!CFG.settingsGD.AIR_DEFENCE_SYSTEMS) return;
         try {
             Parallel.range(1, CFG.core.getCivsSize(), (int i) -> {
+                if (!CFG.core.isAlive(i)) return;
                 Civilization civ = CFG.core.getCiv(i);
                 long maintenance = 0;
                 for (int a = 0; a < civ.getNumOfProvs(); a++) {
@@ -723,7 +696,7 @@ extends Thread {
     }
 
     public static final void updateGameData() {
-        if (happinessChange_ByTaxation == null || happinessChange_ByTaxation.size() != CFG.core.getCivsSize()) {
+        if (happinessChange_ByTaxation == null) {
             happinessChange_ByTaxation = new ArrayList<Float>(CFG.core.getCivsSize());
             happinessChange_ByTaxation_Occupied = new ArrayList<Float>(CFG.core.getCivsSize());
             goodsUpdate = new ArrayList<Float>(CFG.core.getCivsSize());
@@ -736,21 +709,27 @@ extends Thread {
                 devUpdate.add(1.0f);
                 ecoUpdate.add(1.0f);
             }
+        } else if (happinessChange_ByTaxation.size() < CFG.core.getCivsSize()) {
+            for (int i = happinessChange_ByTaxation.size(); i < CFG.core.getCivsSize(); ++i) {
+                happinessChange_ByTaxation.add(1.0f);
+                happinessChange_ByTaxation_Occupied.add(1.0f);
+                goodsUpdate.add(1.0f);
+                devUpdate.add(1.0f);
+                ecoUpdate.add(1.0f);
+            }
         }
         
         ageRiskModifier = CFG.gameAges.getAge_RevolutionaryRiskModifier(GameCalendar.CURRENT_AGEID);
         ageDevMod = CFG.gameAges.getAge_DevelopmentLevel_Increase(GameCalendar.CURRENT_AGEID);
 
-        for (int i2 = 1; i2 < CFG.core.getCivsSize(); ++i2) {
+        for (int i2 = CFG.core.getNextAliveCiv(1); i2 >= 0; i2 = CFG.core.getNextAliveCiv(i2 + 1)) {
             Civilization civ = CFG.core.getCiv(i2);
-            if (civ != null && civ.getNumOfProvs() > 0) {
-                happinessChange_ByTaxation.set(i2, CFG.gameUpdate.getHappinessChange_ByTaxation(i2));
-                happinessChange_ByTaxation_Occupied.set(i2, CFG.gameUpdate.getHappinessChange_ByTaxation_Occupied(i2));
-                goodsUpdate.set(i2, NewTurn.getGoodsUpdate(i2));
-                devUpdate.set(i2, civ.getSpendingInvestmentsB() < CFG.ideologiesMgr.getInvestments(civ.getIdeology(), i2) ? GameValues.gvEconomy.INVEST_UNDER_MIN_DEV_PENALTY * ((CFG.ideologiesMgr.getInvestments(civ.getIdeology(), i2) - civ.getSpendingInvestmentsB()) / (float)CFG.ideologiesMgr.getIdeologyID((int)civ.getIdeology()).MIN_INVESTMENTS) : -CFG.ideologiesMgr.getInvestments(civ.getIdeology(), i2) + GameValues.gvEconomy.INVEST_OVER_MIN_DEV_BASE + civ.getSpendingInvestmentsB());
-                ecoUpdate.set(i2, NewTurn.getInvestUpdate(i2));
-                civ.civGD.civAggressionLevel = Math.max(0.0f, civ.civGD.civAggressionLevel - GameValues.gvDiplomacy.CIV_AGGRESSION_DECAY_PER_TURN);
-            }
+            happinessChange_ByTaxation.set(i2, CFG.gameUpdate.getHappinessChange_ByTaxation(i2));
+            happinessChange_ByTaxation_Occupied.set(i2, CFG.gameUpdate.getHappinessChange_ByTaxation_Occupied(i2));
+            goodsUpdate.set(i2, NewTurn.getGoodsUpdate(i2));
+            devUpdate.set(i2, civ.getSpendingInvestmentsB() < CFG.ideologiesMgr.getInvestments(civ.getIdeology(), i2) ? GameValues.gvEconomy.INVEST_UNDER_MIN_DEV_PENALTY * ((CFG.ideologiesMgr.getInvestments(civ.getIdeology(), i2) - civ.getSpendingInvestmentsB()) / (float)CFG.ideologiesMgr.getIdeologyID((int)civ.getIdeology()).MIN_INVESTMENTS) : -CFG.ideologiesMgr.getInvestments(civ.getIdeology(), i2) + GameValues.gvEconomy.INVEST_OVER_MIN_DEV_BASE + civ.getSpendingInvestmentsB());
+            ecoUpdate.set(i2, NewTurn.getInvestUpdate(i2));
+            civ.civGD.civAggressionLevel = Math.max(0.0f, civ.civGD.civAggressionLevel - GameValues.gvDiplomacy.CIV_AGGRESSION_DECAY_PER_TURN);
         }
 
         NewTurn.updateNukes();
@@ -765,9 +744,15 @@ extends Thread {
         final float fScenarioStartingPopulation = scenarioStartingPopulation;
         final float fScenarioPopulationGrowthRateModifier = scenarioPopulationGrowthRateModifier;
         
+        final boolean updateNeutralArmy = GameCalendar.TURNID % GameValues.gvUpdate.UPDATE_NEUTRAL_ARMY == 0;
         Parallel.range(CFG.core.getProvinSize(), (int provIndex) -> {
             Province province = CFG.core.getProv(provIndex);
-            if (province == null || province.getSeaProv() || province.getWastelandLvl() >= 0 || province.getCivId() <= 0) return;
+            if (province == null || province.getSeaProv() || province.getWastelandLvl() >= 0) {
+                if (updateNeutralArmy && province.getCivId() == 0 && ThreadLocalRandom.current().nextInt(100) > GameValues.gvProvince.NEUTRAL_ARMY_UPDATE_CHANCE_100) {
+                    province.updateArmy4(0, province.getArmyCivID1(0) + (GameValues.gvProvince.NEUTRAL_ARMY_UPDATE_BASE + ThreadLocalRandom.current().nextInt(GameValues.gvProvince.NEUTRAL_ARMY_UPDATE_RANDOM)) * GameCalendar.TURNID % GameValues.gvUpdate.UPDATE_NEUTRAL_ARMY);
+                }
+                return;
+            }
             
             int civId = province.getCivId();
             Civilization provinceCiv = CFG.core.getCiv(civId);
@@ -831,15 +816,6 @@ extends Thread {
             }
             NewTurn.updateGameData_Province(provIndex, fModifiedStartingEco);
         });
-        
-        if (GameCalendar.TURNID % GameValues.gvUpdate.UPDATE_NEUTRAL_ARMY == 0) {
-            for (int i = 0; i < CFG.core.getProvinSize(); ++i) {
-                Province p = CFG.core.getProv(i);
-                if (!p.getSeaProv() && p.getWastelandLvl() < 0 && p.getCivId() == 0 && ThreadLocalRandom.current().nextInt(100) > GameValues.gvProvince.NEUTRAL_ARMY_UPDATE_CHANCE_100) {
-                    p.updateArmy4(0, p.getArmyCivID1(0) + (GameValues.gvProvince.NEUTRAL_ARMY_UPDATE_BASE + ThreadLocalRandom.current().nextInt(GameValues.gvProvince.NEUTRAL_ARMY_UPDATE_RANDOM)) * GameCalendar.TURNID % GameValues.gvUpdate.UPDATE_NEUTRAL_ARMY);
-                }
-            }
-        }
     }
 
     public static void updateGameData_Province(int iProvinceID, float modifiedStartingEco) {
@@ -921,14 +897,17 @@ extends Thread {
             }
             province.setRevRisk(fRisk);
         }
+        if (province.getProviStability() < GameValues.gvRebels.RISE_REVOLT_RISK_IN_PROVINCE_IF_STABILITY_BELOW && !province.isOccupied() && province.getRevRisk() < 0.55f) {
+            province.setRevRisk(province.getRevRisk() + ageRiskModifier * (GameValues.gvRebels.RISE_REVOLT_RISK_IN_PROVINCE_IF_STABILITY_BELOW - province.getProviStability()) * 0.0155f);
+        }
         province.runSupportRebels();
         province.updateNewColony();
     }
 
     public static void updateDiplomacy() {
         for (int i = 1; i < CFG.core.getCivsSize(); ++i) {
+            if (!CFG.core.isAlive(i)) continue;
             Civilization civI = CFG.core.getCiv(i);
-            if (civI == null || (civI.getNumOfProvs() <= 0 && civI.defensivePact.isEmpty() && civI.nonAggressionPact.isEmpty() && civI.guarantee.isEmpty() && civI.militaryAccess.isEmpty() && civI.truce.isEmpty())) continue;
             
             Civilization.DiplomacyData tData;
             Iterator<Map.Entry<Integer, Civilization.DiplomacyData>> it;
@@ -1023,9 +1002,8 @@ extends Thread {
     }
 
     public static void updateBuildingsConstruction() {
-        for (int i = 1; i < CFG.core.getCivsSize(); ++i) {
+        for (int i = CFG.core.getNextAliveCiv(1); i >= 0; i = CFG.core.getNextAliveCiv(i + 1)) {
             Civilization civ = CFG.core.getCiv(i);
-            if (civ == null || civ.civGD == null) continue;
             civ.runConstructions();
             if (civ.getGold() < (long)GameValues.gvTechnology.MIN_MONEY_REQUIRED_TO_ENABLE_RESEARCH) {
                 civ.setSpendingResearchB(0.0f);
@@ -1036,15 +1014,40 @@ extends Thread {
         }
         try {
             for (int a = 0; a < CFG.core.getPlayersSize(); ++a) {
-                if (CFG.core.getCiv(CFG.core.getPlayer(a).getCivId()).getNumOfProvs() <= 0) continue;
-                if (CFG.core.getCiv(CFG.core.getPlayer(a).getCivId()).getSpendingGoodsB() < CFG.ideologiesMgr.getIdeologyID(CFG.core.getCiv(CFG.core.getPlayer(a).getCivId()).getIdeology()).getMin_Goods(CFG.core.getPlayer(a).getCivId())) {
-                    CFG.core.getCiv((int)CFG.core.getPlayer((int)a).getCivId()).getCivDiploGD().messageBox.addMessage(new Message_GoodsLow(CFG.core.getPlayer(a).getCivId(), (int)(CFG.ideologiesMgr.getIdeologyID(CFG.core.getCiv(CFG.core.getPlayer(a).getCivId()).getIdeology()).getMin_Goods(CFG.core.getPlayer(a).getCivId()) * 100.0f)));
+                Civilization civ = CFG.core.getCiv(CFG.core.getPlayer(a).getCivId());
+                if (civ.getNumOfProvs() <= 0) continue;
+                int civID = CFG.core.getPlayer(a).getCivId();
+                Ideology ideology = CFG.ideologiesMgr.getIdeologyID(civ.getIdeology());
+                if (civ.getSpendingGoodsB() < ideology.getMin_Goods(civID)) {
+                    civ.getCivDiploGD().messageBox.addMessage(new Message_GoodsLow(civID, (int)(ideology.getMin_Goods(civID) * 100.0f)));
                 }
-                if (CFG.core.getCiv(CFG.core.getPlayer(a).getCivId()).getSpendingInvestmentsB() < CFG.ideologiesMgr.getInvestments(CFG.core.getCiv(CFG.core.getPlayer(a).getCivId()).getIdeology(), CFG.core.getPlayer(a).getCivId())) {
-                    CFG.core.getCiv((int)CFG.core.getPlayer((int)a).getCivId()).getCivDiploGD().messageBox.addMessage(new Message_InvestmentsLow(CFG.core.getPlayer(a).getCivId(), (int)(CFG.ideologiesMgr.getInvestments(CFG.core.getCiv(CFG.core.getPlayer(a).getCivId()).getIdeology(), CFG.core.getPlayer(a).getCivId()) * 100.0f)));
+                if (civ.getSpendingInvestmentsB() < CFG.ideologiesMgr.getInvestments(civ.getIdeology(), civID)) {
+                    civ.getCivDiploGD().messageBox.addMessage(new Message_InvestmentsLow(civID, (int)(CFG.ideologiesMgr.getInvestments(civ.getIdeology(), civID) * 100.0f)));
                 }
-                if (CFG.core.armyExpertisePointsLeft(CFG.core.getPlayer(a).getCivId()) <= 0) continue;
-                CFG.core.getCiv((int)CFG.core.getPlayer((int)a).getCivId()).getCivDiploGD().messageBox.addMessage(new Message_MilitaryExpPoints(CFG.core.getPlayer(a).getCivId()));
+                if (CFG.core.armyExpertisePointsLeft(civID) <= 0) continue;
+                civ.getCivDiploGD().messageBox.addMessage(new Message_MilitaryExpPoints(civID));
+            }
+        }
+        catch (Exception ex) {
+            CFG.exceptionStack(ex);
+        }
+    }
+
+    private static void updateForeignInvests_List(List<ForeignInvest> list, boolean isBuild) {
+        try {
+            for (int i = list.size() - 1; i >= 0; --i) {
+                if (GameCalendar.TURNID < list.get(i).returnTurnID) continue;
+                ForeignInvest inv = list.get(i);
+                Civilization civ = CFG.core.getCiv(inv.civID);
+                civ.setGold(civ.getGold() + (long)inv.gold);
+                if (civ.getIsPlayer()) {
+                    if (isBuild) {
+                        civ.getCivDiploGD().messageBox.addMessage(new Message_InvestBuildDoneForeign(inv.inCivID, inv.provinceID, inv.gold, inv.profit));
+                    } else {
+                        civ.getCivDiploGD().messageBox.addMessage(new Message_InvestDoneForeign(inv.inCivID, inv.provinceID, inv.gold, inv.profit));
+                    }
+                }
+                list.remove(i);
             }
         }
         catch (Exception ex) {
@@ -1053,39 +1056,11 @@ extends Thread {
     }
 
     public static void updateForeignInvests() {
-        try {
-            for (int i = CFG.core.investForeignGold.size() - 1; i >= 0; --i) {
-                if (GameCalendar.TURNID < CFG.core.investForeignGold.get((int)i).returnTurnID) continue;
-                ForeignInvest inv = CFG.core.investForeignGold.get(i);
-                Civilization civ = CFG.core.getCiv(inv.civID);
-                civ.setGold(civ.getGold() + (long)inv.gold);
-                if (civ.getIsPlayer()) {
-                    civ.getCivDiploGD().messageBox.addMessage(new Message_InvestDoneForeign(inv.inCivID, inv.provinceID, inv.gold, inv.profit));
-                }
-                CFG.core.investForeignGold.remove(i);
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
+        updateForeignInvests_List(CFG.core.investForeignGold, false);
     }
 
     public static void updateForeignBuildInvests() {
-        try {
-            for (int i = CFG.core.buildForeignGold.size() - 1; i >= 0; --i) {
-                if (GameCalendar.TURNID < CFG.core.buildForeignGold.get((int)i).returnTurnID) continue;
-                ForeignInvest inv = CFG.core.buildForeignGold.get(i);
-                Civilization civ = CFG.core.getCiv(inv.civID);
-                civ.setGold(civ.getGold() + (long)inv.gold);
-                if (civ.getIsPlayer()) {
-                    civ.getCivDiploGD().messageBox.addMessage(new Message_InvestBuildDoneForeign(inv.inCivID, inv.provinceID, inv.gold, inv.profit));
-                }
-                CFG.core.buildForeignGold.remove(i);
-            }
-        }
-        catch (Exception ex) {
-            CFG.exceptionStack(ex);
-        }
+        updateForeignInvests_List(CFG.core.buildForeignGold, true);
     }
 
     public static void updatePropaganda() {
@@ -1116,9 +1091,8 @@ extends Thread {
 
     public static void updateSanctions() {
         Parallel.range(1, CFG.core.getCivsSize(), (int i) -> {
-            Civilization civ = CFG.core.getCiv(i);
-            if (civ != null) {
-                civ.updateSanctionsTurns();
+            if (CFG.core.isAlive(i)) {
+                CFG.core.getCiv(i).updateSanctionsTurns();
             }
         });
     }
@@ -1232,9 +1206,9 @@ extends Thread {
     public static void updateWarWeariness() {
         try {
             Parallel.range(1, CFG.core.getCivsSize(), (int i) -> {
+                if (!CFG.core.isAlive(i)) return;
                 Civilization civ = CFG.core.getCiv(i);
-                if (civ != null && civ.getNumOfProvs() > 0) {
-                    if (civ.isAtWarC()) {
+                if (civ.isAtWarC()) {
                         boolean atWarWithOnlyRebels = true;
                         for (int a = 0; a < civ.isAtWarWithCivs.size(); ++a) {
                             int enemyID = civ.isAtWarWithCivs.get(a);
@@ -1250,7 +1224,6 @@ extends Thread {
                     } else {
                         civ.setWarWeariness(civ.getWarWeariness() - GameValues.gvWarWeariness.WAR_WEARINESS_PEACE_DECREASE);
                     }
-                }
             });
         }
         catch (Exception ex) {
@@ -1260,11 +1233,15 @@ extends Thread {
 
     public static void updateLibertyDesireMessages() {
         try {
-            if (GameCalendar.TURNID % GameValues.gvVassalLiberty.SEND_VASSALS_HIGH_LIBERTY_MESSAGE_EVERY_X_TURNS == 0) {
-                for (int i = 0; i < CFG.core.getPlayersSize(); ++i) {
-                    for (int j = 0; j < CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).civGD.iVassalsSize; ++j) {
-                        if (!(CFG.core.getCiv(CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).civGD.vassals.get((int)j).iCivID).getVassalLibertyDesire() > GameValues.gvVassalLiberty.MESSAGE_THE_PLAYER_IF_LIBERTY_OVER)) continue;
-                        CFG.core.getCiv((int)CFG.core.getPlayer((int)i).getCivId()).civGD.civDiploGD.messageBox.addMessage(new Message_VassalHighLiberty(CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).civGD.vassals.get((int)j).iCivID));
+            if (GameCalendar.TURNID % GameValues.gvVassalLiberty.SEND_VASSALS_HIGH_LIBERTY_MESSAGE_EVERY_X_TURNS != 0) return;
+            if (!CFG.SPECTATOR_MODE && CFG.PLAYER_TURN_ID >= 0) {
+                Civilization playerCiv = CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId());
+                if (playerCiv.getNumOfProvs() > 0) {
+                    for (int j = 0; j < playerCiv.civGD.iVassalsSize; ++j) {
+                        int vassalCivID = playerCiv.civGD.vassals.get(j).iCivID;
+                        if (CFG.core.getCiv(vassalCivID).getVassalLibertyDesire() > GameValues.gvVassalLiberty.MESSAGE_THE_PLAYER_IF_LIBERTY_OVER) {
+                            playerCiv.getCivDiploGD().messageBox.addMessage(new Message_VassalHighLiberty(vassalCivID));
+                        }
                     }
                 }
             }

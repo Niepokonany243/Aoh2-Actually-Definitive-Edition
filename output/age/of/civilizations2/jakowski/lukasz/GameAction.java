@@ -910,9 +910,9 @@ public class GameAction {
     }
 
     public final void updateCivsMovementPoints() {
-        Parallel.range(1, CFG.core.getCivsSize(), (int i) -> {
+        for (int i = CFG.core.getNextAliveCiv(1); i >= 0; i = CFG.core.getNextAliveCiv(i + 1)) {
             this.updateCivsMovementPoints(i);
-        });
+        }
     }
 
     public final void updateCivsMovementPoints(int nCivID) {
@@ -946,16 +946,16 @@ public class GameAction {
     }
 
     public final void updateCivsDiploPoints_StartTheGame() {
-        for (int i = 1; i < CFG.core.getCivsSize(); ++i) {
+        for (int i = CFG.core.getNextAliveCiv(1); i >= 0; i = CFG.core.getNextAliveCiv(i + 1)) {
             this.updateCivsDiploPoints(i);
             CFG.core.getCiv(i).setDiploPoints((int)Math.max((float)CFG.core.getCiv(i).getDiploPoints() * GameValues.gvDiplomacyPoints.DIPLOMACY_POINTS_START_GAME_MODIFIER, (float)GameValues.gvDiplomacyPoints.DIPLOMACY_POINTS_START_GAME_MAX));
         }
     }
 
     public final void updateCivsDiploPoints() {
-        Parallel.range(1, CFG.core.getCivsSize(), (int i) -> {
+        for (int i = CFG.core.getNextAliveCiv(1); i >= 0; i = CFG.core.getNextAliveCiv(i + 1)) {
             this.updateCivsDiploPoints(i);
-        });
+        }
     }
 
     public final void updateCivsDiploPoints(int nCivID) {
@@ -1235,7 +1235,21 @@ public class GameAction {
                             for (o = 0; o < this.currentMoveUnits.getMoveUnitsSize(); ++o) {
                                 attackingArmy += this.currentMoveUnits.getMoveUnits(o).getNumberOfUnits();
                             }
-                            if (attackingArmy < CFG.MIN_ARMY_REQUIRED_TO_ATTACK && CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId() > 0 && CFG.core.getCivsAtWar(civRTO, CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId())) {
+                        long required;
+                        if (GameValues.gvCombat.DYNAMIC_MIN_ARMY_ENABLED && CFG.settingsGD.DYNAMIC_MIN_ARMY) {
+                            int targetProvID = this.currentMoveUnits.getMoveUnits(0).getToProvID();
+                            long pop = CFG.core.getProv(targetProvID).getPop().getPops();
+                            float attackerPopPerc = pop > 0 ? (float)CFG.core.getProv(targetProvID).getPop().getPopulationOfCivID(civRTO) / (float)pop : 0f;
+                            float minPerc = attackerPopPerc > GameValues.gvCombat.DYNAMIC_MIN_ARMY_OWN_MAJORITY_THRESHOLD
+                                ? GameValues.gvCombat.DYNAMIC_MIN_ARMY_POP_PERCENT_OWNED_MAJORITY
+                                : GameValues.gvCombat.DYNAMIC_MIN_ARMY_POP_PERCENT;
+                            required = Math.max(1L, (long)Math.ceil((float)pop * minPerc));
+                        } else if (GameValues.gvCombat.DYNAMIC_MIN_ARMY_ENABLED) {
+                            required = Math.max(1L, CFG.MIN_ARMY_REQUIRED_TO_ATTACK);
+                        } else {
+                            required = 0;
+                        }
+                        if (required > 0 && attackingArmy < required && CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId() > 0 && CFG.core.getCivsAtWar(civRTO, CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId())) {
                                 this.currentMoveUnits = null;
                                 continue;
                             }
@@ -2106,8 +2120,12 @@ public class GameAction {
                                 }
                                 int battleProvID = this.currentMoveUnits.getMoveUnits(0).getToProvID();
                                 long mainAttackerRemaining = (long)Math.ceil((double)((Long)tempAttackersArmy.get(0)).longValue() / (double)tempNumOfUnits * (double)(attackersArmy - defendersArmy));
-                                boolean dynSkip = !checkDynamicMinArmy(battleProvID, ((Integer)tempAttackersCivID.get(0)).intValue(), mainAttackerRemaining);
-                                if (dynSkip) {
+                                int mainAttackerCivID = ((Integer)tempAttackersCivID.get(0)).intValue();
+                                if (!checkDynamicMinArmy(battleProvID, mainAttackerCivID, mainAttackerRemaining)) {
+                                    fromProvID = this.currentMoveUnits.getMoveUnits(0).getFromProviID();
+                                    CFG.core.getProv(battleProvID).updateArmy4(0L);
+                                    CFG.core.getProv(fromProvID).updateArmy4(mainAttackerCivID,
+                                        CFG.core.getProv(fromProvID).getArmyCivID1(mainAttackerCivID) + mainAttackerRemaining);
                                     if (battleProvID == CFG.core.getActiveProvID()) this.updateInGame_ProvinceInfo();
                                 } else if (CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() > 0 && CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).getCivId()).getIdeology()).REVOLUTIONARY) {
                                     if (CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() != this.currentMoveUnits.getCivID(0) && !CFG.core.getCivsAtWar(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), this.currentMoveUnits.getCivID(0))) {
@@ -2223,8 +2241,12 @@ public class GameAction {
                                 CFG.core.getCiv(this.currentMoveUnits.getCivID(0)).setNumberOfUnits(CFG.core.getCiv(this.currentMoveUnits.getCivID(0)).getNumberOfUnits() - defendersArmy);
                                 int battleProvID = this.currentMoveUnits.getMoveUnits(0).getToProvID();
                                 long attackerRemainingAfterBattle = Math.max(0L, attackersArmy - defendersArmy);
-                                boolean dynamicPopulationBlockedCapture = !checkDynamicMinArmy(battleProvID, this.currentMoveUnits.getCivID(0), attackerRemainingAfterBattle);
-                                if (dynamicPopulationBlockedCapture) {
+                                int attackerCivID = this.currentMoveUnits.getCivID(0);
+                                if (!checkDynamicMinArmy(battleProvID, attackerCivID, attackerRemainingAfterBattle)) {
+                                    fromProvID = this.currentMoveUnits.getMoveUnits(0).getFromProviID();
+                                    CFG.core.getProv(battleProvID).updateArmy4(0L);
+                                    CFG.core.getProv(fromProvID).updateArmy4(attackerCivID,
+                                        CFG.core.getProv(fromProvID).getArmyCivID1(attackerCivID) + attackerRemainingAfterBattle);
                                     if (battleProvID == CFG.core.getActiveProvID()) {
                                         this.updateInGame_ProvinceInfo();
                                     }
@@ -3669,17 +3691,15 @@ public class GameAction {
     }
 
     public final void updateRelations() {
-        for (int i = 1; i < CFG.core.getCivsSize(); ++i) {
+        for (int i = CFG.core.getNextAliveCiv(1); i >= 0; i = CFG.core.getNextAliveCiv(i + 1)) {
             if (i % GameValues.gvRelations.UPDATE_RELATIONS_DECAY_X_TURNS == GameCalendar.TURNID % GameValues.gvRelations.UPDATE_RELATIONS_DECAY_X_TURNS) {
-                if (CFG.core.getCiv(i).getNumOfProvs() > 0) {
-                    for (int j = 1; j < CFG.core.getCivsSize(); ++j) {
-                        if (i == j) continue;
-                        float relation = CFG.core.getCivRelationOfCivB(i, j);
-                        if (relation > (float)GameValues.gvRelations.RELATIONS_DECAY_MAX) {
-                            CFG.core.setCivRelationOfCivB(i, j, relation + GameValues.gvRelations.RELATIONS_DECAY_IF_POSITIVE);
-                        } else if (relation < (float)GameValues.gvRelations.RELATIONS_DECAY_MIN && !CFG.core.getCivsAtWar(i, j)) {
-                            CFG.core.setCivRelationOfCivB(i, j, relation + GameValues.gvRelations.RELATIONS_DECAY_IF_NEGATIVE);
-                        }
+                for (int j = CFG.core.getNextAliveCiv(1); j >= 0; j = CFG.core.getNextAliveCiv(j + 1)) {
+                    if (i == j) continue;
+                    float relation = CFG.core.getCivRelationOfCivB(i, j);
+                    if (relation > (float)GameValues.gvRelations.RELATIONS_DECAY_MAX) {
+                        CFG.core.setCivRelationOfCivB(i, j, relation + GameValues.gvRelations.RELATIONS_DECAY_IF_POSITIVE);
+                    } else if (relation < (float)GameValues.gvRelations.RELATIONS_DECAY_MIN && !CFG.core.getCivsAtWar(i, j)) {
+                        CFG.core.setCivRelationOfCivB(i, j, relation + GameValues.gvRelations.RELATIONS_DECAY_IF_NEGATIVE);
                     }
                 }
             }
@@ -4945,12 +4965,12 @@ public class GameAction {
 
     public final void updateCivsHappiness_New() {
         for (int i = 1 + GameCalendar.TURNID % GameValues.gvUpdate.UPDATE_CIV_HAPPINESS; i < CFG.core.getCivsSize(); i += GameValues.gvUpdate.UPDATE_CIV_HAPPINESS) {
-            this.updateCivsHappiness(i);
+            if (CFG.core.isAlive(i)) this.updateCivsHappiness(i);
         }
     }
 
     public final void updateCivsHappiness_AllCivs() {
-        for (int i = 1; i < CFG.core.getCivsSize(); ++i) {
+        for (int i = CFG.core.getNextAliveCiv(1); i >= 0; i = CFG.core.getNextAliveCiv(i + 1)) {
             this.updateCivsHappiness(i);
         }
     }
@@ -5372,48 +5392,22 @@ public class GameAction {
     }
 
     public final boolean checkDynamicMinArmy(int provinceID, int attackerCivID, long remainingArmy) {
-        if (!GameValues.gvCombat.DYNAMIC_MIN_ARMY_ENABLED || !CFG.settingsGD.DYNAMIC_MIN_ARMY) return true;
+        if (!GameValues.gvCombat.DYNAMIC_MIN_ARMY_ENABLED) return true;
         Province prov = CFG.core.getProv(provinceID);
         if (prov == null || prov.getSeaProv() || prov.getWastelandLvl() >= 0) return true;
         long pop = prov.getPop().getPops();
         if (pop <= 0 || remainingArmy <= 0L) return remainingArmy > 0L;
-        long required = Math.max(1L, (long)Math.ceil((float)pop * GameValues.gvCombat.DYNAMIC_MIN_ARMY_POP_PERCENT));
-        if (remainingArmy > required) return true;
-
-        float dev = prov.getDeveLvl();
-        float popMult;
-        if (dev < 0.1f) popMult = GameValues.gvCombat.DYNAMIC_POP_ARMY_DEV_LT_01;
-        else if (dev < 0.3f) popMult = GameValues.gvCombat.DYNAMIC_POP_ARMY_DEV_01_TO_03;
-        else if (dev < 0.5f) popMult = GameValues.gvCombat.DYNAMIC_POP_ARMY_DEV_04_TO_05;
-        else if (dev < 0.7f) popMult = GameValues.gvCombat.DYNAMIC_POP_ARMY_DEV_05_TO_07;
-        else popMult = GameValues.gvCombat.DYNAMIC_POP_ARMY_DEV_GT_07;
-
-        long effectivePopArmy = Math.max(1L, (long)Math.ceil((float)pop * popMult));
-        long effectiveAttacker = Math.max(1L, (long)Math.ceil((float)remainingArmy * Math.max(0.01f, GameValues.gvCombat.DYNAMIC_MIN_ARMY_ATTACKER_BONUS)));
-
-        if (CFG.settingsGD.EXPERIMENTAL_BATTLE_SYSTEM && effectivePopArmy > 0 && effectiveAttacker > 0) {
-            float ratio = (float)effectivePopArmy / (float)effectiveAttacker;
-            effectiveAttacker = Math.max(1, (long)((float)effectiveAttacker / Math.max(1.0f, ratio)));
-        }
-
-        if (effectiveAttacker <= effectivePopArmy) {
-            CFG.core.getProv(provinceID).updateArmy4(0L);
-            CFG.core.getCiv(attackerCivID).setNumberOfUnits(Math.max(0L, CFG.core.getCiv(attackerCivID).getNumberOfUnits() - remainingArmy));
-            return false;
-        }
-
-        long attackerLosses;
-        if (CFG.settingsGD.BAT_PLUS) {
-            float effRatio = (float)effectiveAttacker / Math.max(1.0f, (float)effectivePopArmy);
-            float diceMod = Math.max(0.65f, Math.min(1.45f, 1.0f + (float)(this.diceDefenders - this.diceAggressors) * 0.025f));
-            float attackerLossRate = Math.min(0.85f, Math.max(0.025f, 0.22f / (float)Math.sqrt(Math.max(0.05f, effRatio)))) * diceMod;
-            attackerLosses = remainingArmy > 1L ? Math.max(1L, Math.min(remainingArmy - 1L, (long)Math.ceil((double)remainingArmy * (double)attackerLossRate))) : 0L;
+        long required;
+        if (CFG.settingsGD.DYNAMIC_MIN_ARMY) {
+            float attackerPopPerc = pop > 0 ? (float)prov.getPop().getPopulationOfCivID(attackerCivID) / (float)pop : 0f;
+            float minPerc = attackerPopPerc > GameValues.gvCombat.DYNAMIC_MIN_ARMY_OWN_MAJORITY_THRESHOLD
+                ? GameValues.gvCombat.DYNAMIC_MIN_ARMY_POP_PERCENT_OWNED_MAJORITY
+                : GameValues.gvCombat.DYNAMIC_MIN_ARMY_POP_PERCENT;
+            required = Math.max(1L, (long)Math.ceil((float)pop * minPerc));
         } else {
-            attackerLosses = remainingArmy > 1L ? Math.max(1L, Math.min(remainingArmy - 1L, (long)Math.ceil((double)effectivePopArmy / (double)Math.max(1.0f, GameValues.gvCombat.DYNAMIC_MIN_ARMY_ATTACKER_BONUS)))) : 0L;
+            required = Math.max(1L, CFG.MIN_ARMY_REQUIRED_TO_ATTACK);
         }
-        CFG.core.getProv(provinceID).updateArmy4(Math.max(1L, remainingArmy - attackerLosses));
-        CFG.core.getCiv(attackerCivID).setNumberOfUnits(Math.max(0L, CFG.core.getCiv(attackerCivID).getNumberOfUnits() - attackerLosses));
-        return true;
+        return remainingArmy > required;
     }
 }
 

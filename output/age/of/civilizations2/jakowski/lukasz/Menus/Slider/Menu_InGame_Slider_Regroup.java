@@ -5,6 +5,7 @@ import age.of.civilizations2.jakowski.lukasz.Button.Game.Button_Game_Accept;
 import age.of.civilizations2.jakowski.lukasz.Button.Game.Button_Game_Decline;
 import age.of.civilizations2.jakowski.lukasz.Button.MenuElemUI;
 import age.of.civilizations2.jakowski.lukasz.CFG;
+import age.of.civilizations2.jakowski.lukasz.GameValues.GameValues;
 import age.of.civilizations2.jakowski.lukasz.IMGManager;
 import age.of.civilizations2.jakowski.lukasz.Images;
 import age.of.civilizations2.jakowski.lukasz.Menu;
@@ -108,9 +109,22 @@ extends Menu {
                         CFG.core.getCiv(moveCivID).addRegroupArmy(CFG.core.currentRegroupArmy);
                     }
                     try {
-                        if (this.getMenuElem(2).getCurr() < CFG.MIN_ARMY_REQUIRED_TO_ATTACK && CFG.core.getProv(CFG.chosenProvinceID).getCivId() > 0 && CFG.core.getCivsAtWar(moveCivID, CFG.core.getProv(CFG.chosenProvinceID).getCivId())) {
-                            CFG.toastM.addM(CFG.lang.get("MinArmyRequiredToAttack") + ": " + CFG.MIN_ARMY_REQUIRED_TO_ATTACK + " " + CFG.lang.get("Units"), CFG.COLOR_NEGATIVE_2);
-                            CFG.toastM.setTimeInView(3500);
+                        if (GameValues.gvCombat.DYNAMIC_MIN_ARMY_ENABLED) {
+                            long minRequired;
+                            if (CFG.settingsGD.DYNAMIC_MIN_ARMY) {
+                                long pop = CFG.core.getProv(CFG.chosenProvinceID).getPop().getPops();
+                                float attackerPopPerc = pop > 0 ? (float)CFG.core.getProv(CFG.chosenProvinceID).getPop().getPopulationOfCivID(moveCivID) / (float)pop : 0f;
+                                float minPerc = attackerPopPerc > GameValues.gvCombat.DYNAMIC_MIN_ARMY_OWN_MAJORITY_THRESHOLD
+                                    ? GameValues.gvCombat.DYNAMIC_MIN_ARMY_POP_PERCENT_OWNED_MAJORITY
+                                    : GameValues.gvCombat.DYNAMIC_MIN_ARMY_POP_PERCENT;
+                                minRequired = Math.max(1L, (long)Math.ceil((float)pop * minPerc));
+                            } else {
+                                minRequired = Math.max(1L, CFG.MIN_ARMY_REQUIRED_TO_ATTACK);
+                            }
+                            if (this.getMenuElem(2).getCurr() < minRequired && CFG.core.getProv(CFG.chosenProvinceID).getCivId() > 0 && CFG.core.getCivsAtWar(moveCivID, CFG.core.getProv(CFG.chosenProvinceID).getCivId())) {
+                                CFG.toastM.addM(CFG.lang.get("MinArmyRequiredToAttack") + ": " + minRequired + " " + CFG.lang.get("Units"), CFG.COLOR_NEGATIVE_2);
+                                CFG.toastM.setTimeInView(3500);
+                            }
                         }
                     }
                     catch (Exception exception) {

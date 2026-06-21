@@ -6,7 +6,7 @@ import java.util.concurrent.RecursiveAction;
 import java.util.function.IntConsumer;
 
 public class Parallel {
-    private static final int THRESHOLD = 128;
+    private static final int THRESHOLD = 64;
     private static final ForkJoinPool pool = new ForkJoinPool(
         Math.max(1, Runtime.getRuntime().availableProcessors() * 2)
     );

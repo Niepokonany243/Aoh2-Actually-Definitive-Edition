@@ -35,7 +35,7 @@ public class MilitaryRealism {
 
     public static void updateMobilizationAllCivs() {
         if (!isEnabled()) return;
-        for (int i = 1; i < CFG.core.getCivsSize(); ++i) {
+        for (int i = CFG.core.getNextAliveCiv(1); i >= 0; i = CFG.core.getNextAliveCiv(i + 1)) {
             updateMobilization(i);
         }
     }
@@ -157,9 +157,8 @@ public class MilitaryRealism {
         if (cachedTurnID == GameCalendar.TURNID) return cachedWorldEcoPerPop;
         long eco = 0L;
         long pop = 0L;
-        for (int i = 1; i < CFG.core.getCivsSize(); ++i) {
+        for (int i = CFG.core.getNextAliveCiv(1); i >= 0; i = CFG.core.getNextAliveCiv(i + 1)) {
             Civilization civ = CFG.core.getCiv(i);
-            if (civ.getNumOfProvs() <= 0) continue;
             eco += Math.max(0L, civ.countEco());
             pop += Math.max(0L, civ.countPop());
         }

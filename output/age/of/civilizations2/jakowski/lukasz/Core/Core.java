@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
 import age.of.civilizations2.jakowski.lukasz.ProvinceAtlas;
 import age.of.civilizations2.jakowski.lukasz.ProvinceMesh;
@@ -420,6 +421,8 @@ public class Core {
     private List<Integer> pSIV = new ArrayList<Integer>();
     private List<Civilization> lCivs = null;
     private int iCivsSize = 0;
+    private final BitSet aliveCivs = new BitSet();
+    private int iAliveCivsCount = 0;
     private List<Integer> lCivsSortedAZ = new ArrayList<Integer>();
     private int iAvailableCivilizations;
     public List<ForeignInvest> investForeignGold = new ArrayList<ForeignInvest>();
@@ -2219,6 +2222,9 @@ public class Core {
         catch (Exception ex) {
             CFG.exceptionStack(ex);
         }
+        try {
+            this.rebuildAliveCivs();
+        } catch (Exception ex) {}
     }
 
     public final void loadSavedGame_NEW_8(int iLoadID, String[] tSplted) {
@@ -2828,6 +2834,7 @@ public class Core {
         CFG.menus.updateCreateNewGame_Top();
         CFG.disposeActiveCivFlagD();
         this.updateActiveProvinceBorder_Style();
+        this.rebuildAliveCivs();
     }
 
     public final void loadScenario_1(boolean nEditor) {
@@ -2884,6 +2891,7 @@ public class Core {
                     this.getCiv(p.getCivId()).addProv_Just(provinceID);
                 }
             }
+            this.rebuildAliveCivs();
         }
         catch (Exception ex) {
             CFG.exceptionStack(ex);
@@ -3528,6 +3536,7 @@ public class Core {
             }
         }
         this.iCivsSize = this.lCivs.size();
+        this.rebuildAliveCivs();
     }
 
     public final boolean isCivTagAvailable(String nCivTag) {
@@ -5325,7 +5334,7 @@ lbl94:
             if (j == 0 && this.getProv(nProvinceID).getDisplayTimerTurns() > 0) {
                 float tIconScale = (float)CFG.ARMY_HEIGHT * 0.7f / (float)IMGManager.getIMG(Images.time).getHeight();
                 int tIconWidth = (int)((float)IMGManager.getIMG(Images.time).getWidth() * tIconScale);
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.8f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.8f);
                 IMGManager.getIMG(Images.time).draw(oSB, tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale) / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), tIconWidth, (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale));
                 CFG.drawArmyText(oSB, "" + this.getProv(nProvinceID).getDisplayTimerTurns(), tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH + tIconWidth + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - CFG.ARMY_HEIGHT / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), CFG.COLOR_TEXT_NUM_OF_PROVINCES);
                 oSB.setColor(Color.WHITE);
@@ -5361,7 +5370,7 @@ lbl94:
             if (j == 0 && this.getProv(nProvinceID).getDisplayTimerTurns() > 0) {
                 float tIconScale = (float)CFG.ARMY_HEIGHT * 0.7f / (float)IMGManager.getIMG(Images.time).getHeight();
                 int tIconWidth = (int)((float)IMGManager.getIMG(Images.time).getWidth() * tIconScale);
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.8f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.8f);
                 IMGManager.getIMG(Images.time).draw(oSB, tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale) / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), tIconWidth, (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale));
                 CFG.drawArmyText(oSB, "" + this.getProv(nProvinceID).getDisplayTimerTurns(), tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH + tIconWidth + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - CFG.ARMY_HEIGHT / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), CFG.COLOR_TEXT_NUM_OF_PROVINCES);
                 oSB.setColor(Color.WHITE);
@@ -5400,7 +5409,7 @@ lbl94:
             if (j == 0 && this.getProv(nProvinceID).getDisplayTimerTurns() > 0) {
                 float tIconScale = (float)CFG.ARMY_HEIGHT * 0.7f / (float)IMGManager.getIMG(Images.time).getHeight();
                 int tIconWidth = (int)((float)IMGManager.getIMG(Images.time).getWidth() * tIconScale);
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.8f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.8f);
                 IMGManager.getIMG(Images.time).draw(oSB, tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale) / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), tIconWidth, (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale));
                 CFG.drawArmyText(oSB, "" + this.getProv(nProvinceID).getDisplayTimerTurns(), tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH + tIconWidth + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - CFG.ARMY_HEIGHT / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), CFG.COLOR_TEXT_NUM_OF_PROVINCES);
                 oSB.setColor(Color.WHITE);
@@ -5436,7 +5445,7 @@ lbl94:
             if (j == 0 && this.getProv(nProvinceID).getDisplayTimerTurns() > 0) {
                 float tIconScale = (float)CFG.ARMY_HEIGHT * 0.7f / (float)IMGManager.getIMG(Images.time).getHeight();
                 int tIconWidth = (int)((float)IMGManager.getIMG(Images.time).getWidth() * tIconScale);
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.8f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.8f);
                 IMGManager.getIMG(Images.time).draw(oSB, tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale) / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), tIconWidth, (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale));
                 CFG.drawArmyText(oSB, "" + this.getProv(nProvinceID).getDisplayTimerTurns(), tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH + tIconWidth + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - CFG.ARMY_HEIGHT / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), CFG.COLOR_TEXT_NUM_OF_PROVINCES);
                 oSB.setColor(Color.WHITE);
@@ -5472,7 +5481,7 @@ lbl94:
             if (j == 0 && this.getProv(nProvinceID).getDisplayTimerTurns() > 0) {
                 float tIconScale = (float)CFG.ARMY_HEIGHT * 0.7f / (float)IMGManager.getIMG(Images.time).getHeight();
                 int tIconWidth = (int)((float)IMGManager.getIMG(Images.time).getWidth() * tIconScale);
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.8f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.8f);
                 IMGManager.getIMG(Images.time).draw(oSB, tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale) / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), tIconWidth, (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale));
                 CFG.drawArmyText(oSB, "" + this.getProv(nProvinceID).getDisplayTimerTurns(), tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH + tIconWidth + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - CFG.ARMY_HEIGHT / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), CFG.COLOR_TEXT_NUM_OF_PROVINCES);
                 oSB.setColor(Color.WHITE);
@@ -5511,7 +5520,7 @@ lbl94:
             if (j == 0 && this.getProv(nProvinceID).getDisplayTimerTurns() > 0) {
                 float tIconScale = (float)CFG.ARMY_HEIGHT * 0.7f / (float)IMGManager.getIMG(Images.time).getHeight();
                 int tIconWidth = (int)((float)IMGManager.getIMG(Images.time).getWidth() * tIconScale);
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.8f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.8f);
                 IMGManager.getIMG(Images.time).draw(oSB, tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale) / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), tIconWidth, (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale));
                 CFG.drawArmyText(oSB, "" + this.getProv(nProvinceID).getDisplayTimerTurns(), tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH + tIconWidth + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - CFG.ARMY_HEIGHT / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), CFG.COLOR_TEXT_NUM_OF_PROVINCES);
                 oSB.setColor(Color.WHITE);
@@ -5547,7 +5556,7 @@ lbl94:
             if (j == 0 && this.getProv(nProvinceID).getDisplayTimerTurns() > 0) {
                 float tIconScale = (float)CFG.ARMY_HEIGHT * 0.7f / (float)IMGManager.getIMG(Images.time).getHeight();
                 int tIconWidth = (int)((float)IMGManager.getIMG(Images.time).getWidth() * tIconScale);
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.8f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.8f);
                 IMGManager.getIMG(Images.time).draw(oSB, tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale) / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), tIconWidth, (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale));
                 CFG.drawArmyText(oSB, "" + this.getProv(nProvinceID).getDisplayTimerTurns(), tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH + tIconWidth + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - CFG.ARMY_HEIGHT / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), CFG.COLOR_TEXT_NUM_OF_PROVINCES);
                 oSB.setColor(Color.WHITE);
@@ -5586,7 +5595,7 @@ lbl94:
             if (j == 0 && this.getProv(nProvinceID).getDisplayTimerTurns() > 0) {
                 float tIconScale = (float)CFG.ARMY_HEIGHT * 0.7f / (float)IMGManager.getIMG(Images.time).getHeight();
                 int tIconWidth = (int)((float)IMGManager.getIMG(Images.time).getWidth() * tIconScale);
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.8f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.8f);
                 IMGManager.getIMG(Images.time).draw(oSB, tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale) / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), tIconWidth, (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale));
                 CFG.drawArmyText(oSB, "" + this.getProv(nProvinceID).getDisplayTimerTurns(), tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH + tIconWidth + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - CFG.ARMY_HEIGHT / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), CFG.COLOR_TEXT_NUM_OF_PROVINCES);
                 oSB.setColor(Color.WHITE);
@@ -6163,7 +6172,7 @@ lbl94:
             if (j == 0 && this.getProv(nProvinceID).getDisplayTimerTurns() > 0) {
                 float tIconScale = (float)CFG.ARMY_HEIGHT * 0.7f / (float)IMGManager.getIMG(Images.time).getHeight();
                 int tIconWidth = (int)((float)IMGManager.getIMG(Images.time).getWidth() * tIconScale);
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.8f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.8f);
                 IMGManager.getIMG(Images.time).draw(oSB, tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale) / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), tIconWidth, (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale));
                 CFG.drawArmyText(oSB, "" + this.getProv(nProvinceID).getDisplayTimerTurns(), tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH + tIconWidth + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - CFG.ARMY_HEIGHT / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), CFG.COLOR_TEXT_NUM_OF_PROVINCES);
                 oSB.setColor(Color.WHITE);
@@ -6201,7 +6210,7 @@ lbl94:
             if (j == 0 && this.getProv(nProvinceID).getDisplayTimerTurns() > 0) {
                 float tIconScale = (float)CFG.ARMY_HEIGHT * 0.7f / (float)IMGManager.getIMG(Images.time).getHeight();
                 int tIconWidth = (int)((float)IMGManager.getIMG(Images.time).getWidth() * tIconScale);
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.8f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.8f);
                 IMGManager.getIMG(Images.time).draw(oSB, tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale) / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), tIconWidth, (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale));
                 CFG.drawArmyText(oSB, "" + this.getProv(nProvinceID).getDisplayTimerTurns(), tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH + tIconWidth + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - CFG.ARMY_HEIGHT / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), CFG.COLOR_TEXT_NUM_OF_PROVINCES);
                 oSB.setColor(Color.WHITE);
@@ -6239,7 +6248,7 @@ lbl94:
             if (j == 0 && this.getProv(nProvinceID).getDisplayTimerTurns() > 0) {
                 float tIconScale = (float)CFG.ARMY_HEIGHT * 0.7f / (float)IMGManager.getIMG(Images.time).getHeight();
                 int tIconWidth = (int)((float)IMGManager.getIMG(Images.time).getWidth() * tIconScale);
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.8f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.8f);
                 IMGManager.getIMG(Images.time).draw(oSB, tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale) / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), tIconWidth, (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale));
                 CFG.drawArmyText(oSB, "" + this.getProv(nProvinceID).getDisplayTimerTurns(), tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH + tIconWidth + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - CFG.ARMY_HEIGHT / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), CFG.COLOR_TEXT_NUM_OF_PROVINCES);
                 oSB.setColor(Color.WHITE);
@@ -6278,7 +6287,7 @@ lbl94:
             if (j == 0 && this.getProv(nProvinceID).getDisplayTimerTurns() > 0) {
                 float tIconScale = (float)CFG.ARMY_HEIGHT * 0.7f / (float)IMGManager.getIMG(Images.time).getHeight();
                 int tIconWidth = (int)((float)IMGManager.getIMG(Images.time).getWidth() * tIconScale);
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.8f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.8f);
                 IMGManager.getIMG(Images.time).draw(oSB, tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale) / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), tIconWidth, (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale));
                 CFG.drawArmyText(oSB, "" + this.getProv(nProvinceID).getDisplayTimerTurns(), tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH + tIconWidth + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - CFG.ARMY_HEIGHT / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), CFG.COLOR_TEXT_NUM_OF_PROVINCES);
                 oSB.setColor(Color.WHITE);
@@ -6317,7 +6326,7 @@ lbl94:
             if (j == 0 && this.getProv(nProvinceID).getDisplayTimerTurns() > 0) {
                 float tIconScale = (float)CFG.ARMY_HEIGHT * 0.7f / (float)IMGManager.getIMG(Images.time).getHeight();
                 int tIconWidth = (int)((float)IMGManager.getIMG(Images.time).getWidth() * tIconScale);
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.8f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.8f);
                 IMGManager.getIMG(Images.time).draw(oSB, tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale) / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), tIconWidth, (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale));
                 CFG.drawArmyText(oSB, "" + this.getProv(nProvinceID).getDisplayTimerTurns(), tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH + tIconWidth + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - CFG.ARMY_HEIGHT / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), CFG.COLOR_TEXT_NUM_OF_PROVINCES);
                 oSB.setColor(Color.WHITE);
@@ -6355,7 +6364,7 @@ lbl94:
             if (j == 0 && this.getProv(nProvinceID).getDisplayTimerTurns() > 0) {
                 float tIconScale = (float)CFG.ARMY_HEIGHT * 0.7f / (float)IMGManager.getIMG(Images.time).getHeight();
                 int tIconWidth = (int)((float)IMGManager.getIMG(Images.time).getWidth() * tIconScale);
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.8f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.8f);
                 IMGManager.getIMG(Images.time).draw(oSB, tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale) / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), tIconWidth, (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale));
                 CFG.drawArmyText(oSB, "" + this.getProv(nProvinceID).getDisplayTimerTurns(), tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH + tIconWidth + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - CFG.ARMY_HEIGHT / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), CFG.COLOR_TEXT_NUM_OF_PROVINCES);
                 oSB.setColor(Color.WHITE);
@@ -6394,7 +6403,7 @@ lbl94:
             if (j == 0 && this.getProv(nProvinceID).getDisplayTimerTurns() > 0) {
                 float tIconScale = (float)CFG.ARMY_HEIGHT * 0.7f / (float)IMGManager.getIMG(Images.time).getHeight();
                 int tIconWidth = (int)((float)IMGManager.getIMG(Images.time).getWidth() * tIconScale);
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.8f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.8f);
                 IMGManager.getIMG(Images.time).draw(oSB, tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale) / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), tIconWidth, (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale));
                 CFG.drawArmyText(oSB, "" + this.getProv(nProvinceID).getDisplayTimerTurns(), tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH + tIconWidth + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - CFG.ARMY_HEIGHT / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), CFG.COLOR_TEXT_NUM_OF_PROVINCES);
                 oSB.setColor(Color.WHITE);
@@ -6432,7 +6441,7 @@ lbl94:
             if (j == 0 && this.getProv(nProvinceID).getDisplayTimerTurns() > 0) {
                 float tIconScale = (float)CFG.ARMY_HEIGHT * 0.7f / (float)IMGManager.getIMG(Images.time).getHeight();
                 int tIconWidth = (int)((float)IMGManager.getIMG(Images.time).getWidth() * tIconScale);
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.8f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.8f);
                 IMGManager.getIMG(Images.time).draw(oSB, tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale) / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), tIconWidth, (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale));
                 CFG.drawArmyText(oSB, "" + this.getProv(nProvinceID).getDisplayTimerTurns(), tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH + tIconWidth + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - CFG.ARMY_HEIGHT / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), CFG.COLOR_TEXT_NUM_OF_PROVINCES);
                 oSB.setColor(Color.WHITE);
@@ -6471,7 +6480,7 @@ lbl94:
             if (j == 0 && this.getProv(nProvinceID).getDisplayTimerTurns() > 0) {
                 float tIconScale = (float)CFG.ARMY_HEIGHT * 0.7f / (float)IMGManager.getIMG(Images.time).getHeight();
                 int tIconWidth = (int)((float)IMGManager.getIMG(Images.time).getWidth() * tIconScale);
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.8f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.8f);
                 IMGManager.getIMG(Images.time).draw(oSB, tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale) / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), tIconWidth, (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale));
                 CFG.drawArmyText(oSB, "" + this.getProv(nProvinceID).getDisplayTimerTurns(), tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH + tIconWidth + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - CFG.ARMY_HEIGHT / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), CFG.COLOR_TEXT_NUM_OF_PROVINCES);
                 oSB.setColor(Color.WHITE);
@@ -6792,7 +6801,7 @@ lbl94:
             if (j == 0 && this.getProv(nProvinceID).getDisplayTimerTurns() > 0) {
                 float tIconScale = (float)CFG.ARMY_HEIGHT * 0.7f / (float)IMGManager.getIMG(Images.time).getHeight();
                 int tIconWidth = (int)((float)IMGManager.getIMG(Images.time).getWidth() * tIconScale);
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.8f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.8f);
                 IMGManager.getIMG(Images.time).draw(oSB, tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale) / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), tIconWidth, (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale));
                 CFG.drawArmyText(oSB, "" + this.getProv(nProvinceID).getDisplayTimerTurns(), tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + this.getProv(nProvinceID).getArmyWi_NO_TIMER(j) + CFG.ARMY_BG_EXTRA_WIDTH + tIconWidth + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - CFG.ARMY_HEIGHT / 2 + (CFG.ARMY_BG_EXTRA_HEIGHT + Core.getArmyHeight()) * (j - nArmy0) - (this.getProv(nProvinceID).getCivsSize() > 1 ? Core.getArmyHeight() * (this.getProv(nProvinceID).getCivsSize() - 1 - nArmy0) / 2 : 0), CFG.COLOR_TEXT_NUM_OF_PROVINCES);
                 oSB.setColor(Color.WHITE);
@@ -6805,9 +6814,9 @@ lbl94:
         int tPosY = (int)((float)(this.getProv(nProvinceID).getCeY() + this.getProv(nProvinceID).getShPY() + CFG.map.getMpC().getPY()) * nScale);
         int tFlagW = (int)Math.ceil((float)CFG.ARMY_HEIGHT * 100.0f / (float)CFG.CIV_FLAG_HEIGHT * (float)CFG.CIV_FLAG_WIDTH / 100.0f);
         if (this.iActiveProv == nProvinceID) {
-            oSB.setColor(new Color(0.9843137f, 0.9843137f, 0.9843137f, 1.0f));
+            oSB.setColor(0.9843137f, 0.9843137f, 0.9843137f, 1.0f);
         } else {
-            oSB.setColor(new Color(0.039215688f, 0.039215688f, 0.039215688f, 1.0f));
+            oSB.setColor(0.039215688f, 0.039215688f, 0.039215688f, 1.0f);
         }
         this.drawProvinceArmyBackground(oSB, tPosX - CFG.ARMY_BG_EXTRA_WIDTH - tFlagW / 2, tPosY - CFG.ARMY_HEIGHT / 2 - CFG.ARMY_BG_EXTRA_HEIGHT, CFG.ARMY_BG_EXTRA_WIDTH * 2 + tFlagW, CFG.ARMY_HEIGHT + CFG.ARMY_BG_EXTRA_HEIGHT * 2, nImageID);
         oSB.setColor(Color.WHITE);
@@ -6884,7 +6893,7 @@ lbl94:
             }
             oSB.setColor(new Color(CFG.COLOR_GRADIENT_DARK_BLUE.r, CFG.COLOR_GRADIENT_DARK_BLUE.g, CFG.COLOR_GRADIENT_DARK_BLUE.b, 0.8f));
             IMGManager.getIMG(Images.line32Off1).drawO(oSB, tCenterX - ((iBuildingsWidth -= CFG.PADD) + CFG.ARMY_BG_EXTRA_WIDTH * 2) / 2 - tFlagWidth - CFG.ARMY_BG_EXTRA_WIDTH - CFG.PADD * 2, tCenterY - CFG.ARMY_HEIGHT / 2 - CFG.ARMY_BG_EXTRA_HEIGHT - IMGManager.getIMG(Images.line32Off1).getHeight() - 1, iBuildingsWidth + CFG.ARMY_BG_EXTRA_WIDTH * 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + CFG.PADD * 4, CFG.ARMY_HEIGHT + CFG.ARMY_BG_EXTRA_HEIGHT * 2 + 2);
-            oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.1f));
+            oSB.setColor(1.0f, 1.0f, 1.0f, 0.1f);
             IMGManager.getIMG(Images.line32Off1).drawO(oSB, tCenterX - (iBuildingsWidth + CFG.ARMY_BG_EXTRA_WIDTH * 2) / 2 - tFlagWidth - CFG.ARMY_BG_EXTRA_WIDTH - CFG.PADD * 2, tCenterY - CFG.ARMY_HEIGHT / 2 - CFG.ARMY_BG_EXTRA_HEIGHT - IMGManager.getIMG(Images.line32Off1).getHeight(), iBuildingsWidth + CFG.ARMY_BG_EXTRA_WIDTH * 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + CFG.PADD * 4, 1);
             IMGManager.getIMG(Images.line32Off1).drawO(oSB, tCenterX - (iBuildingsWidth + CFG.ARMY_BG_EXTRA_WIDTH * 2) / 2 - tFlagWidth - CFG.ARMY_BG_EXTRA_WIDTH - CFG.PADD * 2, tCenterY - CFG.ARMY_HEIGHT / 2 - CFG.ARMY_BG_EXTRA_HEIGHT - IMGManager.getIMG(Images.line32Off1).getHeight() + CFG.ARMY_HEIGHT + CFG.ARMY_BG_EXTRA_HEIGHT * 2 - 1, iBuildingsWidth + CFG.ARMY_BG_EXTRA_WIDTH * 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + CFG.PADD * 4, 1);
             oSB.setColor(Color.WHITE);
@@ -6951,7 +6960,7 @@ lbl94:
         this.drawProvinceArmyBackground2(oSB, tCenterX - widthTotal / 2, tCenterY - Core.getArmyHeight() / 2, widthTotal, Core.getArmyHeight(), Images.armyBG);
         oSB.setColor(Color.WHITE);
         CFG.drawArmyText(oSB, sArmy, tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - Core.getArmyHeight() / 2, CFG.COLOR_POSITIVE);
-        oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.8f));
+        oSB.setColor(1.0f, 1.0f, 1.0f, 0.8f);
         IMGManager.getIMG(Images.time).draw(oSB, tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + nArmyWidth + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - Core.getArmyHeight() / 2, tIconWidth, (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale));
         CFG.drawArmyText(oSB, "" + nTurns, tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + nArmyWidth + CFG.ARMY_BG_EXTRA_WIDTH + tIconWidth + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - Core.getArmyHeight() / 2, CFG.COLOR_TEXT_NUM_OF_PROVINCES);
         oSB.setColor(Color.WHITE);
@@ -6982,7 +6991,7 @@ lbl94:
         this.drawProvinceArmyBackground2(oSB, tCenterX - widthTotal / 2, tCenterY - Core.getArmyHeight() / 2, widthTotal, Core.getArmyHeight(), Images.armyBG);
         oSB.setColor(Color.WHITE);
         CFG.drawArmyText(oSB, sArmy, tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - Core.getArmyHeight() / 2, CFG.COLOR_TEXT_NUM_OF_PROVINCES);
-        oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.8f));
+        oSB.setColor(1.0f, 1.0f, 1.0f, 0.8f);
         IMGManager.getIMG(Images.time).draw(oSB, tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + nArmyWidth + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - Core.getArmyHeight() / 2, tIconWidth, (int)((float)IMGManager.getIMG(Images.time).getHeight() * tIconScale));
         CFG.drawArmyText(oSB, "" + nTurns, tCenterX - widthTotal / 2 + tFlagWidth + CFG.ARMY_BG_EXTRA_WIDTH + nArmyWidth + CFG.ARMY_BG_EXTRA_WIDTH + tIconWidth + CFG.ARMY_BG_EXTRA_WIDTH, tCenterY - Core.getArmyHeight() / 2, CFG.COLOR_TEXT_NUM_OF_PROVINCES);
         oSB.setColor(Color.WHITE);
@@ -7107,9 +7116,9 @@ lbl94:
         int tPosY = (int)((float)(this.getProv(nProvinceID).getCeY() + this.getProv(nProvinceID).getShPY() + CFG.map.getMpC().getPY()) * nScale);
         int tFlagW = (int)Math.ceil((float)CFG.ARMY_HEIGHT * 100.0f / (float)CFG.CIV_FLAG_HEIGHT * (float)CFG.CIV_FLAG_WIDTH / 100.0f);
         if (this.iActiveProv == nProvinceID) {
-            oSB.setColor(new Color(0.9843137f, 0.9843137f, 0.9843137f, 1.0f));
+            oSB.setColor(0.9843137f, 0.9843137f, 0.9843137f, 1.0f);
         } else {
-            oSB.setColor(new Color(0.039215688f, 0.039215688f, 0.039215688f, 1.0f));
+            oSB.setColor(0.039215688f, 0.039215688f, 0.039215688f, 1.0f);
         }
         this.drawCivFlagBG(oSB, tPosX - CFG.CIV_NAME_BG_EXTRA_WIDTH_ARMY - tFlagW / 2, tPosY - CFG.ARMY_HEIGHT / 2 - CFG.CIV_NAME_BG_EXTRA_HEIGHT_ARMY, CFG.CIV_NAME_BG_EXTRA_WIDTH_ARMY * 2 + tFlagW, CFG.ARMY_HEIGHT + CFG.CIV_NAME_BG_EXTRA_HEIGHT_ARMY * 2);
         oSB.setColor(Color.WHITE);
@@ -7122,9 +7131,9 @@ lbl94:
             int tPosY = (int)((float)(this.getProv(nProvinceID).getCeY() + this.getProv(nProvinceID).getShPY() + CFG.map.getMpC().getPY()) * nScale);
             int tFlagW = (int)Math.ceil((float)CFG.ARMY_HEIGHT * 100.0f / (float)CFG.CIV_FLAG_HEIGHT * (float)CFG.CIV_FLAG_WIDTH / 100.0f);
             if (this.iActiveProv == nProvinceID) {
-                oSB.setColor(new Color(0.9843137f, 0.9843137f, 0.9843137f, 1.0f));
+                oSB.setColor(0.9843137f, 0.9843137f, 0.9843137f, 1.0f);
             } else {
-                oSB.setColor(new Color(0.039215688f, 0.039215688f, 0.039215688f, 1.0f));
+                oSB.setColor(0.039215688f, 0.039215688f, 0.039215688f, 1.0f);
             }
             this.drawCivFlagBG(oSB, tPosX - CFG.CIV_NAME_BG_EXTRA_WIDTH_ARMY - (tFlagW * CFG.core.getProv(nProvinceID).getCores().getCivsSize() + CFG.PADD * (CFG.core.getProv(nProvinceID).getCores().getCivsSize() - 1)) / 2, tPosY - CFG.ARMY_HEIGHT / 2 - CFG.CIV_NAME_BG_EXTRA_HEIGHT_ARMY, CFG.CIV_NAME_BG_EXTRA_WIDTH_ARMY * 2 + (tFlagW * CFG.core.getProv(nProvinceID).getCores().getCivsSize() + CFG.PADD * (CFG.core.getProv(nProvinceID).getCores().getCivsSize() - 1)), CFG.ARMY_HEIGHT + CFG.CIV_NAME_BG_EXTRA_HEIGHT_ARMY * 2);
             oSB.setColor(Color.WHITE);
@@ -7156,13 +7165,13 @@ lbl94:
         int tFlagW = (int)((float)this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() * 100.0f / (float)CFG.CIV_FLAG_HEIGHT * (float)CFG.CIV_FLAG_WIDTH / 100.0f);
         int tFlagH = (int)((float)(CFG.CIV_FLAG_HEIGHT * this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight()) * 100.0f / (float)CFG.CIV_FLAG_HEIGHT / 100.0f);
         if (this.iActiveProv == nProvinceID) {
-            oSB.setColor(new Color(0.99215686f, 0.9882353f, 0.9843137f, fAlpha));
+            oSB.setColor(0.99215686f, 0.9882353f, 0.9843137f, fAlpha);
         } else {
-            oSB.setColor(new Color(0.015686275f, 0.015686275f, 0.015686275f, fAlpha));
+            oSB.setColor(0.015686275f, 0.015686275f, 0.015686275f, fAlpha);
         }
         this.drawCivNameBG(oSB, tPosX - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() / 2 - CFG.CIV_COLOR_W - tFlagW / 2 - CFG.CIV_NAME_BG_EXTRA_WIDTH, tPosY - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() / 2 - CFG.CIV_NAME_BG_EXTRA_HEIGHT, this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() + CFG.CIV_NAME_BG_EXTRA_WIDTH * 2 + tFlagW + CFG.CIV_COLOR_W, this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() + CFG.CIV_NAME_BG_EXTRA_HEIGHT * 2);
         CFG.drawTextDefault(oSB, this.getCiv(this.getProv(nProvinceID).getCivId()).getCivName(), tPosX - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() / 2 + tFlagW / 2, tPosY - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() / 2, this.iActiveProv == nProvinceID ? new Color(0.12156863f, 0.12156863f, 0.12156863f, 1.0f) : new Color(0.9843137f, 0.9843137f, 0.9843137f, 1.0f));
-        oSB.setColor(new Color(1.0f, 1.0f, 1.0f, fAlpha));
+        oSB.setColor(1.0f, 1.0f, 1.0f, fAlpha);
         this.getCiv(this.getProv(nProvinceID).getCivId()).getFlagC().drawO(oSB, tPosX - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() / 2 - tFlagW / 2 - CFG.CIV_COLOR_W, tPosY - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() / 2 - this.getCiv(this.getProv(nProvinceID).getCivId()).getFlagC().getHeight(), tFlagW, tFlagH);
         IMGManager.getIMG(Images.flagRectSmall).drawO(oSB, tPosX - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() / 2 - tFlagW / 2 - CFG.CIV_COLOR_W, tPosY - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() / 2 - IMGManager.getIMG(Images.flagRectSmall).getHeight(), tFlagW, tFlagH);
     }
@@ -7173,12 +7182,12 @@ lbl94:
         int tFlagW = (int)((float)this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() * 100.0f / (float)CFG.CIV_FLAG_HEIGHT * (float)CFG.CIV_FLAG_WIDTH / 100.0f);
         int tFlagH = (int)((float)(CFG.CIV_FLAG_HEIGHT * this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight()) * 100.0f / (float)CFG.CIV_FLAG_HEIGHT / 100.0f);
         if (this.iActiveProv == nProvinceID) {
-            oSB.setColor(new Color(0.99215686f, 0.9882353f, 0.9843137f, fAlpha));
+            oSB.setColor(0.99215686f, 0.9882353f, 0.9843137f, fAlpha);
         } else {
-            oSB.setColor(new Color(0.015686275f, 0.015686275f, 0.015686275f, fAlpha));
+            oSB.setColor(0.015686275f, 0.015686275f, 0.015686275f, fAlpha);
         }
         this.drawCivNameBG(oSB, tPosX - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() / 2 - CFG.CIV_COLOR_W - tFlagW / 2 - CFG.CIV_NAME_BG_EXTRA_WIDTH, tPosY - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() / 2 - CFG.CIV_NAME_BG_EXTRA_HEIGHT, this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() + CFG.CIV_NAME_BG_EXTRA_WIDTH * 2 + tFlagW + CFG.CIV_COLOR_W, this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() + CFG.CIV_NAME_BG_EXTRA_HEIGHT * 2);
-        oSB.setColor(new Color(1.0f, 1.0f, 1.0f, fAlpha));
+        oSB.setColor(1.0f, 1.0f, 1.0f, fAlpha);
         if (CFG.core.getProv(nProvinceID).getCivId() != CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getPuppetOfCiv()) {
             if (CFG.core.getCiv(this.getProv(nProvinceID).getCivId()).getIsPartOfHolyRomanEmpire()) {
                 this.drawProvince_Capital_Crown_HRE_Vassal(oSB, tPosX + this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() / 2 + tFlagW / 2, tPosY - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() / 2, this.getCiv(this.getProv(nProvinceID).getCivId()).getIdeology());
@@ -7201,12 +7210,12 @@ lbl94:
         int tFlagW = (int)((float)this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() * 100.0f / (float)CFG.CIV_FLAG_HEIGHT * (float)CFG.CIV_FLAG_WIDTH / 100.0f);
         int tFlagH = (int)((float)(CFG.CIV_FLAG_HEIGHT * this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight()) * 100.0f / (float)CFG.CIV_FLAG_HEIGHT / 100.0f);
         if (this.iActiveProv == nProvinceID) {
-            oSB.setColor(new Color(0.99215686f, 0.9882353f, 0.9843137f, fAlpha));
+            oSB.setColor(0.99215686f, 0.9882353f, 0.9843137f, fAlpha);
         } else {
-            oSB.setColor(new Color(0.015686275f, 0.015686275f, 0.015686275f, fAlpha));
+            oSB.setColor(0.015686275f, 0.015686275f, 0.015686275f, fAlpha);
         }
         this.drawCivNameBG(oSB, tPosX - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() / 2 - CFG.CIV_COLOR_W - tFlagW / 2 - CFG.CIV_NAME_BG_EXTRA_WIDTH, tPosY - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() / 2 - CFG.CIV_NAME_BG_EXTRA_HEIGHT, this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() + CFG.CIV_NAME_BG_EXTRA_WIDTH * 2 + tFlagW + CFG.CIV_COLOR_W, this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() + CFG.CIV_NAME_BG_EXTRA_HEIGHT * 2);
-        oSB.setColor(new Color(1.0f, 1.0f, 1.0f, fAlpha));
+        oSB.setColor(1.0f, 1.0f, 1.0f, fAlpha);
         if (CFG.core.getProv(nProvinceID).getCivId() != CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getPuppetOfCiv()) {
             if (CFG.core.getCiv(this.getProv(nProvinceID).getCivId()).getIsPartOfHolyRomanEmpire()) {
                 this.drawProvince_Capital_Crown_HRE_Vassal(oSB, tPosX + this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() / 2 + tFlagW / 2, tPosY - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() / 2, this.getCiv(this.getProv(nProvinceID).getCivId()).getIdeology());
@@ -11371,15 +11380,44 @@ lbl94:
     public final void cleanupWars() {
         try {
             for (int i = this.getWarsSize() - 1; i >= 0; --i) {
-                if (this.lWars.get(i).getAggressorsSize() == 0 || this.lWars.get(i).getDefendersSize() == 0) {
-                    if (CFG.LOGs) {
-                        System.out.println("Core: Removed empty war: " + this.lWars.get(i).WAR_TAG);
+                War_GameData war = this.lWars.get(i);
+                
+                // Remove dead rebels (0 provinces) from wars — neutral relation (no truce) so they can respawn
+                for (int a = war.getAggressorsSize() - 1; a >= 0; --a) {
+                    int civID = war.getAggressorID(a).getCivID();
+                    if (civID > 0 && this.getCiv(civID).getNumOfProvs() <= 0 && this.getCiv(civID).getIdeology() == CFG.ideologiesMgr.REBELS_ID) {
+                        for (int d = 0; d < war.getDefendersSize(); ++d) {
+                            int defID = war.getDefenderID(d).getCivID();
+                            if (defID > 0 && this.getCivsAtWar(civID, defID)) {
+                                this.setCivRelationOfCivB(civID, defID, 0);
+                                this.setCivRelationOfCivB(defID, civID, 0);
+                            }
+                        }
+                        war.removeAggressor(civID);
                     }
-                    this.acceptPeaceForWar(i);
+                }
+                for (int d = war.getDefendersSize() - 1; d >= 0; --d) {
+                    int civID = war.getDefenderID(d).getCivID();
+                    if (civID > 0 && this.getCiv(civID).getNumOfProvs() <= 0 && this.getCiv(civID).getIdeology() == CFG.ideologiesMgr.REBELS_ID) {
+                        for (int a = 0; a < war.getAggressorsSize(); ++a) {
+                            int aggrID = war.getAggressorID(a).getCivID();
+                            if (aggrID > 0 && this.getCivsAtWar(civID, aggrID)) {
+                                this.setCivRelationOfCivB(civID, aggrID, 0);
+                                this.setCivRelationOfCivB(aggrID, civID, 0);
+                            }
+                        }
+                        war.removeDefender(civID);
+                    }
+                }
+                
+                if (war.getAggressorsSize() == 0 || war.getDefendersSize() == 0) {
+                    if (CFG.LOGs) {
+                        System.out.println("Core: Removed empty war: " + war.WAR_TAG);
+                    }
                     this.removeWarData(i);
                     continue;
                 }
-
+                war.iLastFight_InTurns++;
             }
         }
         catch (Exception ex) {
@@ -14563,6 +14601,44 @@ lbl94:
         return this.iCivsSize;
     }
 
+    public final boolean isAlive(int civID) {
+        return civID >= 0 && civID < iCivsSize && this.aliveCivs.get(civID);
+    }
+
+    public final void updateAliveCivStatus(int civID) {
+        try {
+            boolean wasAlive = this.aliveCivs.get(civID);
+            boolean isAliveNow = civID > 0 && civID < iCivsSize && this.lCivs.get(civID).getNumOfProvs() > 0;
+            if (wasAlive != isAliveNow) {
+                this.aliveCivs.set(civID, isAliveNow);
+                if (isAliveNow) ++this.iAliveCivsCount;
+                else {
+                    --this.iAliveCivsCount;
+                    this.lCivs.get(civID).civGD.mobilizationLevel = 0;
+                }
+            }
+        } catch (Exception ex) {}
+    }
+
+    public final void rebuildAliveCivs() {
+        this.aliveCivs.clear();
+        this.iAliveCivsCount = 0;
+        for (int i = 1; i < this.iCivsSize; ++i) {
+            if (this.lCivs.get(i).getNumOfProvs() > 0) {
+                this.aliveCivs.set(i);
+                ++this.iAliveCivsCount;
+            }
+        }
+    }
+
+    public final int getAliveCivCount() {
+        return this.iAliveCivsCount;
+    }
+
+    public final int getNextAliveCiv(int fromIndex) {
+        return this.aliveCivs.nextSetBit(fromIndex);
+    }
+
     public final Player getPlayer(int i) {
         try {
             return this.lPlayers.get(i);
@@ -15933,14 +16009,14 @@ lbl94:
             BetterUI_Manager.drawBetterMenuBG(oSB, posX, posY, width, height);
             return;
         }
-        oSB.setColor(new Color(0.0f, 0.0f, 0.0f, 0.4f));
+        oSB.setColor(0.0f, 0.0f, 0.0f, 0.4f);
         IMGManager.getIMG(Images.gradientXYVertical).draw(oSB, (posX -= 2) - CFG.PADD * 2, posY, CFG.PADD * 2, height, true, false);
         IMGManager.getIMG(Images.gradientXYVertical).draw(oSB, posX + (width += 4), posY, CFG.PADD * 2, height);
         oSB.setColor(CFG.COLOR_GRADIENT_MENU_BLUE);
         IMGManager.getIMG(Images.pix255).draw(oSB, posX, posY, width, height);
         oSB.setColor(CFG.COLOR_GRADIENT_BLUE.r, CFG.COLOR_GRADIENT_BLUE.g, CFG.COLOR_GRADIENT_BLUE.b, 0.225f);
         IMGManager.getIMG(Images.line32Off1).draw(oSB, posX, posY, width, height);
-        oSB.setColor(new Color(0.0f, 0.0f, 0.0f, 0.6f));
+        oSB.setColor(0.0f, 0.0f, 0.0f, 0.6f);
         IMGManager.getIMG(Images.gradient).draw(oSB, posX, posY, width, CFG.PADD * 3);
         IMGManager.getIMG(Images.gradient).draw(oSB, posX, posY + height - CFG.PADD * 3, width, CFG.PADD * 3, false, true);
         oSB.setColor(CFG.COLOR_CREATE_NEW_GAME_BOX_PLAYERS);
@@ -16006,6 +16082,7 @@ lbl94:
     public static void updateOverInvestment() {
         try {
             for (int i = 1 + GameCalendar.TURNID % GameValues.gvOverInvestment.UPDATE_EVERY_X_TURNS; i < CFG.core.getCivsSize(); i += GameValues.gvOverInvestment.UPDATE_EVERY_X_TURNS) {
+                if (!CFG.core.isAlive(i)) continue;
                 if (!(CFG.core.getCiv((int)i).civGD.numberOfInvestments > 0.0f)) continue;
                 CFG.core.getCiv((int)i).civGD.numberOfInvestments = Math.max(0.0f, CFG.core.getCiv((int)i).civGD.numberOfInvestments - Math.max(GameValues.gvOverInvestment.UPDATE_DECAY_INVESTMENTS_FIXED_MIN, CFG.core.getCiv((int)i).civGD.numberOfInvestments * GameValues.gvOverInvestment.UPDATE_DECAY_INVESTMENTS__PERC));
             }

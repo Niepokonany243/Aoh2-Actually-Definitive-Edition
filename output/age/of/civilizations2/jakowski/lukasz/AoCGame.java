@@ -120,11 +120,19 @@ public class AoCGame {
 
             @Override
             public void update() {
+                if (CFG.renderRequested) {
+                    CFG.renderRequested = false;
+                    Gdx.graphics.requestRendering();
+                }
             }
         } : new RequestRendering(){
 
             @Override
             public void update() {
+                if (CFG.renderRequested) {
+                    CFG.renderRequested = false;
+                    Gdx.graphics.requestRendering();
+                }
             }
         };
     }

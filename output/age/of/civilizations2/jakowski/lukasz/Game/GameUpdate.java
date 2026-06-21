@@ -418,35 +418,27 @@ public class GameUpdate {
     }
 
     public final void updatePlayableProvinces() {
-        int i;
         CFG.oAI.PLAYABLE_PROVINCES = 0;
-        for (i = 0; i < CFG.core.getProvinSize(); ++i) {
+        for (int i = 0; i < CFG.core.getProvinSize(); ++i) {
             if (CFG.core.getProv(i).getSeaProv() || CFG.core.getProv(i).getWastelandLvl() >= 0) continue;
             ++CFG.oAI.PLAYABLE_PROVINCES;
         }
-        CFG.oAI.NUM_OF_CIVS_IN_THE_GAME = 0;
-        for (i = 1; i < CFG.core.getCivsSize(); ++i) {
-            if (CFG.core.getCiv(i).getNumOfProvs() <= 0) continue;
-            ++CFG.oAI.NUM_OF_CIVS_IN_THE_GAME;
-        }
-        CFG.oAI.NUM_OF_CIVS_IN_THE_GAME = Math.max(1, CFG.oAI.NUM_OF_CIVS_IN_THE_GAME);
+        CFG.oAI.NUM_OF_CIVS_IN_THE_GAME = Math.max(1, CFG.core.getAliveCivCount());
         CFG.oAI.updateMinRivals();
     }
 
     public final void updateInflationPeakValueAllCivs() {
         int i;
         this.inflationMaxIncomeAllCivs = 1;
-        for (i = 1; i < CFG.core.getCivsSize(); ++i) {
-            if (CFG.core.getCiv(i).getNumOfProvs() <= 0) continue;
+        for (i = CFG.core.getNextAliveCiv(1); i >= 0; i = CFG.core.getNextAliveCiv(i + 1)) {
             this.inflationMaxIncomeAllCivs = Math.max(this.inflationMaxIncomeAllCivs, CFG.core.getCiv((int)i).incomeTaxation + CFG.core.getCiv((int)i).incomeProduction);
             LEAGUE_BUDGET = Math.max(LEAGUE_BUDGET, (float)(CFG.core.getCiv((int)i).incomeTaxation + CFG.core.getCiv((int)i).incomeProduction - CFG.core.getCiv((int)i).administrationCosts));
         }
         LEAGUE_BUDGET = LEAGUE_BUDGET * 0.9f;
         final float fLeagueBudget = LEAGUE_BUDGET;
-        Parallel.range(1, CFG.core.getCivsSize(), (int civIdx) -> {
-            if (CFG.core.getCiv(civIdx).getNumOfProvs() <= 0) return;
-            CFG.core.getCiv(civIdx).iLeague = Math.min((int)((float)Math.max(CFG.core.getCiv((int)civIdx).incomeTaxation + CFG.core.getCiv((int)civIdx).incomeProduction - CFG.core.getCiv((int)civIdx).administrationCosts, 0) / fLeagueBudget * 10.0f), 10);
-        });
+        for (i = CFG.core.getNextAliveCiv(1); i >= 0; i = CFG.core.getNextAliveCiv(i + 1)) {
+            CFG.core.getCiv(i).iLeague = Math.min((int)((float)Math.max(CFG.core.getCiv((int)i).incomeTaxation + CFG.core.getCiv((int)i).incomeProduction - CFG.core.getCiv((int)i).administrationCosts, 0) / fLeagueBudget * 10.0f), 10);
+        }
         if (!CFG.SANDBOX_MODE && !CFG.PXSX) {
             for (i = 0; i < CFG.core.getPlayersSize(); ++i) {
                 if (!(this.getInflationPerc(CFG.core.getPlayer(i).getCivId()) > GameValues.gvInflation.SEND_HIGH_INFLATION_MESS_IF_OVER)) continue;
@@ -456,16 +448,14 @@ public class GameUpdate {
     }
 
     public final void updateCivs_Money() {
-        Parallel.range(1, CFG.core.getCivsSize(), (int i) -> {
+        for (int i = CFG.core.getNextAliveCiv(1); i >= 0; i = CFG.core.getNextAliveCiv(i + 1)) {
             this.getBalance_UpdateBudgetPrepare(i);
-        });
-        for (int i = 1; i < CFG.core.getCivsSize(); ++i) {
+        }
+        for (int i = CFG.core.getNextAliveCiv(1); i >= 0; i = CFG.core.getNextAliveCiv(i + 1)) {
             Civilization civ = CFG.core.getCiv(i);
-            if (civ.getNumOfProvs() > 0) {
-                civ.setGold(civ.getGold() + (long)this.getBalanceCivId(i));
-                civ.updateLoansNextTurn();
-                civ.updateLoansFromCivNextTurn();
-            }
+            civ.setGold(civ.getGold() + (long)this.getBalanceCivId(i));
+            civ.updateLoansNextTurn();
+            civ.updateLoansFromCivNextTurn();
         }
     }
 
@@ -490,11 +480,13 @@ public class GameUpdate {
         this.lastUpdateTurnID = GameCalendar.TURNID;
         int i;
         for (i = 1 + GameCalendar.TURNID % GameValues.gvUpdate.UPDATE_PROVINCE_STABILITY; i < CFG.core.getCivsSize(); i += GameValues.gvUpdate.UPDATE_PROVINCE_STABILITY) {
+            if (!CFG.core.isAlive(i)) continue;
             Civilization civ = CFG.core.getCiv(i);
             civ.provincesWithLowStability.clear();
             civ.fStability = 0.0f;
         }
         for (i = 1 + GameCalendar.TURNID % GameValues.gvUpdate.UPDATE_PROVINCE_STABILITY; i < CFG.core.getCivsSize(); i += GameValues.gvUpdate.UPDATE_PROVINCE_STABILITY) {
+            if (!CFG.core.isAlive(i)) continue;
             for (int j = 0; j < CFG.core.getCiv(i).getNumOfProvs(); ++j) {
                 Province province = CFG.core.getProv(CFG.core.getCiv(i).getProvID(j));
                 if (province.getSeaProv() || province.getWastelandLvl() >= 0) continue;
@@ -503,6 +495,7 @@ public class GameUpdate {
             }
         }
         for (i = 1 + GameCalendar.TURNID % GameValues.gvUpdate.UPDATE_PROVINCE_STABILITY; i < CFG.core.getCivsSize(); i += GameValues.gvUpdate.UPDATE_PROVINCE_STABILITY) {
+            if (!CFG.core.isAlive(i)) continue;
             Civilization civ = CFG.core.getCiv(i);
             civ.setStabilityCiv(civ.fStability / (float)civ.getNumOfProvs());
         }
@@ -536,7 +529,7 @@ public class GameUpdate {
             return;
         }
         this.lastUpdateTurnID = GameCalendar.TURNID;
-        for (int i = 1; i < CFG.core.getCivsSize(); ++i) {
+        for (int i = CFG.core.getNextAliveCiv(1); i >= 0; i = CFG.core.getNextAliveCiv(i + 1)) {
             Civilization civ = CFG.core.getCiv(i);
             civ.provincesWithLowStability.clear();
             civ.fStability = 0.0f;
@@ -555,7 +548,7 @@ public class GameUpdate {
             if (province.getSeaProv() || province.getWastelandLvl() >= 0 || province.getCivId() <= 0) continue;
             CFG.core.getCiv((int)province.getCivId()).fStability += province.getProviStability();
         }
-        for (int i = 1; i < CFG.core.getCivsSize(); ++i) {
+        for (int i = CFG.core.getNextAliveCiv(1); i >= 0; i = CFG.core.getNextAliveCiv(i + 1)) {
             Civilization civ = CFG.core.getCiv(i);
             for (int j = civ.provincesWithLowStability.size() - 1; j >= 0; --j) {
                 if (!civ.isAssimilateOrganized(civ.provincesWithLowStability.get(j))) continue;

@@ -1177,26 +1177,28 @@ public class GameManager {
 
     public static void sendUncivilizedMessages() {
         for (int a = 0; a < CFG.core.getPlayersSize(); ++a) {
-            if (CFG.core.getCiv(CFG.core.getPlayer(a).getCivId()).getNumOfProvs() <= 0 || CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)CFG.core.getPlayer((int)a).getCivId()).getIdeology()).CAN_BECOME_CIVILIZED < 0) continue;
-            CFG.core.getCiv((int)CFG.core.getPlayer((int)a).getCivId()).getCivDiploGD().messageBox.addMessage(new Message_Uncivilized(CFG.core.getPlayer(a).getCivId()));
+            Civilization civ = CFG.core.getCiv(CFG.core.getPlayer(a).getCivId());
+            if (civ.getNumOfProvs() <= 0 || CFG.ideologiesMgr.getIdeologyID(civ.getIdeology()).CAN_BECOME_CIVILIZED < 0) continue;
+            civ.getCivDiploGD().messageBox.addMessage(new Message_Uncivilized(civ.getCivId()));
         }
     }
 
     public static void sendLowHappiness() {
         for (int a = 0; a < CFG.core.getPlayersSize(); ++a) {
-            if (CFG.core.getCiv(CFG.core.getPlayer(a).getCivId()).getNumOfProvs() <= 0) continue;
-            if (CFG.core.getCiv(CFG.core.getPlayer(a).getCivId()).getHappiness() < GameValues.gvHappiness.SEND_MESSAGE_LOW_HAPPINESS_IF_BELOW) {
-                CFG.core.getCiv((int)CFG.core.getPlayer((int)a).getCivId()).getCivDiploGD().messageBox.addMessage(new Message_LowHappiness(CFG.core.getPlayer(a).getCivId(), 0));
+            Civilization civ = CFG.core.getCiv(CFG.core.getPlayer(a).getCivId());
+            if (civ.getNumOfProvs() <= 0) continue;
+            if (civ.getHappiness() < GameValues.gvHappiness.SEND_MESSAGE_LOW_HAPPINESS_IF_BELOW) {
+                civ.getCivDiploGD().messageBox.addMessage(new Message_LowHappiness(civ.getCivId(), 0));
             }
-            if (CFG.core.getCiv((int)CFG.core.getPlayer((int)a).getCivId()).provincesWithLowStability.isEmpty()) continue;
+            if (civ.provincesWithLowStability.isEmpty()) continue;
             boolean sendLowStability = false;
-            for (int j = CFG.core.getCiv((int)CFG.core.getPlayer((int)a).getCivId()).provincesWithLowStability.size() - 1; j >= 0; --j) {
-                if (!(CFG.core.getProv(CFG.core.getCiv((int)CFG.core.getPlayer((int)a).getCivId()).provincesWithLowStability.get(j)).getProviStability() < (float)GameValues.gvStability.SEND_MESSAGE_LOW_STABILITY_IF_BELOW)) continue;
+            for (int j = civ.provincesWithLowStability.size() - 1; j >= 0; --j) {
+                if (!(CFG.core.getProv(civ.provincesWithLowStability.get(j)).getProviStability() < (float)GameValues.gvStability.SEND_MESSAGE_LOW_STABILITY_IF_BELOW)) continue;
                 sendLowStability = true;
                 break;
             }
             if (!sendLowStability) continue;
-            CFG.core.getCiv((int)CFG.core.getPlayer((int)a).getCivId()).getCivDiploGD().messageBox.addMessage(new Message_LowStability(CFG.core.getPlayer(a).getCivId(), 0));
+            civ.getCivDiploGD().messageBox.addMessage(new Message_LowStability(civ.getCivId(), 0));
         }
     }
 
@@ -1388,14 +1390,10 @@ public class GameManager {
             int nCivs;
             int nAverageScore;
             int i2;
-            float militarySpending = 0.0f;
-            for (i2 = 1; i2 < CFG.core.getCivsSize(); ++i2) {
-                if (CFG.core.getCiv(i2).getNumOfProvs() <= 0) continue;
+            for (i2 = CFG.core.getNextAliveCiv(1); i2 >= 0; i2 = CFG.core.getNextAliveCiv(i2 + 1)) {
                 CFG.core.getCiv(i2).setGoldenAge_Prosperity(CFG.core.getCiv(i2).getGoldenAge_Prosperity() + (int)((CFG.core.getCiv(i2).getSpendingGoodsB() - CFG.ideologiesMgr.getIdeologyID(CFG.core.getCiv(i2).getIdeology()).getMin_Goods(i2)) * 100.0f * GameValues.gvGoldenAge.GOLDEN_AGE_PROSPERITY_PROGRESS_MODIFIER) + (int)((CFG.core.getCiv(i2).getSpendingInvestmentsB() - CFG.ideologiesMgr.getInvestments(CFG.core.getCiv(i2).getIdeology(), i2)) * 100.0f * GameValues.gvGoldenAge.GOLDEN_AGE_PROSPERITY_PROGRESS_MODIFIER));
                 CFG.core.getCiv(i2).setGoldenAge_Science(CFG.core.getCiv(i2).getGoldenAge_Science() + (int)(CFG.core.getCiv(i2).getSpendingResearchB() * 100.0f * GameValues.gvGoldenAge.GOLDEN_AGE_SCIENCE_PROGRESS_MODIFIER));
-                militarySpending = CFG.gameUpdate.getMilitarySpending2(i2, CFG.core.getCiv((int)i2).iBudget);
                 CFG.core.getCiv(i2).setGoldenAge_Military(CFG.core.getCiv(i2).getGoldenAge_Military() + (int)((float)CFG.gameUpdate.getMilitarySpending(i2, CFG.core.getCiv((int)i2).iBudget) * GameValues.gvGoldenAge.GOLDEN_AGE_MILITARY_PROGRESS_MODIFIER));
-                
             }
             if (GameCalendar.TURNID % GameValues.gvGoldenAge.GOLDEN_AGE_UPDATE_EVERY_X_TURNS == GameValues.gvGoldenAge.GOLDEN_AGE_SCIENCE_UPDATE_TURN) {
                 if (GameManager.getNumOfCivsInTheGame() > GameValues.gvGoldenAge.GOLDEN_AGE_MIN_NUM_OF_CIVS) {
@@ -1427,11 +1425,11 @@ public class GameManager {
                         }
                     }
                     tCivs.clear();
-                    for (i = 1; i < CFG.core.getCivsSize(); ++i) {
+                    for (i = CFG.core.getNextAliveCiv(1); i >= 0; i = CFG.core.getNextAliveCiv(i + 1)) {
                         CFG.core.getCiv(i).setGoldenAge_Science((int)((float)CFG.core.getCiv(i).getGoldenAge_Science() * GameValues.gvGoldenAge.GOLDEN_AGE_SCIENCE_DECAY_PER_UPDATE));
                     }
                 } else {
-                    for (i2 = 1; i2 < CFG.core.getCivsSize(); ++i2) {
+                    for (i2 = CFG.core.getNextAliveCiv(1); i2 >= 0; i2 = CFG.core.getNextAliveCiv(i2 + 1)) {
                         CFG.core.getCiv(i2).setGoldenAge_Science((int)((float)CFG.core.getCiv(i2).getGoldenAge_Science() * GameValues.gvGoldenAge.GOLDEN_AGE_SCIENCE_DECAY_PER_UPDATE / 2.0f));
                     }
                 }
@@ -1466,11 +1464,11 @@ public class GameManager {
                         }
                     }
                     tCivs.clear();
-                    for (i = 1; i < CFG.core.getCivsSize(); ++i) {
+                    for (i = CFG.core.getNextAliveCiv(1); i >= 0; i = CFG.core.getNextAliveCiv(i + 1)) {
                         CFG.core.getCiv(i).setGoldenAge_Military((int)((float)CFG.core.getCiv(i).getGoldenAge_Military() * GameValues.gvGoldenAge.GOLDEN_AGE_MILITARY_DECAY_PER_UPDATE));
                     }
                 } else {
-                    for (i2 = 1; i2 < CFG.core.getCivsSize(); ++i2) {
+                    for (i2 = CFG.core.getNextAliveCiv(1); i2 >= 0; i2 = CFG.core.getNextAliveCiv(i2 + 1)) {
                         CFG.core.getCiv(i2).setGoldenAge_Military((int)((float)CFG.core.getCiv(i2).getGoldenAge_Military() * GameValues.gvGoldenAge.GOLDEN_AGE_MILITARY_DECAY_PER_UPDATE / 2.0f));
                     }
                 }
@@ -1505,11 +1503,11 @@ public class GameManager {
                     }
                 }
                 tCivs.clear();
-                for (i = 1; i < CFG.core.getCivsSize(); ++i) {
+                for (i = CFG.core.getNextAliveCiv(1); i >= 0; i = CFG.core.getNextAliveCiv(i + 1)) {
                     CFG.core.getCiv(i).setGoldenAge_Prosperity((int)((float)CFG.core.getCiv(i).getGoldenAge_Prosperity() * GameValues.gvGoldenAge.GOLDEN_AGE_PROSPERITY_DECAY_PER_UPDATE));
                 }
             } else {
-                for (i2 = 1; i2 < CFG.core.getCivsSize(); ++i2) {
+                for (i2 = CFG.core.getNextAliveCiv(1); i2 >= 0; i2 = CFG.core.getNextAliveCiv(i2 + 1)) {
                     CFG.core.getCiv(i2).setGoldenAge_Prosperity((int)((float)CFG.core.getCiv(i2).getGoldenAge_Prosperity() * GameValues.gvGoldenAge.GOLDEN_AGE_PROSPERITY_DECAY_PER_UPDATE / 2.0f));
                 }
             }
@@ -1517,12 +1515,7 @@ public class GameManager {
     }
 
     public static int getNumOfCivsInTheGame() {
-        int nCivs = 0;
-        for (int i = 1; i < CFG.core.getCivsSize(); ++i) {
-            if (CFG.core.getCiv(i).getNumOfProvs() <= 0) continue;
-            ++nCivs;
-        }
-        return nCivs;
+        return CFG.core.getAliveCivCount();
     }
 
     public static final void goldenAge_Prosperity(int nCivID) {
@@ -3210,25 +3203,24 @@ public class GameManager {
         if (!CFG.SPECTATOR_MODE) {
             try {
                 for (int i = 0; i < CFG.core.getPlayersSize(); ++i) {
-                    if (CFG.core.getCiv(CFG.core.getPlayer(i).getCivId()).getNumOfProvs() <= 0) continue;
-                    for (int z = CFG.core.getCiv(CFG.core.getPlayer(i).getCivId()).getFriendlyCivsSize() - 1; z >= 0; --z) {
-                        if (!(CFG.core.getCivRelationOfCivB(CFG.core.getCiv((int)CFG.core.getPlayer((int)i).getCivId()).getFriendlyCiv((int)z).iCivID, CFG.core.getPlayer(i).getCivId()) < (float)(GameValues.gvRelations.FRIENDLY_MIN_RELATION - 5))) continue;
-                        CFG.core.getCiv(CFG.core.getPlayer(i).getCivId()).removeFriendlyCiv(CFG.core.getCiv((int)CFG.core.getPlayer((int)i).getCivId()).getFriendlyCiv((int)z).iCivID);
+                    Civilization civ = CFG.core.getCiv(CFG.core.getPlayer(i).getCivId());
+                    if (civ.getNumOfProvs() <= 0) continue;
+                    for (int z = civ.getFriendlyCivsSize() - 1; z >= 0; --z) {
+                        if (!(CFG.core.getCivRelationOfCivB(civ.getFriendlyCiv(z).iCivID, civ.getCivId()) < (float)(GameValues.gvRelations.FRIENDLY_MIN_RELATION - 5))) continue;
+                        civ.removeFriendlyCiv(civ.getFriendlyCiv(z).iCivID);
                     }
                 }
             }
-            catch (Exception exception) {
-                
-            }
+            catch (Exception exception) {}
         }
     }
 
     public static final void checkCivsHatedCivilizations_IfStillExists() {
         for (int i = 1 + GameCalendar.TURNID % GameValues.gvUpdate.HATED_CIVS_CHECK_INTERVAL_TURNS; i < CFG.core.getCivsSize(); i += GameValues.gvUpdate.HATED_CIVS_CHECK_INTERVAL_TURNS) {
-            if (CFG.core.getCiv(i).getNumOfProvs() <= 0) continue;
+            if (!CFG.core.isAlive(i)) continue;
             for (int z = CFG.core.getCiv(i).getHatedCivsSize() - 1; z >= 0; --z) {
-                if (CFG.core.getCiv(CFG.core.getCiv((int)i).getHatedCiv((int)z).iCivID).getNumOfProvs() != 0) continue;
-                CFG.core.getCiv(i).removeHatedCiv(CFG.core.getCiv((int)i).getHatedCiv((int)z).iCivID);
+                if (CFG.core.isAlive(CFG.core.getCiv(i).getHatedCiv(z).iCivID)) continue;
+                CFG.core.getCiv(i).removeHatedCiv(CFG.core.getCiv(i).getHatedCiv(z).iCivID);
             }
         }
     }

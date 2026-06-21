@@ -251,17 +251,17 @@ public class RenderProvince {
                                         if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == CFG.core.getProv(CFG.core.getPIV(i)).getTrueOwnerOfProv()) {
                                             CFG.core.getProv(CFG.core.getPIV(i)).setProvColor(oSB);
                                         } else {
-                                            oSB.setColor(new Color((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.5f));
+                                            oSB.setColor((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.5f);
                                         }
                                         CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                                         continue;
                                     }
                                     if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() <= 0) continue;
-                                    oSB.setColor(new Color((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.5f));
+                                    oSB.setColor((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.5f);
                                     CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                                     continue;
                                 }
-                                oSB.setColor(new Color(CFG.settingsGD.COLOR_PROVINCE_DISCOVERY.getR(), CFG.settingsGD.COLOR_PROVINCE_DISCOVERY.getG(), CFG.settingsGD.COLOR_PROVINCE_DISCOVERY.getB(), CFG.settingsGD.COLOR_PROVINCE_DISCOVERY_ALPHA));
+                                oSB.setColor(CFG.settingsGD.COLOR_PROVINCE_DISCOVERY.getR(), CFG.settingsGD.COLOR_PROVINCE_DISCOVERY.getG(), CFG.settingsGD.COLOR_PROVINCE_DISCOVERY.getB(), CFG.settingsGD.COLOR_PROVINCE_DISCOVERY_ALPHA);
                                 CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                             }
                         }
@@ -279,13 +279,13 @@ public class RenderProvince {
                                 if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == CFG.core.getProv(CFG.core.getPIV(i)).getTrueOwnerOfProv()) {
                                     CFG.core.getProv(CFG.core.getPIV(i)).setProvColor(oSB);
                                 } else {
-                                    oSB.setColor(new Color((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.5f));
+                                    oSB.setColor((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.5f);
                                 }
                                 CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                                 continue;
                             }
                             if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() <= 0) continue;
-                            oSB.setColor(new Color((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.5f));
+                            oSB.setColor((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.5f);
                             CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                         }
                     }
@@ -306,17 +306,17 @@ public class RenderProvince {
                                         if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == CFG.core.getProv(CFG.core.getPIV(i)).getTrueOwnerOfProv()) {
                                             CFG.core.getProv(CFG.core.getPIV(i)).setProvColor(oSB);
                                         } else {
-                                            oSB.setColor(new Color((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.5f));
+                                            oSB.setColor((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.5f);
                                         }
                                         CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                                         continue;
                                     }
                                     if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() <= 0) continue;
-                                    oSB.setColor(new Color((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.5f));
+                                    oSB.setColor((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.5f);
                                     CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                                     continue;
                                 }
-                                oSB.setColor(new Color(CFG.settingsGD.COLOR_PROVINCE_DISCOVERY.getR(), CFG.settingsGD.COLOR_PROVINCE_DISCOVERY.getG(), CFG.settingsGD.COLOR_PROVINCE_DISCOVERY.getB(), CFG.settingsGD.COLOR_PROVINCE_DISCOVERY_ALPHA));
+                                oSB.setColor(CFG.settingsGD.COLOR_PROVINCE_DISCOVERY.getR(), CFG.settingsGD.COLOR_PROVINCE_DISCOVERY.getG(), CFG.settingsGD.COLOR_PROVINCE_DISCOVERY.getB(), CFG.settingsGD.COLOR_PROVINCE_DISCOVERY_ALPHA);
                                 CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                             }
                         }
@@ -334,13 +334,13 @@ public class RenderProvince {
                                 if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == CFG.core.getProv(CFG.core.getPIV(i)).getTrueOwnerOfProv()) {
                                     CFG.core.getProv(CFG.core.getPIV(i)).setProvColor(oSB);
                                 } else {
-                                    oSB.setColor(new Color((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.5f));
+                                    oSB.setColor((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.5f);
                                 }
                                 CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                                 continue;
                             }
                             if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() <= 0) continue;
-                            oSB.setColor(new Color((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.5f));
+                            oSB.setColor((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.5f);
                             CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                         }
                     }
@@ -356,16 +356,16 @@ public class RenderProvince {
                     for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                         if (CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getMetProv(CFG.core.getPIV(i))) {
                             if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID) {
-                                oSB.setColor(new Color((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.7f));
+                                oSB.setColor((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.7f);
                                 CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                                 continue;
                             }
                             if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() <= 0) continue;
-                            oSB.setColor(new Color((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.7f));
+                            oSB.setColor((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.7f);
                             CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                             continue;
                         }
-                        oSB.setColor(new Color(CFG.settingsGD.COLOR_PROVINCE_DISCOVERY.getR(), CFG.settingsGD.COLOR_PROVINCE_DISCOVERY.getG(), CFG.settingsGD.COLOR_PROVINCE_DISCOVERY.getB(), CFG.settingsGD.COLOR_PROVINCE_DISCOVERY_ALPHA));
+                        oSB.setColor(CFG.settingsGD.COLOR_PROVINCE_DISCOVERY.getR(), CFG.settingsGD.COLOR_PROVINCE_DISCOVERY.getG(), CFG.settingsGD.COLOR_PROVINCE_DISCOVERY.getB(), CFG.settingsGD.COLOR_PROVINCE_DISCOVERY_ALPHA);
                         CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                     }
                 }
@@ -375,12 +375,12 @@ public class RenderProvince {
                 public void drawProvinces(SpriteBatch oSB) {
                     for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                         if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID) {
-                            oSB.setColor(new Color((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.7f));
+                            oSB.setColor((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.7f);
                             CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                             continue;
                         }
                         if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() <= 0) continue;
-                        oSB.setColor(new Color((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.7f));
+                        oSB.setColor((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.7f);
                         CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                     }
                 }
@@ -395,20 +395,20 @@ public class RenderProvince {
                             if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 < 0) {
                                 for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                                     if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == 0) continue;
-                                    oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f));
+                                    oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f);
                                     CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                                 }
                             } else {
                                 for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                                     if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == 0) continue;
                                     if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1) {
-                                        oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB(), CFG.ALPHA_DIPLOMACY));
+                                        oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB(), CFG.ALPHA_DIPLOMACY);
                                     } else if (CFG.core.getCivNonAggressionPact(CFG.core.getProv(CFG.core.getPIV(i)).getCivId(), CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1) > 0) {
                                         oSB.setColor(CFG.getPactColor(CFG.core.getCivNonAggressionPact(CFG.core.getProv(CFG.core.getPIV(i)).getCivId(), CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1), CFG.ALPHA_DIPLOMACY));
                                     } else {
                                         int tempRelation = (int)CFG.core.getCivRelationOfCivB(CFG.core.getProv(CFG.core.getPIV(i)).getCivId(), CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1);
                                         if (tempRelation == 0) {
-                                            oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f));
+                                            oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f);
                                         } else {
                                             oSB.setColor(CFG.getRelationColor(tempRelation, CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f + CFG.ALPHA_DIPLOMACY * 2.0f / 5.0f * ((float)Math.abs(tempRelation) / 100.0f)));
                                         }
@@ -420,13 +420,13 @@ public class RenderProvince {
                             for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                                 if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == 0) continue;
                                 if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) {
-                                    oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB(), CFG.ALPHA_DIPLOMACY));
+                                    oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB(), CFG.ALPHA_DIPLOMACY);
                                 } else if (CFG.core.getCivNonAggressionPact(CFG.core.getProv(CFG.core.getPIV(i)).getCivId(), CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) > 0) {
                                     oSB.setColor(CFG.getPactColor(CFG.core.getCivNonAggressionPact(CFG.core.getProv(CFG.core.getPIV(i)).getCivId(), CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()), CFG.ALPHA_DIPLOMACY));
                                 } else {
                                     int tempRelation = (int)CFG.core.getCivRelationOfCivB(CFG.core.getProv(CFG.core.getPIV(i)).getCivId(), CFG.core.getProv(CFG.core.getActiveProvID()).getCivId());
                                     if (tempRelation == 0) {
-                                        oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f));
+                                        oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f);
                                     } else {
                                         oSB.setColor(CFG.getRelationColor(tempRelation, CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f + CFG.ALPHA_DIPLOMACY * 2.0f / 5.0f * ((float)Math.abs(tempRelation) / 100.0f)));
                                     }
@@ -445,20 +445,20 @@ public class RenderProvince {
                             if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 < 0) {
                                 for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                                     if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == 0) continue;
-                                    oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f));
+                                    oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f);
                                     CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                                 }
                             } else {
                                 for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                                     if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == 0) continue;
                                     if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1) {
-                                        oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB(), CFG.ALPHA_DIPLOMACY));
+                                        oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB(), CFG.ALPHA_DIPLOMACY);
                                     } else if (CFG.core.getCivTruce(CFG.core.getProv(CFG.core.getPIV(i)).getCivId(), CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1) > 0) {
                                         oSB.setColor(CFG.getTruceColor(CFG.ALPHA_DIPLOMACY));
                                     } else {
                                         int tempRelation = (int)CFG.core.getCivRelationOfCivB(CFG.core.getProv(CFG.core.getPIV(i)).getCivId(), CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1);
                                         if (tempRelation == 0) {
-                                            oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f));
+                                            oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f);
                                         } else {
                                             oSB.setColor(CFG.getRelationColor(tempRelation, CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f + CFG.ALPHA_DIPLOMACY * 2.0f / 5.0f * ((float)Math.abs(tempRelation) / 100.0f)));
                                         }
@@ -470,13 +470,13 @@ public class RenderProvince {
                             for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                                 if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == 0) continue;
                                 if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) {
-                                    oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB(), CFG.ALPHA_DIPLOMACY));
+                                    oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB(), CFG.ALPHA_DIPLOMACY);
                                 } else if (CFG.core.getCivTruce(CFG.core.getProv(CFG.core.getPIV(i)).getCivId(), CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) > 0) {
                                     oSB.setColor(CFG.getTruceColor(CFG.ALPHA_DIPLOMACY));
                                 } else {
                                     int tempRelation = (int)CFG.core.getCivRelationOfCivB(CFG.core.getProv(CFG.core.getPIV(i)).getCivId(), CFG.core.getProv(CFG.core.getActiveProvID()).getCivId());
                                     if (tempRelation == 0) {
-                                        oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f));
+                                        oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f);
                                     } else {
                                         oSB.setColor(CFG.getRelationColor(tempRelation, CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f + CFG.ALPHA_DIPLOMACY * 2.0f / 5.0f * ((float)Math.abs(tempRelation) / 100.0f)));
                                     }
@@ -495,18 +495,18 @@ public class RenderProvince {
                             if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 < 0) {
                                 for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                                     if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == 0) continue;
-                                    oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f));
+                                    oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f);
                                     CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                                 }
                             } else {
                                 for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                                     if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == 0) continue;
                                     if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1) {
-                                        oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB(), CFG.ALPHA_DIPLOMACY));
+                                        oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB(), CFG.ALPHA_DIPLOMACY);
                                     } else if (CFG.core.getGuarantee(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1, CFG.core.getProv(CFG.core.getPIV(i)).getCivId()) > 0) {
-                                        oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_INDEPENDENCE.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_INDEPENDENCE.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_INDEPENDENCE.getB(), CFG.ALPHA_DIPLOMACY));
+                                        oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_INDEPENDENCE.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_INDEPENDENCE.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_INDEPENDENCE.getB(), CFG.ALPHA_DIPLOMACY);
                                     } else {
-                                        oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f));
+                                        oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f);
                                     }
                                     CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                                 }
@@ -515,11 +515,11 @@ public class RenderProvince {
                             for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                                 if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == 0) continue;
                                 if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) {
-                                    oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB(), CFG.ALPHA_DIPLOMACY));
+                                    oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB(), CFG.ALPHA_DIPLOMACY);
                                 } else if (CFG.core.getGuarantee(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId(), CFG.core.getProv(CFG.core.getPIV(i)).getCivId()) > 0) {
-                                    oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_INDEPENDENCE.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_INDEPENDENCE.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_INDEPENDENCE.getB(), CFG.ALPHA_DIPLOMACY));
+                                    oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_INDEPENDENCE.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_INDEPENDENCE.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_INDEPENDENCE.getB(), CFG.ALPHA_DIPLOMACY);
                                 } else {
-                                    oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f));
+                                    oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f);
                                 }
                                 CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                             }
@@ -535,18 +535,18 @@ public class RenderProvince {
                             if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 < 0) {
                                 for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                                     if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == 0) continue;
-                                    oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f));
+                                    oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f);
                                     CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                                 }
                             } else {
                                 for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                                     if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == 0) continue;
                                     if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1) {
-                                        oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB(), CFG.ALPHA_DIPLOMACY));
+                                        oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB(), CFG.ALPHA_DIPLOMACY);
                                     } else if (CFG.core.getDefensivePact(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1, CFG.core.getProv(CFG.core.getPIV(i)).getCivId()) > 0) {
-                                        oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_DEFENSIVE_PACT.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_DEFENSIVE_PACT.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_DEFENSIVE_PACT.getB(), CFG.ALPHA_DIPLOMACY));
+                                        oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_DEFENSIVE_PACT.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_DEFENSIVE_PACT.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_DEFENSIVE_PACT.getB(), CFG.ALPHA_DIPLOMACY);
                                     } else {
-                                        oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f));
+                                        oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f);
                                     }
                                     CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                                 }
@@ -555,11 +555,11 @@ public class RenderProvince {
                             for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                                 if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == 0) continue;
                                 if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) {
-                                    oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB(), CFG.ALPHA_DIPLOMACY));
+                                    oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB(), CFG.ALPHA_DIPLOMACY);
                                 } else if (CFG.core.getDefensivePact(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId(), CFG.core.getProv(CFG.core.getPIV(i)).getCivId()) > 0) {
-                                    oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_DEFENSIVE_PACT.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_DEFENSIVE_PACT.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_DEFENSIVE_PACT.getB(), CFG.ALPHA_DIPLOMACY));
+                                    oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_DEFENSIVE_PACT.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_DEFENSIVE_PACT.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_DEFENSIVE_PACT.getB(), CFG.ALPHA_DIPLOMACY);
                                 } else {
-                                    oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f));
+                                    oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f);
                                 }
                                 CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                             }
@@ -575,18 +575,18 @@ public class RenderProvince {
                             if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 < 0) {
                                 for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                                     if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == 0) continue;
-                                    oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f));
+                                    oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f);
                                     CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                                 }
                             } else {
                                 for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                                     if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == 0) continue;
                                     if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1) {
-                                        oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB(), CFG.ALPHA_DIPLOMACY));
+                                        oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB(), CFG.ALPHA_DIPLOMACY);
                                     } else if (CFG.core.getMilitaryAccess(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1, CFG.core.getProv(CFG.core.getPIV(i)).getCivId()) > 0) {
-                                        oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_MILITARY_ACCESS.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_MILITARY_ACCESS.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_MILITARY_ACCESS.getB(), CFG.ALPHA_DIPLOMACY));
+                                        oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_MILITARY_ACCESS.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_MILITARY_ACCESS.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_MILITARY_ACCESS.getB(), CFG.ALPHA_DIPLOMACY);
                                     } else {
-                                        oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f));
+                                        oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f);
                                     }
                                     CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                                 }
@@ -595,11 +595,11 @@ public class RenderProvince {
                             for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                                 if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == 0) continue;
                                 if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) {
-                                    oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB(), CFG.ALPHA_DIPLOMACY));
+                                    oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB(), CFG.ALPHA_DIPLOMACY);
                                 } else if (CFG.core.getMilitaryAccess(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId(), CFG.core.getProv(CFG.core.getPIV(i)).getCivId()) > 0) {
-                                    oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_MILITARY_ACCESS.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_MILITARY_ACCESS.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_MILITARY_ACCESS.getB(), CFG.ALPHA_DIPLOMACY));
+                                    oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_MILITARY_ACCESS.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_MILITARY_ACCESS.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_MILITARY_ACCESS.getB(), CFG.ALPHA_DIPLOMACY);
                                 } else {
-                                    oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f));
+                                    oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f);
                                 }
                                 CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                             }
@@ -614,11 +614,11 @@ public class RenderProvince {
                         for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                             if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == 0) continue;
                             if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID) {
-                                oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB(), CFG.ALPHA_DIPLOMACY));
+                                oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB(), CFG.ALPHA_DIPLOMACY);
                             } else {
                                 int tempRelation = (int)CFG.core.getCivRelationOfCivB(CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID, CFG.core.getProv(CFG.core.getPIV(i)).getCivId());
                                 if (tempRelation == 0) {
-                                    oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f));
+                                    oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f);
                                 } else {
                                     oSB.setColor(CFG.getRelationColor(tempRelation, CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f + CFG.ALPHA_DIPLOMACY * 2.0f / 5.0f * ((float)Math.abs(tempRelation) / 100.0f)));
                                 }
@@ -646,11 +646,11 @@ public class RenderProvince {
                         for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                             if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == 0) continue;
                             if (nActiveCivID == CFG.core.getProv(CFG.core.getPIV(i)).getCivId()) {
-                                oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB(), CFG.ALPHA_DIPLOMACY));
+                                oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB(), CFG.ALPHA_DIPLOMACY);
                             } else if (nActiveCivID == CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getPuppetOfCiv()) {
-                                oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_VASSAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_VASSAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_VASSAL.getB(), CFG.ALPHA_DIPLOMACY));
+                                oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_VASSAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_VASSAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_VASSAL.getB(), CFG.ALPHA_DIPLOMACY);
                             } else {
-                                oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f));
+                                oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f);
                             }
                             CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                         }
@@ -668,7 +668,7 @@ public class RenderProvince {
 
                 @Override
                 public void drawProvinces(SpriteBatch oSB) {
-                    oSB.setColor(new Color(CFG.editor_Continent_GameData.getR(), CFG.editor_Continent_GameData.getG(), CFG.editor_Continent_GameData.getB(), 0.7f));
+                    oSB.setColor(CFG.editor_Continent_GameData.getR(), CFG.editor_Continent_GameData.getG(), CFG.editor_Continent_GameData.getB(), 0.7f);
                     for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                         CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                     }
@@ -679,7 +679,7 @@ public class RenderProvince {
 
                 @Override
                 public void drawProvinces(SpriteBatch oSB) {
-                    oSB.setColor(new Color(CFG.editor_Region_GameData.getR(), CFG.editor_Region_GameData.getG(), CFG.editor_Region_GameData.getB(), 0.45f));
+                    oSB.setColor(CFG.editor_Region_GameData.getR(), CFG.editor_Region_GameData.getG(), CFG.editor_Region_GameData.getB(), 0.45f);
                     for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                         CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                     }
@@ -690,7 +690,7 @@ public class RenderProvince {
 
                 @Override
                 public void drawProvinces(SpriteBatch oSB) {
-                    oSB.setColor(new Color(CFG.menus.getColorPicker().getActiveColor().r, CFG.menus.getColorPicker().getActiveColor().g, CFG.menus.getColorPicker().getActiveColor().b, CFG.ALPHA_DIPLOMACY));
+                    oSB.setColor(CFG.menus.getColorPicker().getActiveColor().r, CFG.menus.getColorPicker().getActiveColor().g, CFG.menus.getColorPicker().getActiveColor().b, CFG.ALPHA_DIPLOMACY);
                     for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                         CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                     }
@@ -741,7 +741,7 @@ public class RenderProvince {
 
                 @Override
                 public void drawProvinces(SpriteBatch oSB) {
-                    oSB.setColor(new Color((float)CFG.editorCivilization_GameData.getR() / 255.0f, (float)CFG.editorCivilization_GameData.getG() / 255.0f, (float)CFG.editorCivilization_GameData.getB() / 255.0f, CFG.ALPHA_DIPLOMACY));
+                    oSB.setColor((float)CFG.editorCivilization_GameData.getR() / 255.0f, (float)CFG.editorCivilization_GameData.getG() / 255.0f, (float)CFG.editorCivilization_GameData.getB() / 255.0f, CFG.ALPHA_DIPLOMACY);
                     for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                         CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                     }
@@ -752,7 +752,7 @@ public class RenderProvince {
 
                 @Override
                 public void drawProvinces(SpriteBatch oSB) {
-                    oSB.setColor(new Color((float)CFG.editorCivilization_GameData.getR() / 255.0f, (float)CFG.editorCivilization_GameData.getG() / 255.0f, (float)CFG.editorCivilization_GameData.getB() / 255.0f, CFG.ALPHA_DIPLOMACY));
+                    oSB.setColor((float)CFG.editorCivilization_GameData.getR() / 255.0f, (float)CFG.editorCivilization_GameData.getG() / 255.0f, (float)CFG.editorCivilization_GameData.getB() / 255.0f, CFG.ALPHA_DIPLOMACY);
                     for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                         CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                     }
@@ -770,7 +770,7 @@ public class RenderProvince {
 
                 @Override
                 public void drawProvinces(SpriteBatch oSB) {
-                    oSB.setColor(new Color(CFG.editorTerrain_Data2.getColor().getR(), CFG.editorTerrain_Data2.getColor().getG(), CFG.editorTerrain_Data2.getColor().getB(), 0.55f));
+                    oSB.setColor(CFG.editorTerrain_Data2.getColor().getR(), CFG.editorTerrain_Data2.getColor().getG(), CFG.editorTerrain_Data2.getColor().getB(), 0.55f);
                     for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                         CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                     }
@@ -825,7 +825,7 @@ public class RenderProvince {
 
                 @Override
                 public void drawProvinces(SpriteBatch oSB) {
-                    oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 1.0f));
+                    oSB.setColor(1.0f, 1.0f, 1.0f, 1.0f);
                     for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                         CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                     }
@@ -899,7 +899,7 @@ public class RenderProvince {
                 for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
                     if (CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == 0) continue;
                     if (CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getAlliance() == 0) {
-                        oSB.setColor(new Color(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f));
+                        oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f);
                     } else {
                         oSB.setColor(CFG.core.getAlliance(CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getAlliance()).getColorOfAlliance().getR(), CFG.core.getAlliance(CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getAlliance()).getColorOfAlliance().getG(), CFG.core.getAlliance(CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getAlliance()).getColorOfAlliance().getB(), CFG.ALPHA_DIPLOMACY * 1.25f);
                     }
@@ -1008,7 +1008,7 @@ public class RenderProvince {
             if (CFG.core.getProv(CFG.formableCivs_GameData.getProvinceID(i)).getCivId() == CFG.core.getCiv(CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID).getCivId()) {
                 CFG.core.getProv(CFG.formableCivs_GameData.getProvinceID(i)).setProvColor(oSB);
             } else {
-                oSB.setColor(new Color(CFG.COLOR_NEGATIVE_2.r, CFG.COLOR_NEGATIVE_2.g, CFG.COLOR_NEGATIVE_2.b, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.85f));
+                oSB.setColor(CFG.COLOR_NEGATIVE_2.r, CFG.COLOR_NEGATIVE_2.g, CFG.COLOR_NEGATIVE_2.b, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.85f);
             }
             CFG.core.getProv(CFG.formableCivs_GameData.getProvinceID(i)).drawLandProv(oSB);
             CFG.core.getProv(CFG.formableCivs_GameData.getProvinceID(i)).setDrawProv(false);
@@ -1016,7 +1016,7 @@ public class RenderProvince {
         for (i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
             if (CFG.core.getProv(CFG.core.getPIV(i)).getDrawProv() && CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == CFG.core.getCiv(CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID).getCivId()) {
                 CFG.core.getProv(CFG.core.getPIV(i)).setProvColor(oSB);
-                oSB.setColor(new Color((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.35f));
+                oSB.setColor((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.35f);
                 CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
             }
             CFG.core.getProv(CFG.core.getPIV(i)).setDrawProv(true);
@@ -1031,16 +1031,16 @@ public class RenderProvince {
             if (CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getMetProv(CFG.formableCivs_GameData.getProvinceID(i)) && CFG.core.getProv(CFG.formableCivs_GameData.getProvinceID(i)).getCivId() == CFG.core.getCiv(CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID).getCivId()) {
                 CFG.core.getProv(CFG.formableCivs_GameData.getProvinceID(i)).setProvColor(oSB);
             } else if (CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getMetProv(CFG.formableCivs_GameData.getProvinceID(i))) {
-                oSB.setColor(new Color(CFG.COLOR_NEGATIVE_2.r, CFG.COLOR_NEGATIVE_2.g, CFG.COLOR_NEGATIVE_2.b, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.85f));
+                oSB.setColor(CFG.COLOR_NEGATIVE_2.r, CFG.COLOR_NEGATIVE_2.g, CFG.COLOR_NEGATIVE_2.b, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.85f);
             } else {
-                oSB.setColor(new Color(CFG.COLOR_NEGATIVE_2.r, CFG.COLOR_NEGATIVE_2.g, CFG.COLOR_NEGATIVE_2.b, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.75f));
+                oSB.setColor(CFG.COLOR_NEGATIVE_2.r, CFG.COLOR_NEGATIVE_2.g, CFG.COLOR_NEGATIVE_2.b, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.75f);
             }
             CFG.core.getProv(CFG.formableCivs_GameData.getProvinceID(i)).drawLandProv(oSB);
             CFG.core.getProv(CFG.formableCivs_GameData.getProvinceID(i)).setDrawProv(false);
         }
         for (i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
             if (CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getMetProv(CFG.core.getPIV(i)) && CFG.core.getProv(CFG.core.getPIV(i)).getDrawProv() && CFG.core.getProv(CFG.core.getPIV(i)).getCivId() == CFG.core.getCiv(CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID).getCivId()) {
-                oSB.setColor(new Color((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.35f));
+                oSB.setColor((float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getR() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getG() / 255.0f, (float)CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getB() / 255.0f, (float)CFG.settingsGD.PROV_ALPHA / 255.0f * 0.35f);
                 CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
             }
             CFG.core.getProv(CFG.core.getPIV(i)).setDrawProv(true);
@@ -1111,7 +1111,7 @@ public class RenderProvince {
                 CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
                 continue;
             }
-            oSB.setColor(new Color(CFG.settingsGD.COLOR_PROVINCE_DISCOVERY.getR(), CFG.settingsGD.COLOR_PROVINCE_DISCOVERY.getG(), CFG.settingsGD.COLOR_PROVINCE_DISCOVERY.getB(), CFG.settingsGD.COLOR_PROVINCE_DISCOVERY_ALPHA));
+            oSB.setColor(CFG.settingsGD.COLOR_PROVINCE_DISCOVERY.getR(), CFG.settingsGD.COLOR_PROVINCE_DISCOVERY.getG(), CFG.settingsGD.COLOR_PROVINCE_DISCOVERY.getB(), CFG.settingsGD.COLOR_PROVINCE_DISCOVERY_ALPHA);
             CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
         }
         oSB.setShader(AoCGame.shaderAlpha3);
@@ -1366,7 +1366,7 @@ public class RenderProvince {
             if (CFG.core.getCiv(CFG.core.getProv(CFG.core.getPIV(i)).getCivId()).getIsAvailable()) {
                 CFG.core.getProv(CFG.core.getPIV(i)).setProvColor(oSB);
             } else {
-                oSB.setColor(new Color(0.0f, 0.0f, 0.0f, (float)CFG.settingsGD.PROV_ALPHA * 0.6f / 255.0f));
+                oSB.setColor(0.0f, 0.0f, 0.0f, (float)CFG.settingsGD.PROV_ALPHA * 0.6f / 255.0f);
             }
             CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
         }
@@ -1425,11 +1425,11 @@ public class RenderProvince {
     public static final void drawProvincesInMapEditor_Connections(SpriteBatch oSB) {
         int i;
         CFG.core.updateProvincesInView();
-        oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.1f));
+        oSB.setColor(1.0f, 1.0f, 1.0f, 0.1f);
         for (i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
             CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);
         }
-        oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.4f));
+        oSB.setColor(1.0f, 1.0f, 1.0f, 0.4f);
         if (CFG.VIEW_SHOW_VALUES) {
             int j;
             for (i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
@@ -1444,7 +1444,7 @@ public class RenderProvince {
                 for (j = 0; j < CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceBordersLandBySeaSize(); ++j) {
                     RenderProvince.drawProvincesInMapEditor_Connections_Line(oSB, Images.line33, CFG.core.getPSVI(i), CFG.core.getProv(CFG.core.getPSVI(i)).getProvBordersLandBySea().get(j).getWithProvinceID());
                 }
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.25f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.25f);
                 for (j = 0; j < CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceBordersSeaBySeaSize(); ++j) {
                     RenderProvince.drawProvincesInMapEditor_Connections_Line(oSB, Images.line33, CFG.core.getPSVI(i), CFG.core.getProv(CFG.core.getPSVI(i)).getProvBordersSeaBySea().get(j).getWithProvinceID());
                 }
@@ -1466,44 +1466,44 @@ public class RenderProvince {
         CFG.core.updateProvincesInView();
         for (i = 0; i < CFG.NUM_OF_WASTELAND_PROVINCES_IN_VIEW; ++i) {
             if (CFG.core.getProv(CFG.core.getWPIV(i)).getLvlOfPort() >= -1) {
-                oSB.setColor(new Color(0.1254902f, 0.2901961f, 0.043137256f, 0.6f));
+                oSB.setColor(0.1254902f, 0.2901961f, 0.043137256f, 0.6f);
                 CFG.core.getProv(CFG.core.getWPIV(i)).drawProv_ActiveProv(oSB);
                 continue;
             }
             if (CFG.core.getProv(CFG.core.getWPIV(i)).getLvlOfPort() == -1) {
-                oSB.setColor(new Color(0.02745098f, 0.12941177f, 0.18431373f, 0.6f));
+                oSB.setColor(0.02745098f, 0.12941177f, 0.18431373f, 0.6f);
                 CFG.core.getProv(CFG.core.getWPIV(i)).drawProv_ActiveProv(oSB);
                 continue;
             }
-            oSB.setColor(new Color(0.007843138f, 0.09411765f, 0.13725491f, 0.6f));
+            oSB.setColor(0.007843138f, 0.09411765f, 0.13725491f, 0.6f);
             CFG.core.getProv(CFG.core.getWPIV(i)).drawProv_ActiveProv(oSB);
         }
         for (i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
             if (CFG.core.getProv(CFG.core.getPIV(i)).getLvlOfPort() >= -1) {
-                oSB.setColor(new Color(0.1254902f, 0.2901961f, 0.043137256f, 0.6f));
+                oSB.setColor(0.1254902f, 0.2901961f, 0.043137256f, 0.6f);
                 CFG.core.getProv(CFG.core.getPIV(i)).drawProv_ActiveProv(oSB);
                 continue;
             }
             if (CFG.core.getProv(CFG.core.getPIV(i)).getLvlOfPort() == -1) {
-                oSB.setColor(new Color(0.02745098f, 0.12941177f, 0.18431373f, 0.6f));
+                oSB.setColor(0.02745098f, 0.12941177f, 0.18431373f, 0.6f);
                 CFG.core.getProv(CFG.core.getPIV(i)).drawProv_ActiveProv(oSB);
                 continue;
             }
-            oSB.setColor(new Color(0.007843138f, 0.09411765f, 0.13725491f, 0.6f));
+            oSB.setColor(0.007843138f, 0.09411765f, 0.13725491f, 0.6f);
             CFG.core.getProv(CFG.core.getPIV(i)).drawProv_ActiveProv(oSB);
         }
         for (i = 0; i < CFG.NUM_OF_SEA_PROVINCES_IN_VIEW; ++i) {
             if (CFG.core.getProv(CFG.core.getPSVI(i)).getLvlOfPort() >= -1) {
-                oSB.setColor(new Color(0.1254902f, 0.2901961f, 0.043137256f, 0.6f));
+                oSB.setColor(0.1254902f, 0.2901961f, 0.043137256f, 0.6f);
                 CFG.core.getProv(CFG.core.getPSVI(i)).drawProv_ActiveProv(oSB);
                 continue;
             }
             if (CFG.core.getProv(CFG.core.getPSVI(i)).getLvlOfPort() == -1) {
-                oSB.setColor(new Color(0.02745098f, 0.12941177f, 0.18431373f, 0.6f));
+                oSB.setColor(0.02745098f, 0.12941177f, 0.18431373f, 0.6f);
                 CFG.core.getProv(CFG.core.getPSVI(i)).drawProv_ActiveProv(oSB);
                 continue;
             }
-            oSB.setColor(new Color(0.007843138f, 0.09411765f, 0.13725491f, 0.6f));
+            oSB.setColor(0.007843138f, 0.09411765f, 0.13725491f, 0.6f);
             CFG.core.getProv(CFG.core.getPSVI(i)).drawProv_ActiveProv(oSB);
         }
     }
@@ -1524,14 +1524,14 @@ public class RenderProvince {
             CFG.core.getProv(CFG.core.getPSVI(i)).drawProv_ActiveProv(oSB);
         }
         if (CFG.core.getActiveProvID() >= 0) {
-            oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.2f));
+            oSB.setColor(1.0f, 1.0f, 1.0f, 0.2f);
             IMGManager.getIMG(Images.pix255).drawO(oSB, CFG.core.getRegions().get(CFG.core.getRegionID(CFG.core.getActiveProvID())).getMinX() + CFG.map.getMpC().getPX(), CFG.core.getRegions().get(CFG.core.getRegionID(CFG.core.getActiveProvID())).getMinY() + CFG.map.getMpC().getPY(), CFG.core.getRegions().get(CFG.core.getRegionID(CFG.core.getActiveProvID())).getMaxX() - CFG.core.getRegions().get(CFG.core.getRegionID(CFG.core.getActiveProvID())).getMinX(), CFG.core.getRegions().get(CFG.core.getRegionID(CFG.core.getActiveProvID())).getMaxY() - CFG.core.getRegions().get(CFG.core.getRegionID(CFG.core.getActiveProvID())).getMinY());
-            oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.6f));
+            oSB.setColor(1.0f, 1.0f, 1.0f, 0.6f);
             CFG.drawRect(oSB, CFG.core.getRegions().get(CFG.core.getRegionID(CFG.core.getActiveProvID())).getMinX() + CFG.map.getMpC().getPX(), CFG.core.getRegions().get(CFG.core.getRegionID(CFG.core.getActiveProvID())).getMinY() + CFG.map.getMpC().getPY(), CFG.core.getRegions().get(CFG.core.getRegionID(CFG.core.getActiveProvID())).getMaxX() - CFG.core.getRegions().get(CFG.core.getRegionID(CFG.core.getActiveProvID())).getMinX(), CFG.core.getRegions().get(CFG.core.getRegionID(CFG.core.getActiveProvID())).getMaxY() - CFG.core.getRegions().get(CFG.core.getRegionID(CFG.core.getActiveProvID())).getMinY());
             if (CFG.map.getIsMapWorldMap(CFG.map.getActiveMapIDN())) {
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.2f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.2f);
                 IMGManager.getIMG(Images.pix255).drawO(oSB, CFG.core.getRegions().get(CFG.core.getRegionID(CFG.core.getActiveProvID())).getMinX() + CFG.map.getMpC().getPX() + CFG.map.getMpB().getWidthM(), CFG.core.getRegions().get(CFG.core.getRegionID(CFG.core.getActiveProvID())).getMinY() + CFG.map.getMpC().getPY(), CFG.core.getRegions().get(CFG.core.getRegionID(CFG.core.getActiveProvID())).getMaxX() - CFG.core.getRegions().get(CFG.core.getRegionID(CFG.core.getActiveProvID())).getMinX(), CFG.core.getRegions().get(CFG.core.getRegionID(CFG.core.getActiveProvID())).getMaxY() - CFG.core.getRegions().get(CFG.core.getRegionID(CFG.core.getActiveProvID())).getMinY());
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.6f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.6f);
                 CFG.drawRect(oSB, CFG.core.getRegions().get(CFG.core.getRegionID(CFG.core.getActiveProvID())).getMinX() + CFG.map.getMpC().getPX() + CFG.map.getMpB().getWidthM(), CFG.core.getRegions().get(CFG.core.getRegionID(CFG.core.getActiveProvID())).getMinY() + CFG.map.getMpC().getPY(), CFG.core.getRegions().get(CFG.core.getRegionID(CFG.core.getActiveProvID())).getMaxX() - CFG.core.getRegions().get(CFG.core.getRegionID(CFG.core.getActiveProvID())).getMinX(), CFG.core.getRegions().get(CFG.core.getRegionID(CFG.core.getActiveProvID())).getMaxY() - CFG.core.getRegions().get(CFG.core.getRegionID(CFG.core.getActiveProvID())).getMinY());
             }
         }
@@ -1540,28 +1540,28 @@ public class RenderProvince {
     public static final void drawProvincesInMapEditor_ArmySeaBoxes(SpriteBatch oSB) {
         CFG.core.updateProvincesInView();
         if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getSeaProv()) {
-            oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.15f));
+            oSB.setColor(1.0f, 1.0f, 1.0f, 0.15f);
             IMGManager.getIMG(Images.pix255).drawO(oSB, CFG.core.getProv(CFG.core.getActiveProvID()).getMiX2() + CFG.map.getMpC().getPX(), CFG.core.getProv(CFG.core.getActiveProvID()).getMiY4() + CFG.map.getMpC().getPY(), CFG.core.getProv(CFG.core.getActiveProvID()).getMaX7() - CFG.core.getProv(CFG.core.getActiveProvID()).getMiX2(), CFG.core.getProv(CFG.core.getActiveProvID()).getMaY6() - CFG.core.getProv(CFG.core.getActiveProvID()).getMiY4());
-            oSB.setColor(new Color(CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.r, CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.g, CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.b, 0.8f));
+            oSB.setColor(CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.r, CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.g, CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.b, 0.8f);
             CFG.drawRect(oSB, CFG.core.getProv(CFG.core.getActiveProvID()).getMiX2() + CFG.map.getMpC().getPX(), CFG.core.getProv(CFG.core.getActiveProvID()).getMiY4() + CFG.map.getMpC().getPY(), CFG.core.getProv(CFG.core.getActiveProvID()).getMaX7() - CFG.core.getProv(CFG.core.getActiveProvID()).getMiX2(), CFG.core.getProv(CFG.core.getActiveProvID()).getMaY6() - CFG.core.getProv(CFG.core.getActiveProvID()).getMiY4());
             if (CFG.map.getIsMapWorldMap(CFG.map.getActiveMapIDN())) {
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.15f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.15f);
                 IMGManager.getIMG(Images.pix255).drawO(oSB, CFG.core.getProv(CFG.core.getActiveProvID()).getMiX2() + CFG.map.getMpC().getPX() + CFG.map.getMpB().getWidthM(), CFG.core.getProv(CFG.core.getActiveProvID()).getMiY4() + CFG.map.getMpC().getPY(), CFG.core.getProv(CFG.core.getActiveProvID()).getMaX7() - CFG.core.getProv(CFG.core.getActiveProvID()).getMiX2(), CFG.core.getProv(CFG.core.getActiveProvID()).getMaY6() - CFG.core.getProv(CFG.core.getActiveProvID()).getMiY4());
-                oSB.setColor(new Color(CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.r, CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.g, CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.b, 0.8f));
+                oSB.setColor(CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.r, CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.g, CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.b, 0.8f);
                 CFG.drawRect(oSB, CFG.core.getProv(CFG.core.getActiveProvID()).getMiX2() + CFG.map.getMpC().getPX() + CFG.map.getMpB().getWidthM(), CFG.core.getProv(CFG.core.getActiveProvID()).getMiY4() + CFG.map.getMpC().getPY(), CFG.core.getProv(CFG.core.getActiveProvID()).getMaX7() - CFG.core.getProv(CFG.core.getActiveProvID()).getMiX2(), CFG.core.getProv(CFG.core.getActiveProvID()).getMaY6() - CFG.core.getProv(CFG.core.getActiveProvID()).getMiY4());
             }
         }
         for (int i = 0; i < CFG.NUM_OF_SEA_PROVINCES_IN_VIEW; ++i) {
             if (CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceArmyBoxes() == null) continue;
             for (int j = CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceArmyBoxes().size() - 1; j >= 0; --j) {
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.05f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.05f);
                 IMGManager.getIMG(Images.pix255).drawO(oSB, CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceArmyBoxes().get(j).getStartPosX() + CFG.map.getMpC().getPX(), CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceArmyBoxes().get(j).getStartPosY() + CFG.map.getMpC().getPY(), CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceArmyBoxes().get(j).getEndPosX() - CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceArmyBoxes().get(j).getStartPosX(), CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceArmyBoxes().get(j).getEndPosY() - CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceArmyBoxes().get(j).getStartPosY());
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.075f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.075f);
                 CFG.drawRect(oSB, CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceArmyBoxes().get(j).getStartPosX() + CFG.map.getMpC().getPX(), CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceArmyBoxes().get(j).getStartPosY() + CFG.map.getMpC().getPY(), CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceArmyBoxes().get(j).getEndPosX() - CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceArmyBoxes().get(j).getStartPosX(), CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceArmyBoxes().get(j).getEndPosY() - CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceArmyBoxes().get(j).getStartPosY());
                 if (!CFG.map.getIsMapWorldMap(CFG.map.getActiveMapIDN())) continue;
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.05f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.05f);
                 IMGManager.getIMG(Images.pix255).drawO(oSB, CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceArmyBoxes().get(j).getStartPosX() + CFG.map.getMpC().getPX() + CFG.map.getMpB().getWidthM(), CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceArmyBoxes().get(j).getStartPosY() + CFG.map.getMpC().getPY(), CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceArmyBoxes().get(j).getEndPosX() - CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceArmyBoxes().get(j).getStartPosX(), CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceArmyBoxes().get(j).getEndPosY() - CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceArmyBoxes().get(j).getStartPosY());
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.075f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.075f);
                 CFG.drawRect(oSB, CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceArmyBoxes().get(j).getStartPosX() + CFG.map.getMpC().getPX() + CFG.map.getMpB().getWidthM(), CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceArmyBoxes().get(j).getStartPosY() + CFG.map.getMpC().getPY(), CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceArmyBoxes().get(j).getEndPosX() - CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceArmyBoxes().get(j).getStartPosX(), CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceArmyBoxes().get(j).getEndPosY() - CFG.core.getProv(CFG.core.getPSVI(i)).getProvinceArmyBoxes().get(j).getStartPosY());
             }
         }
@@ -1571,23 +1571,23 @@ public class RenderProvince {
         int j;
         CFG.core.updateProvincesInView();
         if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 >= 0 && CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getSeaProv()) {
-            oSB.setColor(new Color(CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.r, CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.g, CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.b, 0.3f));
+            oSB.setColor(CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.r, CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.g, CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.b, 0.3f);
             CFG.drawRect(oSB, CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getMiX2() + CFG.map.getMpC().getPX(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getMiY4() + CFG.map.getMpC().getPY(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getMaX7() - CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getMiX2(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getMaY6() - CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getMiY4());
             if (CFG.map.getIsMapWorldMap(CFG.map.getActiveMapIDN())) {
-                oSB.setColor(new Color(CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.r, CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.g, CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.b, 0.3f));
+                oSB.setColor(CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.r, CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.g, CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.b, 0.3f);
                 CFG.drawRect(oSB, CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getMiX2() + CFG.map.getMpC().getPX() + CFG.map.getMpB().getWidthM(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getMiY4() + CFG.map.getMpC().getPY(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getMaX7() - CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getMiX2(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getMaY6() - CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getMiY4());
             }
         }
         if (CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes() != null) {
             for (j = CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().size() - 1; j >= 0; --j) {
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.05f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.05f);
                 IMGManager.getIMG(Images.pix255).drawO(oSB, CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosX() + CFG.map.getMpC().getPX(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosY() + CFG.map.getMpC().getPY(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getEndPosX() - CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosX(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getEndPosY() - CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosY());
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.075f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.075f);
                 CFG.drawRect(oSB, CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosX() + CFG.map.getMpC().getPX(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosY() + CFG.map.getMpC().getPY(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getEndPosX() - CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosX(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getEndPosY() - CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosY());
                 if (!CFG.map.getIsMapWorldMap(CFG.map.getActiveMapIDN())) continue;
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.05f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.05f);
                 IMGManager.getIMG(Images.pix255).drawO(oSB, CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosX() + CFG.map.getMpC().getPX() + CFG.map.getMpB().getWidthM(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosY() + CFG.map.getMpC().getPY(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getEndPosX() - CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosX(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getEndPosY() - CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosY());
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.075f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.075f);
                 CFG.drawRect(oSB, CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosX() + CFG.map.getMpC().getPX() + CFG.map.getMpB().getWidthM(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosY() + CFG.map.getMpC().getPY(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getEndPosX() - CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosX(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getEndPosY() - CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosY());
             }
         }
@@ -1605,24 +1605,24 @@ public class RenderProvince {
         int j;
         CFG.core.updateProvincesInView();
         if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 >= 0 && CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getSeaProv()) {
-            oSB.setColor(new Color(CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.r, CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.g, CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.b, 0.3f));
+            oSB.setColor(CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.r, CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.g, CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.b, 0.3f);
             CFG.drawRect(oSB, CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getMiX2() + CFG.map.getMpC().getPX(), -IMGManager.getIMG(Images.pix255).getHeight() + CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getMiY4() + CFG.map.getMpC().getPY(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getMaX7() - CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getMiX2(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getMaY6() - CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getMiY4());
             if (CFG.map.getIsMapWorldMap(CFG.map.getActiveMapIDN())) {
-                oSB.setColor(new Color(CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.r, CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.g, CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.b, 0.3f));
+                oSB.setColor(CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.r, CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.g, CFG.COLOR_PROVINCE_ACTIVE_PROVINCE_BORDER.b, 0.3f);
                 CFG.drawRect(oSB, CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getMiX2() + CFG.map.getMpC().getPX() + CFG.map.getMpB().getWidthM(), -IMGManager.getIMG(Images.pix255).getHeight() + CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getMiY4() + CFG.map.getMpC().getPY(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getMaX7() - CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getMiX2(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getMaY6() - CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getMiY4());
             }
         }
         if (CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes() != null) {
             for (j = CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().size() - 1; j >= 0; --j) {
                 if (j == CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2) continue;
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.05f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.05f);
                 IMGManager.getIMG(Images.pix255).drawO(oSB, CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosX() + CFG.map.getMpC().getPX(), -IMGManager.getIMG(Images.pix255).getHeight() + CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosY() + CFG.map.getMpC().getPY(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getEndPosX() - CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosX(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getEndPosY() - CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosY());
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.075f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.075f);
                 CFG.drawRect(oSB, CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosX() + CFG.map.getMpC().getPX(), -IMGManager.getIMG(Images.pix255).getHeight() + CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosY() + CFG.map.getMpC().getPY(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getEndPosX() - CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosX(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getEndPosY() - CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosY());
                 if (!CFG.map.getIsMapWorldMap(CFG.map.getActiveMapIDN())) continue;
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.05f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.05f);
                 IMGManager.getIMG(Images.pix255).drawO(oSB, CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosX() + CFG.map.getMpC().getPX() + CFG.map.getMpB().getWidthM(), -IMGManager.getIMG(Images.pix255).getHeight() + CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosY() + CFG.map.getMpC().getPY(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getEndPosX() - CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosX(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getEndPosY() - CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosY());
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.075f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.075f);
                 CFG.drawRect(oSB, CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosX() + CFG.map.getMpC().getPX() + CFG.map.getMpB().getWidthM(), -IMGManager.getIMG(Images.pix255).getHeight() + CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosY() + CFG.map.getMpC().getPY(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getEndPosX() - CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosX(), CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getEndPosY() - CFG.core.getProv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getProvinceArmyBoxes().get(j).getStartPosY());
             }
         }
@@ -1636,14 +1636,14 @@ public class RenderProvince {
             }
         }
         if (Menu_MapEditor_ArmySeaBoxes_Add.oFirstPoint.getPY() >= 0 && Menu_MapEditor_ArmySeaBoxes_Add.oSecondPoint.getPY() >= 0) {
-            oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.15f));
+            oSB.setColor(1.0f, 1.0f, 1.0f, 0.15f);
             IMGManager.getIMG(Images.pix255).drawO(oSB, Menu_MapEditor_ArmySeaBoxes_Add.oFirstPoint.getPX() + CFG.map.getMpC().getPX(), -IMGManager.getIMG(Images.pix255).getHeight() + Menu_MapEditor_ArmySeaBoxes_Add.oFirstPoint.getPY() + CFG.map.getMpC().getPY(), Menu_MapEditor_ArmySeaBoxes_Add.oSecondPoint.getPX() - Menu_MapEditor_ArmySeaBoxes_Add.oFirstPoint.getPX(), Menu_MapEditor_ArmySeaBoxes_Add.oSecondPoint.getPY() - Menu_MapEditor_ArmySeaBoxes_Add.oFirstPoint.getPY());
-            oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.45f));
+            oSB.setColor(1.0f, 1.0f, 1.0f, 0.45f);
             CFG.drawRect(oSB, Menu_MapEditor_ArmySeaBoxes_Add.oFirstPoint.getPX() + CFG.map.getMpC().getPX(), -IMGManager.getIMG(Images.pix255).getHeight() + Menu_MapEditor_ArmySeaBoxes_Add.oFirstPoint.getPY() + CFG.map.getMpC().getPY(), Menu_MapEditor_ArmySeaBoxes_Add.oSecondPoint.getPX() - Menu_MapEditor_ArmySeaBoxes_Add.oFirstPoint.getPX(), Menu_MapEditor_ArmySeaBoxes_Add.oSecondPoint.getPY() - Menu_MapEditor_ArmySeaBoxes_Add.oFirstPoint.getPY());
             if (CFG.map.getIsMapWorldMap(CFG.map.getActiveMapIDN())) {
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.15f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.15f);
                 IMGManager.getIMG(Images.pix255).drawO(oSB, CFG.map.getMpB().getWidthM() + Menu_MapEditor_ArmySeaBoxes_Add.oFirstPoint.getPX() + CFG.map.getMpC().getPX(), -IMGManager.getIMG(Images.pix255).getHeight() + Menu_MapEditor_ArmySeaBoxes_Add.oFirstPoint.getPY() + CFG.map.getMpC().getPY(), Menu_MapEditor_ArmySeaBoxes_Add.oSecondPoint.getPX() - Menu_MapEditor_ArmySeaBoxes_Add.oFirstPoint.getPX(), Menu_MapEditor_ArmySeaBoxes_Add.oSecondPoint.getPY() - Menu_MapEditor_ArmySeaBoxes_Add.oFirstPoint.getPY());
-                oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.45f));
+                oSB.setColor(1.0f, 1.0f, 1.0f, 0.45f);
                 CFG.drawRect(oSB, CFG.map.getMpB().getWidthM() + Menu_MapEditor_ArmySeaBoxes_Add.oFirstPoint.getPX() + CFG.map.getMpC().getPX(), -IMGManager.getIMG(Images.pix255).getHeight() + Menu_MapEditor_ArmySeaBoxes_Add.oFirstPoint.getPY() + CFG.map.getMpC().getPY(), Menu_MapEditor_ArmySeaBoxes_Add.oSecondPoint.getPX() - Menu_MapEditor_ArmySeaBoxes_Add.oFirstPoint.getPX(), Menu_MapEditor_ArmySeaBoxes_Add.oSecondPoint.getPY() - Menu_MapEditor_ArmySeaBoxes_Add.oFirstPoint.getPY());
             }
         }

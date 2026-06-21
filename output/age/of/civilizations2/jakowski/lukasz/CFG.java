@@ -308,6 +308,7 @@ public class CFG {
     public static final String WWW_LUKASZJAKOWSKI = "http://lukaszjakowski.pl";
     public static final String WWW_AOC_FACEBOOK = "https://www.facebook.com/AgeofCivilizationsJakowski/";
     public static boolean gameLoaded = false;
+    public static boolean renderRequested = false;
     public static int GAMEWIDTH;
     public static int GAMEHEIGHT;
     public static int iNumOfFPS;
@@ -1299,6 +1300,9 @@ public class CFG {
     }
 
     public static void setRenderO(boolean nRENDER) {
+        if (nRENDER) {
+            renderRequested = true;
+        }
     }
 
     public static boolean getMetProv(int nProvinceID) {
@@ -7982,7 +7986,7 @@ public class CFG {
         ASSIMILATION_COST_MODIFIER = 1.0f;
         AGE_OF_CHAOS_CIVS_LIST = new ArrayList<Integer>();
         REBELS_POWER = 1.5f;
-        MIN_ARMY_REQUIRED_TO_ATTACK = 19;
+        MIN_ARMY_REQUIRED_TO_ATTACK = 1000;
         RANDOM_CIVILIZATION_COLOR = new Color(0.03f, 0.03f, 0.05f, 1.0f);
         PLAYER_TURN_ID = 0;
         regroupArmyMode = false;

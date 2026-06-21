@@ -3866,6 +3866,8 @@ public class Province {
         }
         this.updateProviBorder_OwnerAnimation();
         this.updateDrawArmyInProv();
+        CFG.core.updateAliveCivStatus(oldCivID);
+        CFG.core.updateAliveCivStatus(nCivID);
         if (isInGame) {
             int i2;
             try {

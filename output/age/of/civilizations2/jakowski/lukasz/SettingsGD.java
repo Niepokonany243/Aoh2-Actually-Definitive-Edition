@@ -2,6 +2,8 @@
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.Color_GameData;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 
 public class SettingsGD
@@ -26,7 +28,7 @@ implements Serializable {
     public boolean DRAW_CIVILIZATIONS_NAMES_OVER_PROVINCES_IN_GAME = true;
     public int PERCENTAGE_OF_CITIES_ON_MAP = 22;
     public int TURNS_BETWEEN_AUTOSAVEX = 200;
-    public boolean CONTINUOUS_RENDERING = true;
+    public boolean CONTINUOUS_RENDERING = false;
     public float CITIES_FONT_SCALE = 0.35f;
     public final int CITIES_DEFAULT_FONT_SIZE = 10;
     public Color_GameData civNamesFontColor = new Color_GameData(0.0f, 0.0f, 0.0f);
@@ -90,6 +92,11 @@ implements Serializable {
     public boolean DYNAMIC_MIN_ARMY = true;
     public int ARMY_VISIBILITY_RANGE = 3; 
     public int ARMY_ICON_SCALE = 1; 
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        this.DYNAMIC_MIN_ARMY = true;
+    }
 
     public final float getArmyIconFactor() {
         switch (this.ARMY_ICON_SCALE) {

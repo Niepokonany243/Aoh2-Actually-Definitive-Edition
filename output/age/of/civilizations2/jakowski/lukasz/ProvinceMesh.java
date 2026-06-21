@@ -209,6 +209,10 @@ public class ProvinceMesh {
         colorTexture.draw(colorPixmap, 0, 0);
     }
     
+    public static boolean isInitialized() {
+        return initialized;
+    }
+
     public static void updateTexture() {
         if (initialized) colorTexture.draw(colorPixmap, 0, 0);
     }

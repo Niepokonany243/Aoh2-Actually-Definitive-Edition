@@ -2230,7 +2230,7 @@ public class Civilization {
             CFG.core.getCiv(this.getCivId()).setGold(CFG.core.getCiv(this.getCivId()).getGold() + tDiff * recruitCost);
             return true;
         }
-        if (CFG.core.getCiv(this.getCivId()).getMovemPoints() < CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)this.getCivId()).getIdeology()).COST_OF_RECRUIT) {
+        if (!CFG.core.getCiv((int)this.getCivId()).isAtWarC() && !CFG.core.getCiv((int)this.getCivId()).civGD.civPlans.isPreparingForTheWar() && CFG.core.getCiv(this.getCivId()).getMovemPoints() < CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)this.getCivId()).getIdeology()).COST_OF_RECRUIT) {
             return false;
         }
         if (nArmy >= CFG.core.getCiv(this.getCivId()).getGold() / (long)CFG.gCARR(nProvinceID, this.getCivId())) {
