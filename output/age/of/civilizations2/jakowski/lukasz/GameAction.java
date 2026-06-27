@@ -45,6 +45,7 @@ import age.of.civilizations2.jakowski.lukasz.Player;
 import age.of.civilizations2.jakowski.lukasz.Province;
 import age.of.civilizations2.jakowski.lukasz.Province_Army;
 import age.of.civilizations2.jakowski.lukasz.Province_Population;
+import age.of.civilizations2.jakowski.lukasz.RegroupArmy.RegroupArmy_AtWar;
 import age.of.civilizations2.jakowski.lukasz.RTS;
 import age.of.civilizations2.jakowski.lukasz.Render;
 import age.of.civilizations2.jakowski.lukasz.Report_Data;
@@ -78,6 +79,12 @@ public class GameAction {
     public Report_Data battleReportSave = new Report_Data();
     public TurnStates activeTurnAction = TurnStates.INPUT_ORDERS;
     private MoveUnits_TurnData currentMoveUnits = null;
+    private boolean retryFailedNavalInvasionNow = false;
+    private int retryFailedNavalInvasionFromProvinceID = -1;
+    private int retryFailedNavalInvasionToProvinceID = -1;
+    private int retryFailedNavalInvasionCivID = -1;
+    private long retryFailedNavalInvasionArmy = 0L;
+    private int retryFailedNavalInvasionDepth = 0;
     private int iPlayerAttack_ShowArmyInProvinceID = -1;
     public static boolean SKIP_ALL_COMBAT_MOVEMENT_ONCE = false;
     public boolean updatePosOfMap_NewTurn = false;
@@ -2363,6 +2370,7 @@ public class GameAction {
                                     this.armyRetreat(this.currentMoveUnits.getMoveUnits(i8).getToProvID(), this.currentMoveUnits.getCivID(i8), unitLosses);
                                     CFG.core.getProv(this.currentMoveUnits.getMoveUnits(i8).getFromProviID()).updateArmy4(this.currentMoveUnits.getCivID(i8), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(i8).getFromProviID()).getArmyCivID1(this.currentMoveUnits.getCivID(i8)) - unitLosses);
                                     CFG.core.getCiv(this.currentMoveUnits.getCivID(i8)).setNumberOfUnits(CFG.core.getCiv(this.currentMoveUnits.getCivID(i8)).getNumberOfUnits() - unitLosses);
+                                    this.retryFailedNavalInvasion(this.currentMoveUnits.getMoveUnits(i8).getFromProviID(), this.currentMoveUnits.getMoveUnits(i8).getToProvID(), this.currentMoveUnits.getCivID(i8), unitArmy - unitLosses);
                                 }
                             } else {
                                 for (int i8 = 0; i8 < this.currentMoveUnits.getMoveUnitsSize(); ++i8) {
@@ -2748,6 +2756,10 @@ public class GameAction {
                     CFG.exceptionStack(ex);
                 }
             }
+            if (this.consumeFailedNavalInvasionRetry()) {
+                return;
+            }
+            this.retryFailedNavalInvasionDepth = 0;
             this.currentMoveUnits = null;
         }
         catch (Exception ex) {
@@ -3283,6 +3295,101 @@ public class GameAction {
         }
         catch (StackOverflowError exr) {
             CFG.exceptionStack(exr);
+        }
+    }
+
+    private final void retryFailedNavalInvasion(int fromProvinceID, int toProvinceID, int civID, long survivingArmy) {
+        try {
+            if (survivingArmy <= 0L || !CFG.core.getProv(fromProvinceID).getSeaProv() || CFG.core.getProv(toProvinceID).getSeaProv()) {
+                return;
+            }
+            if (CFG.core.getProv(toProvinceID).getCivId() <= 0 || !CFG.core.getCivsAtWar(civID, CFG.core.getProv(toProvinceID).getCivId())) {
+                return;
+            }
+            long armyInSea = CFG.core.getProv(fromProvinceID).getArmyCivID1(civID);
+            if (armyInSea < survivingArmy) {
+                CFG.core.getProv(fromProvinceID).updateArmy4(civID, survivingArmy);
+            }
+            this.queueFailedNavalInvasionRegroup(fromProvinceID, toProvinceID, civID, Math.max(survivingArmy, CFG.core.getProv(fromProvinceID).getArmyCivID1(civID)));
+            if (!this.retryFailedNavalInvasionNow || survivingArmy > this.retryFailedNavalInvasionArmy) {
+                this.retryFailedNavalInvasionNow = true;
+                this.retryFailedNavalInvasionFromProvinceID = fromProvinceID;
+                this.retryFailedNavalInvasionToProvinceID = toProvinceID;
+                this.retryFailedNavalInvasionCivID = civID;
+                this.retryFailedNavalInvasionArmy = survivingArmy;
+            }
+        }
+        catch (Exception ex) {
+            CFG.exceptionStack(ex);
+        }
+    }
+
+    private final void queueFailedNavalInvasionRegroup(int fromProvinceID, int toProvinceID, int civID, long survivingArmy) {
+        try {
+            Civilization civ = CFG.core.getCiv(civID);
+            if (survivingArmy <= CFG.MIN_ARMY_REQUIRED_TO_ATTACK || !this.checkDynamicMinArmy(toProvinceID, civID, survivingArmy)) {
+                return;
+            }
+            for (int i = civ.getRegroupArmySize() - 1; i >= 0; --i) {
+                if (civ.getRegroupArmy(i).getFromProvinceID() == fromProvinceID && civ.getRegroupArmy(i).getRouteSize() > 0 && civ.getRegroupArmy(i).getToProvinceID() == toProvinceID) {
+                    civ.getRegroupArmy(i).setNumOfUnits(Math.max(civ.getRegroupArmy(i).getNumOfUnits(), survivingArmy));
+                    return;
+                }
+            }
+            RegroupArmy_AtWar retryRegroup = new RegroupArmy_AtWar(civID, fromProvinceID, toProvinceID);
+            if (retryRegroup.getRouteSize() <= 0) {
+                return;
+            }
+            retryRegroup.setNumOfUnits(survivingArmy);
+            retryRegroup.iObsolete = Math.max(retryRegroup.iObsolete, 24);
+            civ.addRegroupArmy(retryRegroup);
+        }
+        catch (Exception ex) {
+            CFG.exceptionStack(ex);
+        }
+    }
+
+    private final boolean consumeFailedNavalInvasionRetry() {
+        try {
+            if (!this.retryFailedNavalInvasionNow) {
+                return false;
+            }
+            int fromProvinceID = this.retryFailedNavalInvasionFromProvinceID;
+            int toProvinceID = this.retryFailedNavalInvasionToProvinceID;
+            int civID = this.retryFailedNavalInvasionCivID;
+            long retryArmy = this.retryFailedNavalInvasionArmy;
+            this.retryFailedNavalInvasionNow = false;
+            this.retryFailedNavalInvasionFromProvinceID = -1;
+            this.retryFailedNavalInvasionToProvinceID = -1;
+            this.retryFailedNavalInvasionCivID = -1;
+            this.retryFailedNavalInvasionArmy = 0L;
+            if (++this.retryFailedNavalInvasionDepth > 24) {
+                return false;
+            }
+            if (fromProvinceID < 0 || toProvinceID < 0 || civID < 0) {
+                return false;
+            }
+            if (!CFG.core.getProv(fromProvinceID).getSeaProv() || CFG.core.getProv(toProvinceID).getSeaProv()) {
+                return false;
+            }
+            if (CFG.core.getProv(toProvinceID).getCivId() <= 0 || !CFG.core.getCivsAtWar(civID, CFG.core.getProv(toProvinceID).getCivId())) {
+                return false;
+            }
+            retryArmy = Math.min(retryArmy, CFG.core.getProv(fromProvinceID).getArmyCivID1(civID));
+            if (retryArmy <= CFG.MIN_ARMY_REQUIRED_TO_ATTACK || !this.checkDynamicMinArmy(toProvinceID, civID, retryArmy)) {
+                return false;
+            }
+            this.currentMoveUnits = new MoveUnits_TurnData(civID);
+            this.currentMoveUnits.addMoveUnits(new MoveUnits(fromProvinceID, toProvinceID, retryArmy, true), civID);
+            this.SHOW_REPORT = false;
+            this.SAVE_REPORT = false;
+            this.rollDices();
+            this.turnMoves_MoveCurrentArmy();
+            return true;
+        }
+        catch (Exception ex) {
+            CFG.exceptionStack(ex);
+            return false;
         }
     }
 

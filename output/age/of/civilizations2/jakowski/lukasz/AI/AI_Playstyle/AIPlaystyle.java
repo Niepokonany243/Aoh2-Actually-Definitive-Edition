@@ -117,6 +117,20 @@ public class AIPlaystyle {
         return CFG.core.getCiv((int)nCivID).civGD.civPers.MIN_MILITARY_SPENDINGS;
     }
 
+    public final boolean isPeaceArmyAboveDisbandTarget(int nCivID) {
+        Civilization civ = CFG.core.getCiv(nCivID);
+        if (civ.isAtWarC() || civ.civGD.civPlans.isPreparingForTheWar()) {
+            return false;
+        }
+        float targetMilitarySpending = Math.max(0.0f, this.getMinMilitarySpending(nCivID));
+        if (civ.iBudget <= 0) {
+            return civ.iMilitaryUpkeep_Total > 0;
+        }
+        int targetArmySpending = (int)((float)civ.iBudget * targetMilitarySpending);
+        int disbandTrigger = Math.max(targetArmySpending + 1, (int)Math.ceil((double)((float)civ.iBudget * targetMilitarySpending * 1.1f)));
+        return civ.iMilitaryUpkeep_Total > disbandTrigger || civ.iMilitaryUpkeep_PERC > targetMilitarySpending * 1.1f;
+    }
+
     public void turnOrders(int nCivID) {
         this.armyOverBudget = false;
         this.relocateLostCapital(nCivID);
@@ -163,7 +177,7 @@ public class AIPlaystyle {
         }
 
         CFG.oAI.expandNeutral.expandToNeutralProvinces(nCivID);
-        if (!sandboxMilitaryControl && this.getMinMilitarySpending(nCivID) + 0.025f < CFG.core.getCiv((int)nCivID).iMilitaryUpkeep_PERC) {
+        if (this.isPeaceArmyAboveDisbandTarget(nCivID)) {
             if (!(CFG.settingsGD.EXPERIMENTAL_BATTLE_SYSTEM && GameCalendar.TURNID - CFG.core.getCiv(nCivID).civGD.iLastWarTurnID < 30)) {
                 this.armyOverBudget_Disband(nCivID);
             }
@@ -249,6 +263,7 @@ public class AIPlaystyle {
                 }
             }
         } else if (!isAtWar && !CFG.core.getCiv(nCivID).civGD.sandboxMilitarise && CFG.core.getCiv(nCivID).getMovemPoints() > GameValues.gvAiProvince.BUILD_INVEST_MIN_MOVEMENT_POINTS) {
+            this.billionaireRecruitment(nCivID);
             
             this.billionaireBuilding(nCivID);
 
@@ -2131,11 +2146,22 @@ public class AIPlaystyle {
             }
         }
         
+        boolean atPeace = !atWar && !preparingForWar;
+        boolean belowPeaceMilitaryTarget = atPeace && this.getMinMilitarySpending(n) > civ.iMilitaryUpkeep_PERC;
         long minReserve = (atWar || preparingForWar) ? 0L : AIPlaystyle.getMoney_MinReserve(n);
+        if (belowPeaceMilitaryTarget) {
+            long reserveRecruitmentBudget = Math.max(1L, (long)((float)civ.iBudget * Math.min(0.25f, this.getMinMilitarySpending(n))));
+            minReserve = Math.min(minReserve, Math.max(0L, civ.getGold() - reserveRecruitmentBudget));
+        }
         long spendable = Math.max(0L, civ.getGold() - minReserve);
         if (spendable <= 0L) return;
         
         int recruitCost = CFG.ideologiesMgr.getIdeologyID((int)civ.getIdeology()).COST_OF_RECRUIT;
+        if (atPeace && !belowPeaceMilitaryTarget) {
+            long surplusRecruitmentTrigger = Math.max((long)GameValues.gvAiProvince.MIN_GOLD_TO_BUILD, (long)civ.iBudget);
+            if (spendable < surplusRecruitmentTrigger) return;
+            spendable = Math.max(1L, Math.min(spendable / 4L, Math.max(1L, (long)((float)civ.iBudget * this.getMinMilitarySpending(n)))));
+        }
         
         java.util.ArrayList<Integer> shuffledProvinces = new java.util.ArrayList<Integer>();
         for (int i = 0; i < civ.getNumOfProvs(); i++) {
@@ -3500,6 +3526,7 @@ public class AIPlaystyle {
                     civilization.civGD.iNextCheckMilitaryAccessSeaTurnID = GameCalendar.TURNID + 6 + CFG.oR.nextInt(20);
                 }
             }
+            this.moveAtWar_AtSeaBorderRetry(n);
             this.moveAtWar_EnemyProvinceFallback(n);
             if (GameValues.gvAiWar.USE_NEW_NAVAL_INVASION) {
                 this.moveAtWar_AtSea_New(n);
@@ -3510,6 +3537,41 @@ public class AIPlaystyle {
         catch (Exception exception) {
             CFG.exceptionStack(exception);
         }
+    }
+
+    private void moveAtWar_AtSeaBorderRetry(int nCivID) {
+        Civilization civ = CFG.core.getCiv(nCivID);
+        if (civ.getMovemPoints() < CFG.ideologiesMgr.getIdeologyID((int)civ.getIdeology()).COST_OF_MOVE) return;
+        for (int i = civ.armiesPositionSize - 1; i >= 0 && civ.getMovemPoints() >= CFG.ideologiesMgr.getIdeologyID((int)civ.getIdeology()).COST_OF_MOVE; --i) {
+            this.moveAtWar_AtSeaBorderRetryFrom(nCivID, civ.armiesPosition.get(i));
+        }
+        for (int i = civ.getArmyInAnotherProvinceSize() - 1; i >= 0 && civ.getMovemPoints() >= CFG.ideologiesMgr.getIdeologyID((int)civ.getIdeology()).COST_OF_MOVE; --i) {
+            this.moveAtWar_AtSeaBorderRetryFrom(nCivID, civ.getArmyInAnotherProviP(i));
+        }
+    }
+
+    private boolean moveAtWar_AtSeaBorderRetryFrom(int nCivID, int fromProvinceID) {
+        if (fromProvinceID < 0 || fromProvinceID >= CFG.core.getProvinSize()) return false;
+        Civilization civ = CFG.core.getCiv(nCivID);
+        Province fromProvince = CFG.core.getProv(fromProvinceID);
+        if (!fromProvince.getSeaProv()) return false;
+        long army = fromProvince.getArmyCivID1(nCivID);
+        if (army <= CFG.MIN_ARMY_REQUIRED_TO_ATTACK) return false;
+        int bestTarget = -1;
+        float bestScore = -1.0f;
+        for (int j = 0; j < fromProvince.getNeighProvincesSize(); ++j) {
+            int toProvinceID = fromProvince.getNeighProvinces(j);
+            Province toProvince = CFG.core.getProv(toProvinceID);
+            if (toProvince.getSeaProv() || !CFG.core.getCivsAtWar(nCivID, toProvince.getCivId()) || civ.isMovingUnitsToProvID(toProvinceID)) continue;
+            if (!CFG.gameAction.checkDynamicMinArmy(toProvinceID, nCivID, army)) continue;
+            long hostileArmy = Math.max(1L, this.getHostileArmyInProvince(toProvinceID, nCivID) + (long)this.getEnemyArmy_ExtraMovedArmy(toProvinceID));
+            float score = this.moveAtWar_AttackTo_Score(nCivID, toProvinceID) * ((float)army / (float)hostileArmy);
+            if (score <= bestScore) continue;
+            bestScore = score;
+            bestTarget = toProvinceID;
+        }
+        if (bestTarget < 0) return false;
+        return CFG.gameAction.moveArmyAction(fromProvinceID, bestTarget, army, nCivID, true, false);
     }
 
     private void moveAtWar_EnemyProvinceFallback(int nCivID) {
@@ -7302,9 +7364,11 @@ public class AIPlaystyle {
                 return;
             }
             ArrayList<AI_ArmyUpkeep> armyUpkeep = new ArrayList<AI_ArmyUpkeep>();
-            int spendingsOnArmy = (int)((float)CFG.core.getCiv((int)nCivID).iBudget * (atWar ? this.armyOverBudget_Disband_AtWar(nCivID) : this.getMinMilitarySpending(nCivID)));
-            int budgetForArmyisOver = (int)Math.abs((float)CFG.core.getCiv((int)nCivID).iBudget * (atWar ? this.armyOverBudget_Disband_AtWar(nCivID) : this.getMinMilitarySpending(nCivID)) - (float)CFG.core.getCiv((int)nCivID).iBudget * CFG.core.getCiv((int)nCivID).iMilitaryUpkeep_PERC);
-            if (CFG.core.getCiv((int)nCivID).iMilitaryUpkeep_Total > spendingsOnArmy) {
+            float militarySpendTarget = atWar ? this.armyOverBudget_Disband_AtWar(nCivID) : this.getMinMilitarySpending(nCivID);
+            int spendingsOnArmy = (int)((float)CFG.core.getCiv((int)nCivID).iBudget * militarySpendTarget);
+            int disbandTrigger = atWar ? spendingsOnArmy : Math.max(spendingsOnArmy + 1, (int)Math.ceil((double)((float)CFG.core.getCiv((int)nCivID).iBudget * militarySpendTarget * 1.1f)));
+            int budgetForArmyisOver = (int)Math.abs((float)CFG.core.getCiv((int)nCivID).iBudget * militarySpendTarget - (float)CFG.core.getCiv((int)nCivID).iBudget * CFG.core.getCiv((int)nCivID).iMilitaryUpkeep_PERC);
+            if (CFG.core.getCiv((int)nCivID).iMilitaryUpkeep_Total > disbandTrigger) {
                 int i;
                 for (int i2 = 0; i2 < CFG.core.getCiv((int)nCivID).armiesPositionSize; ++i2) {
                     armyUpkeep.add(new AI_ArmyUpkeep(nCivID, CFG.core.getCiv((int)nCivID).armiesPosition.get(i2)));

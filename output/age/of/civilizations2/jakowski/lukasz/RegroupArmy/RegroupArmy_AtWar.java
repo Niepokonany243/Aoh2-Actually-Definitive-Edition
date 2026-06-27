@@ -15,7 +15,7 @@ extends RegroupArmy {
         if (!CFG.core.getCiv(nCivID).isAtWarC()) {
             return false;
         }
-        if (CFG.core.getProv(this.getFromProvinceID()).getBordersWithEnemy()) {
+        if (!CFG.core.getProv(this.getFromProvinceID()).getSeaProv() && CFG.core.getProv(this.getFromProvinceID()).getBordersWithEnemy()) {
             return false;
         }
         return super.continueMovingArmy(nCivID);
