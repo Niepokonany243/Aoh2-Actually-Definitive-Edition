@@ -2099,9 +2099,17 @@ public class Core {
 
     public final boolean loadSavedGame_NEW_2(int iLoadID, String[] tSplted) {
         try {
-            for (int z = 0; z < CFG.settingsGD.LOAD_CIVS_SPEED; ++z) {
+            while (true) {
+                if (SaveGameManager.getLoadCivChunks() >= 0 && Menu_LoadSave.tFileID >= SaveGameManager.getLoadCivChunks()) {
+                    this.iCivsSize = this.lCivs.size();
+                    return false;
+                }
                 FileHandle fileReadData_2 = null;
                 fileReadData_2 = CFG.readLocalFiles() ? Gdx.files.local("saves/games/" + CFG.map.getFileActiveMapPath() + tSplted[iLoadID] + "/" + tSplted[iLoadID] + "_2X" + (Menu_LoadSave.tFileID == 0 ? "" : Integer.valueOf(Menu_LoadSave.tFileID))) : FileManager.loadFile("saves/games/" + CFG.map.getFileActiveMapPath() + tSplted[iLoadID] + "/" + tSplted[iLoadID] + "_2X" + (Menu_LoadSave.tFileID == 0 ? "" : Integer.valueOf(Menu_LoadSave.tFileID)));
+                if (!fileReadData_2.exists()) {
+                    this.iCivsSize = this.lCivs.size();
+                    return false;
+                }
                 Save_GameData_2 tempSavedGame_2 = (Save_GameData_2)CFG.deserialize(fileReadData_2.readBytes());
                 List<Civilization> tempCivsLoad = this.gameScenarios.loadCivilizationsLoadGame(tempSavedGame_2.lCivsData, this.lCivs.size());
                 int aSize = tempCivsLoad.size();
@@ -2112,7 +2120,6 @@ public class Core {
                 tempSavedGame_2 = null;
                 this.iCivsSize = this.lCivs.size();
             }
-            return true;
         }
         catch (Exception z) {
             this.iCivsSize = this.lCivs.size();
@@ -2174,21 +2181,26 @@ public class Core {
 
     public final boolean loadSavedGame_NEW_6(int iLoadID, String[] tSplted) {
         try {
-            for (int z = 0; z < CFG.settingsGD.LOAD_PROVINCES_SPEED; ++z) {
-                int loadProvID = 0 + Menu_LoadSave.tFileID2 * SaveGameManager.PROVINCES_PER_FILE;
+            while (true) {
+                if (SaveGameManager.getLoadProvinceChunks() >= 0 && Menu_LoadSave.tFileID2 >= SaveGameManager.getLoadProvinceChunks()) {
+                    return false;
+                }
+                int loadProvID = 0 + Menu_LoadSave.tFileID2 * SaveGameManager.getLoadProvincesPerFile();
                 try {
                     FileHandle fileReadData_4 = null;
                     fileReadData_4 = CFG.readLocalFiles() ? Gdx.files.local("saves/games/" + CFG.map.getFileActiveMapPath() + tSplted[iLoadID] + "/" + tSplted[iLoadID] + "_4X" + (Menu_LoadSave.tFileID2 == 0 ? "" : Integer.valueOf(Menu_LoadSave.tFileID2))) : FileManager.loadFile("saves/games/" + CFG.map.getFileActiveMapPath() + tSplted[iLoadID] + "/" + tSplted[iLoadID] + "_4X" + (Menu_LoadSave.tFileID2 == 0 ? "" : Integer.valueOf(Menu_LoadSave.tFileID2)));
+                    if (!fileReadData_4.exists()) {
+                        return false;
+                    }
                     Save_GameData_4 tempSavedGame_4 = (Save_GameData_4)CFG.deserialize(fileReadData_4.readBytes());
                     for (int i = 0; i < tempSavedGame_4.lProvincesData.size(); ++i) {
                         CFG.core.getProv((int)loadProvID).provGD = tempSavedGame_4.lProvincesData.get(i);
                         ++loadProvID;
                     }
                     ++Menu_LoadSave.tFileID2;
-                    return true;
                 }
                 catch (Exception exception) {
-                    continue;
+                    return false;
                 }
             }
         }

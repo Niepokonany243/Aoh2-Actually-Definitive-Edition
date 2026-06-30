@@ -83,45 +83,22 @@ extends Menu {
                 } else if (iStepID == 15) {
                     CFG.core.loadScenario_11(editor);
                 } else if (iStepID == 16) {
-                    if (nTextureStep < 0) {
-                        try {
-                            if (CFG.core.getGameScenars().getScenario_ActivePallet_TAG() != null) {
-                                for (int i = 0; i < CFG.palletManager.getNumOfPallets(); ++i) {
-                                    if (!CFG.palletManager.getPalletTag(i).equals(CFG.core.getGameScenars().getScenario_ActivePallet_TAG())) continue;
-                                    CFG.palletManager.setActivePalletID(i + 1);
-                                    CFG.palletManager.loadCivilizationsPaletteOfColors(CFG.palletManager.getActivePalletID());
-                                    break;
-                                }
+                    try {
+                        if (CFG.core.getGameScenars().getScenario_ActivePallet_TAG() != null) {
+                            for (int i = 0; i < CFG.palletManager.getNumOfPallets(); ++i) {
+                                if (!CFG.palletManager.getPalletTag(i).equals(CFG.core.getGameScenars().getScenario_ActivePallet_TAG())) continue;
+                                CFG.palletManager.setActivePalletID(i + 1);
+                                CFG.palletManager.loadCivilizationsPaletteOfColors(CFG.palletManager.getActivePalletID());
+                                break;
                             }
-                            CitiesManager.buildLevelsOfCities();
                         }
-                        catch (Exception ex) {
-                            CFG.exceptionStack(ex);
-                        }
-                        CFG.core.loadProvinceTextures_BatchInit();
-                        nTextureStep = 0;
+                        CitiesManager.buildLevelsOfCities();
                     }
-                    int provinSize = CFG.core.getProvinSize();
-                    if (nTextureStep < provinSize) {
-                        int batchSize = 500;
-                        int end = Math.min(nTextureStep + batchSize, provinSize);
-                        CFG.core.loadProvinceTextures_Batch(nTextureStep, end);
-                        nTextureStep = end;
-                        return;
-                    } else if (nTextureStep == provinSize) {
-                        CFG.core.loadProvinceTextures_BatchFinalise();
-                        nTextureStep = provinSize + 1;
-                        return;
-                    } else if (nTextureStep <= provinSize * 2) {
-                        int batchSize = 500;
-                        int bgStart = nTextureStep - (provinSize + 1);
-                        int bgEnd = Math.min(bgStart + batchSize, provinSize);
-                        CFG.core.loadProvinceBG_Batch(bgStart, bgEnd);
-                        nTextureStep = provinSize + 1 + bgEnd;
-                        return;
-                    } else {
-                        nTextureStep = -1;
+                    catch (Exception ex) {
+                        CFG.exceptionStack(ex);
                     }
+                    CFG.core.loadProvinceTextures();
+                    nTextureStep = -1;
                 } else if (iStepID == 17) {
                     CFG.core.loadScenario_13(editor);
                 } else if (iStepID == 18) {

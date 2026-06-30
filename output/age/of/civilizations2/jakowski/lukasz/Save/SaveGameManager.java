@@ -26,8 +26,15 @@ import com.badlogic.gdx.utils.JsonWriter;
 import java.util.ArrayList;
 
 public class SaveGameManager {
-    public static int CIVS_PER_FILE = 3;
-    public static int PROVINCES_PER_FILE = 150;
+    public static final int LEGACY_CIVS_PER_FILE = 3;
+    public static final int LEGACY_PROVINCES_PER_FILE = 150;
+    public static final int SAVE_FORMAT_VERSION_FAST_CHUNKS = 2;
+    public static int CIVS_PER_FILE = Integer.MAX_VALUE;
+    public static int PROVINCES_PER_FILE = Integer.MAX_VALUE;
+    private static int loadCivsPerFile = LEGACY_CIVS_PER_FILE;
+    private static int loadProvincesPerFile = LEGACY_PROVINCES_PER_FILE;
+    private static int loadCivChunks = -1;
+    private static int loadProvinceChunks = -1;
     public static boolean saveRequest = false;
     public static String saveTag;
     public static boolean gameCanBeContinued;
@@ -38,6 +45,66 @@ public class SaveGameManager {
     public static void newGame() {
         saveTag = null;
         iTurnsSinceLastSave = 0;
+    }
+
+    public static int getLoadCivsPerFile() {
+        return loadCivsPerFile > 0 ? loadCivsPerFile : LEGACY_CIVS_PER_FILE;
+    }
+
+    public static int getLoadProvincesPerFile() {
+        return loadProvincesPerFile > 0 ? loadProvincesPerFile : LEGACY_PROVINCES_PER_FILE;
+    }
+
+    public static int getLoadCivChunks() {
+        return loadCivChunks;
+    }
+
+    public static int getLoadProvinceChunks() {
+        return loadProvinceChunks;
+    }
+
+    private static int getChunksCount(int size, int perFile) {
+        if (size <= 0) {
+            return 0;
+        }
+        if (perFile <= 0 || perFile == Integer.MAX_VALUE) {
+            return 1;
+        }
+        return (int)(((long)size + (long)perFile - 1L) / (long)perFile);
+    }
+
+    public static void prepareLoadGameFormat(String nSaveTag) {
+        loadCivsPerFile = LEGACY_CIVS_PER_FILE;
+        loadProvincesPerFile = LEGACY_PROVINCES_PER_FILE;
+        loadCivChunks = -1;
+        loadProvinceChunks = -1;
+        try {
+            FileHandle file = CFG.readLocalFiles() ? Gdx.files.local("saves/games/" + CFG.map.getFileActiveMapPath() + nSaveTag + "/" + nSaveTag + ".json") : FileManager.loadFile("saves/games/" + CFG.map.getFileActiveMapPath() + nSaveTag + "/" + nSaveTag + ".json");
+            Json json = new Json();
+            json.setElementType(ConfigSaveInfo.class, "Data_Save_Info", Data_Save_Info.class);
+            ConfigSaveInfo data = json.fromJson(ConfigSaveInfo.class, file.readString());
+            if (data != null && data.Data_Save_Info != null && data.Data_Save_Info.size() > 0) {
+                Data_Save_Info saveInfo = (Data_Save_Info)data.Data_Save_Info.get(0);
+                if (saveInfo.CivsPerFile > 0) {
+                    loadCivsPerFile = saveInfo.CivsPerFile;
+                }
+                if (saveInfo.ProvincesPerFile > 0) {
+                    loadProvincesPerFile = saveInfo.ProvincesPerFile;
+                }
+                if (saveInfo.CivChunks > 0) {
+                    loadCivChunks = saveInfo.CivChunks;
+                }
+                if (saveInfo.ProvinceChunks > 0) {
+                    loadProvinceChunks = saveInfo.ProvinceChunks;
+                }
+            }
+        }
+        catch (Exception ex) {
+            loadCivsPerFile = LEGACY_CIVS_PER_FILE;
+            loadProvincesPerFile = LEGACY_PROVINCES_PER_FILE;
+            loadCivChunks = -1;
+            loadProvinceChunks = -1;
+        }
     }
 
     public static void trySaveGame() {
@@ -150,7 +217,11 @@ public class SaveGameManager {
 
     public static final boolean saveGame_3(int tFileID) {
         try {
-            int i = 1 + tFileID * CIVS_PER_FILE;
+            long startID = 1L + (long)tFileID * (long)CIVS_PER_FILE;
+            if (startID >= CFG.core.getCivsSize()) {
+                return false;
+            }
+            int i = (int)startID;
             while (i < CFG.core.getCivsSize()) {
                 try {
                     Save_GameData_2 nSaveData = new Save_GameData_2();
@@ -164,8 +235,7 @@ public class SaveGameManager {
                     CFG.exceptionStack(ex);
                     CFG.toastM.addM(CFG.lang.get("Error - Game not saved"), CFG.COLOR_NEGATIVE_2);
                     CFG.toastM.setTimeInView(2500);
-                    i += CIVS_PER_FILE;
-                    ++tFileID;
+                    return false;
                 }
             }
         }
@@ -194,7 +264,11 @@ public class SaveGameManager {
 
     public static boolean saveGame_5(int tFileID) {
         try {
-            int i = tFileID * PROVINCES_PER_FILE;
+            long startID = (long)tFileID * (long)PROVINCES_PER_FILE;
+            if (startID >= CFG.core.getProvinSize()) {
+                return false;
+            }
+            int i = (int)startID;
             while (i < CFG.core.getProvinSize()) {
                 try {
                     Save_GameData_4 nSaveData = new Save_GameData_4();
@@ -208,8 +282,7 @@ public class SaveGameManager {
                     CFG.exceptionStack(ex);
                     CFG.toastM.addM(CFG.lang.get("Error - Game not saved"), CFG.COLOR_NEGATIVE_2);
                     CFG.toastM.setTimeInView(2500);
-                    i += PROVINCES_PER_FILE;
-                    ++tFileID;
+                    return false;
                 }
             }
         }
@@ -519,6 +592,11 @@ public class SaveGameManager {
             ++tNumOfCivs;
         }
         Data_Save_Info nDataTag = new Data_Save_Info();
+        nDataTag.SaveFormatVersion = SAVE_FORMAT_VERSION_FAST_CHUNKS;
+        nDataTag.CivsPerFile = CIVS_PER_FILE;
+        nDataTag.ProvincesPerFile = PROVINCES_PER_FILE;
+        nDataTag.CivChunks = SaveGameManager.getChunksCount(Math.max(0, CFG.core.getCivsSize() - 1), CIVS_PER_FILE);
+        nDataTag.ProvinceChunks = SaveGameManager.getChunksCount(CFG.core.getProvinSize(), PROVINCES_PER_FILE);
         nDataTag.Civs = tNumOfCivs;
         nDataTag.GameDate = GameCalendar.getCurrDate();
         nDataTag.Turn = GameCalendar.TURNID;
@@ -597,6 +675,11 @@ public class SaveGameManager {
         public String GameDate;
         public int Turn;
         public int Civs;
+        public int SaveFormatVersion;
+        public int CivsPerFile;
+        public int ProvincesPerFile;
+        public int CivChunks;
+        public int ProvinceChunks;
     }
 }
 

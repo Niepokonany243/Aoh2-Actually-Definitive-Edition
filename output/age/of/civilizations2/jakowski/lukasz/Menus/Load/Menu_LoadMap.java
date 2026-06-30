@@ -14,7 +14,6 @@ import age.of.civilizations2.jakowski.lukasz.Save.SaveGameManager;
 import age.of.civilizations2.jakowski.lukasz.SaveLoad.LoadManager;
 import age.of.civilizations2.jakowski.lukasz.Ships.ShipManager;
 import age.of.civilizations2.jakowski.lukasz.Z_Other.PNM;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.ArrayList;
@@ -37,19 +36,7 @@ extends Menu {
         IMGManager.getIMG(Images.gradient).drawO(oSB, iTranslateX, CFG.GAMEHEIGHT - IMGManager.getIMG(Images.gradient).getHeight() - CFG.PADD * 3 + iTranslateY, CFG.GAMEWIDTH, CFG.PADD * 3, false, true);
         CFG.drLOA(oSB, (int)((float)CFG.GAMEWIDTH * CFG.getLOAPAD()) + iTranslateX, CFG.GAMEHEIGHT - (int)((float)CFG.BUTTON_H * 0.8f) * 2 - CFG.PADD + iTranslateY, (int)((float)CFG.GAMEWIDTH * (1.0f - CFG.getLOAPAD() * 2.0f)), (int)((float)CFG.BUTTON_H * 0.8f), (float)this.iStepID / (float)(this.iNumOfSteps + CFG.map.getMapNumOfProvinces(CFG.map.getActiveMapIDN()) * 2));
         CFG.drawJakowskiGames_RIGHT_BOT(oSB, iTranslateX);
-        new Thread(new Runnable(){
-
-            @Override
-            public void run() {
-                Gdx.app.postRunnable(new Runnable(){
-
-                    @Override
-                    public void run() {
-                        Menu_LoadMap.this.loadMap();
-                    }
-                });
-            }
-        }).start();
+        this.loadMap();
         CFG.drawVersionLB(oSB, iTranslateX);
         CFG.setRenderO(true);
     }

@@ -58,27 +58,13 @@ extends Menu {
                 SaveGameManager.saveGame_2();
                 sSaving = CFG.lang.get("Saving") + ": " + CFG.lang.get("Civilizations");
             } else if (iStepID == 3) {
-                boolean savedT = false;
-                for (int z = 0; z < CFG.settingsGD.SAVE_CIVS_SPEED; ++z) {
-                    if (!SaveGameManager.saveGame_3(fileID_Civs++)) continue;
-                    pause = true;
-                    savedT = true;
-                }
-                if (savedT) {
-                    return;
+                while (SaveGameManager.saveGame_3(fileID_Civs++)) {
                 }
             } else if (iStepID == 4) {
                 SaveGameManager.saveGame_4();
                 sSaving = CFG.lang.get("Saving") + ": " + CFG.lang.get("Provinces");
             } else if (iStepID == 5) {
-                boolean savedT = false;
-                for (int z = 0; z < CFG.settingsGD.SAVE_PROVINCES_SPEED; ++z) {
-                    if (!SaveGameManager.saveGame_5(fileID_Provinces++)) continue;
-                    pause = true;
-                    savedT = true;
-                }
-                if (savedT) {
-                    return;
+                while (SaveGameManager.saveGame_5(fileID_Provinces++)) {
                 }
             } else if (iStepID == 6) {
                 SaveGameManager.saveGame_6();

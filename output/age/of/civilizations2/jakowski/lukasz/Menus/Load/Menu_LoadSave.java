@@ -72,6 +72,7 @@ extends Menu {
                     FileHandle file2 = CFG.readLocalFiles() ? Gdx.files.local("saves/games/" + CFG.map.getFileActiveMapPath() + "Age_of_Civilizations") : FileManager.loadFile("saves/games/" + CFG.map.getFileActiveMapPath() + "Age_of_Civilizations");
                     String tempTags = file2.readString();
                     this.tSplted = tempTags.split(";");
+                    SaveGameManager.prepareLoadGameFormat(this.tSplted[iLoadID]);
                     break block73;
                 }
                 if (loadStepID == 1) {
@@ -122,65 +123,22 @@ extends Menu {
                     break block73;
                 }
                 if (loadStepID == 11) {
-                    if (nLoadSubStep == 0) {
-                        nLoadSubStep = 1;
+                    for (int i = 1; i < CFG.core.getCivsSize(); ++i) {
+                        CFG.core.buildCivilizationRegions(i);
                     }
-                    int batchSize = 3;
-                    int processed = 0;
-                    while (nLoadSubStep < CFG.core.getCivsSize() && processed < batchSize) {
-                        CFG.core.buildCivilizationRegions(nLoadSubStep);
-                        nLoadSubStep++;
-                        processed++;
+                    for (int i = 1; i < CFG.core.getCivsSize(); ++i) {
+                        CFG.core.getCiv(i).civNeighbors.buildNeighbors(i);
                     }
-                    if (nLoadSubStep >= CFG.core.getCivsSize()) {
-                        for (int i = 1; i < CFG.core.getCivsSize(); ++i) {
-                            CFG.core.getCiv(i).civNeighbors.buildNeighbors(i);
-                        }
-                        nLoadSubStep = 0;
-                        break block73;
-                    }
-                    pause = true;
-                    return;
+                    nLoadSubStep = 0;
+                    break block73;
                 }
                 if (loadStepID == 12) {
-                    if (nLoadSubStep == 0) {
-                        CFG.core.loadProvinceTextures_BatchInit();
-                        nLoadSubStep = 1;
+                    CFG.core.loadProvinceTextures();
+                    CFG.core.buildWastelandLevels();
+                    for (int i = 0; i < CFG.core.getProvinSize(); ++i) {
+                        CFG.core.getProv(i).updateProvinceBorder();
                     }
-                    int provinSize = CFG.core.getProvinSize();
-                    if (nLoadSubStep >= 1 && nLoadSubStep <= provinSize) {
-                        int start = nLoadSubStep - 1;
-                        int batchSize = 500;
-                        int end = Math.min(start + batchSize, provinSize);
-                        CFG.core.loadProvinceTextures_Batch(start, end);
-                        nLoadSubStep = end + 1;
-                        if (end < provinSize) {
-                            pause = true;
-                            return;
-                        }
-                    }
-                    if (nLoadSubStep == provinSize + 1) {
-                        CFG.core.loadProvinceTextures_BatchFinalise();
-                        CFG.core.buildWastelandLevels();
-                        nLoadSubStep = provinSize + 2;
-                        pause = true;
-                        return;
-                    }
-                    if (nLoadSubStep >= provinSize + 2) {
-                        int borderOffset = nLoadSubStep - (provinSize + 2);
-                        int batchSize = 500;
-                        int borderEnd = Math.min(borderOffset + batchSize, provinSize);
-                        for (int i = borderOffset; i < borderEnd; ++i) {
-                            CFG.core.getProv(i).updateProvinceBorder();
-                        }
-                        nLoadSubStep = provinSize + 2 + borderEnd;
-                        if (borderEnd >= provinSize) {
-                            nLoadSubStep = 0;
-                            break block73;
-                        }
-                        pause = true;
-                        return;
-                    }
+                    nLoadSubStep = 0;
                     break block73;
                 }
                 if (loadStepID == 13) {
@@ -275,26 +233,15 @@ extends Menu {
                     break block73;
                 }
                 if (loadStepID == 33) {
-                    if (nLoadSubStep == 0) {
-                        try {
-                            CFG.map.getMpC().centerToProvID(CFG.core.getCiv(CFG.core.getPlayer(0).getCivId()).getCapitalProvID());
-                        }
-                        catch (IndexOutOfBoundsException i) {}
-                        nLoadSubStep = 1;
+                    try {
+                        CFG.map.getMpC().centerToProvID(CFG.core.getCiv(CFG.core.getPlayer(0).getCivId()).getCapitalProvID());
                     }
-                    int batchSize = 15;
-                    int processed = 0;
-                    while (nLoadSubStep < CFG.core.getCivsSize() && processed < batchSize) {
-                        CFG.core.getCiv(nLoadSubStep).updateNumberOfUnits();
-                        nLoadSubStep++;
-                        processed++;
+                    catch (IndexOutOfBoundsException i) {}
+                    for (int i = 1; i < CFG.core.getCivsSize(); ++i) {
+                        CFG.core.getCiv(i).updateNumberOfUnits();
                     }
-                    if (nLoadSubStep >= CFG.core.getCivsSize()) {
-                        nLoadSubStep = 0;
-                        break block73;
-                    }
-                    pause = true;
-                    return;
+                    nLoadSubStep = 0;
+                    break block73;
                 }
                 if (loadStepID == 34) {
                     CFG.map.getMpC().setDisableMovingMap(false);

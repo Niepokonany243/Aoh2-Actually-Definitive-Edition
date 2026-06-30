@@ -363,10 +363,10 @@ extends Menu {
         this.getMenuElem(34).setTextE(CFG.lang.get("ShowCombatMovement") + ": " + (CFG.settingsGD.SHOW_COMBAT_MOVEMENT ? CFG.lang.get("On") : CFG.lang.get("Off")));
         this.getMenuElem(40).setTextE(CFG.lang.get("Map") + ", " + CFG.lang.get("Overlays") + ": " + (Menu_LoadMap.loadMapOverlays() ? CFG.lang.get("On") : CFG.lang.get("Off")));
         this.getMenuElem(43).setTextE(CFG.lang.get("Ships") + ": " + CFG.settingsGD.SHIPS_ON_MAP + "%");
-        this.getMenuElem(46).setTextE(CFG.lang.get("SaveSpeed") + ", " + CFG.lang.get("Provinces") + ": " + CFG.settingsGD.SAVE_PROVINCES_SPEED * 100 + "%");
-        this.getMenuElem(49).setTextE(CFG.lang.get("SaveSpeed") + ", " + CFG.lang.get("Civilizations") + ": " + CFG.settingsGD.SAVE_CIVS_SPEED * 100 + "%");
-        this.getMenuElem(52).setTextE(CFG.lang.get("LoadSpeed") + ", " + CFG.lang.get("Provinces") + ": " + CFG.settingsGD.LOAD_PROVINCES_SPEED * 100 + "%");
-        this.getMenuElem(55).setTextE(CFG.lang.get("LoadSpeed") + ", " + CFG.lang.get("Civilizations") + ": " + CFG.settingsGD.LOAD_CIVS_SPEED * 100 + "%");
+        this.getMenuElem(46).setTextE(CFG.lang.get("SaveSpeed") + ", " + CFG.lang.get("Provinces") + ": " + CFG.lang.get("NoLimit"));
+        this.getMenuElem(49).setTextE(CFG.lang.get("SaveSpeed") + ", " + CFG.lang.get("Civilizations") + ": " + CFG.lang.get("NoLimit"));
+        this.getMenuElem(52).setTextE(CFG.lang.get("LoadSpeed") + ", " + CFG.lang.get("Provinces") + ": " + CFG.lang.get("NoLimit"));
+        this.getMenuElem(55).setTextE(CFG.lang.get("LoadSpeed") + ", " + CFG.lang.get("Civilizations") + ": " + CFG.lang.get("NoLimit"));
         this.getMenuElem(58).setTextE(CFG.lang.get("UseOldProvinceBorders") + ": " + (CFG.settingsGD.USE_OLD_PROVINCE_BORDER ? CFG.lang.get("On") : CFG.lang.get("Off")));
         this.getMenuElem(61).setTextE(CFG.lang.get("Menu") + " Extra Left Position: " + CFG.settingsGD.MENU_EXTRA_LEFT + "px");
         this.getMenuElem(64).setTextE(CFG.lang.get("Map") + ": " + CFG.lang.get("DeclareWar") + " - " + CFG.lang.get("GameAnimation") + ": " + (CFG.settingsGD.DRAW_WAR_ON_MAP ? CFG.lang.get("On") : CFG.lang.get("Off")));
@@ -718,43 +718,43 @@ extends Menu {
                 break;
             }
             case 45: {
-                CFG.settingsGD.SAVE_PROVINCES_SPEED = Math.max(1, CFG.settingsGD.SAVE_PROVINCES_SPEED - 1);
-                this.getMenuElem(46).setTextE(CFG.lang.get("SaveSpeed") + ", " + CFG.lang.get("Provinces") + ": " + CFG.settingsGD.SAVE_PROVINCES_SPEED * 100 + "%");
+                CFG.settingsGD.SAVE_PROVINCES_SPEED = Integer.MAX_VALUE;
+                this.getMenuElem(46).setTextE(CFG.lang.get("SaveSpeed") + ", " + CFG.lang.get("Provinces") + ": " + CFG.lang.get("NoLimit"));
                 break;
             }
             case 47: {
-                CFG.settingsGD.SAVE_PROVINCES_SPEED = Math.max(1, CFG.settingsGD.SAVE_PROVINCES_SPEED + 1);
-                this.getMenuElem(46).setTextE(CFG.lang.get("SaveSpeed") + ", " + CFG.lang.get("Provinces") + ": " + CFG.settingsGD.SAVE_PROVINCES_SPEED * 100 + "%");
+                CFG.settingsGD.SAVE_PROVINCES_SPEED = Integer.MAX_VALUE;
+                this.getMenuElem(46).setTextE(CFG.lang.get("SaveSpeed") + ", " + CFG.lang.get("Provinces") + ": " + CFG.lang.get("NoLimit"));
                 break;
             }
             case 48: {
-                CFG.settingsGD.SAVE_CIVS_SPEED = Math.max(1, CFG.settingsGD.SAVE_CIVS_SPEED - 1);
-                this.getMenuElem(49).setTextE(CFG.lang.get("SaveSpeed") + ", " + CFG.lang.get("Civilizations") + ": " + CFG.settingsGD.SAVE_CIVS_SPEED * 100 + "%");
+                CFG.settingsGD.SAVE_CIVS_SPEED = Integer.MAX_VALUE;
+                this.getMenuElem(49).setTextE(CFG.lang.get("SaveSpeed") + ", " + CFG.lang.get("Civilizations") + ": " + CFG.lang.get("NoLimit"));
                 break;
             }
             case 50: {
-                CFG.settingsGD.SAVE_CIVS_SPEED = Math.max(1, CFG.settingsGD.SAVE_CIVS_SPEED + 1);
-                this.getMenuElem(49).setTextE(CFG.lang.get("SaveSpeed") + ", " + CFG.lang.get("Civilizations") + ": " + CFG.settingsGD.SAVE_CIVS_SPEED * 100 + "%");
+                CFG.settingsGD.SAVE_CIVS_SPEED = Integer.MAX_VALUE;
+                this.getMenuElem(49).setTextE(CFG.lang.get("SaveSpeed") + ", " + CFG.lang.get("Civilizations") + ": " + CFG.lang.get("NoLimit"));
                 break;
             }
             case 51: {
-                CFG.settingsGD.LOAD_PROVINCES_SPEED = Math.max(1, CFG.settingsGD.LOAD_PROVINCES_SPEED - 1);
-                this.getMenuElem(52).setTextE(CFG.lang.get("LoadSpeed") + ", " + CFG.lang.get("Provinces") + ": " + CFG.settingsGD.LOAD_PROVINCES_SPEED * 100 + "%");
+                CFG.settingsGD.LOAD_PROVINCES_SPEED = Integer.MAX_VALUE;
+                this.getMenuElem(52).setTextE(CFG.lang.get("LoadSpeed") + ", " + CFG.lang.get("Provinces") + ": " + CFG.lang.get("NoLimit"));
                 break;
             }
             case 53: {
-                CFG.settingsGD.LOAD_PROVINCES_SPEED = Math.max(1, CFG.settingsGD.LOAD_PROVINCES_SPEED + 1);
-                this.getMenuElem(52).setTextE(CFG.lang.get("LoadSpeed") + ", " + CFG.lang.get("Provinces") + ": " + CFG.settingsGD.LOAD_PROVINCES_SPEED * 100 + "%");
+                CFG.settingsGD.LOAD_PROVINCES_SPEED = Integer.MAX_VALUE;
+                this.getMenuElem(52).setTextE(CFG.lang.get("LoadSpeed") + ", " + CFG.lang.get("Provinces") + ": " + CFG.lang.get("NoLimit"));
                 break;
             }
             case 54: {
-                CFG.settingsGD.LOAD_CIVS_SPEED = Math.max(1, CFG.settingsGD.LOAD_CIVS_SPEED - 1);
-                this.getMenuElem(55).setTextE(CFG.lang.get("LoadSpeed") + ", " + CFG.lang.get("Civilizations") + ": " + CFG.settingsGD.LOAD_CIVS_SPEED * 100 + "%");
+                CFG.settingsGD.LOAD_CIVS_SPEED = Integer.MAX_VALUE;
+                this.getMenuElem(55).setTextE(CFG.lang.get("LoadSpeed") + ", " + CFG.lang.get("Civilizations") + ": " + CFG.lang.get("NoLimit"));
                 break;
             }
             case 56: {
-                CFG.settingsGD.LOAD_CIVS_SPEED = Math.max(1, CFG.settingsGD.LOAD_CIVS_SPEED + 1);
-                this.getMenuElem(55).setTextE(CFG.lang.get("LoadSpeed") + ", " + CFG.lang.get("Civilizations") + ": " + CFG.settingsGD.LOAD_CIVS_SPEED * 100 + "%");
+                CFG.settingsGD.LOAD_CIVS_SPEED = Integer.MAX_VALUE;
+                this.getMenuElem(55).setTextE(CFG.lang.get("LoadSpeed") + ", " + CFG.lang.get("Civilizations") + ": " + CFG.lang.get("NoLimit"));
                 break;
             }
             case 57: {

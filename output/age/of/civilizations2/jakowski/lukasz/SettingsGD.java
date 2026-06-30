@@ -73,10 +73,10 @@ implements Serializable {
     public boolean CAPITAL_FLAGS_HIGH = true;
     public boolean ANDROID_LOAD_MAP_OVERLAYS = false;
     public int SHIPS_ON_MAP = 10;
-    public int LOAD_CIVS_SPEED = 2;
-    public int LOAD_PROVINCES_SPEED = 2;
-    public int SAVE_CIVS_SPEED = 2;
-    public int SAVE_PROVINCES_SPEED = 2;
+    public int LOAD_CIVS_SPEED = Integer.MAX_VALUE;
+    public int LOAD_PROVINCES_SPEED = Integer.MAX_VALUE;
+    public int SAVE_CIVS_SPEED = Integer.MAX_VALUE;
+    public int SAVE_PROVINCES_SPEED = Integer.MAX_VALUE;
     public boolean USE_OLD_PROVINCE_BORDER = false;
     public int MENU_EXTRA_LEFT = 0;
     public boolean DRAW_WAR_ON_MAP = true;
