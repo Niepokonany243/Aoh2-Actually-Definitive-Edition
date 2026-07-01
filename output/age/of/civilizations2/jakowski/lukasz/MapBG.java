@@ -809,9 +809,15 @@ public class MapBG {
     }
 
     public final void updateMinimapResolution(int nScale) {
-        CFG.map.getMpS().updateMinimapScaleXY();
         this.iMinimapHeight = Menu_InGame_ProvInfo.getUseSmallProvinceInfo() ? (CFG.BUTTON_H + CFG.PADD * 2) * nScale : (CFG.BUTTON_H * 2 + CFG.PADD * 2) * nScale;
-        this.iMinimapWidth = (int)((float)this.getWidthM() / CFG.map.getMpS().getMinimapScaleY());
+        if (this.iMinimapHeight < 3) {
+            this.iMinimapHeight = 3;
+        }
+        float minimapScaleY = (float)this.getHeightM() / ((float)this.iMinimapHeight - 2.0f);
+        this.iMinimapWidth = (int)((float)this.getWidthM() / minimapScaleY);
+        if (this.iMinimapWidth < 3) {
+            this.iMinimapWidth = 3;
+        }
         CFG.map.getMpS().updateMinimapScaleXY();
     }
 

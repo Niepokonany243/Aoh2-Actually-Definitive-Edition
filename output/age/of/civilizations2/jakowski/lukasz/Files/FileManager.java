@@ -1,8 +1,8 @@
 
 package age.of.civilizations2.jakowski.lukasz.Files;
 
-import age.of.civilizations2.jakowski.lukasz.CFG;
 import age.of.civilizations2.jakowski.lukasz.Z_Other.ST.sUM;
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import java.nio.ByteBuffer;
@@ -16,7 +16,7 @@ public class FileManager {
     }
 
     public static void initLoadInterface() {
-        loadInterface = CFG.getIsDesktop() ? (IS_MAC ? new LoadInterface(){
+        loadInterface = Gdx.app.getType() == Application.ApplicationType.Desktop ? (IS_MAC ? new LoadInterface(){
 
             @Override
             public FileHandle loadFile(String sFile) {

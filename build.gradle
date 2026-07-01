@@ -8,7 +8,84 @@ buildscript {
         maven { url "https://jitpack.io" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'com.android.tools.build:gradle:9.3.0-alpha05'
+    }
+}
+def aoh2BuildStatsFile = rootProject.layout.buildDirectory.file('aoh2-build-stats.properties').get().asFile
+def aoh2BuildStats = new Properties()
+if (aoh2BuildStatsFile.isFile()) {
+    aoh2BuildStatsFile.withInputStream { aoh2BuildStats.load(it) }
+}
+def aoh2ReadStat = { String name -> (aoh2BuildStats.getProperty(name, '0') as int) }
+def aoh2WriteStats = {
+    aoh2BuildStatsFile.parentFile.mkdirs()
+    aoh2BuildStatsFile.withOutputStream { aoh2BuildStats.store(it, 'AoH2 Gradle build stats') }
+}
+def aoh2StatsOnlyTasks = ['printBuildStats', 'projects', 'tasks']
+def aoh2TaskNames = gradle.startParameter.taskNames
+def aoh2CountThisInvocation = aoh2TaskNames.isEmpty() || !aoh2TaskNames.every { taskName ->
+    aoh2StatsOnlyTasks.any { statsTask -> taskName == statsTask || taskName.endsWith(":${statsTask}") }
+}
+def aoh2Attempt = aoh2ReadStat('attempts')
+def aoh2ThisBuildErrors = 0
+if (aoh2CountThisInvocation) {
+    aoh2Attempt++
+    aoh2BuildStats.setProperty('attempts', aoh2Attempt.toString())
+    aoh2BuildStats.setProperty('lastStarted', new Date().format("yyyy-MM-dd HH:mm:ss"))
+    aoh2WriteStats()
+}
+gradle.taskGraph.afterTask { task, state ->
+    if (aoh2CountThisInvocation && state.failure != null) {
+        aoh2ThisBuildErrors++
+    }
+}
+
+gradle.buildFinished { result ->
+    if (aoh2CountThisInvocation) {
+        if (result.failure == null) {
+            aoh2BuildStats.setProperty('successes', (aoh2ReadStat('successes') + 1).toString())
+            aoh2BuildStats.setProperty('lastResult', 'SUCCESS')
+            aoh2BuildStats.setProperty('lastError', '')
+        } else {
+            if (aoh2ThisBuildErrors == 0) {
+                aoh2ThisBuildErrors = 1
+            }
+            aoh2BuildStats.setProperty('failures', (aoh2ReadStat('failures') + 1).toString())
+            aoh2BuildStats.setProperty('totalErrors', (aoh2ReadStat('totalErrors') + aoh2ThisBuildErrors).toString())
+            aoh2BuildStats.setProperty('lastResult', 'FAILED')
+            aoh2BuildStats.setProperty('lastError', result.failure.message ?: result.failure.toString())
+        }
+        aoh2BuildStats.setProperty('lastErrors', aoh2ThisBuildErrors.toString())
+        aoh2BuildStats.setProperty('lastFinished', new Date().format("yyyy-MM-dd HH:mm:ss"))
+        aoh2WriteStats()
+
+        logger.lifecycle("")
+        logger.lifecycle("=== AoH2 Build Counter ===")
+        logger.lifecycle("Attempts: ${aoh2BuildStats.getProperty('attempts', '0')} | Successes: ${aoh2BuildStats.getProperty('successes', '0')} | Failed builds: ${aoh2BuildStats.getProperty('failures', '0')}")
+        logger.lifecycle("Total errors: ${aoh2BuildStats.getProperty('totalErrors', '0')} | Last build errors: ${aoh2BuildStats.getProperty('lastErrors', '0')} | Result: ${aoh2BuildStats.getProperty('lastResult', 'UNKNOWN')}")
+        logger.lifecycle("Stats file: ${aoh2BuildStatsFile}")
+        if (result.failure != null) {
+            logger.lifecycle("Last error: ${aoh2BuildStats.getProperty('lastError', '')}")
+        }
+        logger.lifecycle("==========================")
+        logger.lifecycle("")
+    }
+}
+
+tasks.register('printBuildStats') {
+    group = 'help'
+    description = 'Prints persistent AoH2 Gradle build/error counters.'
+    doLast {
+        logger.lifecycle("=== AoH2 Build Counter ===")
+        logger.lifecycle("Attempts: ${aoh2BuildStats.getProperty('attempts', '0')}")
+        logger.lifecycle("Successes: ${aoh2BuildStats.getProperty('successes', '0')}")
+        logger.lifecycle("Failed builds: ${aoh2BuildStats.getProperty('failures', '0')}")
+        logger.lifecycle("Total errors: ${aoh2BuildStats.getProperty('totalErrors', '0')}")
+        logger.lifecycle("Last build errors: ${aoh2BuildStats.getProperty('lastErrors', '0')}")
+        logger.lifecycle("Last result: ${aoh2BuildStats.getProperty('lastResult', 'UNKNOWN')}")
+        logger.lifecycle("Last started: ${aoh2BuildStats.getProperty('lastStarted', '')}")
+        logger.lifecycle("Last finished: ${aoh2BuildStats.getProperty('lastFinished', '')}")
+        logger.lifecycle("Stats file: ${aoh2BuildStatsFile}")
     }
 }
 
@@ -18,7 +95,7 @@ allprojects {
     version = '1.0'
     ext {
         appName = "AoH2"
-        gdxVersion = '1.11.0'
+        gdxVersion = '1.14.0'
         roboVMVersion = '2.3.16'
         box2DLightsVersion = '1.5'
         ashleyVersion = '1.7.4'
@@ -64,7 +141,10 @@ project(':core') {
 
 project(':desktop') {
     apply plugin: 'application'
-    mainClassName = 'aoc.kingdoms.lukasz.jakowski.desktop.DesktopLauncher'
+    ext.desktopMainClass = 'aoc.kingdoms.lukasz.jakowski.desktop.DesktopLauncher'
+    application {
+        mainClass = desktopMainClass
+    }
     sourceSets {
         main {
             java {
@@ -91,7 +171,7 @@ project(':desktop') {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
         manifest {
-            attributes 'Main-Class': mainClassName
+            attributes 'Main-Class': desktopMainClass
         }
 
         from project(':core').sourceSets.main.output
@@ -102,8 +182,4 @@ project(':desktop') {
 
         exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
     }
-}
-
-project(':android') {
-    // Android configuration would go here if needed
 }

@@ -1,0 +1,126 @@
+apply plugin: 'com.android.application'
+
+def generatedAssetsDir = layout.buildDirectory.dir('generated/assets/main')
+def packedAssetsDir = layout.buildDirectory.dir('generated/packedAssets/main')
+def generatedJniLibsDir = layout.buildDirectory.dir('generated/jniLibs/main')
+def packedAssetArchiveName = 'aoh2-assets.zip'
+def bundledAssetDirs = ['game', 'map', 'UI', 'sounds', 'music']
+def directAssetDirs = ['settings']
+
+configurations {
+    androidNativesArm64
+    androidNativesArmv7
+}
+
+tasks.register('syncAndroidAssets', Sync) {
+    into generatedAssetsDir
+    directAssetDirs.each { assetDir ->
+        from(rootProject.file(assetDir)) {
+            into assetDir
+            exclude '**/.DS_Store', '**/Thumbs.db'
+        }
+    }
+}
+
+tasks.register('packageAndroidAssets', Zip) {
+    archiveFileName = packedAssetArchiveName
+    destinationDirectory = packedAssetsDir
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    zip64 = true
+
+    bundledAssetDirs.each { assetDir ->
+        from(rootProject.file(assetDir)) {
+            into assetDir
+            exclude '**/.DS_Store', '**/Thumbs.db'
+        }
+    }
+}
+
+tasks.register('syncAndroidNatives', Copy) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    into(generatedJniLibsDir)
+    into('arm64-v8a') {
+        from({ configurations.androidNativesArm64.collect { zipTree(it) } })
+        include '*.so'
+    }
+    into('armeabi-v7a') {
+        from({ configurations.androidNativesArmv7.collect { zipTree(it) } })
+        include '*.so'
+    }
+}
+
+android {
+    namespace 'aoc.kingdoms.lukasz.jakowski.android'
+    compileSdkVersion 35
+
+    defaultConfig {
+        applicationId 'aoc.kingdoms.lukasz.jakowski.android'
+        minSdkVersion 23
+        targetSdkVersion 35
+        versionCode 1
+        versionName '1.0'
+        multiDexEnabled false
+
+        ndk {
+            abiFilters 'arm64-v8a', 'armeabi-v7a'
+        }
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'src/main/AndroidManifest.xml'
+            java.srcDirs = ['src/main/java']
+            res.srcDirs = ['src/main/res']
+            assets.srcDirs = [generatedAssetsDir, packedAssetsDir]
+            jniLibs.srcDirs = [generatedJniLibsDir]
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    aaptOptions {
+        noCompress 'png', 'jpg', 'jpeg', 'ogg', 'mp3', 'wav', 'json', 'txt', 'glsl', 'zip'
+    }
+
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging true
+        }
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            crunchPngs false
+        }
+        release {
+            minifyEnabled false
+            crunchPngs false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+preBuild.dependsOn tasks.named('syncAndroidAssets'), tasks.named('packageAndroidAssets'), tasks.named('syncAndroidNatives')
+
+dependencies {
+    implementation project(':core')
+    implementation "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+
+    androidNativesArm64 "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
+    androidNativesArm64 "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-arm64-v8a"
+    androidNativesArm64 "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a"
+
+    androidNativesArmv7 "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
+    androidNativesArmv7 "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-armeabi-v7a"
+    androidNativesArmv7 "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
+}

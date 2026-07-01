@@ -12,7 +12,7 @@ import age.of.civilizations2.jakowski.lukasz.SFXManager;
 import age.of.civilizations2.jakowski.lukasz.View;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import java.awt.Point;
+import com.badlogic.gdx.math.GridPoint2;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -74,7 +74,7 @@ extends Menu {
             lastMoveTime = now;
         }
         int tID = 0;
-        for (Point p : Menu_SK.snakeGame.snake) {
+        for (GridPoint2 p : Menu_SK.snakeGame.snake) {
             CFG.core.getCiv(Menu_SK.snakeGame.flags.get(tID++)).getFlagC().draw(oSB, p.x * snakeW, p.y * snakeH, snakeW, snakeH);
         }
         IMGManager.getIMG(Images.bFarm).draw(oSB, Menu_SK.snakeGame.food.x * snakeW, Menu_SK.snakeGame.food.y * snakeH, snakeW, snakeH);
@@ -118,9 +118,9 @@ extends Menu {
     public static class SnakeGame {
         int cols = CFG.GAMEWIDTH / snakeW;
         int rows = CFG.GAMEHEIGHT / snakeH;
-        LinkedList<Point> snake = new LinkedList();
+        LinkedList<GridPoint2> snake = new LinkedList();
         List<Integer> flags = new ArrayList<Integer>();
-        Point food;
+        GridPoint2 food;
         int dirX = 1;
         int dirY = 0;
         int nextDirX = 1;
@@ -133,17 +133,17 @@ extends Menu {
 
         public void init() {
             this.snake.clear();
-            this.snake.add(new Point(this.cols / 2, this.rows / 2));
+            this.snake.add(new GridPoint2(this.cols / 2, this.rows / 2));
             this.flags.add(CFG.oR.nextInt(CFG.core.getCivsSize()));
-            this.snake.add(new Point(this.cols / 2 - 1, this.rows / 2));
+            this.snake.add(new GridPoint2(this.cols / 2 - 1, this.rows / 2));
             this.flags.add(CFG.oR.nextInt(CFG.core.getCivsSize()));
-            this.snake.add(new Point(this.cols / 2 - 2, this.rows / 2));
+            this.snake.add(new GridPoint2(this.cols / 2 - 2, this.rows / 2));
             this.flags.add(CFG.oR.nextInt(CFG.core.getCivsSize()));
             this.spawnFood();
         }
 
         private void spawnFood() {
-            this.food = new Point(CFG.oR.nextInt(this.cols), CFG.oR.nextInt(this.rows));
+            this.food = new GridPoint2(CFG.oR.nextInt(this.cols), CFG.oR.nextInt(this.rows));
         }
 
         public void update() {
@@ -152,10 +152,10 @@ extends Menu {
             }
             this.dirX = this.nextDirX;
             this.dirY = this.nextDirY;
-            Point head = this.snake.getFirst();
+            GridPoint2 head = this.snake.getFirst();
             int newX = head.x + this.dirX;
             int newY = head.y + this.dirY;
-            Point newHead = new Point(newX, newY);
+            GridPoint2 newHead = new GridPoint2(newX, newY);
             if (newX < 0 || newY < 0 || newX >= this.cols || newY >= this.rows) {
                 this.gameOver = true;
                 CFG.toastM.addM(CFG.lang.get("Defeat") + " - Game Over", CFG.COLOR_NEGATIVE_2);

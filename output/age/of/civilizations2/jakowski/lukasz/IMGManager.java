@@ -38,7 +38,7 @@ public class IMGManager {
     }
 
     public static final int addIMG2(String imageName, Pixmap.Format nFormat, Texture.TextureFilter nTextureFilter) {
-        images.add(new Image(new Texture(Gdx.files.internal(imageName), nFormat, true), nTextureFilter));
+        images.add(new Image(new Texture(FileManager.loadFile(imageName), nFormat, true), nTextureFilter));
         return images.size() - 1;
     }
 
@@ -170,7 +170,7 @@ public class IMGManager {
         }
         catch (GdxRuntimeException ex) {
             CFG.exceptionStack(ex);
-            return new Texture("UI/imageNotFound.png");
+            return new Texture(FileManager.loadFile("UI/imageNotFound.png"));
         }
     }
 

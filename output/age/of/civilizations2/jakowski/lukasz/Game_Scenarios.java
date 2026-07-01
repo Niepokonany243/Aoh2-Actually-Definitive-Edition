@@ -62,6 +62,32 @@ public class Game_Scenarios {
     public static boolean loadedCustomUseCustomProvinceData = true;
     public static final float PERC_OF_POPULATION_REQUIRED_TO_GET_A_CORE = 0.18f;
 
+    public static void logJavaHeap(String stage) {
+        try {
+            Runtime runtime = Runtime.getRuntime();
+            long used = runtime.totalMemory() - runtime.freeMemory();
+            CFG.LOG("[memory] " + stage + " used=" + used / 1048576L + "MB total=" + runtime.totalMemory() / 1048576L + "MB max=" + runtime.maxMemory() / 1048576L + "MB");
+        }
+        catch (Exception exception) {
+        }
+    }
+
+    public static void releaseCustomScenarioJsonAfterDiplomacy() {
+        if (loadedCustomJSON != null) {
+            loadedCustomJSON = null;
+            CFG.LOG("[customJSON] Released scenario parse tree after diplomacy/HRE");
+            logJavaHeap("after custom JSON release");
+        }
+    }
+
+    public static void releaseCustomProvinceJsonCache() {
+        if (loadedCustomProvinceDataByID != null) {
+            loadedCustomProvinceDataByID = null;
+            CFG.LOG("[customJSON] Released province parse cache after armies");
+            logJavaHeap("after custom province cache release");
+        }
+    }
+
     public int getScenarioIDbyTag(String tag) {
         for (int i = this.lScenarios_TagsList.size() - 1; i >= 0; --i) {
             if (!this.lScenarios_TagsList.get(i).equals(tag)) continue;
@@ -619,6 +645,7 @@ public class Game_Scenarios {
         loadedCustomProvinceDataByID = null;
         loadedCustomProvinceData = null;
         loadedCustomUseCustomProvinceData = true;
+        logJavaHeap("before loadCivilizations");
         FileHandle fileProvince;
         FileHandle file;
         CFG.FILL_THE_MAP = true;
@@ -658,7 +685,9 @@ public class Game_Scenarios {
             CFG.LOG("[loadCivilizations] customPath=" + customPath + " exists=" + customFile.exists() + " absPath=" + customFile.file().getAbsolutePath());
             if (customFile.exists()) {
                 try {
-                    Scenario_CustomJSON customData = json.fromJson(Scenario_CustomJSON.class, CFG.stripBOM_JSON(customFile.readString("UTF-8")));
+                    String customJsonText = CFG.stripBOM_JSON(customFile.readString("UTF-8"));
+                    Scenario_CustomJSON customData = json.fromJson(Scenario_CustomJSON.class, customJsonText);
+                    customJsonText = null;
                     if (customData != null) {
                         loadedCustomJSON = customData;
                         if (customData.civilizations == null) customData.civilizations = new ArrayList<Scenario_CustomJSON.CivilizationData>();
@@ -748,6 +777,7 @@ public class Game_Scenarios {
                             CFG.LOG("[loadCivilizations] Custom province data disabled by JSON flag");
                         }
                     }
+                    logJavaHeap("after custom JSON parse");
                 } catch (Exception ex) {
                     CFG.exceptionStack(ex);
                 }
@@ -938,6 +968,7 @@ public class Game_Scenarios {
         catch (IndexOutOfBoundsException ex) {
             this.sActiveScenarioTag = "";
         }
+        logJavaHeap("after loadCivilizations");
         return lCivs;
     }
 
@@ -1345,8 +1376,9 @@ public class Game_Scenarios {
         for (i = 0; i < CFG.core.getProvinSize(); ++i) {
             CFG.core.getProv((int)i).provinceVolunteerArmySent.clear();
         }
-        if (loadedCustomJSON != null) {
+        if (loadedCustomProvinceDataByID != null) {
             this.applyCustomArmiesData();
+            releaseCustomProvinceJsonCache();
             return;
         }
         try {
@@ -1399,6 +1431,7 @@ public class Game_Scenarios {
         catch (GdxRuntimeException gdxRuntimeException) {
             
         }
+        releaseCustomProvinceJsonCache();
     }
 
     private boolean isLoadedCustomProvinceNatural(int provinceID) {

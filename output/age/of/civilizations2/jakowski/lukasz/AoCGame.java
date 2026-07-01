@@ -41,6 +41,7 @@ import age.of.civilizations2.jakowski.lukasz.Z_Other.ConfigINI;
 import age.of.civilizations2.jakowski.lukasz.Z_Other.ST.sUM;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Cursor;
@@ -242,7 +243,7 @@ public class AoCGame {
         this.oSB.oSBR = new SpriteBatch();
         this.oSBNames = new SpriteBatch();
         this.initInput();
-        Gdx.input.setCatchBackKey(true);
+        Gdx.input.setCatchKey(Input.Keys.BACK, true);
         if (CFG.getIsDesktop()) {
             Platform.init();
         }

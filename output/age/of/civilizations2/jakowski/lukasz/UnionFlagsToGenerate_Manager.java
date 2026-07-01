@@ -2,10 +2,10 @@
 package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
+import age.of.civilizations2.jakowski.lukasz.Files.FileManager;
 import age.of.civilizations2.jakowski.lukasz.GameAction;
 import age.of.civilizations2.jakowski.lukasz.Image;
 import age.of.civilizations2.jakowski.lukasz.UnionFlagsToGenerate;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.ArrayList;
@@ -68,8 +68,8 @@ public class UnionFlagsToGenerate_Manager {
 
     public final void loadImages() {
         for (int i = 0; i < 4; ++i) {
-            this.lFlags_Small.add(new Image(new Texture(Gdx.files.internal("game/unions/union_0_" + i + ".png")), Texture.TextureFilter.Nearest));
-            this.lFlags_H.add(new Image(new Texture(Gdx.files.internal("game/unions/unionH_0_" + i + ".png")), Texture.TextureFilter.Nearest));
+            this.lFlags_Small.add(new Image(new Texture(FileManager.loadFile("game/unions/union_0_" + i + ".png")), Texture.TextureFilter.Nearest));
+            this.lFlags_H.add(new Image(new Texture(FileManager.loadFile("game/unions/unionH_0_" + i + ".png")), Texture.TextureFilter.Nearest));
         }
     }
 

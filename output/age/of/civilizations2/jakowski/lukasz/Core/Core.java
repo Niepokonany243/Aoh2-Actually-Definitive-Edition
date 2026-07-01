@@ -2830,6 +2830,7 @@ public class Core {
         this.buildWastelandLevels();
         this.getGameScenars().loadDiplomacyData(nEditor);
         CFG.hreMgr.loadHolyRomanEmpire_ScenarioData();
+        Game_Scenarios.releaseCustomScenarioJsonAfterDiplomacy();
         this.buildLeaders();
         this.buildCivilizationsRegions();
         this.buildCivilizationsRegions_TextOver();
@@ -2958,6 +2959,7 @@ public class Core {
         try {
             Core.bCP();
             CFG.hreMgr.loadHolyRomanEmpire_ScenarioData();
+            Game_Scenarios.releaseCustomScenarioJsonAfterDiplomacy();
         }
         catch (Exception ex) {
             CFG.exceptionStack(ex);

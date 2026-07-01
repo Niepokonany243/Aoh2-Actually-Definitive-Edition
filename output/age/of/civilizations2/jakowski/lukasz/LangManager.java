@@ -355,7 +355,7 @@ public class LangManager {
     }
 
     public LangManager(String nTag) {
-        this.fileHandle = FileManager.loadFile("game/languages/Bundle");
+        this.fileHandle = this.loadBundleFile("game/languages/Bundle", nTag);
         this.locale = new Locale(nTag);
         this.bundle = I18NBundle.createBundle(this.fileHandle, this.locale);
         this.initCivsBundle(nTag);
@@ -365,16 +365,16 @@ public class LangManager {
     }
 
     public final void initCivsBundle(String nTag) {
-        this.fileHandleCivs = FileManager.loadFile("game/languages/civilizations/Bundle");
+        this.fileHandleCivs = this.loadBundleFile("game/languages/civilizations/Bundle", nTag);
         this.localeCivs = new Locale(nTag);
         this.bundleCivs = I18NBundle.createBundle(this.fileHandleCivs, this.localeCivs);
-        this.fileHandleFormable = FileManager.loadFile("game/languages/formable/Bundle");
+        this.fileHandleFormable = this.loadBundleFile("game/languages/formable/Bundle", nTag);
         this.localeFormable = new Locale(nTag);
         this.bundleFormable = I18NBundle.createBundle(this.fileHandleFormable, this.localeFormable);
     }
 
     public final void initLoadingBundle(String nTag) {
-        this.fileHandleLoading = FileManager.loadFile("game/languages/loading/Bundle");
+        this.fileHandleLoading = this.loadBundleFile("game/languages/loading/Bundle", nTag);
         this.localeLoading = new Locale(nTag);
         this.bundleLoading = I18NBundle.createBundle(this.fileHandleLoading, this.localeLoading);
         try {
@@ -383,6 +383,16 @@ public class LangManager {
         catch (IllegalArgumentException ex) {
             this.iLNOT = 0;
         }
+    }
+
+    private FileHandle loadBundleFile(String basePath, String nTag) {
+        if (nTag != null && !nTag.isEmpty() && Gdx.files.local(basePath + "_" + nTag + ".properties").exists()) {
+            return Gdx.files.local(basePath);
+        }
+        if (Gdx.files.local(basePath + ".properties").exists()) {
+            return Gdx.files.local(basePath);
+        }
+        return FileManager.loadFile(basePath);
     }
 
     public final void dispose() {

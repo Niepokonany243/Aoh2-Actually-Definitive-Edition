@@ -82,6 +82,7 @@ public class NewGameManager {
         if (!CFG.RANDOM_FILL && !CFG.RANDOM_PLACEMENT && CFG.FILL_THE_MAP) {
             CFG.core.getGameScenars().loadArmiesData();
         }
+        Game_Scenarios.releaseCustomProvinceJsonCache();
         if (CFG.TOTAL_WARMODE) {
             for (i2 = 1; i2 < CFG.core.getCivsSize() - 1; ++i2) {
                 if (CFG.core.getCiv(i2).getNumOfProvs() <= 0) continue;
