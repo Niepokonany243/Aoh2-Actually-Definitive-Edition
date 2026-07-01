@@ -117,6 +117,13 @@ public class Game_Scenarios {
             } else {
                 int i4;
                 List<String> tempFiles = CFG.getFileNames_O_Classic("map/" + CFG.map.getFileActiveMapPath() + "scenarios/");
+                if (tempFiles.isEmpty()) {
+                    try {
+                        for (FileHandle entry : Gdx.files.local("map/" + CFG.map.getFileActiveMapPath() + "scenarios/").list()) {
+                            tempFiles.add(entry.name());
+                        }
+                    } catch (Exception ex2) {}
+                }
                 int iSize = tempFiles.size();
                 for (i4 = 0; i4 < iSize; ++i4) {
                     if (!tempFiles.get(i4).equals("Age_of_Civilizations")) continue;
@@ -137,7 +144,7 @@ public class Game_Scenarios {
                 scenarioTags.add(tagsSPLITED[i5]);
             }
             try {
-                FileHandle tempFileT2 = Gdx.files.internal("map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + "Age_of_Civilizations");
+                FileHandle tempFileT2 = FileManager.loadFile("map/" + CFG.map.getFileActiveMapPath() + "scenarios/" + "Age_of_Civilizations");
                 String tempT2 = tempFileT2.readString();
                 String[] tagsSPLITED2 = tempT2.split(";");
                 for (int i6 = tagsSPLITED2.length - 1; i6 >= 0; --i6) {
@@ -685,9 +692,7 @@ public class Game_Scenarios {
             CFG.LOG("[loadCivilizations] customPath=" + customPath + " exists=" + customFile.exists() + " absPath=" + customFile.file().getAbsolutePath());
             if (customFile.exists()) {
                 try {
-                    String customJsonText = CFG.stripBOM_JSON(customFile.readString("UTF-8"));
-                    Scenario_CustomJSON customData = json.fromJson(Scenario_CustomJSON.class, customJsonText);
-                    customJsonText = null;
+                    Scenario_CustomJSON customData = json.fromJson(Scenario_CustomJSON.class, customFile.reader("UTF-8"));
                     if (customData != null) {
                         loadedCustomJSON = customData;
                         if (customData.civilizations == null) customData.civilizations = new ArrayList<Scenario_CustomJSON.CivilizationData>();

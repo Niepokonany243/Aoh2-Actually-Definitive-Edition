@@ -25,8 +25,8 @@ public class ProvinceBorder {
     private int iLineWidth = 0;
     private short withProvinceID;
     public DrawProvBorder drawProvBorder;
-    public List<Short> pX = new ArrayList<Short>();
-    public List<Short> pY = new ArrayList<Short>();
+    public List<Short> pX;
+    public List<Short> pY;
     private int pathLastPointX;
     private int pathLastPointY;
     public static JoinType joinType = JoinType.POINTY;
@@ -46,11 +46,8 @@ public class ProvinceBorder {
         for (i = 0; i < iSize; ++i) {
             this.provBorderLine.add(new Province_Border_Line(nPointsX.get(i) * CFG.map.getMpB().getMapSc3(), nPointsY.get(i) * CFG.map.getMpB().getMapSc3(), nPointsX.get(i + 1) * CFG.map.getMpB().getMapSc3(), nPointsY.get(i + 1) * CFG.map.getMpB().getMapSc3()));
         }
-        iSize = nPointsX.size();
-        for (i = 0; i < iSize; ++i) {
-            this.pX.add(nPointsX.get(i));
-            this.pY.add(nPointsY.get(i));
-        }
+        this.pX = nPointsX;
+        this.pY = nPointsY;
         this.provBorderLineSize = this.provBorderLine.size();
         this.withProvinceID = (short)withProvinceID;
         for (i = 0; i < this.provBorderLineSize; ++i) {

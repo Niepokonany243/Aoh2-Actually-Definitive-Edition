@@ -19,7 +19,7 @@ public class ProvinceAtlas {
             packer.dispose();
         }
         
-        packer = new PixmapPacker(2048, 2048, Pixmap.Format.RGBA8888, 2, true);
+        packer = new PixmapPacker(2048, 2048, Pixmap.Format.RGBA8888, 16, true);
         provinceRegions.clear();
         initialized = true;
     }

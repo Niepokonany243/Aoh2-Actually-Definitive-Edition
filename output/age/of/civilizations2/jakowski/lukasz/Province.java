@@ -83,8 +83,8 @@ public class Province {
     private List<Wonder> wonders;
     private int iWondersSize = 0;
     private Image provBG = null;
-    private List<Short> pointsX = new ArrayList<Short>();
-    private List<Short> pointsY = new ArrayList<Short>();
+    private List<Short> pointsX;
+    private List<Short> pointsY;
     private List<Province_ArmyBox> lProvince_ArmyBoxes = null;
     private boolean isBelowZeroPosX = false;
     private int iTranslateProvincePosX = 0;
@@ -182,31 +182,26 @@ public class Province {
             this.lNeighboringSeaProvinces.add(nProvince_GameData.getNeighboringSeaProvinces().get(i));
         }
         this.neighboringSeaProvincesSize = this.lNeighboringSeaProvinces.size();
-        short s = nProvince_GameData.getPointsX().get(0);
-        this.maX = s;
-        this.miX = s;
-        short s2 = nProvince_GameData.getPointsY().get(0);
-        this.maY = s2;
-        this.miY = s2;
-        int iSize = nProvince_GameData.getPointsX().size();
-        for (i = 0; i < iSize; ++i) {
-            this.pointsX.add(nProvince_GameData.getPointsX().get(i));
-            this.pointsY.add(nProvince_GameData.getPointsY().get(i));
-            if (this.miX > nProvince_GameData.getPointsX().get(i)) {
-                this.miX = nProvince_GameData.getPointsX().get(i).shortValue();
+        this.pointsX = nProvince_GameData.getPointsX();
+        this.pointsY = nProvince_GameData.getPointsY();
+        int iSize = this.pointsX.size();
+        if (iSize > 0) {
+            short s = this.pointsX.get(0);
+            this.maX = s;
+            this.miX = s;
+            short s2 = this.pointsY.get(0);
+            this.maY = s2;
+            this.miY = s2;
+            for (i = 0; i < iSize; ++i) {
+                short px = this.pointsX.get(i);
+                if (this.miX > px) this.miX = px;
+                if (this.maX < px) this.maX = px;
+                short py = this.pointsY.get(i);
+                if (this.miY > py) this.miY = py;
+                if (this.maY < py) this.maY = py;
             }
-            if (this.maX < nProvince_GameData.getPointsX().get(i)) {
-                this.maX = nProvince_GameData.getPointsX().get(i).shortValue();
-            }
-            if (this.miY > nProvince_GameData.getPointsY().get(i)) {
-                this.miY = nProvince_GameData.getPointsY().get(i).shortValue();
-            }
-            if (this.maY >= nProvince_GameData.getPointsY().get(i)) continue;
-            this.maY = nProvince_GameData.getPointsY().get(i).shortValue();
         }
-        this.pointsX.add(nProvince_GameData.getPointsX().get(nProvince_GameData.getPointsX().size() - 1));
-        this.pointsY.add(nProvince_GameData.getPointsY().get(nProvince_GameData.getPointsY().size() - 1));
-        this.pointsSize = this.pointsX.size();
+        this.pointsSize = iSize;
         this.ceX = (short)((this.miX + this.maX) / 2);
         this.ceY = (short)((this.miY + this.maY) / 2);
         boolean bl = this.isBelowZeroPosX = this.miX < 0;
@@ -1391,7 +1386,14 @@ public class Province {
 
     public final void draw(SpriteBatch oSB, int nPosX, int nPosY, float scale, int nAlpha) {
         this.setCivilizationProvinceColor(oSB, this.provGD.armiesC.get(0).getCivID(), (float)nAlpha / 255.0f);
-        this.provBG.drawO(oSB, nPosX + this.miX + (int)Math.floor((float)this.miX * scale * (float)CFG.map.getMpB().getMapSc3()) - this.miX, nPosY + this.miY + (int)Math.floor((float)this.miY * scale * (float)CFG.map.getMpB().getMapSc3()) - this.miY + (int)((float)this.provBG.getHeight() * scale * CFG.map.getMpB().getMapExtraScale()) - this.provBG.getHeight(), scale * CFG.map.getMpB().getMapExtraScale());
+        if (this.provBG != null) {
+            this.provBG.drawO(oSB, nPosX + this.miX + (int)Math.floor((float)this.miX * scale * (float)CFG.map.getMpB().getMapSc3()) - this.miX, nPosY + this.miY + (int)Math.floor((float)this.miY * scale * (float)CFG.map.getMpB().getMapSc3()) - this.miY + (int)((float)this.provBG.getHeight() * scale * CFG.map.getMpB().getMapExtraScale()) - this.provBG.getHeight(), scale * CFG.map.getMpB().getMapExtraScale());
+        } else {
+            float s = scale * CFG.map.getMpB().getMapExtraScale();
+            int dx = nPosX + this.miX + (int)Math.floor((float)this.miX * scale * (float)CFG.map.getMpB().getMapSc3()) - this.miX;
+            int dy = nPosY + this.miY + (int)Math.floor((float)this.miY * scale * (float)CFG.map.getMpB().getMapSc3()) - this.miY;
+            IMGManager.getIMG(Images.pix255).drawO(oSB, dx, dy, (int)((this.maX - this.miX) * s), (int)((this.maY - this.miY) * s));
+        }
     }
 
     public final void draw_FogOfWarDiscovery(SpriteBatch oSB, int nPosX, int nPosY, float scale, int nAlpha) {
@@ -1408,7 +1410,14 @@ public class Province {
 
     public final void drawWasteland(SpriteBatch oSB, int nPosX, int nPosY, float scale, int nAlpha) {
         oSB.setColor(this.getWastelandColor((float)nAlpha / 255.0f));
-        this.provBG.drawO(oSB, nPosX + this.miX + (int)Math.floor((float)this.miX * scale * (float)CFG.map.getMpB().getMapSc3()) - this.miX, nPosY + this.miY + (int)Math.floor((float)this.miY * scale * (float)CFG.map.getMpB().getMapSc3()) - this.miY + (int)((float)this.provBG.getHeight() * scale * CFG.map.getMpB().getMapExtraScale()) - this.provBG.getHeight(), scale * CFG.map.getMpB().getMapExtraScale());
+        if (this.provBG != null) {
+            this.provBG.drawO(oSB, nPosX + this.miX + (int)Math.floor((float)this.miX * scale * (float)CFG.map.getMpB().getMapSc3()) - this.miX, nPosY + this.miY + (int)Math.floor((float)this.miY * scale * (float)CFG.map.getMpB().getMapSc3()) - this.miY + (int)((float)this.provBG.getHeight() * scale * CFG.map.getMpB().getMapExtraScale()) - this.provBG.getHeight(), scale * CFG.map.getMpB().getMapExtraScale());
+        } else {
+            float s = scale * CFG.map.getMpB().getMapExtraScale();
+            int dx = nPosX + this.miX + (int)Math.floor((float)this.miX * scale * (float)CFG.map.getMpB().getMapSc3()) - this.miX;
+            int dy = nPosY + this.miY + (int)Math.floor((float)this.miY * scale * (float)CFG.map.getMpB().getMapSc3()) - this.miY;
+            IMGManager.getIMG(Images.pix255).drawO(oSB, dx, dy, (int)((this.maX - this.miX) * s), (int)((this.maY - this.miY) * s));
+        }
     }
 
     public final Color getWastelandColor(float fAlpha) {
@@ -3432,32 +3441,25 @@ public class Province {
 
     public final void setPoints(List<Short> nPointsX, List<Short> nPointsY) {
         int i;
-        this.pointsX.clear();
-        this.pointsY.clear();
-        for (i = 0; i < nPointsX.size(); ++i) {
-            this.pointsX.add((short)nPointsX.get(i));
-            this.pointsY.add((short)nPointsY.get(i));
-        }
-        this.pointsSize = this.pointsX.size();
-        short s = this.pointsX.get(0);
-        this.maX = s;
-        this.miX = s;
-        short s2 = this.pointsY.get(0);
-        this.maY = s2;
-        this.miY = s2;
+        this.pointsX = new ArrayList<Short>(nPointsX);
+        this.pointsY = new ArrayList<Short>(nPointsY);
         int iSize = this.pointsX.size();
-        for (i = 0; i < iSize; ++i) {
-            if (this.miX > this.pointsX.get(i)) {
-                this.miX = this.pointsX.get(i).shortValue();
+        this.pointsSize = iSize;
+        if (iSize > 0) {
+            short s = this.pointsX.get(0);
+            this.maX = s;
+            this.miX = s;
+            short s2 = this.pointsY.get(0);
+            this.maY = s2;
+            this.miY = s2;
+            for (i = 0; i < iSize; ++i) {
+                short px = this.pointsX.get(i);
+                if (this.miX > px) this.miX = px;
+                if (this.maX < px) this.maX = px;
+                short py = this.pointsY.get(i);
+                if (this.miY > py) this.miY = py;
+                if (this.maY < py) this.maY = py;
             }
-            if (this.maX < this.pointsX.get(i)) {
-                this.maX = this.pointsX.get(i).shortValue();
-            }
-            if (this.miY > this.pointsY.get(i)) {
-                this.miY = this.pointsY.get(i).shortValue();
-            }
-            if (this.maY >= this.pointsY.get(i)) continue;
-            this.maY = this.pointsY.get(i).shortValue();
         }
     }
 

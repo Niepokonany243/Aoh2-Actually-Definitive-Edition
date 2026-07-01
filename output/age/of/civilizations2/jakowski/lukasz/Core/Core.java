@@ -1542,7 +1542,6 @@ public class Core {
         ProvinceAtlas.finalise();
         ProvinceMesh.init();
         provinceTexturesLoaded = true;
-        provinceBGLoaded = true;
         provinceTextureDataCache = null;
     }
 

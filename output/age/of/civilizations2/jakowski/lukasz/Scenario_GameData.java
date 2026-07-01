@@ -27,9 +27,9 @@ implements Serializable {
         this.lTechnologyLevels = (List<Float>)fields.get("lTechnologyLevels", null);
         this.lTechnologyByContinents = (List<List<Scenario_GameData_Technology>>)fields.get("lTechnologyByContinents", null);
         this.lHappiness = (List<Integer>)fields.get("lHappiness", null);
-        this.lStartingMoney = (List<Long>)fields.get("lStartingMoney", null);
-        this.lTargetPopulation = (List<Long>)fields.get("lTargetPopulation", new ArrayList<Long>());
-        this.lTargetEconomy = (List<Long>)fields.get("lTargetEconomy", new ArrayList<Long>());
+        this.lStartingMoney = normalizeLongList((List<?>)fields.get("lStartingMoney", null));
+        this.lTargetPopulation = normalizeLongList((List<?>)fields.get("lTargetPopulation", new ArrayList<Long>()));
+        this.lTargetEconomy = normalizeLongList((List<?>)fields.get("lTargetEconomy", new ArrayList<Long>()));
         this.iStartingArmyInCapitals = fields.get("iStartingArmyInCapitals", 500L);
         this.iNeutralArmy = fields.get("iNeutralArmy", 500L);
         this.iStartingPopulation = fields.get("iStartingPopulation", 500L);
@@ -75,6 +75,23 @@ implements Serializable {
         this.lTechnologyByContinents = new ArrayList<List<Scenario_GameData_Technology>>();
         this.lHappiness = new ArrayList<Integer>();
         this.lStartingMoney = new ArrayList<Long>();
+    }
+
+    private static List<Long> normalizeLongList(List<?> rawList) {
+        if (rawList == null) return null;
+        ArrayList<Long> result = new ArrayList<Long>(rawList.size());
+        for (Object val : rawList) {
+            if (val instanceof Long) {
+                result.add((Long)val);
+            } else if (val instanceof Integer) {
+                result.add(((Integer)val).longValue());
+            } else if (val instanceof Number) {
+                result.add(((Number)val).longValue());
+            } else {
+                result.add(0L);
+            }
+        }
+        return result;
     }
 
     public final int getCivSize() {

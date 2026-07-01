@@ -75,7 +75,10 @@ public class FileManager {
                 if (Gdx.files.local(sFile).exists()) {
                     return Gdx.files.local(sFile);
                 }
-                return Gdx.files.internal(sFile);
+                if (Gdx.files.internal(sFile).exists()) {
+                    return Gdx.files.internal(sFile);
+                }
+                return Gdx.files.local(sFile);
             }
 
             @Override

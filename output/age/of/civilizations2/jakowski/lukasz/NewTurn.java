@@ -822,6 +822,7 @@ extends Thread {
         float tempEco;
         Province province = CFG.core.getProv(iProvinceID);
         int civId = province.getCivId();
+        if (civId <= 0) return;
         Civilization provinceCiv = CFG.core.getCiv(civId);
         int ideologyId = provinceCiv.getIdeology();
         Ideology ideology = CFG.ideologiesMgr.getIdeologyID(ideologyId);

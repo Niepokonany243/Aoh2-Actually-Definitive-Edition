@@ -143,7 +143,7 @@ public class IdeologiesManager {
             CFG.exceptionStack(ex);
         }
         try {
-            fileList = Gdx.files.internal("game/Governments.json");
+            fileList = FileManager.loadFile("game/Governments.json");
             fileContent = fileList.readString();
             json = new Json();
             json.setElementType(ConfigIdeologiesData.class, "Government", Data_Ideologies.class);
