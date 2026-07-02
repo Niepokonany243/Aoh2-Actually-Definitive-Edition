@@ -162,6 +162,7 @@ import age.of.civilizations2.jakowski.lukasz.Menus.Wars.Menu_InGame_WarPreparati
 public class CFG {
     public static long currentTimeMillis;
     public static boolean LOGs;
+    public static boolean LOG_PERF;
     public static boolean DEBUG_MODE;
     public static String sDEBUG;
     public static boolean LANDSCAPE;
@@ -5477,6 +5478,7 @@ public class CFG {
 
     public static void LOG(String log, String log2) {
         if (LOGs) {
+            if ("PERF".equals(log) && !LOG_PERF) return;
             Gdx.app.log(log, log2);
             if (GameValues.gvLogs.SAVE_LOGS_TO_FILE) {
                 FileHandle file = FileManager.IS_MAC ? Gdx.files.external(LOGS_FILE) : Gdx.files.local(LOGS_FILE);
@@ -7769,6 +7771,7 @@ public class CFG {
 
     static {
         LOGs = true;
+        LOG_PERF = true;
         DEBUG_MODE = false;
         sDEBUG = "#";
         LANDSCAPE = true;

@@ -18,6 +18,7 @@ public class GameLogger {
         if (initialized) return;
         try {
             if (Gdx.app.getType() == Application.ApplicationType.Android) {
+                Gdx.app.setLogLevel(Application.LOG_INFO);
                 requestAndroidPermissions();
                 logFile = Gdx.files.external("Age of History 2 Definitive Edition/logs/game.log");
             } else {

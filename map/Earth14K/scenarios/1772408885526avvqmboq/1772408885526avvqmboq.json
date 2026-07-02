@@ -1,0 +1,662 @@
+{
+lCivsTags: [
+	por_q
+	and_m
+	spa_n
+	fra_q
+	lux_m
+	bel_n
+	net_n
+	pol_q
+	cze_q
+	ger_q
+	lic_n
+	san_q
+	ita_q
+	moc_n
+	uni_n
+	ire_q
+	for_q
+	ice_q
+	den_n
+	swi_r
+	atr_q
+	slo_q
+	hun_q
+	mol_q
+	tra_p
+	rom_q
+	ser_q
+	bah_q
+	cro_q
+	slv_q
+	kos_q
+	mot_q
+	alb_q
+	gre_q
+	cpr_p
+	cyn_q
+	usa_p
+	can_n
+	brr_q
+	syr_p
+	leb_r
+	egy_q
+	kuw_m
+	irq_q
+	aze_q
+	arm_q
+	geo_q
+	ose_q
+	ukr_q
+	ber_q
+	rus_p
+	nor_n
+	swe_n
+	fin_q
+	sau_m
+	uae_m
+	baj_m
+	oma_m
+	yem_q
+	fyr_q
+	bul_q
+	tur_p
+	ira_p
+	afg_w
+	trk_p
+	taj_p
+	kyr_p
+	uzb_p
+	lat_q
+	lit_q
+	est_q
+	kaz_q
+	chi_c
+	mac_r
+	hon_r
+	mon_q
+	sok_c
+	jap_n
+	tai_q
+	phi_p
+	bru_m
+	mal_n
+	sin_q
+	ins_p
+	eat_q
+	pau_r
+	vie_c
+	tha_n
+	lao_c
+	cab_n
+	ban_q
+	ind_q
+	nep_q
+	bhu_m
+	pak_q
+	sri_r
+	ggg_q
+	mex_p
+	gua_p
+	els_p
+	bei_n
+	hou_p
+	nic_p
+	cor_p
+	pan_p
+	col_p
+	cub_c
+	tuc_n
+	bau_n
+	cay_n
+	jam_n
+	hai_q
+	dom_r
+	pue_p
+	vir_p
+	vir_n
+	all_n
+	skn_n
+	aib_q
+	moo_n
+	guu_n
+	ddo_n
+	mqu_n
+	sal_n
+	sai_r
+	grn_r
+	bab_q
+	try_q
+	aru_r
+	cur_r
+	ven_p
+	bra_p
+	guy_q
+	sur_q
+	frg_p
+	ecu_p
+	per_p
+	bol_p
+	par_p
+	arg_p
+	uru_p
+	chl_p
+	pit_r
+	aus_n
+	pap_m
+	sol_m
+	van_q
+	nca_p
+	fij_q
+	waf_q
+	tuv_q
+	nau_r
+	mis_r
+	mic_r
+	gum_r
+	mar_r
+	sam_r
+	ams_r
+	tok_q
+	ton_q
+	niu_q
+	coo_r
+	frp_p
+	kir_r
+	nez_n
+	mdd_r
+	som_q
+	eth_q
+	dji_p
+	ent_w
+	sud_w
+	sus_w
+	ken_p
+	uga_p
+	buu_p
+	rwa_p
+	tan_p
+	com_p
+	may_r
+	ssz_p
+	maa_q
+	reu_q
+	mad_q
+	moz_q
+	sww_m
+	les_n
+	maw_p
+	zim_p
+	soa_q
+	nam_q
+	bot_q
+	zam_p
+	ang_p
+	ges_r
+	hel_r
+	asc_r
+	drc_q
+	rco_q
+	gab_w
+	sao_q
+	eqa_p
+	car_r
+	cam_p
+	nig_p
+	cha_w
+	nii_w
+	lib_r
+	tun_q
+	alg_q
+	mor_n
+	mat_r
+	ben_p
+	tog_p
+	gha_p
+	ivo_p
+	lii_p
+	sil_p
+	gui_w
+	gub_r
+	sen_p
+	gam_p
+	mai_w
+	mau_p
+	bur_w
+	cap_r
+	mya_w
+	isr_q
+	pal_q
+	jor_n
+	sok_p
+	qat_m
+	abk_q
+	crim_r
+	sli_p
+	anta_s
+	zomb3_h
+]
+lCivsCapitals: [ 11, 55, 6561, 260, 379, 832, 6502, 1276, 656, 592, 307, 181, 6881, 134, 825, 920, 914, 951, 965, 310, 688, 3101, 3141, 1258, 1042, 473, 1431, 3090, 3107, 2308, 3050, 6886, 2231, 2202, 1357, 3011, 8714, 10243, 10020, 3719, 6087, 2669, 2616, 2639, 2654, 10436, 10431, 1161, 3757, 3658, 3726, 1009, 1049, 1461, 6109, 3518, 3524, 6230, 5043, 3067, 3130, 2207, 2578, 5843, 10472, 5884, 10512, 10599, 504, 442, 513, 10944, 3475, 2778, 2777, 10768, 3458, 1755, 2756, 5902, 1475, 1582, 1593, 1554, 11460, 11428, 2768, 1603, 1608, 1641, 5308, 5570, 5498, 3432, 5813, 2991, 12889, 2376, 1858, 1843, 1840, 1895, 1880, 8221, 5116, 2162, 2320, 10028, 10027, 1696, 1693, 2336, 2328, 5077, 2338, 2337, 2341, 2342, 2343, 2344, 2345, 2347, 2348, 2349, 2351, 2352, 2350, 5073, 2354, 2353, 5083, 2020, 5198, 8112, 5285, 2100, 2041, 2119, 7716, 7727, 3408, 7774, 11980, 6950, 8468, 11501, 11495, 11489, 11447, 11450, 11437, 11436, 11432, 11433, 11429, 11431, 11440, 11441, 11438, 11443, 11442, 11977, 11979, 11404, 6762, 11416, 3919, 4389, 4366, 4599, 2723, 4112, 3948, 3370, 4917, 3376, 3961, 11402, 11399, 11414, 11411, 11410, 3489, 3268, 3283, 3255, 3351, 3364, 3043, 4166, 3316, 3848, 3870, 11395, 11392, 11391, 3386, 3387, 3829, 11393, 2467, 4003, 6845, 3568, 4487, 2536, 1365, 2242, 1399, 2920, 270, 2432, 2412, 4632, 2453, 4672, 2456, 4666, 4669, 4413, 2473, 4471, 4419, 4462, 13058, 5693, 8065, 4743, 6085, 3437, 6028, 11519, 1268, 4368, 13865, 6034 ]
+lTechnologyLevels: [ 0.6, 0.45, 0.57, 0.55, 0.65, 0.65, 0.64, 0.56, 0.58, 0.57, 0.62, 0.45, 0.54, 0.45, 0.58, 0.57, 0.45, 0.54, 0.58, 0.63, 0.56, 0.54, 0.52, 0.45, 0.45, 0.52, 0.5, 0.48, 0.49, 0.52, 0.48, 0.45, 0.44, 0.52, 0.45, 0.45, 0.55, 0.55, 0.45, 0.45, 0.43, 0.6, 0.49, 0.45, 0.54, 0.58, 0.57, 0.45, 0.5, 0.47, 0.44, 0.54, 0.56, 0.45, 0.55, 0.58, 0.45, 0.5, 0.39, 0.45, 0.52, 0.52, 0.48, 0.45, 0.45, 0.45, 0.45, 0.45, 0.52, 0.54, 0.54, 0.45, 0.84, 0.45, 0.45, 0.45, 0.58, 0.58, 0.69, 0.58, 0.45, 0.63, 0.45, 0.67, 0.45, 0.45, 0.62, 0.56, 0.54, 0.55, 0.81, 0.7, 0.58, 0.52, 0.56, 0.57, 0.45, 0.51, 0.5, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.51, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.48, 0.48, 0.45, 0.45, 0.45, 0.45, 0.55, 0.43, 0.41, 0.51, 0.44, 0.5, 0.45, 0.54, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.55, 0.45, 0.45, 0.55, 0.45, 0.45, 0.42, 0.48, 0.51, 0.55, 0.56, 0.58, 0.5, 0.45, 0.45, 0.45, 0.45, 0.45, 0.45, 0.5, 0.45, 0.45, 0.51, 0.52, 0.54, 0.51, 0.66, 0.48, 0.54, 0.45, 0.45, 0.45, 0.52, 0.48, 0.45, 0.45, 0.45, 0.45, 0.57, 0.58, 0.45, 0.45, 0.51, 0.54, 0.49, 0.56, 0.45, 0.54, 0.52, 0.54, 0.52, 0.45, 0.45, 0.45, 0.45, 0.5, 0.45, 0.45, 0.45, 0.45, 0.45, 0.56, 0.58, 0.45, 0.47, 0.69, 0.56, 0.45, 0.45, 0.45, 0.45, 0.45 ]
+lTechnologyByContinents: [
+	null
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 45
+		}
+	]
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 34
+		}
+	]
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 105
+		}
+	]
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 111
+		}
+	]
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 63
+		}
+	]
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 37
+		}
+	]
+	null
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 42
+		}
+	]
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 35
+		}
+	]
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 68
+		}
+	]
+	null
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 18
+		}
+	]
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 38
+		}
+	]
+	null
+	null
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 98
+		}
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iContinentID: 1
+			iPercentage: 97
+		}
+	]
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 38
+		}
+	]
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 43
+		}
+	]
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 52
+		}
+	]
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 50
+		}
+	]
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 142
+		}
+	]
+	null
+	null
+	null
+	null
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 114
+		}
+	]
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 116
+		}
+	]
+	null
+	null
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 115
+		}
+	]
+	null
+	null
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 119
+		}
+	]
+	null
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 119
+		}
+	]
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 127
+		}
+	]
+	null
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 116
+		}
+	]
+	null
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 55
+		}
+	]
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 40
+		}
+	]
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 40
+		}
+	]
+	null
+	null
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 39
+		}
+	]
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 74
+		}
+	]
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 56
+		}
+	]
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 115
+		}
+	]
+	null
+	null
+	null
+	null
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 115
+		}
+	]
+	null
+	null
+	null
+	null
+	null
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 114
+		}
+	]
+	null
+	null
+	null
+	null
+	[
+		{
+			class: age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology
+			iPercentage: 84
+		}
+	]
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+	null
+]
+lHappiness: [ 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75 ]
+lStartingMoney: [ -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999, -999999 ]
+iStartingArmyInCapitals: 25000
+iStartingPopulation: 2000000
+iStartingEconomy: 623000
+iStartingMoney: 35050
+COLONIZATION: false
+}

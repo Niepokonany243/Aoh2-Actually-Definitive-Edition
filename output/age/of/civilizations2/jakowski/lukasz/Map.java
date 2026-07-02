@@ -186,28 +186,7 @@ public class Map {
                     FileHandle file = FileManager.IS_MAC ? Gdx.files.external("settings/settings_mapAoH2DE") : Gdx.files.local("settings/settings_mapAoH2DE");
                     SaveActiveMap_GameData tempActiveMapData = (SaveActiveMap_GameData)CFG.deserialize(file.readBytes());
                     if (tempActiveMapData.iActiveMapID < 0 || tempActiveMapData.iActiveMapID >= this.getNumOfMaps()) break block14;
-                    int activeMapScale = tempActiveMapData.iActiveMapScale;
-                    try {
-                        FileHandle tempFileT = FileManager.loadFile("map/" + CFG.map.getFileMapPath(tempActiveMapData.iActiveMapID) + "data/" + "scales/" + "provinces/" + "Age_of_Civilizations");
-                        String tempT = tempFileT.readString();
-                        String[] tagsSPLITED = tempT.split(";");
-                        ArrayList<Integer> tempScales = new ArrayList<Integer>();
-                        for (int i = 0; i < tagsSPLITED.length; ++i) {
-                            tempScales.add(Integer.parseInt(tagsSPLITED[i]));
-                        }
-                        boolean scaleExists = false;
-                        for (int i = 0; i < tempScales.size(); ++i) {
-                            if ((Integer)tempScales.get(i) != activeMapScale) continue;
-                            scaleExists = true;
-                            break;
-                        }
-                        if (!scaleExists) {
-                            activeMapScale = (Integer)tempScales.get(tempScales.size() - 1);
-                        }
-                    }
-                    catch (Exception tempFileT) {
-                        
-                    }
+                    int activeMapScale = this.normalizeProvinceTextureScale(tempActiveMapData.iActiveMapID, tempActiveMapData.iActiveMapScale);
                     CFG.map.setMapScale(tempActiveMapData.iActiveMapID, activeMapScale);
                     CFG.map.setActiveMapIDN(tempActiveMapData.iActiveMapID);
                 }
@@ -215,28 +194,7 @@ public class Map {
                     FileHandle file = FileManager.loadFile("settings/settings_mapAoH2DE");
                     SaveActiveMap_GameData tempActiveMapData = (SaveActiveMap_GameData)CFG.deserialize(file.readBytes());
                     if (tempActiveMapData.iActiveMapID < 0 || tempActiveMapData.iActiveMapID >= this.getNumOfMaps()) break block14;
-                    int activeMapScale = tempActiveMapData.iActiveMapScale;
-                    try {
-                        FileHandle tempFileT = FileManager.loadFile("map/" + CFG.map.getFileMapPath(tempActiveMapData.iActiveMapScale) + "data/" + "scales/" + "provinces/" + "Age_of_Civilizations");
-                        String tempT = tempFileT.readString();
-                        String[] tagsSPLITED = tempT.split(";");
-                        ArrayList<Integer> tempScales = new ArrayList<Integer>();
-                        for (int i = 0; i < tagsSPLITED.length; ++i) {
-                            tempScales.add(Integer.parseInt(tagsSPLITED[i]));
-                        }
-                        boolean scaleExists = false;
-                        for (int i = 0; i < tempScales.size(); ++i) {
-                            if ((Integer)tempScales.get(i) != activeMapScale) continue;
-                            scaleExists = true;
-                            break;
-                        }
-                        if (!scaleExists) {
-                            activeMapScale = (Integer)tempScales.get(tempScales.size() - 1);
-                        }
-                    }
-                    catch (Exception exception) {
-                        
-                    }
+                    int activeMapScale = this.normalizeProvinceTextureScale(tempActiveMapData.iActiveMapID, tempActiveMapData.iActiveMapScale);
                     CFG.map.setMapScale(tempActiveMapData.iActiveMapID, activeMapScale);
                     CFG.map.setActiveMapIDN(tempActiveMapData.iActiveMapID);
                 }
@@ -398,6 +356,47 @@ public class Map {
 
     public final int getMapScale_PreExtra(int i) {
         return this.iMAP_SCALE_PRE_EXTRA.get(i);
+    }
+
+    public final ArrayList<Integer> getProvinceTextureScales(int mapID) {
+        ArrayList<Integer> scales = new ArrayList<Integer>();
+        try {
+            FileHandle tempFileT = FileManager.loadFile("map/" + this.getFileMapPath(mapID) + "data/scales/provinces/Age_of_Civilizations");
+            String tempT = tempFileT.readString();
+            String[] tagsSPLITED = tempT.split(";");
+            for (int i = 0; i < tagsSPLITED.length; ++i) {
+                String tag = tagsSPLITED[i].trim();
+                if (tag.length() <= 0) continue;
+                int scale = Integer.parseInt(tag);
+                if (scale <= 0 || scales.contains(scale)) continue;
+                scales.add(scale);
+            }
+        }
+        catch (Exception ex) {
+            try {
+                Gdx.app.log("MapScale", "Failed reading province texture scales for map=" + mapID + " error=" + ex.getClass().getSimpleName() + " " + ex.getMessage());
+            }
+            catch (Exception ignored) {}
+        }
+        if (scales.size() == 0) {
+            scales.add(this.getMapDefaultScale(mapID));
+        }
+        return scales;
+    }
+
+    public final int normalizeProvinceTextureScale(int mapID, int requestedScale) {
+        ArrayList<Integer> scales = this.getProvinceTextureScales(mapID);
+        for (int i = 0; i < scales.size(); ++i) {
+            if (scales.get(i).intValue() == requestedScale) {
+                return requestedScale;
+            }
+        }
+        int fallbackScale = scales.get(scales.size() - 1).intValue();
+        try {
+            Gdx.app.log("MapScale", "Normalized map=" + this.getFileMapPath(mapID) + " requestedScale=" + requestedScale + " fallbackScale=" + fallbackScale + " available=" + scales);
+        }
+        catch (Exception ignored) {}
+        return fallbackScale;
     }
 
     public final int getMapDefaultScale(int i) {

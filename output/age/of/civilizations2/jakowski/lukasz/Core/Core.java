@@ -156,8 +156,8 @@ import age.of.civilizations2.jakowski.lukasz.VictoryManager;
 import age.of.civilizations2.jakowski.lukasz.View;
 import age.of.civilizations2.jakowski.lukasz.War_GameData;
 import age.of.civilizations2.jakowski.lukasz.Z_Other.ST.sUM;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -1401,6 +1401,7 @@ public class Core {
                 this.getProv(i).getWonder(j).dispose();
             }
         }
+        ProvinceMesh.dispose();
         ProvinceAtlas.dispose();
         Core.clearProvCache();
         Core.resetProvinceTexturesLoaded();
@@ -1425,7 +1426,15 @@ public class Core {
     public final void loadProvinceTextures() {
         if (!provinceTexturesLoaded) {
             loadProvinceTextures_BatchInit();
-            loadProvinceTextures_Batch(0, this.iProvincesSize);
+            int batchSize = CFG.isAndroid() ? Math.min(4000, this.iProvincesSize) : this.iProvincesSize;
+            if (batchSize >= this.iProvincesSize) {
+                loadProvinceTextures_Batch(0, this.iProvincesSize);
+            } else {
+                for (int offset = 0; offset < this.iProvincesSize; offset += batchSize) {
+                    int end = Math.min(offset + batchSize, this.iProvincesSize);
+                    loadProvinceTextures_Batch(offset, end);
+                }
+            }
             loadProvinceTextures_BatchFinalise();
         }
     }
@@ -1434,19 +1443,130 @@ public class Core {
     }
 
     private static byte[][] provinceTextureDataCache = null;
+    private static int provinceTextureReadCount = 0;
+    private static int provinceTextureFallbackCount = 0;
+    private static int provinceTextureMissingCount = 0;
+    private static int provinceTextureSeaSkippedCount = 0;
+    private static int provinceTextureDecodeFailures = 0;
+    private static int provinceTextureReadFailuresLogged = 0;
+    private static int provinceTextureDecodeFailuresLogged = 0;
+    private static final int PROVINCE_TEXTURE_LOG_LIMIT = 12;
+
+    public static FileHandle loadProvinceTextureFile(int provinceID) {
+        try {
+            Province p = CFG.core.getProv(provinceID);
+            int requestedScale = p.getContinent() == CFG.map.getMapContinents().getOceanContinentID() ? 1 : CFG.map.getMpB().getMapScale_PreExtra();
+            return loadProvinceTextureFile(provinceID, requestedScale, false);
+        }
+        catch (Exception ex) {
+            logProvinceTexture("Failed to resolve province texture " + provinceID + ": " + ex.getClass().getSimpleName() + " " + ex.getMessage());
+            return null;
+        }
+    }
+
+    private static FileHandle loadProvinceTextureFile(int provinceID, int requestedScale, boolean countFallback) {
+        int[] scales = getProvinceTextureScaleCandidates(requestedScale);
+        String basePath = "map/" + CFG.map.getFileActiveMapPath() + "data/scales/provinces/";
+        for (int i = 0; i < scales.length; ++i) {
+            FileHandle file = FileManager.loadFile(basePath + scales[i] + "/" + provinceID);
+            if (file.exists()) {
+                if (countFallback && scales[i] != requestedScale) {
+                    ++provinceTextureFallbackCount;
+                    if (provinceTextureReadFailuresLogged < PROVINCE_TEXTURE_LOG_LIMIT) {
+                        ++provinceTextureReadFailuresLogged;
+                        logProvinceTexture("Province " + provinceID + " requested scale " + requestedScale + " but loaded scale " + scales[i] + " from " + file.path());
+                    }
+                }
+                return file;
+            }
+        }
+        return null;
+    }
+
+    private static int[] getProvinceTextureScaleCandidates(int requestedScale) {
+        ArrayList<Integer> scales = new ArrayList<Integer>();
+        addProvinceTextureScale(scales, requestedScale);
+        addProvinceTextureScale(scales, 1);
+        try {
+            FileHandle list = FileManager.loadFile("map/" + CFG.map.getFileActiveMapPath() + "data/scales/provinces/Age_of_Civilizations");
+            if (list.exists()) {
+                String[] split = list.readString().split(";");
+                for (int i = 0; i < split.length; ++i) {
+                    String s = split[i].trim();
+                    if (s.length() > 0) {
+                        addProvinceTextureScale(scales, Integer.parseInt(s));
+                    }
+                }
+            }
+        }
+        catch (Exception ex) {
+            logProvinceTexture("Failed reading province scale list: " + ex.getClass().getSimpleName() + " " + ex.getMessage());
+        }
+        int[] result = new int[scales.size()];
+        for (int i = 0; i < scales.size(); ++i) {
+            result[i] = scales.get(i);
+        }
+        return result;
+    }
+
+    private static void addProvinceTextureScale(ArrayList<Integer> scales, int scale) {
+        if (scale <= 0) return;
+        for (int i = 0; i < scales.size(); ++i) {
+            if (scales.get(i).intValue() == scale) return;
+        }
+        scales.add(scale);
+    }
+
+    private static void logProvinceTexture(String message) {
+        try {
+            Gdx.app.log("ProvinceTexture", message);
+        }
+        catch (Exception ex) {
+            System.out.println("ProvinceTexture: " + message);
+        }
+    }
     
     public final void preloadProvinceTextureData() {
         if (provinceTextureDataCache != null) return;
         int nProv = this.iProvincesSize;
         provinceTextureDataCache = new byte[nProv][];
+        provinceTextureReadCount = 0;
+        provinceTextureFallbackCount = 0;
+        provinceTextureMissingCount = 0;
+        provinceTextureSeaSkippedCount = 0;
+        provinceTextureDecodeFailures = 0;
+        provinceTextureReadFailuresLogged = 0;
+        provinceTextureDecodeFailuresLogged = 0;
+        long startedAt = System.currentTimeMillis();
+        logProvinceTexture("Preload start map=" + CFG.map.getFileActiveMapPath() + " provinces=" + nProv + " mapScalePreExtra=" + CFG.map.getMpB().getMapScale_PreExtra() + " android=" + CFG.isAndroid() + " readLocal=" + CFG.readLocalFiles());
         for (int i = 0; i < nProv; ++i) {
             try {
                 Province p = this.getProv(i);
-                if (p.getSeaProv()) continue;
-                FileHandle f = FileManager.loadFile("map/" + CFG.map.getFileActiveMapPath() + "data/scales/provinces/" + (p.getContinent() == CFG.map.getMapContinents().getOceanContinentID() ? 1 : CFG.map.getMpB().getMapScale_PreExtra()) + "/" + i);
-                if (f.exists()) provinceTextureDataCache[i] = f.readBytes();
-            } catch (Exception ex) {}
+                if (p.getSeaProv()) {
+                    ++provinceTextureSeaSkippedCount;
+                    continue;
+                }
+                int requestedScale = p.getContinent() == CFG.map.getMapContinents().getOceanContinentID() ? 1 : CFG.map.getMpB().getMapScale_PreExtra();
+                FileHandle f = Core.loadProvinceTextureFile(i, requestedScale, true);
+                if (f != null && f.exists()) {
+                    provinceTextureDataCache[i] = f.readBytes();
+                    ++provinceTextureReadCount;
+                } else {
+                    ++provinceTextureMissingCount;
+                    if (provinceTextureReadFailuresLogged < PROVINCE_TEXTURE_LOG_LIMIT) {
+                        ++provinceTextureReadFailuresLogged;
+                        logProvinceTexture("Missing province texture " + i + " requestedScale=" + requestedScale + " candidates=" + java.util.Arrays.toString(getProvinceTextureScaleCandidates(requestedScale)));
+                    }
+                }
+            } catch (Exception ex) {
+                ++provinceTextureMissingCount;
+                if (provinceTextureReadFailuresLogged < PROVINCE_TEXTURE_LOG_LIMIT) {
+                    ++provinceTextureReadFailuresLogged;
+                    logProvinceTexture("Read failed province " + i + ": " + ex.getClass().getSimpleName() + " " + ex.getMessage());
+                }
+            }
         }
+        logProvinceTexture("Preload done read=" + provinceTextureReadCount + " fallback=" + provinceTextureFallbackCount + " missing=" + provinceTextureMissingCount + " seaSkipped=" + provinceTextureSeaSkippedCount + " ms=" + (System.currentTimeMillis() - startedAt));
     }
     
     public static Pixmap readCIMFromBytes(byte[] data) {
@@ -1470,6 +1590,11 @@ public class Core {
             return pixmap;
         } catch (Exception ex) {
             try { if (in != null) in.close(); } catch (Exception e) {}
+            ++provinceTextureDecodeFailures;
+            if (provinceTextureDecodeFailuresLogged < PROVINCE_TEXTURE_LOG_LIMIT) {
+                ++provinceTextureDecodeFailuresLogged;
+                logProvinceTexture("CIM decode failed: " + ex.getClass().getSimpleName() + " " + ex.getMessage() + " bytes=" + (data == null ? 0 : data.length));
+            }
             return null;
         }
     }
@@ -1488,9 +1613,12 @@ public class Core {
         if (count <= 0) return;
         final byte[][] cache = provinceTextureDataCache;
         if (cache == null) return;
-        int processors = Math.max(1, Math.min(Runtime.getRuntime().availableProcessors(), count));
+        int maxProcessors = CFG.isAndroid() ? 2 : Runtime.getRuntime().availableProcessors();
+        int processors = Math.max(1, Math.min(maxProcessors, count));
         int chunkSize = Math.max(1, (count + processors - 1) / processors);
         java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(processors);
+        java.util.concurrent.atomic.AtomicInteger decoded = new java.util.concurrent.atomic.AtomicInteger(0);
+        java.util.concurrent.atomic.AtomicInteger nullDecoded = new java.util.concurrent.atomic.AtomicInteger(0);
         for (int t = 0; t < processors; ++t) {
             final int chunkStart = start + t * chunkSize;
             final int chunkEnd = Math.min(chunkStart + chunkSize, end);
@@ -1506,7 +1634,10 @@ public class Core {
                                 Pixmap pixmap = Core.readCIMFromBytes(cache[i]);
                                 if (pixmap != null) {
                                     ProvinceAtlas.addProvince(i, pixmap);
+                                    decoded.incrementAndGet();
                                     pixmap.dispose();
+                                } else {
+                                    nullDecoded.incrementAndGet();
                                 }
                             }
                         }
@@ -1522,27 +1653,22 @@ public class Core {
         } catch (InterruptedException e) {
             CFG.exceptionStack(e);
         }
+        logProvinceTexture("Batch packed start=" + start + " end=" + end + " decoded=" + decoded.get() + " nullDecoded=" + nullDecoded.get() + " decodeFailures=" + provinceTextureDecodeFailures);
     }
     
     public final void loadProvinceTextures_BatchFinalise() {
         if (provinceTexturesLoaded) return;
-        if (provinceTextureDataCache != null) {
-            for (int i = 0; i < this.iProvincesSize && i < provinceTextureDataCache.length; ++i) {
-                if (provinceTextureDataCache[i] != null && this.getProv(i).getProvBG() == null) {
-                    try {
-                        Pixmap pixmap = Core.readCIMFromBytes(provinceTextureDataCache[i]);
-                        if (pixmap != null) {
-                            this.getProv(i).setProvBG(new Image(new Texture(pixmap), com.badlogic.gdx.graphics.Texture.TextureFilter.Nearest, com.badlogic.gdx.graphics.Texture.TextureWrap.ClampToEdge));
-                            pixmap.dispose();
-                        }
-                    } catch (Exception ex) {}
-                }
-            }
-        }
         ProvinceAtlas.finalise();
+        logProvinceTexture("Atlas finalised textures=" + ProvinceAtlas.getTextureCount() + " regions=" + ProvinceAtlas.getRegionCount() + " packed=" + ProvinceAtlas.getPackedCount());
+        if (provinceTextureDataCache != null && CFG.isAndroid()) {
+            Gdx.app.log("Core", "Releasing texture data cache early on Android to reduce memory pressure");
+            provinceTextureDataCache = null;
+        }
         ProvinceMesh.init();
         provinceTexturesLoaded = true;
-        provinceTextureDataCache = null;
+        if (provinceTextureDataCache != null) {
+            provinceTextureDataCache = null;
+        }
     }
 
     public final void loadProvinceBG_Batch(int startProvince, int endProvince) {

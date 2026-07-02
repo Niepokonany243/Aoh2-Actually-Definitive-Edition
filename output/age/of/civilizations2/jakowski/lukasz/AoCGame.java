@@ -168,6 +168,9 @@ public class AoCGame {
         Vector2 a;
         FileManager.initLoadInterface();
         ConfigINI.readConfig();
+        if (CFG.isAndroid()) {
+            CFG.LOG_PERF = false;
+        }
         CFG.LANDSCAPE = ConfigINI.landscape;
         if (CFG.isAndroid()) {
             if (CFG.LANDSCAPE) {
@@ -571,7 +574,8 @@ public class AoCGame {
         this.requestRendering.update();
         long renderEnd = System.currentTimeMillis();
         long renderTotalMs = renderEnd - renderStart;
-        if (renderTotalMs > 50) {
+        long perfThreshold = CFG.isAndroid() ? 200L : 50L;
+        if (renderTotalMs > perfThreshold) {
             CFG.LOG("PERF", "[render] TOTAL: " + renderTotalMs + "ms (update: " + (perfUpdate - renderStart) + "ms) [phase1_map:" + perfPhase1 + "ms][phase2_overlay:" + perfPhase2 + "ms][phase3_details:" + perfPhase3 + "ms][phase4_ui:" + perfPhase4 + "ms]");
         }
     }

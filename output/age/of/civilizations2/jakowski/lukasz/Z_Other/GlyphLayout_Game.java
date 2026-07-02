@@ -13,22 +13,28 @@ public class GlyphLayout_Game extends GlyphLayout {
 
     @Override
     public void setText(BitmapFont font, CharSequence str) {
+        if (font == null || font.getData() == null) return;
+        if (str == null) str = "";
         synchronized (lock) {
-            super.setText(font, str == null ? "" : str);
+            super.setText(font, str);
         }
     }
 
     @Override
     public void setText(BitmapFont font, CharSequence str, Color color, float targetWidth, int halign, boolean wrap) {
+        if (font == null || font.getData() == null) return;
+        if (str == null) str = "";
         synchronized (lock) {
-            super.setText(font, str == null ? "" : str, color, targetWidth, halign, wrap);
+            super.setText(font, str, color, targetWidth, halign, wrap);
         }
     }
 
     @Override
     public void setText(BitmapFont font, CharSequence str, int start, int end, Color color, float targetWidth, int halign, boolean wrap, String truncate) {
+        if (font == null || font.getData() == null) return;
+        if (str == null) str = "";
         synchronized (lock) {
-            super.setText(font, str == null ? "" : str, start, end, color, targetWidth, halign, wrap, truncate);
+            super.setText(font, str, start, end, color, targetWidth, halign, wrap, truncate);
         }
     }
 }

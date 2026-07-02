@@ -28,10 +28,12 @@ extends Text_Static {
     }
 
     public Text_Desc(String sText, int iPosX, int iPosY, int iWidth, int nFontID) {
-        this.init(sText, iPosX, iPosY, iWidth, nFontID);
+        this.init(sText != null ? sText : "", iPosX, iPosY, iWidth, nFontID);
     }
 
     public void init(String sText, int iPosX, int iPosY, int iWidth, int nFontID) {
+        if (sText == null) sText = "";
+        if (nFontID < 0 || nFontID >= CFG.fontMain.size()) nFontID = 0;
         GlyphLayout_Game glyphLayout;
         this.typeOfMenuElemUI = MenuElemUI.TypeOfMenuElemUI.TEXT;
         this.fontID = nFontID;

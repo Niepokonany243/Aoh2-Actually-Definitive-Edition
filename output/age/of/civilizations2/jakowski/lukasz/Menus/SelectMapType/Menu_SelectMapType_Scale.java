@@ -6,14 +6,12 @@ import age.of.civilizations2.jakowski.lukasz.Button.Classic.Button_Classic_LR_Ma
 import age.of.civilizations2.jakowski.lukasz.Button.MenuElemUI;
 import age.of.civilizations2.jakowski.lukasz.CFG;
 import age.of.civilizations2.jakowski.lukasz.Core.Core;
-import age.of.civilizations2.jakowski.lukasz.Files.FileManager;
 import age.of.civilizations2.jakowski.lukasz.Menu;
 import age.of.civilizations2.jakowski.lukasz.Menus.Main.Menu_Main;
 import age.of.civilizations2.jakowski.lukasz.Renderer;
 import age.of.civilizations2.jakowski.lukasz.TextB.Text;
 import age.of.civilizations2.jakowski.lukasz.View;
 import age.of.civilizations2.jakowski.lukasz.Z_Other.ST.sUM;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.ArrayList;
@@ -37,16 +35,10 @@ extends Menu {
             }
         });
         tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE() + CFG.PADD;
-        FileHandle tempFileT = FileManager.loadFile("map/" + CFG.map.getFileMapPath(MAP_ID_TO_LOAD) + "data/" + "scales/" + "provinces/" + "Age_of_Civilizations");
-        String tempT = tempFileT.readString();
-        String[] tagsSPLITED = tempT.split(";");
-        ArrayList<Integer> tempScales = new ArrayList<Integer>();
-        for (i = 0; i < tagsSPLITED.length; ++i) {
-            tempScales.add(Integer.parseInt(tagsSPLITED[i]));
-        }
+        ArrayList<Integer> tempScales = CFG.map.getProvinceTextureScales(MAP_ID_TO_LOAD);
         for (i = 0; i < tempScales.size(); ++i) {
             if (CFG.map.getActiveMapIDN() == MAP_ID_TO_LOAD) {
-                if (CFG.map.getMapScale(CFG.map.getActiveMapIDN()) == ((Integer)tempScales.get(i)).intValue()) {
+                if (CFG.map.getMapScale_PreExtra(CFG.map.getActiveMapIDN()) == ((Integer)tempScales.get(i)).intValue()) {
                     menuElements.add(new Button_Classic(CFG.lang.get("Scale") + " x" + tempScales.get(i) + " - [" + CFG.map.getMpB().getWidthM() / CFG.map.getMapScale(CFG.map.getActiveMapIDN()) * (Integer)tempScales.get(i) + "x" + CFG.map.getMpB().getHeightM() / CFG.map.getMapScale(CFG.map.getActiveMapIDN()) * (Integer)tempScales.get(i) + "]", (int)(50.0f * CFG.GUI_SCALE), 0, tY, tempMenuWidth, CFG.BUTTON_H, true, true));
                 } else {
                     menuElements.add(new Button_Classic(CFG.lang.get("Scale") + " x" + tempScales.get(i) + " - [" + CFG.map.getMpB().getWidthM() / CFG.map.getMapScale(CFG.map.getActiveMapIDN()) * (Integer)tempScales.get(i) + "x" + CFG.map.getMpB().getHeightM() / CFG.map.getMapScale(CFG.map.getActiveMapIDN()) * (Integer)tempScales.get(i) + "]", (int)(50.0f * CFG.GUI_SCALE), 0, tY, tempMenuWidth, CFG.BUTTON_H, true));
@@ -99,10 +91,8 @@ extends Menu {
                 return;
             }
         }
-        FileHandle tempFileT = FileManager.loadFile("map/" + CFG.map.getFileMapPath(MAP_ID_TO_LOAD) + "data/" + "scales/" + "provinces/" + "Age_of_Civilizations");
-        String tempT = tempFileT.readString();
-        String[] tagsSPLITED = tempT.split(";");
-        CFG.map.setMapScale(MAP_ID_TO_LOAD, Integer.parseInt(tagsSPLITED[iID - 2]));
+        ArrayList<Integer> tempScales = CFG.map.getProvinceTextureScales(MAP_ID_TO_LOAD);
+        CFG.map.setMapScale(MAP_ID_TO_LOAD, tempScales.get(iID - 2));
         CFG.map.setActiveMapIDN(MAP_ID_TO_LOAD);
         CFG.goToMenu = View.eSELECT_MAP_TYPE;
         CFG.menus.setMenuIDWithoutAnim(View.eLOAD_MAP);

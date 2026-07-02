@@ -51,6 +51,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Province {
+
+
     private int iProvinceID = 0;
     private int iPotential = 0;
     private int iDangerLevel = 0;
@@ -337,7 +339,9 @@ public class Province {
         String[] tagsSPLITED = tempT.split(";");
         ArrayList<String> tempL = new ArrayList<String>();
         for (int i2 = 0; i2 < tagsSPLITED.length; ++i2) {
-            tempL.add(tagsSPLITED[i2]);
+            if (tagsSPLITED[i2].trim().length() > 0) {
+                tempL.add(tagsSPLITED[i2].trim());
+            }
         }
         boolean addStandardScale = true;
         boolean addScale1 = true;
@@ -2816,20 +2820,50 @@ public class Province {
     }
 
     public final void loadProvinceBG() {
-        block3: {
+        try {
+            if (!(GameValues.gvInGame.LOAD_SEA_PROVINCES_IMAGES && CFG.getIsDesktop() || !this.getSeaProv())) {
+                this.provBG = IMGManager.loadImage("UI/pixEmpty.png");
+                return;
+            }
+            FileHandle provinceTexture = Core.loadProvinceTextureFile(this.iProvinceID);
+            if (provinceTexture == null || !provinceTexture.exists()) {
+                throw new GdxRuntimeException("Missing province texture mask for " + this.iProvinceID);
+            }
+            Pixmap pixmap = PixmapIO.readCIM(provinceTexture);
+            this.provBG = new Image(new Texture(pixmap), Texture.TextureFilter.Nearest, Texture.TextureWrap.ClampToEdge);
+            pixmap.dispose();
+        }
+        catch (Exception ex) {
             try {
-                if (!(GameValues.gvInGame.LOAD_SEA_PROVINCES_IMAGES && CFG.getIsDesktop() || !this.getSeaProv())) {
-                    this.provBG = IMGManager.loadImage("UI/pixEmpty.png");
+                Gdx.app.log("ProvinceTexture", "loadProvinceBG failed province=" + this.iProvinceID + " error=" + ex.getClass().getSimpleName() + " " + ex.getMessage());
+            }
+            catch (Exception ignored) {}
+            try {
+                this.buildProvinceBG(false);
+            }
+            catch (Exception buildEx) {
+                try {
+                    Gdx.app.log("ProvinceTexture", "buildProvinceBG failed province=" + this.iProvinceID + " error=" + buildEx.getClass().getSimpleName() + " " + buildEx.getMessage());
+                }
+                catch (Exception ignored) {}
+            }
+            try {
+                FileHandle provinceTexture = Core.loadProvinceTextureFile(this.iProvinceID);
+                if (provinceTexture != null && provinceTexture.exists()) {
+                    Pixmap pixmap = PixmapIO.readCIM(provinceTexture);
+                    this.provBG = new Image(new Texture(pixmap), Texture.TextureFilter.Nearest, Texture.TextureWrap.ClampToEdge);
+                    pixmap.dispose();
                     return;
                 }
-                Pixmap pixmap = PixmapIO.readCIM(FileManager.loadFile("map/" + CFG.map.getFileActiveMapPath() + "data/" + "scales/" + "provinces/" + (this.iContinentID == CFG.map.getMapContinents().getOceanContinentID() ? 1 : CFG.map.getMpB().getMapScale_PreExtra()) + "/" + this.iProvinceID));
-                this.provBG = new Image(new Texture(pixmap), Texture.TextureFilter.Nearest, Texture.TextureWrap.ClampToEdge);
-                pixmap.dispose();
             }
-            catch (GdxRuntimeException ex) {
-                this.buildProvinceBG(false);
-                this.loadProvinceBG();
-                if (!CFG.LOGs) break block3;
+            catch (Exception retryEx) {
+                try {
+                    Gdx.app.log("ProvinceTexture", "loadProvinceBG retry failed province=" + this.iProvinceID + " error=" + retryEx.getClass().getSimpleName() + " " + retryEx.getMessage());
+                }
+                catch (Exception ignored) {}
+            }
+            this.provBG = IMGManager.loadImage("UI/pixEmpty.png");
+            if (CFG.LOGs) {
                 CFG.exceptionStack(ex);
             }
         }
@@ -2871,6 +2905,7 @@ public class Province {
     }
 
     public final void setCivId(int nCivID, boolean conquered) {
+        ProvinceMesh.markDirty(this.iProvinceID);
         this.setCivId(nCivID, conquered, true);
     }
 
@@ -3825,6 +3860,7 @@ public class Province {
             return;
         }
         int oldCivID = this.getCivId();
+        ProvinceMesh.markDirty(this.iProvinceID);
         try {
             if (oldCivID >= 0) {
                 CFG.core.getCiv(oldCivID).updateNumberOfUnits();

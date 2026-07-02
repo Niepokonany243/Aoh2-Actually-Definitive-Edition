@@ -42,6 +42,8 @@ implements ME_Hover_2Type {
 
     private final void init(String sText, Color oColor, int fontID) {
         int i;
+        if (sText == null) sText = "";
+        if (fontID < 0 || fontID >= CFG.fontMain.size()) fontID = CFG.FONT_REGULAR_SMALL;
         this.oColor = oColor;
         this.fontID = fontID;
         this.iTextHeight = fontID == CFG.FONT_BOLD ? CFG.TEXT_HEIGHT_DEFAULT : CFG.TEXT_HEIGHT_DEFAULT_SMALL;

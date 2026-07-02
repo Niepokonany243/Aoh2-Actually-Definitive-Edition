@@ -10,6 +10,7 @@ import age.of.civilizations2.jakowski.lukasz.Images;
 import age.of.civilizations2.jakowski.lukasz.Menus.ArmyS.Menu_MapEditor_ArmySeaBoxes_Add;
 import age.of.civilizations2.jakowski.lukasz.Menus.ZRest.Menu_InGame_CivilizationView;
 import age.of.civilizations2.jakowski.lukasz.Menus.Z_Rest.GameE.Menu_GameEditor_Regions;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -841,6 +842,11 @@ public class RenderProvince {
 
             @Override
             public void drawProvinces(SpriteBatch oSB) {
+                if (ProvinceMesh.canRender() && CFG.isAndroid()) {
+                    ProvinceMesh.draw(oSB);
+                    RenderProvince.drawOccupiedProvinces_FogOfWar(oSB);
+                    return;
+                }
                 int lastCivID = -1;
                 boolean lastMet = false;
                 for (int i = 0; i < CFG.core.sortedPIV.size(); ++i) {
@@ -871,6 +877,11 @@ public class RenderProvince {
 
             @Override
             public void drawProvinces(SpriteBatch oSB) {
+                if (ProvinceMesh.canRender() && CFG.isAndroid()) {
+                    ProvinceMesh.draw(oSB);
+                    RenderProvince.drawOccupiedProvinces(oSB);
+                    return;
+                }
                 int lastCivID = -1;
                 for (int i = 0; i < CFG.core.sortedPIV.size(); ++i) {
                     int provinceID = CFG.core.sortedPIV.get(i);
@@ -1384,8 +1395,16 @@ public class RenderProvince {
 
     public static final void drawProvincesInGame(SpriteBatch oSB) {
         CFG.core.updateProvincesInView();
+        RenderProvince.prepareProvinceColorDraw(oSB);
         RenderProvince.drawProvincesInGame_StandardWasteland_FogOFWar(oSB);
         drawProvinces.drawProvinces(oSB);
+    }
+
+    public static final void prepareProvinceColorDraw(SpriteBatch oSB) {
+        oSB.setShader(AoCGame.shaderDef);
+        oSB.enableBlending();
+        oSB.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        ProvinceMesh.updateAllStates();
     }
 
     public static final void drawProvincesInGame_StandardWasteland(SpriteBatch oSB) {

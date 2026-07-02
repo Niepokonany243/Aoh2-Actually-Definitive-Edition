@@ -44,6 +44,12 @@ public class AndroidLauncher extends AndroidApplication {
 
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         config.useGL30 = false;
+        config.r = 8;
+        config.g = 8;
+        config.b = 8;
+        config.a = 8;
+        config.depth = 16;
+        config.stencil = 0;
         config.useImmersiveMode = true;
         config.useWakelock = true;
         config.useAccelerometer = false;
@@ -52,6 +58,9 @@ public class AndroidLauncher extends AndroidApplication {
         config.useRotationVectorSensor = false;
         config.numSamples = 0;
         config.maxSimultaneousSounds = 24;
+        Log.i(TAG, "GL config request rgba=" + config.r + "/" + config.g + "/" + config.b + "/" + config.a
+                + " depth=" + config.depth + " stencil=" + config.stencil + " gl30=" + config.useGL30
+                + " samples=" + config.numSamples + " immersive=" + config.useImmersiveMode);
 
         initialize(new AA_Game(), config);
     }
@@ -61,10 +70,12 @@ public class AndroidLauncher extends AndroidApplication {
         String marker = getPackageName() + ":" + getAssetArchiveLength();
         File markerFile = new File(targetDir, ASSET_MARKER);
         if (marker.equals(readMarker(markerFile)) && hasSentinelAssets(targetDir)) {
+            Log.i(TAG, "Bundled assets already extracted at " + targetDir + " marker=" + marker);
             return;
         }
 
         Log.i(TAG, "Extracting bundled assets to " + targetDir);
+        int extractedFiles = 0;
         try (ZipInputStream zip = new ZipInputStream(new BufferedInputStream(getAssets().open(ASSET_ARCHIVE)))) {
             ZipEntry entry;
             byte[] buffer = new byte[64 * 1024];
@@ -80,17 +91,20 @@ public class AndroidLauncher extends AndroidApplication {
                             out.write(buffer, 0, read);
                         }
                     }
+                    ++extractedFiles;
                 }
                 zip.closeEntry();
             }
         }
 
         writeMarker(markerFile, marker);
+        Log.i(TAG, "Bundled assets extracted files=" + extractedFiles + " marker=" + marker);
     }
 
     private boolean hasSentinelAssets(File targetDir) {
         for (String sentinel : ASSET_SENTINELS) {
             if (!new File(targetDir, sentinel).isFile()) {
+                Log.w(TAG, "Missing bundled asset sentinel " + sentinel + " under " + targetDir);
                 return false;
             }
         }
