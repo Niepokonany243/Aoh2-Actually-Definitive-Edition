@@ -64,6 +64,8 @@ extends Menu {
     public static LocalDate timeT;
     public static Color btnCLR;
     public static Color btnCLR_R;
+    private static final Color DISABLED_TEXT_COLOR = new Color(0.78f, 0.78f, 0.78f, 0.7f);
+    private static final Color INFO_TEXT_COLOR = new Color(1.0f, 1.0f, 1.0f, 0.75f);
 
     public static final void updateOverBudget() {
         iTopBalance = (int)CFG.gameUpdate.getBalanceCivId(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId());
@@ -638,9 +640,9 @@ extends Menu {
             @Override
             public void drawExtra(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive, boolean scrollableY) {
                 if (CFG.MOVE_AND_RECRUIT_ARMY_AT_WAR_BY_AI) {
-                    oSB.setColor(new Color(CFG.COLOR_TEXT_CHECKBOX_TRUE.r, CFG.COLOR_TEXT_CHECKBOX_TRUE.g, CFG.COLOR_TEXT_CHECKBOX_TRUE.b, 0.05f));
+                    oSB.setColor(CFG.COLOR_TEXT_CHECKBOX_TRUE.r, CFG.COLOR_TEXT_CHECKBOX_TRUE.g, CFG.COLOR_TEXT_CHECKBOX_TRUE.b, 0.05f);
                     IMGManager.getIMG(Images.gradientFull).draw(oSB, iTranslateX, iTranslateY, this.getWidthE(), this.getHeightE());
-                    oSB.setColor(new Color(CFG.COLOR_TEXT_CHECKBOX_TRUE.r, CFG.COLOR_TEXT_CHECKBOX_TRUE.g, CFG.COLOR_TEXT_CHECKBOX_TRUE.b, 0.145f));
+                    oSB.setColor(CFG.COLOR_TEXT_CHECKBOX_TRUE.r, CFG.COLOR_TEXT_CHECKBOX_TRUE.g, CFG.COLOR_TEXT_CHECKBOX_TRUE.b, 0.145f);
                     IMGManager.getIMG(Images.gradientXY).draw(oSB, iTranslateX, iTranslateY + this.getHeightE() / 2, this.getWidthE(), this.getHeightE() / 2);
                     oSB.setColor(Color.WHITE);
                 }
@@ -909,7 +911,7 @@ extends Menu {
 
             @Override
             public Color getColor(boolean isActive) {
-                return isActive ? CFG.COLOR_TEXT_CIV_NAME_ACTIVE : (this.getIsClickable() ? (this.getIsHovered() ? CFG.COLOR_TEXT_CIV_NAME_HOVERED : CFG.COLOR_TEXT_CIV_NAME) : new Color(0.78f, 0.78f, 0.78f, 0.7f));
+                return isActive ? CFG.COLOR_TEXT_CIV_NAME_ACTIVE : (this.getIsClickable() ? (this.getIsHovered() ? CFG.COLOR_TEXT_CIV_NAME_HOVERED : CFG.COLOR_TEXT_CIV_NAME) : DISABLED_TEXT_COLOR);
             }
 
             @Override
@@ -956,7 +958,7 @@ extends Menu {
                 if (!RTS.PAUSE) {
                     return CFG.COLOR_TEXT_NUM_OF_PROVINCES;
                 }
-                return isActive ? CFG.COLOR_TEXT_RANK_ACTIVE : (this.getIsClickable() ? (this.getIsHovered() ? CFG.COLOR_TEXT_RANK_HOVER : CFG.COLOR_TEXT_RANK) : new Color(0.78f, 0.78f, 0.78f, 0.7f));
+                return isActive ? CFG.COLOR_TEXT_RANK_ACTIVE : (this.getIsClickable() ? (this.getIsHovered() ? CFG.COLOR_TEXT_RANK_HOVER : CFG.COLOR_TEXT_RANK) : DISABLED_TEXT_COLOR);
             }
 
             @Override
@@ -1044,24 +1046,24 @@ extends Menu {
 
     public static final void draw_Time(SpriteBatch oSB, int nPosX, int nPosY, int nWidth, int nHeight) {
         if (!MENU_AOC_1) {
-            oSB.setColor(new Color(Menu_InGame_2.btnCLR_R.r, Menu_InGame_2.btnCLR_R.g, Menu_InGame_2.btnCLR_R.b, 1.0f));
+            oSB.setColor(Menu_InGame_2.btnCLR_R.r, Menu_InGame_2.btnCLR_R.g, Menu_InGame_2.btnCLR_R.b, 1.0f);
             IMGManager.getIMG(Images.patternReversed).draw2(oSB, nPosX, nPosY, nWidth, nHeight);
             IMGManager.getIMG(Images.patternReversed).draw2(oSB, nPosX, nPosY, nWidth, nHeight);
-            oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 1.0f));
+            oSB.setColor(1.0f, 1.0f, 1.0f, 1.0f);
             IMGManager.getIMG(Images.patternReversed).draw2(oSB, nPosX, nPosY, (int)((float)nWidth * RTS.getTimePerc()), nHeight, 0, RTS.SOURCE);
-            oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.75f));
+            oSB.setColor(1.0f, 1.0f, 1.0f, 0.75f);
             IMGManager.getIMG(Images.patternReversed).draw2(oSB, nPosX, nPosY, (int)((float)nWidth * RTS.getTimePerc()), nHeight, 0, RTS.SOURCE);
             if (!RTS.PAUSE) {
                 --RTS.SOURCE;
             }
-            oSB.setColor(new Color(Menu_InGame_2.btnCLR_R.r, Menu_InGame_2.btnCLR_R.g, Menu_InGame_2.btnCLR_R.b, 0.4f));
+            oSB.setColor(Menu_InGame_2.btnCLR_R.r, Menu_InGame_2.btnCLR_R.g, Menu_InGame_2.btnCLR_R.b, 0.4f);
             IMGManager.getIMG(Images.gradient).draw(oSB, nPosX, nPosY, nWidth, nHeight, false, true);
-            oSB.setColor(new Color(0.0f, 0.0f, 0.0f, 0.45f));
+            oSB.setColor(0.0f, 0.0f, 0.0f, 0.45f);
             IMGManager.getIMG(Images.gradient).draw(oSB, nPosX, nPosY, nWidth, CFG.PADD);
         } else {
-            oSB.setColor(new Color(0.15686275f, 0.15686275f, 0.15686275f, 0.25f));
+            oSB.setColor(0.15686275f, 0.15686275f, 0.15686275f, 0.25f);
             IMGManager.getIMG(Images.patternReversed).draw2(oSB, nPosX, nPosY, (int)((float)nWidth * RTS.getTimePerc()), nHeight, 0, RTS.SOURCE);
-            oSB.setColor(new Color(0.15686275f, 0.15686275f, 0.15686275f, 0.15f));
+            oSB.setColor(0.15686275f, 0.15686275f, 0.15686275f, 0.15f);
             IMGManager.getIMG(Images.patternReversed).draw2(oSB, nPosX, nPosY, (int)((float)nWidth * RTS.getTimePerc()), nHeight, 0, RTS.SOURCE);
             if (!RTS.PAUSE) {
                 --RTS.SOURCE;
@@ -1072,17 +1074,17 @@ extends Menu {
 
     public static final void draw_Speed(SpriteBatch oSB, int nPosX, int nPosY, int nWidth, int nHeight) {
         if (!MENU_AOC_1) {
-            oSB.setColor(new Color(Menu_InGame_2.btnCLR_R.r, Menu_InGame_2.btnCLR_R.g, Menu_InGame_2.btnCLR_R.b, 0.75f));
+            oSB.setColor(Menu_InGame_2.btnCLR_R.r, Menu_InGame_2.btnCLR_R.g, Menu_InGame_2.btnCLR_R.b, 0.75f);
             IMGManager.getIMG(Images.pix255).drawO(oSB, nPosX, nPosY - IMGManager.getIMG(Images.pix255).getHeight(), nWidth, nHeight);
-            oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.075f));
+            oSB.setColor(1.0f, 1.0f, 1.0f, 0.075f);
             IMGManager.getIMG(Images.gradient).drawO(oSB, nPosX, nPosY + nHeight - nHeight / 2 - IMGManager.getIMG(Images.gradient).getHeight(), nWidth, nHeight / 2, false, true);
             IMGManager.getIMG(Images.gradient).drawO(oSB, nPosX, nPosY - IMGManager.getIMG(Images.gradient).getHeight(), nWidth, nHeight / 2, false, false);
             IMGManager.getIMG(Images.sliderGradient).drawO(oSB, nPosX, nPosY - IMGManager.getIMG(Images.sliderGradient).getHeight(), CFG.PADD, nHeight);
             IMGManager.getIMG(Images.sliderGradient).drawO(oSB, nPosX + nWidth - CFG.PADD, nPosY - IMGManager.getIMG(Images.sliderGradient).getHeight(), CFG.PADD, nHeight, true, false);
         } else {
-            oSB.setColor(new Color(0.15686275f, 0.15686275f, 0.15686275f, 0.35f));
+            oSB.setColor(0.15686275f, 0.15686275f, 0.15686275f, 0.35f);
             IMGManager.getIMG(Images.pix255).drawO(oSB, nPosX, nPosY - IMGManager.getIMG(Images.pix255).getHeight(), nWidth, nHeight);
-            oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.025f));
+            oSB.setColor(1.0f, 1.0f, 1.0f, 0.025f);
             IMGManager.getIMG(Images.gradient).drawO(oSB, nPosX, nPosY + nHeight - nHeight / 2 - IMGManager.getIMG(Images.gradient).getHeight(), nWidth, nHeight / 2, false, true);
             IMGManager.getIMG(Images.gradient).drawO(oSB, nPosX, nPosY - IMGManager.getIMG(Images.gradient).getHeight(), nWidth, nHeight / 2, false, false);
             IMGManager.getIMG(Images.sliderGradient).drawO(oSB, nPosX, nPosY - IMGManager.getIMG(Images.sliderGradient).getHeight(), CFG.PADD, nHeight);
@@ -1106,9 +1108,9 @@ extends Menu {
             IMGManager.getIMG(Images.topFlagBG).draw(oSB, iTranslateX, iTranslateY);
             IMGManager.getIMG(Images.topBar).draw2(oSB, (RTS.isEnabled() ? this.getMenuElem(11).getPosXE() : this.getMenuElem(4).getPosXE()) - CFG.topBox.topBarPaddingRight + iTranslateX, iTranslateY, CFG.topBox.topBarPaddingRight + (CFG.GAMEWIDTH - (RTS.isEnabled() ? this.getMenuElem(11).getPosXE() : this.getMenuElem(4).getPosXE())), IMGManager.getIMG(Images.topBar).getHeight());
         } else {
-            oSB.setColor(new Color(0.03137255f, 0.03137255f, 0.03137255f, 1.0f));
+            oSB.setColor(0.03137255f, 0.03137255f, 0.03137255f, 1.0f);
             IMGManager.getIMG(Images.pix255).draw(oSB, this.getPosX() + iTranslateX, this.getPosY() + iTranslateY, CFG.GAMEWIDTH, IMGManager.getIMG(Images.topBar).getHeight());
-            oSB.setColor(new Color(0.16078432f, 0.15686275f, 0.16862746f, 1.0f));
+            oSB.setColor(0.16078432f, 0.15686275f, 0.16862746f, 1.0f);
             IMGManager.getIMG(Images.pix255).draw(oSB, this.getPosX() + iTranslateX, this.getPosY() + IMGManager.getIMG(Images.topBar).getHeight() - 2 + iTranslateY, CFG.GAMEWIDTH, 2);
         }
         if (RTS.isEnabled()) {
@@ -1133,7 +1135,7 @@ extends Menu {
         }
         oSB.setColor(Color.WHITE);
         if (!Menu_InitGame.PDR && CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).civGD.armyExpertiseLevel > 2 && timeD.isAfter(timeT)) {
-            Renderer.drawText(oSB, CFG.FONT_BOLD, Menu_InGame_2.getInfo(), CFG.BUTTON_W + iTranslateX, CFG.GAMEHEIGHT / 2 + iTranslateY, new Color(1.0f, 1.0f, 1.0f, 0.75f));
+            Renderer.drawText(oSB, CFG.FONT_BOLD, Menu_InGame_2.getInfo(), CFG.BUTTON_W + iTranslateX, CFG.GAMEHEIGHT / 2 + iTranslateY, INFO_TEXT_COLOR);
         }
     }
 

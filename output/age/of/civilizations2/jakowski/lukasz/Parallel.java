@@ -8,8 +8,27 @@ import java.util.function.IntConsumer;
 public class Parallel {
     private static final int THRESHOLD = 64;
     private static final ForkJoinPool pool = new ForkJoinPool(
-        Math.max(1, Runtime.getRuntime().availableProcessors() * 2)
+        getParallelism()
     );
+
+    private static int getParallelism() {
+        int cores = Math.max(1, Runtime.getRuntime().availableProcessors());
+        if (isAndroidRuntime()) {
+            return cores;
+        }
+        return Math.max(1, cores * 2);
+    }
+
+    private static boolean isAndroidRuntime() {
+        try {
+            String runtime = System.getProperty("java.runtime.name", "");
+            String vm = System.getProperty("java.vm.name", "");
+            return runtime.contains("Android") || vm.contains("Dalvik") || vm.contains("ART");
+        }
+        catch (Exception ex) {
+            return false;
+        }
+    }
 
     public static void range(int startInclusive, int endExclusive, IntConsumer action) {
         if (endExclusive - startInclusive <= THRESHOLD) {

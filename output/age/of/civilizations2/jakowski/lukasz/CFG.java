@@ -163,6 +163,7 @@ public class CFG {
     public static long currentTimeMillis;
     public static boolean LOGs;
     public static boolean LOG_PERF;
+    public static boolean LOG_PERF_VERBOSE;
     public static boolean DEBUG_MODE;
     public static String sDEBUG;
     public static boolean LANDSCAPE;
@@ -7772,6 +7773,7 @@ public class CFG {
     static {
         LOGs = true;
         LOG_PERF = true;
+        LOG_PERF_VERBOSE = true;
         DEBUG_MODE = false;
         sDEBUG = "#";
         LANDSCAPE = true;

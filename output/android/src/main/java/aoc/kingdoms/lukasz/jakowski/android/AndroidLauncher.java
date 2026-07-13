@@ -1,7 +1,10 @@
 package aoc.kingdoms.lukasz.jakowski.android;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.os.Bundle;
+import android.os.Process;
 import android.util.Log;
 
 import aoc.kingdoms.lukasz.jakowski.AA_Game;
@@ -43,7 +46,10 @@ public class AndroidLauncher extends AndroidApplication {
         }
 
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-        config.useGL30 = false;
+        Process.setThreadPriority(Process.THREAD_PRIORITY_DISPLAY);
+        logRuntimeLimits();
+
+        config.useGL30 = true;
         config.r = 8;
         config.g = 8;
         config.b = 8;
@@ -63,6 +69,17 @@ public class AndroidLauncher extends AndroidApplication {
                 + " samples=" + config.numSamples + " immersive=" + config.useImmersiveMode);
 
         initialize(new AA_Game(), config);
+    }
+
+    private void logRuntimeLimits() {
+        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        int memoryClass = activityManager == null ? -1 : activityManager.getMemoryClass();
+        int largeMemoryClass = activityManager == null ? -1 : activityManager.getLargeMemoryClass();
+        Runtime runtime = Runtime.getRuntime();
+        Log.i(TAG, "Runtime limits cores=" + runtime.availableProcessors()
+                + " heapMaxMB=" + (runtime.maxMemory() / 1048576L)
+                + " activityMemoryClassMB=" + memoryClass
+                + " largeMemoryClassMB=" + largeMemoryClass);
     }
 
     private void extractBundledAssets() throws IOException {

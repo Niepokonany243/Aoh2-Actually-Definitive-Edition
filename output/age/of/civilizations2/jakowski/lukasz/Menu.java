@@ -41,6 +41,7 @@ public class Menu {
     private int iScrollPosX = -1;
     private int iScrollPosX2 = -1;
     private float fScrollNewMenuPosX = 0.0f;
+    private final Rectangle clipBounds = new Rectangle();
 
     public final void initMenu(TitleM menuTitle, int iPosX, int iPosY, int iWidth, int iHeight, List<MenuElemUI> menuElements) {
         this.initMenu(menuTitle, iPosX, iPosY, iWidth, iHeight, menuElements, true, false, false);
@@ -160,9 +161,9 @@ public class Menu {
         int rectH = this.getHeightM();
         int rectX = this.getPosX() + iTranslateX;
         int rectY = CFG.GAMEHEIGHT - this.getPosY() - iTranslateY - rectH;
-        Rectangle clipBounds = new Rectangle(rectX, rectY, rectW, rectH);
+        this.clipBounds.set(rectX, rectY, rectW, rectH);
         oSB.flush();
-        ScissorStack.pushScissors(clipBounds);
+        ScissorStack.pushScissors(this.clipBounds);
     }
 
     public final void drawMenuM(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean sliderMenuIsActive) {
@@ -311,11 +312,11 @@ public class Menu {
         }
         if (CFG.menus.getSliderMenuResizeLEFT()) {
             IMGManager.getIMG(Images.pix255).drawO(oSB, this.getPosX(), this.getPosY() + this.getHeightM() - 1 - CFG.PADD * 6, CFG.PADD * 6, CFG.PADD * 6);
-            oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.35f));
+            oSB.setColor(1.0f, 1.0f, 1.0f, 0.35f);
             IMGManager.getIMG(Images.pickerEdge).drawO(oSB, this.getPosX(), this.getPosY() + this.getHeightM() - IMGManager.getIMG(Images.pickerEdge).getHeight() * 2, IMGManager.getIMG(Images.pickerEdge).getWidth(), IMGManager.getIMG(Images.pickerEdge).getHeight(), true, false);
         } else {
             IMGManager.getIMG(Images.pix255).drawO(oSB, this.getPosX() + this.getWidthM() - 1 - CFG.PADD * 6, this.getPosY() + this.getHeightM() - 1 - CFG.PADD * 6, CFG.PADD * 6, CFG.PADD * 6);
-            oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.35f));
+            oSB.setColor(1.0f, 1.0f, 1.0f, 0.35f);
             IMGManager.getIMG(Images.pickerEdge).drawO(oSB, this.getPosX() + this.getWidthM() - IMGManager.getIMG(Images.pickerEdge).getWidth(), this.getPosY() + this.getHeightM() - IMGManager.getIMG(Images.pickerEdge).getHeight() * 2, IMGManager.getIMG(Images.pickerEdge).getWidth(), IMGManager.getIMG(Images.pickerEdge).getHeight(), false, false);
         }
         oSB.setColor(Color.WHITE);
@@ -323,7 +324,7 @@ public class Menu {
 
     public final void drawBackgroundMode(SpriteBatch oSB, boolean sliderMenuIsActive) {
         if (sliderMenuIsActive && (CFG.menus.getSliderMenuResizeMode() || CFG.menus.getSliderMenuTitleMode())) {
-            oSB.setColor(new Color(0.1f, 0.1f, 0.1f, 0.5f));
+            oSB.setColor(0.1f, 0.1f, 0.1f, 0.5f);
             IMGManager.getIMG(Images.pattern).draw2O(oSB, 0, -IMGManager.getIMG(Images.pattern).getHeight(), CFG.GAMEWIDTH, CFG.GAMEHEIGHT);
             oSB.setColor(Color.WHITE);
         }
@@ -341,7 +342,7 @@ public class Menu {
     }
 
     public void actionEL(int nMenuElementID) {
-        System.out.println("Menu: actionEL " + nMenuElementID + " elementClass:" + this.menuElem.get(nMenuElementID).getClass().getSimpleName());
+        if (CFG.DEBUG_MODE) System.out.println("Menu: actionEL " + nMenuElementID + " elementClass:" + this.menuElem.get(nMenuElementID).getClass().getSimpleName());
         this.menuElem.get(nMenuElementID).actionElem(nMenuElementID);
     }
 

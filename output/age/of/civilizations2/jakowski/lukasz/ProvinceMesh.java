@@ -45,6 +45,10 @@ public class ProvinceMesh {
     private static Texture flagTexture;
     private static Pixmap flagPixmap;
     private static float lastDiscoveryFade = -1f;
+    private static boolean[] dirtyFlags;
+    private static int dirtyCount;
+    private static int dirtyArraySize;
+    private static final Matrix4 combinedMatrix = new Matrix4();
 
     public static void init() {
         long t0 = System.nanoTime();
@@ -277,6 +281,10 @@ public class ProvinceMesh {
             renderAvailable = true;
         }
         initialized = true;
+        dirtyArraySize = numProvinces;
+        dirtyFlags = new boolean[numProvinces];
+        java.util.Arrays.fill(dirtyFlags, true);
+        dirtyCount = numProvinces;
         updateAllStates();
     }
 
@@ -292,12 +300,19 @@ public class ProvinceMesh {
     }
 
     public static void markDirty(int provinceID) {
-        if (!needsUpdate) {
+        if (!initialized) return;
+        if (provinceID >= 0 && provinceID < dirtyArraySize && !dirtyFlags[provinceID]) {
+            dirtyFlags[provinceID] = true;
+            dirtyCount++;
             needsUpdate = true;
         }
     }
 
     public static void markAllDirty() {
+        if (!initialized) return;
+        if (dirtyCount == dirtyArraySize) return;
+        java.util.Arrays.fill(dirtyFlags, true);
+        dirtyCount = dirtyArraySize;
         needsUpdate = true;
     }
 
@@ -335,12 +350,19 @@ public class ProvinceMesh {
         if (!initialized || !needsUpdate) return;
         needsUpdate = false;
         long t0 = System.nanoTime();
-        int numProv = CFG.core.getProvinSize();
-        for (int i = 0; i < numProv; i++) {
-            updateProvinceColor(i);
+        if (dirtyCount > 0) {
+            int numProv = CFG.core.getProvinSize();
+            int lim = Math.min(numProv, dirtyArraySize);
+            for (int i = 0; i < lim; i++) {
+                if (dirtyFlags[i]) {
+                    dirtyFlags[i] = false;
+                    updateProvinceColor(i);
+                }
+            }
+            dirtyCount = 0;
+            colorTexture.draw(colorPixmap, 0, 0);
+            flagTexture.draw(flagPixmap, 0, 0);
         }
-        colorTexture.draw(colorPixmap, 0, 0);
-        flagTexture.draw(flagPixmap, 0, 0);
         long dtNs = System.nanoTime() - t0;
         perfUpdateTotalNs += dtNs;
         perfUpdateCount++;
@@ -380,7 +402,8 @@ public class ProvinceMesh {
             
             shader.begin();
             shaderBegun = true;
-            shader.setUniformMatrix("u_projTrans", oSB.getProjectionMatrix().cpy().mul(oSB.getTransformMatrix()));
+            combinedMatrix.set(oSB.getProjectionMatrix()).mul(oSB.getTransformMatrix());
+            shader.setUniformMatrix("u_projTrans", combinedMatrix);
             shader.setUniformf("u_translateY", -CFG.map.getMpC().getPY());
             shader.setUniformi("u_colors", 1);
             shader.setUniformi("u_flags", 2);
@@ -393,43 +416,55 @@ public class ProvinceMesh {
             boolean worldMap = CFG.map.getIsMapWorldMap(CFG.map.getActiveMapIDN());
             int pX = CFG.map.getMpC().getPX();
             int pY = CFG.map.getMpC().getPY();
-            float[] translateOffsets;
             if (worldMap) {
                 float widthM = CFG.map.getMpB().getWidthM();
-                translateOffsets = new float[]{pX, pX - widthM, pX + widthM};
-            } else {
-                translateOffsets = new float[]{pX};
-            }
-            
-            int totalIndices = 0;
-            for (int p = 0; p < pageMeshes.size(); ++p) {
-                TexturePageMesh tpm = pageMeshes.get(p);
-                if (tpm.mesh == null || tpm.indexCount <= 0) continue;
-                tpm.texture.bind(0);
-                shader.setUniformi("u_texture", 0);
-                totalIndices += tpm.indexCount;
-                for (int t = 0; t < translateOffsets.length; ++t) {
-                    shader.setUniformf("u_translateX", translateOffsets[t]);
+                int totalIndices = 0;
+                for (int p = 0; p < pageMeshes.size(); ++p) {
+                    TexturePageMesh tpm = pageMeshes.get(p);
+                    if (tpm.mesh == null || tpm.indexCount <= 0) continue;
+                    tpm.texture.bind(0);
+                    shader.setUniformi("u_texture", 0);
+                    totalIndices += tpm.indexCount;
+                    shader.setUniformf("u_translateX", pX);
+                    tpm.mesh.render(shader, GL20.GL_TRIANGLES);
+                    shader.setUniformf("u_translateX", pX - widthM);
+                    tpm.mesh.render(shader, GL20.GL_TRIANGLES);
+                    shader.setUniformf("u_translateX", pX + widthM);
                     tpm.mesh.render(shader, GL20.GL_TRIANGLES);
                 }
-            }
-            
-            perfDrawTotalNs += (System.nanoTime() - drawStart);
-            perfDrawCount++;
-            if (++logFrameCounter % 300 == 0) {
-                float avgDrawMs = (float)(perfDrawTotalNs / Math.max(1, perfDrawCount)) / 1000000.0f;
-                float avgUpdateMs = (float)(perfUpdateTotalNs / Math.max(1, perfUpdateCount)) / 1000000.0f;
-                Gdx.app.log("ProvinceMesh", "[PERF] avgDraw=" + String.format("%.2f", avgDrawMs) + "ms avgColorUpdate=" + String.format("%.2f", avgUpdateMs) + "ms pages=" + pageMeshes.size() + " indices=" + totalIndices + " pX=" + pX + " pY=" + pY + " scale=" + String.format("%.3f", CFG.map.getMpS().getCurrSc()) + " prov=" + CFG.core.getProvinSize() + " rendered=" + totalProvincesRendered + " canRender=" + canRender());
-                perfDrawTotalNs = 0;
-                perfDrawCount = 0;
-                perfUpdateTotalNs = 0;
-                perfUpdateCount = 0;
+                logPerfIfNeeded(drawStart, totalIndices, pX, pY);
+            } else {
+                int totalIndices = 0;
+                shader.setUniformf("u_translateX", pX);
+                for (int p = 0; p < pageMeshes.size(); ++p) {
+                    TexturePageMesh tpm = pageMeshes.get(p);
+                    if (tpm.mesh == null || tpm.indexCount <= 0) continue;
+                    tpm.texture.bind(0);
+                    shader.setUniformi("u_texture", 0);
+                    totalIndices += tpm.indexCount;
+                    tpm.mesh.render(shader, GL20.GL_TRIANGLES);
+                }
+                logPerfIfNeeded(drawStart, totalIndices, pX, pY);
             }
         }
         finally {
             if (shaderBegun) shader.end();
             Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
             if (wasDrawing) oSB.begin();
+        }
+    }
+
+    private static void logPerfIfNeeded(long drawStart, int totalIndices, int pX, int pY) {
+        perfDrawTotalNs += (System.nanoTime() - drawStart);
+        perfDrawCount++;
+        if (++logFrameCounter % 300 == 0 && CFG.LOG_PERF) {
+            float avgDrawMs = (float)(perfDrawTotalNs / Math.max(1, perfDrawCount)) / 1000000.0f;
+            float avgUpdateMs = (float)(perfUpdateTotalNs / Math.max(1, perfUpdateCount)) / 1000000.0f;
+            Gdx.app.log("ProvinceMesh", "[PERF] avgDraw=" + avgDrawMs + "ms avgColorUpdate=" + avgUpdateMs + "ms pages=" + pageMeshes.size() + " indices=" + totalIndices + " pX=" + pX + " pY=" + pY + " scale=" + CFG.map.getMpS().getCurrSc() + " prov=" + CFG.core.getProvinSize() + " rendered=" + totalProvincesRendered + " canRender=" + canRender());
+            perfDrawTotalNs = 0;
+            perfDrawCount = 0;
+            perfUpdateTotalNs = 0;
+            perfUpdateCount = 0;
         }
     }
 
@@ -454,5 +489,8 @@ public class ProvinceMesh {
         renderAvailable = false;
         totalProvincesRendered = 0;
         lastDiscoveryFade = -1f;
+        dirtyFlags = null;
+        dirtyCount = 0;
+        dirtyArraySize = 0;
     }
 }

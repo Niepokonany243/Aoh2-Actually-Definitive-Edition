@@ -497,6 +497,7 @@ public class Province {
     }
 
     public final void drawOccupiedProv(SpriteBatch oSB) {
+        if (this.provBG == null) return;
         oSB.setColor(new Color(1.0f, 1.0f, 1.0f, (float)CFG.settingsGD.OCCUPIED_PROV_ALPHA / 255.0f));
         AoCGame.shaderAlpha3.setUniformf("u_maskScale", CFG.settingsGD.OCCUPIED_STRIPES_SIZE * Math.max((float)this.provBG.getWidth() / (float)IMGManager.getIMG(Images.patternReversed).getWidth(), (float)this.provBG.getHeight() / (float)IMGManager.getIMG(Images.patternReversed).getHeight()));
         this.provBG.getTexture().bind(1);
@@ -506,6 +507,7 @@ public class Province {
     }
 
     public final void drawOccupiedProv2(SpriteBatch oSB) {
+        if (this.provBG == null) return;
         oSB.setColor(new Color(1.0f, 1.0f, 1.0f, (float)(CFG.settingsGD.OCCUPIED_PROV_ALPHA * 2) / 255.0f));
         AoCGame.shaderAlpha3.setUniformf("u_maskScale", CFG.settingsGD.OCCUPIED_STRIPES_SIZE * Math.max((float)this.provBG.getWidth() / (float)IMGManager.getIMG(Images.patternReversed).getWidth(), (float)this.provBG.getHeight() / (float)IMGManager.getIMG(Images.patternReversed).getHeight()));
         this.provBG.getTexture().bind(1);

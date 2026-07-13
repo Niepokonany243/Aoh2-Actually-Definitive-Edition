@@ -72,11 +72,11 @@ extends Menu {
             @Override
             public void drawT(SpriteBatch oSB, int iTranslateX, int nPosX, int nPosY, int nWidth, boolean sliderMenuIsActive) {
                 IMGManager.getIMG(Images.gameTopEdgeTitle).draw2O(oSB, Menu_InGame_RTO2.this.getPosX() + iTranslateX, Menu_InGame_RTO2.this.getPosY() - IMGManager.getIMG(Images.gameTopEdgeTitle).getHeight() - this.getHeightT(), Menu_InGame_RTO2.this.getWidthM(), this.getHeightT());
-                oSB.setColor(new Color(0.011f, 0.014f, 0.019f, 0.8f));
+                oSB.setColor(0.011f, 0.014f, 0.019f, 0.8f);
                 IMGManager.getIMG(Images.gradient).drawO(oSB, Menu_InGame_RTO2.this.getPosX() + 2 + iTranslateX, Menu_InGame_RTO2.this.getPosY() - IMGManager.getIMG(Images.gradient).getHeight() - this.getHeightT() * 3 / 4, Menu_InGame_RTO2.this.getWidthM(), this.getHeightT() * 3 / 4, false, true);
                 oSB.setColor(CFG.COLOR_NEW_GAME_EDGE_LINE);
                 IMGManager.getIMG(Images.pix255).drawO(oSB, Menu_InGame_RTO2.this.getPosX() + 2 + iTranslateX, Menu_InGame_RTO2.this.getPosY() - IMGManager.getIMG(Images.pix255).getHeight(), Menu_InGame_RTO2.this.getWidthM() - 2);
-                oSB.setColor(new Color(CFG.COLOR_FLAG_FRAME.r, CFG.COLOR_FLAG_FRAME.g, CFG.COLOR_FLAG_FRAME.b, 0.4f));
+                oSB.setColor(CFG.COLOR_FLAG_FRAME.r, CFG.COLOR_FLAG_FRAME.g, CFG.COLOR_FLAG_FRAME.b, 0.4f);
                 IMGManager.getIMG(Images.line32Off1).drawO(oSB, Menu_InGame_RTO2.this.getPosX() + 2 + iTranslateX, Menu_InGame_RTO2.this.getPosY() - IMGManager.getIMG(Images.pix255).getHeight() - IMGManager.getIMG(Images.line32Off1).getHeight(), Menu_InGame_RTO2.this.getWidthM() - 2, 1);
                 oSB.setColor(Color.WHITE);
                 Renderer.drawText(oSB, CFG.FONT_BOLD_SMALL, this.getText(), nPosX + nWidth / 2 - this.getTextWidth() / 2 + iTranslateX, nPosY - this.getHeightT() + this.getHeightT() / 2 + 1 - this.getTextHeight() / 2, CFG.COLOR_TEXT_GRAY_LEFT_NS);
@@ -100,14 +100,14 @@ extends Menu {
             IMGManager.getIMG(Images.gameTopEdgeLine).draw2O(oSB, this.getPosX() + iTranslateX, this.getPosY() - IMGManager.getIMG(Images.gameTopEdgeLine).getHeight() + iTranslateY, this.getWidthM(), this.getHeightM(), false, true);
             super.draw(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);
             if (!CFG.oAI.doneLoadingOrders) {
-                oSB.setColor(new Color(CFG.COLOR_GRADIENT_DARK_BLUE.r, CFG.COLOR_GRADIENT_DARK_BLUE.g, CFG.COLOR_GRADIENT_DARK_BLUE.b, 0.9f));
+                oSB.setColor(CFG.COLOR_GRADIENT_DARK_BLUE.r, CFG.COLOR_GRADIENT_DARK_BLUE.g, CFG.COLOR_GRADIENT_DARK_BLUE.b, 0.9f);
                 IMGManager.getIMG(Images.sliderGradient).drawO(oSB, 0, this.getLoadPosY() - IMGManager.getIMG(Images.line32Off1).getHeight(), CFG.map.getMpB().getMinimapWidth(), this.getLoadHeight(), false, false);
-                oSB.setColor(new Color(0.0f, 0.0f, 0.0f, 0.35f));
+                oSB.setColor(0.0f, 0.0f, 0.0f, 0.35f);
                 IMGManager.getIMG(Images.sliderGradient).drawO(oSB, 0, this.getLoadPosY() - IMGManager.getIMG(Images.sliderGradient).getHeight(), CFG.map.getMpB().getMinimapWidth() / 2, this.getLoadHeight(), false, false);
                 oSB.setColor(CFG.COLOR_CREATE_NEW_GAME_BOX_PLAYERS);
                 IMGManager.getIMG(Images.sliderGradient).drawO(oSB, 0, this.getLoadPosY() - IMGManager.getIMG(Images.sliderGradient).getHeight(), CFG.map.getMpB().getMinimapWidth(), 1, false, false);
                 IMGManager.getIMG(Images.sliderGradient).drawO(oSB, 0, this.getLoadPosY() + this.getLoadHeight() - 1 - IMGManager.getIMG(Images.sliderGradient).getHeight(), CFG.map.getMpB().getMinimapWidth(), 1, false, false);
-                oSB.setColor(new Color(0.0f, 0.0f, 0.0f, 0.65f));
+                oSB.setColor(0.0f, 0.0f, 0.0f, 0.65f);
                 IMGManager.getIMG(Images.sliderGradient).drawO(oSB, 0, this.getLoadPosY() + 1 - IMGManager.getIMG(Images.sliderGradient).getHeight(), CFG.map.getMpB().getMinimapWidth(), 1, false, false);
                 IMGManager.getIMG(Images.sliderGradient).drawO(oSB, 0, this.getLoadPosY() + this.getLoadHeight() - 2 - IMGManager.getIMG(Images.sliderGradient).getHeight(), CFG.map.getMpB().getMinimapWidth(), 1, false, false);
                 oSB.setColor(Color.WHITE);
@@ -117,14 +117,14 @@ extends Menu {
                 Menu_InGame_ProvInfo.clickEndTurn();
             }
         } else if (!CFG.oAI.doneLoadingOrders) {
-            oSB.setColor(new Color(CFG.COLOR_GRADIENT_DARK_BLUE.r, CFG.COLOR_GRADIENT_DARK_BLUE.g, CFG.COLOR_GRADIENT_DARK_BLUE.b, 0.9f));
+            oSB.setColor(CFG.COLOR_GRADIENT_DARK_BLUE.r, CFG.COLOR_GRADIENT_DARK_BLUE.g, CFG.COLOR_GRADIENT_DARK_BLUE.b, 0.9f);
             IMGManager.getIMG(Images.sliderGradient).drawO(oSB, 0, this.getLoadPosY() - IMGManager.getIMG(Images.line32Off1).getHeight(), CFG.map.getMpB().getMinimapWidth(), this.getLoadHeight(), false, false);
-            oSB.setColor(new Color(0.0f, 0.0f, 0.0f, 0.35f));
+            oSB.setColor(0.0f, 0.0f, 0.0f, 0.35f);
             IMGManager.getIMG(Images.sliderGradient).drawO(oSB, 0, this.getLoadPosY() - IMGManager.getIMG(Images.sliderGradient).getHeight(), CFG.map.getMpB().getMinimapWidth() / 2, this.getLoadHeight(), false, false);
             oSB.setColor(CFG.COLOR_CREATE_NEW_GAME_BOX_PLAYERS);
             IMGManager.getIMG(Images.sliderGradient).drawO(oSB, 0, this.getLoadPosY() - IMGManager.getIMG(Images.sliderGradient).getHeight(), CFG.map.getMpB().getMinimapWidth(), 1, false, false);
             IMGManager.getIMG(Images.sliderGradient).drawO(oSB, 0, this.getLoadPosY() + this.getLoadHeight() - 1 - IMGManager.getIMG(Images.sliderGradient).getHeight(), CFG.map.getMpB().getMinimapWidth(), 1, false, false);
-            oSB.setColor(new Color(0.0f, 0.0f, 0.0f, 0.65f));
+            oSB.setColor(0.0f, 0.0f, 0.0f, 0.65f);
             IMGManager.getIMG(Images.sliderGradient).drawO(oSB, 0, this.getLoadPosY() + 1 - IMGManager.getIMG(Images.sliderGradient).getHeight(), CFG.map.getMpB().getMinimapWidth(), 1, false, false);
             IMGManager.getIMG(Images.sliderGradient).drawO(oSB, 0, this.getLoadPosY() + this.getLoadHeight() - 2 - IMGManager.getIMG(Images.sliderGradient).getHeight(), CFG.map.getMpB().getMinimapWidth(), 1, false, false);
             oSB.setColor(Color.WHITE);

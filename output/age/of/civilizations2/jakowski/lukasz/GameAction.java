@@ -1701,9 +1701,12 @@ public class GameAction {
     }
 
     public final void moveRegroupArmy() {
-        for (int i = 1; i < CFG.core.getCivsSize(); ++i) {
+        for (int i = CFG.core.getNextAliveCiv(1); i >= 0; i = CFG.core.getNextAliveCiv(i + 1)) {
             try {
-                CFG.core.getCiv(i).moveRegroupArmy();
+                Civilization civ = CFG.core.getCiv(i);
+                if (civ.civGD.iRegroupArmySize > 0) {
+                    civ.moveRegroupArmy();
+                }
             }
             catch (Exception ex) {
                 CFG.exceptionStack(ex);

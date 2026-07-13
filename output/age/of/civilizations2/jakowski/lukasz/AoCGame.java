@@ -74,6 +74,8 @@ public class AoCGame {
     private long lTimeFPS;
     private int iNumOfFPS = 0;
     public static boolean drawFPS;
+    private long perfRenderTotalNs;
+    private int perfRenderCount;
     private RequestRendering requestRendering;
     public static ShaderProgram shaderDef;
     public static ShaderProgram blackWhiteShdr;
@@ -169,7 +171,8 @@ public class AoCGame {
         FileManager.initLoadInterface();
         ConfigINI.readConfig();
         if (CFG.isAndroid()) {
-            CFG.LOG_PERF = false;
+            CFG.LOG_PERF = true;
+            CFG.LOG_PERF_VERBOSE = false;
         }
         CFG.LANDSCAPE = ConfigINI.landscape;
         if (CFG.isAndroid()) {
@@ -574,9 +577,26 @@ public class AoCGame {
         this.requestRendering.update();
         long renderEnd = System.currentTimeMillis();
         long renderTotalMs = renderEnd - renderStart;
-        long perfThreshold = CFG.isAndroid() ? 200L : 50L;
-        if (renderTotalMs > perfThreshold) {
+        long perfThreshold = CFG.isAndroid() ? 100L : 50L;
+        if (renderTotalMs > perfThreshold && (CFG.LOG_PERF_VERBOSE || CFG.getIsDesktop())) {
             CFG.LOG("PERF", "[render] TOTAL: " + renderTotalMs + "ms (update: " + (perfUpdate - renderStart) + "ms) [phase1_map:" + perfPhase1 + "ms][phase2_overlay:" + perfPhase2 + "ms][phase3_details:" + perfPhase3 + "ms][phase4_ui:" + perfPhase4 + "ms]");
+        }
+        perfRenderTotalNs += renderTotalMs;
+        if (++perfRenderCount >= 300) {
+            if (CFG.LOG_PERF) {
+                long avgMs = perfRenderTotalNs / perfRenderCount;
+                Runtime rt = Runtime.getRuntime();
+                long used = (rt.totalMemory() - rt.freeMemory()) / 1048576L;
+                long totalMem = rt.totalMemory() / 1048576L;
+                long maxMem = rt.maxMemory() / 1048576L;
+                if (CFG.LOG_PERF_VERBOSE || avgMs > 50) {
+                    CFG.LOG("PERF", "[avg] " + avgMs + "ms/frame over " + perfRenderCount + " frames  mem=" + used + "/" + totalMem + "/" + maxMem + "MB  fps=" + CFG.iNumOfFPS);
+                } else {
+                    CFG.LOG("PERF", "[avg] " + avgMs + "ms/frame over " + perfRenderCount + " frames  mem=" + used + "/" + totalMem + "/" + maxMem + "MB");
+                }
+            }
+            perfRenderTotalNs = 0;
+            perfRenderCount = 0;
         }
     }
 

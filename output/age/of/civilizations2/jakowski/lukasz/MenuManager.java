@@ -7271,7 +7271,7 @@ public class MenuManager {
     public final void drawToastGradient(SpriteBatch oSB) {
         if (TOAST_TIME + (long)ANIMATION_TIME >= CFG.currentTimeMillis) {
             float fAlpha = 0.8f - 0.8f * ((float)(CFG.currentTimeMillis - TOAST_TIME) / (float)ANIMATION_TIME);
-            oSB.setColor(new Color(Colors.COLOR_GRADIENT_BG_BLUE.r, Colors.COLOR_GRADIENT_BG_BLUE.g, Colors.COLOR_GRADIENT_BG_BLUE.b, fAlpha));
+            oSB.setColor(Colors.COLOR_GRADIENT_BG_BLUE.r, Colors.COLOR_GRADIENT_BG_BLUE.g, Colors.COLOR_GRADIENT_BG_BLUE.b, fAlpha);
             IMGManager.getIMG(Images.gradientXY).draw(oSB, CFG.GAMEWIDTH / 4, CFG.GAMEHEIGHT - CFG.BUTTON_H * 2, CFG.GAMEWIDTH / 2, CFG.BUTTON_H * 2);
             oSB.setColor(Color.WHITE);
         }
@@ -7301,10 +7301,12 @@ public class MenuManager {
             for (int i = this.menus.get(menuID).size() - 1; i >= 0; --i) {
                 if (!this.menus.get(menuID).get(this.orderOfMenu.get(menuID).get(i)).getVisibleM()) continue;
                 menuStart = System.currentTimeMillis();
-                this.menus.get(menuID).get(this.orderOfMenu.get(menuID).get(i)).draw(oSB, iTranslateX, this.dialogMenu.getVisibleM() ? false : (this.keyboardMode ? false : this.orderOfMenu.get(menuID).get(i) == this.activeMenuID));
+                int menuIdx = this.orderOfMenu.get(menuID).get(i);
+                Menu menu = this.menus.get(menuID).get(menuIdx);
+                menu.draw(oSB, iTranslateX, this.dialogMenu.getVisibleM() ? false : (this.keyboardMode ? false : menuIdx == this.activeMenuID));
                 long menuTime = System.currentTimeMillis() - menuStart;
                 if (menuTime > 50) {
-                    CFG.LOG("PERF", "[drawMM] menuIdx:" + this.orderOfMenu.get(menuID).get(i) + " time:" + menuTime + "ms");
+                    CFG.LOG("PERF", "[drawMM] menuIdx:" + menuIdx + " class:" + menu.getClass().getSimpleName() + " time:" + menuTime + "ms");
                 }
             }
             CFG.tutorialManager.draw(oSB, iTranslateX, 0);
@@ -9283,7 +9285,7 @@ public class MenuManager {
 
     public final boolean actionUp(int nPosX, int nPosY, int nPointer, int button) {
         this.isWarDetailsValid();
-        System.out.println("MenuManager: actionUp " + nPosX + " " + nPosY + " button:" + button + " activeMenuID:" + this.activeMenuID + " activeMenuElemeID:" + this.activeMenuElemeID);
+        if (CFG.DEBUG_MODE) System.out.println("MenuManager: actionUp " + nPosX + " " + nPosY + " button:" + button + " activeMenuID:" + this.activeMenuID + " activeMenuElemeID:" + this.activeMenuElemeID);
         try {
             if (this.dialogMenu != null && this.dialogMenu.getVisibleM()) {
                 if (this.activeMenuElemeID >= 0 && this.dialogMenu.getMenuElem(this.activeMenuElemeID).getIsClickable() && nPosX >= this.dialogMenu.getMenuElem(this.activeMenuElemeID).getPosXE() && nPosX <= this.dialogMenu.getMenuElem(this.activeMenuElemeID).getPosXE() + this.dialogMenu.getMenuElem(this.activeMenuElemeID).getWidthE() && nPosY >= this.dialogMenu.getMenuElem(this.activeMenuElemeID).getPosY() && nPosY <= this.dialogMenu.getMenuElem(this.activeMenuElemeID).getPosY() + this.dialogMenu.getMenuElem(this.activeMenuElemeID).getHeightE()) {
@@ -9541,7 +9543,7 @@ public class MenuManager {
     }
 
     public final void actionElem(int sliderMenuID, int nMenuElementID) {
-        System.out.println("MenuManager: actionElem sliderMenuID:" + sliderMenuID + " nMenuElementID:" + nMenuElementID);
+        if (CFG.DEBUG_MODE) System.out.println("MenuManager: actionElem sliderMenuID:" + sliderMenuID + " nMenuElementID:" + nMenuElementID);
         try {
             List<Menu> activeMenu = this.getActiveMenu();
             if (activeMenu != null && sliderMenuID >= 0 && sliderMenuID < activeMenu.size()) {
@@ -9903,11 +9905,11 @@ public class MenuManager {
                                     int nY = ((Menu)((List)MenuManager.this.menus.get(MenuManager.this.IN_GAME_MENU)).get(MenuManager.this.INGAME_PROV_INFO)).getMenuElem(4).getPosY();
                                     int nH = ((Menu)((List)MenuManager.this.menus.get(MenuManager.this.IN_GAME_MENU)).get(MenuManager.this.INGAME_PROV_INFO)).getMenuElem(4).getHeightE();
                                     int nW = ((Menu)((List)MenuManager.this.menus.get(MenuManager.this.IN_GAME_MENU)).get(MenuManager.this.INGAME_PROV_INFO)).getMenuElem(1).getWidthE() - CFG.PADD - ((Menu)((List)MenuManager.this.menus.get(MenuManager.this.IN_GAME_MENU)).get(MenuManager.this.INGAME_PROV_INFO)).getMenuElem(4).getWidthE();
-                                    oSB.setColor(new Color(Colors.COLOR_STATS_RECT_BG.r, Colors.COLOR_STATS_RECT_BG.g, Colors.COLOR_STATS_RECT_BG.b, this.getIsHovered() || isActive ? 0.6f : 0.5f));
+                                    oSB.setColor(Colors.COLOR_STATS_RECT_BG.r, Colors.COLOR_STATS_RECT_BG.g, Colors.COLOR_STATS_RECT_BG.b, this.getIsHovered() || isActive ? 0.6f : 0.5f);
                                     Renderer.drawBox2(oSB, Images.statsRectBG, nX + iTranslateX, nY + iTranslateY, nW, nH, 1.0f);
                                     oSB.setColor(Color.WHITE);
                                     if (this.getIsHovered() || isActive) {
-                                        oSB.setColor(new Color(0.0f, 0.0f, 0.0f, 1.0f));
+                                        oSB.setColor(0.0f, 0.0f, 0.0f, 1.0f);
                                         Renderer.drawBox2(oSB, Images.statsRectBGBorder, nX + iTranslateX, nY + iTranslateY, nW, nH, 1.0f);
                                         oSB.setColor(Color.WHITE);
                                     }

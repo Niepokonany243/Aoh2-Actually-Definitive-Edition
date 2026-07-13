@@ -448,8 +448,17 @@ public class GameUpdate {
     }
 
     public final void updateCivs_Money() {
-        for (int i = CFG.core.getNextAliveCiv(1); i >= 0; i = CFG.core.getNextAliveCiv(i + 1)) {
-            this.getBalance_UpdateBudgetPrepare(i);
+        if (CFG.isAndroid() && CFG.core.getCivsSize() > 64) {
+            this.ensureAdministrationEfficiencyCache();
+            Parallel.range(1, CFG.core.getCivsSize(), (int i) -> {
+                if (CFG.core.isAlive(i)) {
+                    this.getBalance_UpdateBudgetPrepare(i);
+                }
+            });
+        } else {
+            for (int i = CFG.core.getNextAliveCiv(1); i >= 0; i = CFG.core.getNextAliveCiv(i + 1)) {
+                this.getBalance_UpdateBudgetPrepare(i);
+            }
         }
         for (int i = CFG.core.getNextAliveCiv(1); i >= 0; i = CFG.core.getNextAliveCiv(i + 1)) {
             Civilization civ = CFG.core.getCiv(i);
