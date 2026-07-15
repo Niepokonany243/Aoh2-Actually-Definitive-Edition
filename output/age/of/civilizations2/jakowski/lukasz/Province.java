@@ -52,6 +52,7 @@ import java.util.List;
 
 public class Province {
 
+    private static final Color ANDROID_WASTELAND_DRAW_COLOR = new Color();
 
     private int iProvinceID = 0;
     private int iPotential = 0;
@@ -498,7 +499,7 @@ public class Province {
 
     public final void drawOccupiedProv(SpriteBatch oSB) {
         if (this.provBG == null) return;
-        oSB.setColor(new Color(1.0f, 1.0f, 1.0f, (float)CFG.settingsGD.OCCUPIED_PROV_ALPHA / 255.0f));
+        oSB.setColor(1.0f, 1.0f, 1.0f, (float)CFG.settingsGD.OCCUPIED_PROV_ALPHA / 255.0f);
         AoCGame.shaderAlpha3.setUniformf("u_maskScale", CFG.settingsGD.OCCUPIED_STRIPES_SIZE * Math.max((float)this.provBG.getWidth() / (float)IMGManager.getIMG(Images.patternReversed).getWidth(), (float)this.provBG.getHeight() / (float)IMGManager.getIMG(Images.patternReversed).getHeight()));
         this.provBG.getTexture().bind(1);
         Gdx.gl.glActiveTexture(33984);
@@ -508,7 +509,7 @@ public class Province {
 
     public final void drawOccupiedProv2(SpriteBatch oSB) {
         if (this.provBG == null) return;
-        oSB.setColor(new Color(1.0f, 1.0f, 1.0f, (float)(CFG.settingsGD.OCCUPIED_PROV_ALPHA * 2) / 255.0f));
+        oSB.setColor(1.0f, 1.0f, 1.0f, (float)(CFG.settingsGD.OCCUPIED_PROV_ALPHA * 2) / 255.0f);
         AoCGame.shaderAlpha3.setUniformf("u_maskScale", CFG.settingsGD.OCCUPIED_STRIPES_SIZE * Math.max((float)this.provBG.getWidth() / (float)IMGManager.getIMG(Images.patternReversed).getWidth(), (float)this.provBG.getHeight() / (float)IMGManager.getIMG(Images.patternReversed).getHeight()));
         this.provBG.getTexture().bind(1);
         Gdx.gl.glActiveTexture(33984);
@@ -1427,6 +1428,9 @@ public class Province {
     }
 
     public final Color getWastelandColor(float fAlpha) {
+        if (CFG.isAndroid()) {
+            return ANDROID_WASTELAND_DRAW_COLOR.set(CFG.settingsGD.COLOR_PROVINCE_BG_WASTELAND.getR() - 0.0627f * (float)this.getWastelandLvl(), CFG.settingsGD.COLOR_PROVINCE_BG_WASTELAND.getG() - 0.0529f * (float)this.getWastelandLvl(), CFG.settingsGD.COLOR_PROVINCE_BG_WASTELAND.getB() - 0.0443f * (float)this.getWastelandLvl(), fAlpha);
+        }
         return new Color(CFG.settingsGD.COLOR_PROVINCE_BG_WASTELAND.getR() - 0.0627f * (float)this.getWastelandLvl(), CFG.settingsGD.COLOR_PROVINCE_BG_WASTELAND.getG() - 0.0529f * (float)this.getWastelandLvl(), CFG.settingsGD.COLOR_PROVINCE_BG_WASTELAND.getB() - 0.0443f * (float)this.getWastelandLvl(), fAlpha);
     }
 
@@ -2895,6 +2899,7 @@ public class Province {
         this.provGD.armiesC.get(0).setCivID(nCivID);
         this.provGD.trueOwnerOfProvince = nCivID;
         this.fromCivID = -1;
+        ProvinceMesh.markDirty(this.iProvinceID);
     }
 
     public final void setCivId_LoadScenario(int nCivID) {
@@ -2904,6 +2909,7 @@ public class Province {
         }
         this.provGD.armiesC.get(0).setCivID(nCivID);
         this.provGD.trueOwnerOfProvince = nCivID;
+        ProvinceMesh.markDirty(this.iProvinceID);
     }
 
     public final void setCivId(int nCivID, boolean conquered) {

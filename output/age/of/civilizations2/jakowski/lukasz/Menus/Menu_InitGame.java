@@ -1053,7 +1053,7 @@ extends Menu {
                     try {
                         CFG.gameAction.turnThreadNewTurn = new Turn_ThreadNewTurn();
                         CFG.gameAction.turnThreadActions = new Turn_ThreadActions();
-                        if (CFG.getIsDesktop() && GameValues.gvInGame.USE_NEW_TREAD_TURN_ACTION) {
+                        if (CFG.isAndroid() || CFG.getIsDesktop() && GameValues.gvInGame.USE_NEW_TREAD_TURN_ACTION) {
                             CFG.gameAction.turnThreadNewTurn.start();
                             CFG.gameAction.turnThreadActions.start();
                         }

@@ -842,7 +842,7 @@ public class RenderProvince {
 
             @Override
             public void drawProvinces(SpriteBatch oSB) {
-                if (ProvinceMesh.canRender() && CFG.isAndroid()) {
+                if (ProvinceMesh.canRenderWithColors() && CFG.isAndroid()) {
                     ProvinceMesh.draw(oSB);
                     RenderProvince.drawOccupiedProvinces_FogOfWar(oSB);
                     return;
@@ -877,7 +877,7 @@ public class RenderProvince {
 
             @Override
             public void drawProvinces(SpriteBatch oSB) {
-                if (ProvinceMesh.canRender() && CFG.isAndroid()) {
+                if (ProvinceMesh.canRenderWithColors() && CFG.isAndroid()) {
                     ProvinceMesh.draw(oSB);
                     RenderProvince.drawOccupiedProvinces(oSB);
                     return;
@@ -1404,7 +1404,9 @@ public class RenderProvince {
         oSB.setShader(AoCGame.shaderDef);
         oSB.enableBlending();
         oSB.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        ProvinceMesh.updateAllStates();
+        if (!CFG.isAndroid() || !ProvinceMesh.canRenderWithColors()) {
+            ProvinceMesh.updateAllStates();
+        }
     }
 
     public static final void drawProvincesInGame_StandardWasteland(SpriteBatch oSB) {

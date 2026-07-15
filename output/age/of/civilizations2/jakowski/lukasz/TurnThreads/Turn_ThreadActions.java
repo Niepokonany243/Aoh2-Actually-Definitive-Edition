@@ -12,6 +12,13 @@ extends Thread {
     
     @Override
     public void run() {
+        if (CFG.isAndroid()) {
+            try {
+                Thread.currentThread().setPriority(Thread.NORM_PRIORITY - 2);
+            }
+            catch (Exception ex) {
+            }
+        }
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 Turn_ThreadActions turn_ThreadActions = this;

@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +36,7 @@ public class ProvinceMesh {
     private static final int INDICES_PER_PROVINCE = 6;
     private static final int COMPONENTS_PER_VERTEX = 5;
     private static final int VERTEX_LIMIT = 32767;
+    private static final int ANDROID_DIRTY_BATCH = 768;
     public static boolean needsUpdate = true;
     private static int totalProvincesRendered = 0;
     private static int logFrameCounter = 0;
@@ -46,8 +48,14 @@ public class ProvinceMesh {
     private static Pixmap flagPixmap;
     private static float lastDiscoveryFade = -1f;
     private static boolean[] dirtyFlags;
+    private static int[] dirtyList;
+    private static int dirtyListSize;
     private static int dirtyCount;
     private static int dirtyArraySize;
+    private static int dirtyMin = Integer.MAX_VALUE;
+    private static int dirtyMax = -1;
+    private static int dirtySweepCursor = -1;
+    private static boolean colorsHaveOwnership = false;
     private static final Matrix4 combinedMatrix = new Matrix4();
 
     public static void init() {
@@ -227,7 +235,7 @@ public class ProvinceMesh {
         colorTexture = new Texture(colorPixmap);
         colorTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         
-        flagPixmap = new Pixmap(texWidth, 1, Pixmap.Format.Alpha);
+        flagPixmap = new Pixmap(texWidth, 1, Pixmap.Format.RGBA8888);
         flagTexture = new Texture(flagPixmap);
         flagTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
@@ -283,8 +291,15 @@ public class ProvinceMesh {
         initialized = true;
         dirtyArraySize = numProvinces;
         dirtyFlags = new boolean[numProvinces];
+        dirtyList = new int[numProvinces];
+        dirtyListSize = 0;
         java.util.Arrays.fill(dirtyFlags, true);
         dirtyCount = numProvinces;
+        dirtyMin = 0;
+        dirtyMax = numProvinces - 1;
+        dirtySweepCursor = -1;
+        colorsHaveOwnership = false;
+        needsUpdate = true;
         updateAllStates();
     }
 
@@ -299,21 +314,58 @@ public class ProvinceMesh {
         return value + 1;
     }
 
-    public static void markDirty(int provinceID) {
+    public static synchronized void markDirty(int provinceID) {
         if (!initialized) return;
         if (provinceID >= 0 && provinceID < dirtyArraySize && !dirtyFlags[provinceID]) {
             dirtyFlags[provinceID] = true;
+            dirtyList[dirtyListSize++] = provinceID;
             dirtyCount++;
+            if (provinceID < dirtyMin) dirtyMin = provinceID;
+            if (provinceID > dirtyMax) dirtyMax = provinceID;
             needsUpdate = true;
         }
     }
 
-    public static void markAllDirty() {
+    public static synchronized void markAllDirty() {
         if (!initialized) return;
-        if (dirtyCount == dirtyArraySize) return;
+        if (dirtyCount == dirtyArraySize && dirtySweepCursor >= 0) return;
         java.util.Arrays.fill(dirtyFlags, true);
+        dirtyListSize = 0;
         dirtyCount = dirtyArraySize;
+        dirtyMin = 0;
+        dirtyMax = dirtyArraySize - 1;
+        dirtySweepCursor = 0;
         needsUpdate = true;
+    }
+
+    public static synchronized void markAllDirtyImmediate() {
+        if (!initialized) return;
+        java.util.Arrays.fill(dirtyFlags, true);
+        dirtyListSize = 0;
+        dirtyCount = dirtyArraySize;
+        dirtyMin = 0;
+        dirtyMax = dirtyArraySize - 1;
+        dirtySweepCursor = -1;
+        colorsHaveOwnership = false;
+        needsUpdate = true;
+    }
+
+    public static synchronized void markCivDirty(int civID) {
+        if (!initialized) return;
+        if (CFG.core == null || civID < 0 || civID >= CFG.core.getCivsSize()) {
+            markAllDirty();
+            return;
+        }
+        Civilization civ = CFG.core.getCiv(civID);
+        if (civ == null) {
+            markAllDirty();
+            return;
+        }
+        int numProvs = civ.getNumOfProvs();
+        if (numProvs <= 0) return;
+        for (int i = 0; i < numProvs; ++i) {
+            markDirty(civ.getProvID(i));
+        }
     }
 
     public static void updateProvinceColor(int provinceID) {
@@ -335,6 +387,9 @@ public class ProvinceMesh {
             int civID = p.getCivId();
             Civilization civ = CFG.core.getCiv(civID);
             float alpha = (civID == 0) ? 0.039215688f : (float)CFG.settingsGD.PROV_ALPHA / 255.0f;
+            if (civID > 0) {
+                colorsHaveOwnership = true;
+            }
             if (civ == null) {
                 colorPixmap.setColor(1, 0, 1, alpha);
             } else {
@@ -346,26 +401,126 @@ public class ProvinceMesh {
         flagPixmap.drawPixel(provinceID, 0);
     }
     
-    public static void updateAllStates() {
+    public static synchronized void updateAllStates() {
         if (!initialized || !needsUpdate) return;
-        needsUpdate = false;
         long t0 = System.nanoTime();
         if (dirtyCount > 0) {
             int numProv = CFG.core.getProvinSize();
             int lim = Math.min(numProv, dirtyArraySize);
-            for (int i = 0; i < lim; i++) {
-                if (dirtyFlags[i]) {
-                    dirtyFlags[i] = false;
-                    updateProvinceColor(i);
+            int processed = 0;
+            if (dirtySweepCursor >= 0 || dirtyCount == dirtyArraySize || dirtyListSize == 0) {
+                int start = dirtySweepCursor >= 0 ? dirtySweepCursor : 0;
+                int end = CFG.isAndroid() && dirtySweepCursor >= 0 ? Math.min(lim, start + ANDROID_DIRTY_BATCH) : lim;
+                int uploadStart = -1;
+                int uploadEnd = -1;
+                for (int i = start; i < end; i++) {
+                    if (dirtyFlags[i]) {
+                        dirtyFlags[i] = false;
+                        updateProvinceColor(i);
+                        ++processed;
+                        if (uploadStart < 0) uploadStart = i;
+                        uploadEnd = i;
+                    }
                 }
+                if (uploadStart >= 0) {
+                    if (start == 0 && end >= lim) {
+                        updateTexture();
+                    } else {
+                        uploadDirtyTextures(uploadStart, uploadEnd);
+                    }
+                }
+                dirtySweepCursor = end >= lim ? -1 : end;
+            } else {
+                java.util.Arrays.sort(dirtyList, 0, dirtyListSize);
+                int toProcess = CFG.isAndroid() ? Math.min(dirtyListSize, ANDROID_DIRTY_BATCH) : dirtyListSize;
+                int spanStart = -1;
+                int spanEnd = -1;
+                for (int i = 0; i < toProcess; ++i) {
+                    int provinceID = dirtyList[i];
+                    if (provinceID < 0 || provinceID >= lim || !dirtyFlags[provinceID]) continue;
+                    dirtyFlags[provinceID] = false;
+                    updateProvinceColor(provinceID);
+                    ++processed;
+                    if (spanStart < 0) {
+                        spanStart = provinceID;
+                        spanEnd = provinceID;
+                    } else if (provinceID <= spanEnd + 16) {
+                        spanEnd = provinceID;
+                    } else {
+                        uploadDirtyTextures(spanStart, spanEnd);
+                        spanStart = provinceID;
+                        spanEnd = provinceID;
+                    }
+                }
+                if (spanStart >= 0) {
+                    uploadDirtyTextures(spanStart, spanEnd);
+                }
+                if (toProcess < dirtyListSize) {
+                    System.arraycopy(dirtyList, toProcess, dirtyList, 0, dirtyListSize - toProcess);
+                }
+                dirtyListSize -= toProcess;
             }
-            dirtyCount = 0;
-            colorTexture.draw(colorPixmap, 0, 0);
-            flagTexture.draw(flagPixmap, 0, 0);
+            dirtyCount = Math.max(0, dirtyCount - processed);
+            if (dirtySweepCursor < 0 && dirtyListSize == 0 && dirtyCount == 0) {
+                dirtyMin = Integer.MAX_VALUE;
+                dirtyMax = -1;
+            }
         }
+        needsUpdate = dirtyCount > 0 || dirtyListSize > 0 || dirtySweepCursor >= 0;
         long dtNs = System.nanoTime() - t0;
         perfUpdateTotalNs += dtNs;
         perfUpdateCount++;
+    }
+
+    private static void uploadDirtyTextures(int minProvinceID, int maxProvinceID) {
+        if (minProvinceID < 0 || maxProvinceID < minProvinceID || colorTexture == null || flagTexture == null) return;
+        int start = Math.max(0, minProvinceID);
+        int end = Math.min(colorPixmap.getWidth() - 1, maxProvinceID);
+        int width = end - start + 1;
+        uploadPixmapRow(colorTexture, colorPixmap, start, width);
+        uploadPixmapRow(flagTexture, flagPixmap, start, width);
+    }
+
+    private static void uploadPixmapRow(Texture texture, Pixmap pixmap, int x, int width) {
+        if (width <= 0) return;
+        ByteBuffer pixels = pixmap.getPixels();
+        int oldPosition = pixels.position();
+        int oldLimit = pixels.limit();
+        int bytesPerPixel = getBytesPerPixel(pixmap);
+        int byteStart = x * bytesPerPixel;
+        int byteEnd = byteStart + width * bytesPerPixel;
+        try {
+            pixels.position(byteStart);
+            pixels.limit(byteEnd);
+            ByteBuffer uploadPixels = pixels.slice();
+            uploadPixels.limit(width * bytesPerPixel);
+            Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
+            texture.bind();
+            Gdx.gl.glPixelStorei(GL20.GL_UNPACK_ALIGNMENT, 1);
+            Gdx.gl.glTexSubImage2D(GL20.GL_TEXTURE_2D, 0, x, 0, width, 1, pixmap.getGLFormat(), pixmap.getGLType(), uploadPixels);
+            Gdx.gl.glPixelStorei(GL20.GL_UNPACK_ALIGNMENT, 4);
+        }
+        finally {
+            pixels.position(oldPosition);
+            pixels.limit(oldLimit);
+        }
+    }
+
+    private static int getBytesPerPixel(Pixmap pixmap) {
+        switch (pixmap.getFormat()) {
+            case Alpha:
+            case Intensity:
+                return 1;
+            case LuminanceAlpha:
+            case RGB565:
+            case RGBA4444:
+                return 2;
+            case RGB888:
+                return 3;
+            case RGBA8888:
+            default:
+                return 4;
+        }
     }
     
     public static boolean isInitialized() {
@@ -376,8 +531,15 @@ public class ProvinceMesh {
         return initialized && renderAvailable && shader != null && colorTexture != null && flagTexture != null && pageMeshes.size() > 0;
     }
 
+    public static boolean canRenderWithColors() {
+        return canRender() && colorsHaveOwnership && !CFG.isAndroid();
+    }
+
     public static void updateTexture() {
-        if (initialized) colorTexture.draw(colorPixmap, 0, 0);
+        if (initialized) {
+            colorTexture.draw(colorPixmap, 0, 0);
+            flagTexture.draw(flagPixmap, 0, 0);
+        }
     }
 
     private static float getDiscoveryFade() {
@@ -390,11 +552,10 @@ public class ProvinceMesh {
     public static void draw(SpriteBatch oSB) {
         if (!canRender()) return;
         long drawStart = System.nanoTime();
-        
-        updateAllStates();
-        
+
         boolean wasDrawing = oSB.isDrawing();
         if (wasDrawing) oSB.end();
+        updateAllStates();
         boolean shaderBegun = false;
         try {
             Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -483,14 +644,23 @@ public class ProvinceMesh {
         if (colorPixmap != null) colorPixmap.dispose();
         if (flagTexture != null) flagTexture.dispose();
         if (flagPixmap != null) flagPixmap.dispose();
+        colorPixmap = null;
+        colorTexture = null;
         flagPixmap = null;
         flagTexture = null;
         initialized = false;
         renderAvailable = false;
+        needsUpdate = true;
         totalProvincesRendered = 0;
         lastDiscoveryFade = -1f;
         dirtyFlags = null;
+        dirtyList = null;
+        dirtyListSize = 0;
         dirtyCount = 0;
         dirtyArraySize = 0;
+        dirtyMin = Integer.MAX_VALUE;
+        dirtyMax = -1;
+        dirtySweepCursor = -1;
+        colorsHaveOwnership = false;
     }
 }

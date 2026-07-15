@@ -15,6 +15,13 @@ public class Actions
 extends Thread {
     @Override
     public void run() {
+        if (CFG.isAndroid()) {
+            try {
+                Thread.currentThread().setPriority(Thread.NORM_PRIORITY - 2);
+            }
+            catch (Exception ex) {
+            }
+        }
         Actions.doActions();
     }
 

@@ -2940,7 +2940,7 @@ public class GameAction {
                 return;
             }
             case LOADING_NEXT_TURN: {
-                if (GameValues.gvInGame.USE_NEW_TREAD_TURN_ACTION) {
+                if (GameValues.gvInGame.USE_NEW_TREAD_TURN_ACTION || CFG.isAndroid()) {
                     if (this.turnThreadNewTurn != null && !this.turnThreadNewTurn.getProcessTurn()) {
                         this.startNewTurn_End();
                     }
@@ -2983,7 +2983,11 @@ public class GameAction {
         if (!CFG.getIsDesktop()) {
             Actions.runRevolts();
         }
-        if (GameValues.gvInGame.USE_NEW_TREAD_TURN_ACTION) {
+        if (GameValues.gvInGame.USE_NEW_TREAD_TURN_ACTION || CFG.isAndroid()) {
+            if (this.turnThreadActions == null) {
+                this.turnThreadActions = new age.of.civilizations2.jakowski.lukasz.TurnThreads.Turn_ThreadActions();
+                this.turnThreadActions.start();
+            }
             this.turnThreadActions.triggerTurn();
         } else {
             this.actions = new Actions();
@@ -3001,7 +3005,7 @@ public class GameAction {
         }
         
         this.activeTurnAction = TurnStates.LOADING_NEXT_TURN;
-        if (GameValues.gvInGame.USE_NEW_TREAD_TURN_ACTION) {
+        if (GameValues.gvInGame.USE_NEW_TREAD_TURN_ACTION || CFG.isAndroid()) {
             if (this.turnThreadNewTurn == null) {
                 this.turnThreadNewTurn = new age.of.civilizations2.jakowski.lukasz.TurnThreads.Turn_ThreadNewTurn();
                 this.turnThreadNewTurn.start();

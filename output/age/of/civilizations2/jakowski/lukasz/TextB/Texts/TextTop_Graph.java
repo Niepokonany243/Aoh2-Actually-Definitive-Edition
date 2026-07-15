@@ -36,6 +36,7 @@ extends MenuElemUI {
     public int iGraphPlayerID = 0;
     public float lastValue = -997654.3f;
     public int WIDTH_LAST_TURN_UPDATE = 0;
+    private static final Color DRAW_COLOR = new Color();
 
     public TextTop_Graph(int imageID, String sText, String sText2, int iPosX, int iPosY, Graph2.GraphType graphType) {
         this.typeOfMenuElemUI = MenuElemUI.TypeOfMenuElemUI.TEXT;
@@ -75,19 +76,19 @@ extends MenuElemUI {
             IMGManager.getIMG(Images.gradientFull).draw(oSB, iTranslateX, iTranslateY, this.getWidthE(), this.getHeightE());
             oSB.getColor().a = 0.3f;
             IMGManager.getIMG(Images.gradientXY).draw(oSB, iTranslateX, iTranslateY, this.getWidthE(), this.getHeightE());
-            oSB.setColor(new Color(0.0f, 0.0f, 0.0f, 0.25f));
+            oSB.setColor(DRAW_COLOR.set(0.0f, 0.0f, 0.0f, 0.25f));
             IMGManager.getIMG(Images.gradientXY).draw(oSB, iTranslateX, iTranslateY, this.getWidthE(), CFG.PADD * 2, false, true);
             IMGManager.getIMG(Images.gradientXY).draw(oSB, iTranslateX, iTranslateY + this.getHeightE() - CFG.PADD * 2, this.getWidthE(), CFG.PADD * 2);
-            oSB.setColor(new Color(0.0f, 0.0f, 0.0f, 0.25f));
+            oSB.setColor(DRAW_COLOR.set(0.0f, 0.0f, 0.0f, 0.25f));
             Renderer.drawBox2(oSB, Images.statsRectBGBorder, iTranslateX, iTranslateY, this.getWidthE(), this.getHeightE(), 1.0f);
-            oSB.setColor(new Color(0.0f, 0.0f, 0.0f, 0.5f));
+            oSB.setColor(DRAW_COLOR.set(0.0f, 0.0f, 0.0f, 0.5f));
             IMGManager.getIMG(Images.gradientFull).draw(oSB, iTranslateX, iTranslateY + this.getHeightE() - 1, this.getWidthE(), 1);
             IMGManager.getIMG(Images.gradientFull).draw(oSB, iTranslateX, iTranslateY, this.getWidthE(), 1);
             oSB.setColor(Menu_InGame_2.btnCLR);
             oSB.getColor().a = 0.85f;
             IMGManager.getIMG(Images.gradientFull).draw(oSB, iTranslateX, iTranslateY + this.getHeightE() - 2, this.getWidthE(), 1);
             IMGManager.getIMG(Images.gradientFull).draw(oSB, iTranslateX, iTranslateY + 1, this.getWidthE(), 1);
-            oSB.setColor(new Color(0.0f, 0.0f, 0.0f, 0.55f));
+            oSB.setColor(DRAW_COLOR.set(0.0f, 0.0f, 0.0f, 0.55f));
             IMGManager.getIMG(Images.gradientFull).draw(oSB, iTranslateX, iTranslateY + this.getHeightE() - 1, this.getWidthE(), 1);
             IMGManager.getIMG(Images.gradientFull).draw(oSB, iTranslateX, iTranslateY, this.getWidthE(), 1);
             oSB.setColor(Menu_InGame_2.btnCLR);
@@ -96,11 +97,11 @@ extends MenuElemUI {
             IMGManager.getIMG(Images.gradientFull).draw(oSB, iTranslateX, iTranslateY + 1, this.getWidthE(), 1);
             oSB.setColor(Color.WHITE);
             if (this.getIsHovered() || isActive || this.getIsActiveButton()) {
-                oSB.setColor(new Color(Colors.COLOR_GRADIENT.r, Colors.COLOR_GRADIENT.g, Colors.COLOR_GRADIENT.b, 0.8f));
+                oSB.setColor(DRAW_COLOR.set(Colors.COLOR_GRADIENT.r, Colors.COLOR_GRADIENT.g, Colors.COLOR_GRADIENT.b, 0.8f));
                 IMGManager.getIMG(Images.gradientXY).draw(oSB, iTranslateX, iTranslateY, this.getWidthE(), this.getHeightE());
                 oSB.setColor(CFG.sparksColors);
                 this.sparksAnimationTop.draw2(oSB, iTranslateX, iTranslateY, this.getWidthE(), this.getHeightE());
-                oSB.setColor(new Color(0.0f, 0.0f, 0.0f, 1.0f));
+                oSB.setColor(DRAW_COLOR.set(0.0f, 0.0f, 0.0f, 1.0f));
                 Renderer.drawBox2(oSB, Images.statsRectBGBorder, iTranslateX, iTranslateY, this.getWidthE(), this.getHeightE(), 1.0f);
                 oSB.setColor(Color.WHITE);
             }

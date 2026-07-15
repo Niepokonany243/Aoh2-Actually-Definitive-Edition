@@ -43,7 +43,7 @@ public class Render {
     private static List<List<Integer>> lRegions_Civs_RegionsID;
     public static List<DiploAnimation> diploAnimations;
     public static int iDiploAnimationsSize;
-    public static Matrix4 oldTransformMatrix;
+    public static Matrix4 oldTransformMatrix = new Matrix4();
 
     private static int[] cachedTempCivs = new int[0];
     private static int lastCivsSize = 0;
@@ -105,7 +105,7 @@ public class Render {
             ShipManager.drawCurrentScale(oSB);
         }
         oRenderer.drawRenderer(oSB);
-        if (CFG.map.getMpS().getCurrSc() < CIV_NAMES_START_DRAWING_NAMES_MAP_SCALE || Core.DRAW_PROVINCE_NAMES_ALPHA < 0.99f) {
+        if ((!Render.mobileFullMapLowDetail() && CFG.map.getMpS().getCurrSc() < CIV_NAMES_START_DRAWING_NAMES_MAP_SCALE) || Core.DRAW_PROVINCE_NAMES_ALPHA < 0.99f) {
             rendererCivRegionNames.update();
             rendererCivRegionNames.drawCRN(oSB);
         } else {
@@ -116,16 +116,21 @@ public class Render {
     public static final void drawWithoutScale(SpriteBatch oSB, SpriteBatch oSBNames) {
         CFG.unionFlagsToGenerate_Manager.generateFlags(oSB);
         CFG.core.updateLoadArmiesWidth_ErrorIDs(oSB);
-        if (!CFG.menus.getIn_InitMenu() || !CFG.menus.getIn_SaveTheGame()) {
+        boolean mobileLowDetail = Render.mobileFullMapLowDetail();
+        if (!mobileLowDetail && (!CFG.menus.getIn_InitMenu() || !CFG.menus.getIn_SaveTheGame())) {
             if (CFG.map.getMapProvinceNames(CFG.map.getActiveMapIDN())) {
                 PNM.dPN.dPNA(oSBNames);
             } else {
                 PNM.uDPNA();
             }
+        } else if (mobileLowDetail) {
+            PNM.uDPNA();
         }
         try {
-            Core.drawDiplomacyLines_Just(oSB, CFG.map.getMpS().getCurrSc());
-            Core.drawProvinceDots_Just(oSB, CFG.map.getMpS().getCurrSc());
+            if (!mobileLowDetail) {
+                Core.drawDiplomacyLines_Just(oSB, CFG.map.getMpS().getCurrSc());
+                Core.drawProvinceDots_Just(oSB, CFG.map.getMpS().getCurrSc());
+            }
         }
         catch (Exception ex) {
         }
@@ -178,12 +183,12 @@ public class Render {
 
     public static final void drawCivRegions_Names(SpriteBatch oSB) {
         try {
-            oldTransformMatrix = oSB.getTransformMatrix().cpy();
+            oldTransformMatrix.set(oSB.getTransformMatrix());
         }
         catch (Exception ex) {
         }
         try {
-            CFG.fontBorder.setColor(new Color(1.0f, 1.0f, 1.0f, CFG.settingsGD.PROVINCE_NAMES_ALPHA * (1.0f - Core.DRAW_PROVINCE_NAMES_ALPHA)));
+            CFG.fontBorder.setColor(1.0f, 1.0f, 1.0f, CFG.settingsGD.PROVINCE_NAMES_ALPHA * (1.0f - Core.DRAW_PROVINCE_NAMES_ALPHA));
         }
         catch (Exception ex) {
         }
@@ -266,7 +271,20 @@ public class Render {
         if (f >= 1.0f) {
             return false;
         }
-        return f > Render.getArmyVisibilityMinScale();
+        return f > Render.getArmyVisibilityMinScale() && (!CFG.isAndroid() || f >= Render.mobileOverlayMinScale());
+    }
+
+    public static final boolean mobileFullMapLowDetail() {
+        try {
+            return CFG.isAndroid() && CFG.menus != null && CFG.menus.getInGameView() && CFG.map.getMpS().getCurrSc() < Render.mobileOverlayMinScale();
+        }
+        catch (Exception ex) {
+            return false;
+        }
+    }
+
+    public static final float mobileOverlayMinScale() {
+        return 0.85f;
     }
 
     private static final float getArmyVisibilityMinScale() {
@@ -1308,11 +1326,11 @@ public class Render {
                 RenderProvince.drawOccupiedProvinces(oSB);
                 CFG.core.drawActiveProvince(oSB);
                 try {
-                    oSB.setColor(new Color(1.0f, 1.0f, 1.0f, (float)CFG.settingsGD.PROV_ALPHA * 0.6f / 255.0f));
+                    oSB.setColor(1.0f, 1.0f, 1.0f, (float)CFG.settingsGD.PROV_ALPHA * 0.6f / 255.0f);
                     if (Menu_InGame_AddCiv.provinceID >= 0 && CFG.core.getProv(Menu_InGame_AddCiv.provinceID).getDrawProv()) {
                         CFG.core.getProv(Menu_InGame_AddCiv.provinceID).drawProv_ActiveProv(oSB);
                     }
-                    oSB.setColor(new Color(1.0f, 1.0f, 1.0f, (float)CFG.settingsGD.PROV_ALPHA * 0.5f / 255.0f));
+                    oSB.setColor(1.0f, 1.0f, 1.0f, (float)CFG.settingsGD.PROV_ALPHA * 0.5f / 255.0f);
                     for (int i = Menu_InGame_AddCiv.provinces.size() - 1; i >= 0; --i) {
                         CFG.core.getProv(Menu_InGame_AddCiv.provinces.get(i)).drawProv_ActiveProv(oSB);
                     }
@@ -1376,11 +1394,11 @@ public class Render {
                 CFG.core.drawActiveProvince(oSB);
                 try {
                     if (CFG.menus.getVisible_CreateNewGame_AddCiv() && Menu_CreateNewGame_AddCiv.provinceID >= 0) {
-                        oSB.setColor(new Color(1.0f, 1.0f, 1.0f, (float)CFG.settingsGD.PROV_ALPHA * 0.6f / 255.0f));
+                        oSB.setColor(1.0f, 1.0f, 1.0f, (float)CFG.settingsGD.PROV_ALPHA * 0.6f / 255.0f);
                         if (CFG.core.getProv(Menu_CreateNewGame_AddCiv.provinceID).getDrawProv()) {
                             CFG.core.getProv(Menu_CreateNewGame_AddCiv.provinceID).drawProv_ActiveProv(oSB);
                         }
-                        oSB.setColor(new Color(1.0f, 1.0f, 1.0f, (float)CFG.settingsGD.PROV_ALPHA * 0.5f / 255.0f));
+                        oSB.setColor(1.0f, 1.0f, 1.0f, (float)CFG.settingsGD.PROV_ALPHA * 0.5f / 255.0f);
                         for (int i = Menu_CreateNewGame_AddCiv.provinces.size() - 1; i >= 0; --i) {
                             CFG.core.getProv(Menu_CreateNewGame_AddCiv.provinces.get(i)).drawProv_ActiveProv(oSB);
                         }
@@ -1443,7 +1461,7 @@ public class Render {
                 RenderProvince.drawProvincesInCreateRandomGame(oSB);
                 CFG.core.drawActiveProvince(oSB);
                 try {
-                    oSB.setColor(new Color(1.0f, 1.0f, 1.0f, 0.8f));
+                    oSB.setColor(1.0f, 1.0f, 1.0f, 0.8f);
                     for (int i = 0; i < CFG.randomGameManager.getPlayersSize(); ++i) {
                         if (CFG.randomGameManager.getPlayer(i).getCapitalProvinceID() < 0) continue;
                         CFG.core.getProv(CFG.randomGameManager.getPlayer(i).getCapitalProvinceID()).drawProvFlag_CreateRandomGame(oSB, i);
@@ -2645,7 +2663,7 @@ public class Render {
 
             @Override
             public void drawRenderer(SpriteBatch oSB) {
-                oSB.setColor(new Color(0.06666667f, 0.11764706f, 0.19607843f, 1.0f));
+                oSB.setColor(0.06666667f, 0.11764706f, 0.19607843f, 1.0f);
                 IMGManager.getIMG(Images.pix255).draw2O(oSB, 0, -IMGManager.getIMG(Images.pix255).getHeight(), CFG.GAMEWIDTH, CFG.GAMEHEIGHT);
                 oSB.setColor(Color.WHITE);
                 RenderProvince.drawProvinces_PrintAMap(oSB);

@@ -2072,7 +2072,7 @@ public class Civilization {
     public final void setR(int iR) {
         this.civGD.iR = (short)iR;
         this.colorFloat[0] = (float)iR / 255.0f;
-        ProvinceMesh.markAllDirty();
+        ProvinceMesh.markCivDirty(this.iCivId);
     }
 
     public final int getG() {
@@ -2082,7 +2082,7 @@ public class Civilization {
     public final void setG(int iG) {
         this.civGD.iG = (short)iG;
         this.colorFloat[1] = (float)iG / 255.0f;
-        ProvinceMesh.markAllDirty();
+        ProvinceMesh.markCivDirty(this.iCivId);
     }
 
     public final int getB() {
@@ -2092,7 +2092,7 @@ public class Civilization {
     public final void setB(int iB) {
         this.civGD.iB = (short)iB;
         this.colorFloat[2] = (float)iB / 255.0f;
-        ProvinceMesh.markAllDirty();
+        ProvinceMesh.markCivDirty(this.iCivId);
     }
 
     public final int getCivId() {
@@ -2103,7 +2103,7 @@ public class Civilization {
         this.colorFloat[0] = (float)this.civGD.iR / 255.0f;
         this.colorFloat[1] = (float)this.civGD.iG / 255.0f;
         this.colorFloat[2] = (float)this.civGD.iB / 255.0f;
-        ProvinceMesh.markAllDirty();
+        ProvinceMesh.markCivDirty(this.iCivId);
     }
 
     public final void setCivId(int iCivID) {

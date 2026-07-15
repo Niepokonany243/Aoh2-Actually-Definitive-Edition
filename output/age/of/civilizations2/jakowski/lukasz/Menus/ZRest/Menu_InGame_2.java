@@ -1122,7 +1122,11 @@ extends Menu {
             }
         }
         oSB.setColor(Color.WHITE);
-        super.draw(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);
+        if (CFG.isAndroid()) {
+            this.drawMenuElements(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);
+        } else {
+            super.draw(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);
+        }
         if (Menu_InGame_ProvInfo.getUseSmallProvinceInfo()) {
             oSB.setColor(CFG.COLOR_BG_GAME_MENU_SHADOW);
             if (Menu_InGame_ProvInfo.iMaxWidth >= 0) {

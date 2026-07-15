@@ -7303,6 +7303,11 @@ public class MenuManager {
                 menuStart = System.currentTimeMillis();
                 int menuIdx = this.orderOfMenu.get(menuID).get(i);
                 Menu menu = this.menus.get(menuID).get(menuIdx);
+                if (CFG.isAndroid() && CFG.gameAction != null && CFG.gameAction.getActiveTurnStateID() != GameAction.TurnStates.INPUT_ORDERS) {
+                    if (menu instanceof Menu_InGame_RTO2) {
+                        continue;
+                    }
+                }
                 menu.draw(oSB, iTranslateX, this.dialogMenu.getVisibleM() ? false : (this.keyboardMode ? false : menuIdx == this.activeMenuID));
                 long menuTime = System.currentTimeMillis() - menuStart;
                 if (menuTime > 50) {

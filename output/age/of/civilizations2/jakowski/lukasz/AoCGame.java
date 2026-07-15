@@ -76,6 +76,7 @@ public class AoCGame {
     public static boolean drawFPS;
     private long perfRenderTotalNs;
     private int perfRenderCount;
+    private long androidContinuousUntil;
     private RequestRendering requestRendering;
     public static ShaderProgram shaderDef;
     public static ShaderProgram blackWhiteShdr;
@@ -138,6 +139,38 @@ public class AoCGame {
                 }
             }
         };
+    }
+
+    private final void updateAndroidRenderMode() {
+        if (!CFG.isAndroid()) return;
+        boolean continuous = this.shouldAndroidRenderContinuously();
+        long now = System.currentTimeMillis();
+        if (continuous) {
+            this.androidContinuousUntil = now + 250L;
+        } else {
+            continuous = now < this.androidContinuousUntil;
+        }
+        if (Gdx.graphics.isContinuousRendering() != continuous) {
+            Gdx.graphics.setContinuousRendering(continuous);
+            Gdx.graphics.requestRendering();
+        }
+    }
+
+    private final boolean shouldAndroidRenderContinuously() {
+        try {
+            if (CFG.menus == null || CFG.gameAction == null) return true;
+            if (Gdx.input != null && Gdx.input.isTouched()) return true;
+            if (RTS.isEnabled() && !RTS.PAUSE) return true;
+            if (CFG.gameAction.getActiveTurnStateID() != GameAction.TurnStates.INPUT_ORDERS) return true;
+            if (ProvinceMesh.needsUpdate) return true;
+            if (Render.iDiploAnimationsSize > 0) return true;
+            if (CFG.achievementGD != null) return true;
+            if (CFG.toastM != null && CFG.toastM.getInView()) return true;
+            return false;
+        }
+        catch (Exception ex) {
+            return true;
+        }
     }
 
     private Vector2 getIOSSafeAreaInsets() {
@@ -212,6 +245,9 @@ public class AoCGame {
         Renderer.init();
         this.updateRequestRendering(true);
         CFG.loadSettings();
+        if (CFG.isAndroid()) {
+            Gdx.graphics.setForegroundFPS(120);
+        }
         Gdx.graphics.setContinuousRendering(true);
         RankingSettings.load();
         CFG.DENSITY = Gdx.graphics.getDensity();
@@ -574,6 +610,7 @@ public class AoCGame {
         if (CFG.getIsDesktop()) {
             
         }
+        this.updateAndroidRenderMode();
         this.requestRendering.update();
         long renderEnd = System.currentTimeMillis();
         long renderTotalMs = renderEnd - renderStart;

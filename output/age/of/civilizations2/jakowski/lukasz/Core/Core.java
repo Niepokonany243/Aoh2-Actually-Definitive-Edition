@@ -176,6 +176,8 @@ public class Core {
     public static final int NUM_THREADS = Runtime.getRuntime().availableProcessors();
     public static final java.util.concurrent.ExecutorService EXECUTOR = java.util.concurrent.Executors.newFixedThreadPool(NUM_THREADS);
     private final Color tmpCityNameColor = new Color();
+    private static final Color CIV_NAME_TEXT_ACTIVE = new Color(0.12156863f, 0.12156863f, 0.12156863f, 1.0f);
+    private static final Color CIV_NAME_TEXT = new Color(0.9843137f, 0.9843137f, 0.9843137f, 1.0f);
 
     private int scenarioID = -1;
     private List<Player> lPlayers = new ArrayList<Player>();
@@ -2974,6 +2976,7 @@ public class Core {
         CFG.disposeActiveCivFlagD();
         this.updateActiveProvinceBorder_Style();
         this.rebuildAliveCivs();
+        ProvinceMesh.markAllDirtyImmediate();
     }
 
     public final void loadScenario_1(boolean nEditor) {
@@ -3150,6 +3153,9 @@ public class Core {
         try {
             CFG.menus.updateCreateNewGame_Top();
             CFG.disposeActiveCivFlagD();
+            this.updateActiveProvinceBorder_Style();
+            this.rebuildAliveCivs();
+            ProvinceMesh.markAllDirtyImmediate();
         }
         catch (Exception ex) {
             CFG.exceptionStack(ex);
@@ -7315,7 +7321,7 @@ lbl94:
             oSB.setColor(0.015686275f, 0.015686275f, 0.015686275f, fAlpha);
         }
         this.drawCivNameBG(oSB, tPosX - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() / 2 - CFG.CIV_COLOR_W - tFlagW / 2 - CFG.CIV_NAME_BG_EXTRA_WIDTH, tPosY - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() / 2 - CFG.CIV_NAME_BG_EXTRA_HEIGHT, this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() + CFG.CIV_NAME_BG_EXTRA_WIDTH * 2 + tFlagW + CFG.CIV_COLOR_W, this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() + CFG.CIV_NAME_BG_EXTRA_HEIGHT * 2);
-        CFG.drawTextDefault(oSB, this.getCiv(this.getProv(nProvinceID).getCivId()).getCivName(), tPosX - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() / 2 + tFlagW / 2, tPosY - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() / 2, this.iActiveProv == nProvinceID ? new Color(0.12156863f, 0.12156863f, 0.12156863f, 1.0f) : new Color(0.9843137f, 0.9843137f, 0.9843137f, 1.0f));
+        CFG.drawTextDefault(oSB, this.getCiv(this.getProv(nProvinceID).getCivId()).getCivName(), tPosX - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() / 2 + tFlagW / 2, tPosY - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() / 2, this.iActiveProv == nProvinceID ? CIV_NAME_TEXT_ACTIVE : CIV_NAME_TEXT);
         oSB.setColor(1.0f, 1.0f, 1.0f, fAlpha);
         this.getCiv(this.getProv(nProvinceID).getCivId()).getFlagC().drawO(oSB, tPosX - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() / 2 - tFlagW / 2 - CFG.CIV_COLOR_W, tPosY - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() / 2 - this.getCiv(this.getProv(nProvinceID).getCivId()).getFlagC().getHeight(), tFlagW, tFlagH);
         IMGManager.getIMG(Images.flagRectSmall).drawO(oSB, tPosX - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() / 2 - tFlagW / 2 - CFG.CIV_COLOR_W, tPosY - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() / 2 - IMGManager.getIMG(Images.flagRectSmall).getHeight(), tFlagW, tFlagH);
@@ -7344,7 +7350,7 @@ lbl94:
         } else {
             this.drawProvince_Capital_Crown(oSB, tPosX + this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() / 2 + tFlagW / 2, tPosY - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() / 2, this.getCiv(this.getProv(nProvinceID).getCivId()).getIdeology());
         }
-        CFG.drawTextDefault(oSB, this.getCiv(this.getProv(nProvinceID).getCivId()).getCivName(), tPosX - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() / 2 + tFlagW / 2, tPosY - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() / 2, this.iActiveProv == nProvinceID ? new Color(0.12156863f, 0.12156863f, 0.12156863f, 1.0f) : new Color(0.9843137f, 0.9843137f, 0.9843137f, 1.0f));
+        CFG.drawTextDefault(oSB, this.getCiv(this.getProv(nProvinceID).getCivId()).getCivName(), tPosX - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() / 2 + tFlagW / 2, tPosY - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() / 2, this.iActiveProv == nProvinceID ? CIV_NAME_TEXT_ACTIVE : CIV_NAME_TEXT);
         this.getCiv(this.getProv(nProvinceID).getCivId()).getFlagC().drawO(oSB, tPosX - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() / 2 - tFlagW / 2 - CFG.CIV_COLOR_W, tPosY - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() / 2 - this.getCiv(this.getProv(nProvinceID).getCivId()).getFlagC().getHeight(), tFlagW, tFlagH);
         IMGManager.getIMG(Images.flagRectSmall).drawO(oSB, tPosX - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() / 2 - tFlagW / 2 - CFG.CIV_COLOR_W, tPosY - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() / 2 - IMGManager.getIMG(Images.flagRectSmall).getHeight(), tFlagW, tFlagH);
     }
@@ -7368,7 +7374,7 @@ lbl94:
                 this.drawProvince_Capital_Crown_Vassal(oSB, tPosX + this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() / 2 + tFlagW / 2, tPosY - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() / 2, this.getCiv(this.getProv(nProvinceID).getCivId()).getIdeology());
             }
         }
-        CFG.drawTextDefault(oSB, this.getCiv(this.getProv(nProvinceID).getCivId()).getCivName(), tPosX - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() / 2 + tFlagW / 2, tPosY - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() / 2, this.iActiveProv == nProvinceID ? new Color(0.12156863f, 0.12156863f, 0.12156863f, 1.0f) : new Color(0.9843137f, 0.9843137f, 0.9843137f, 1.0f));
+        CFG.drawTextDefault(oSB, this.getCiv(this.getProv(nProvinceID).getCivId()).getCivName(), tPosX - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() / 2 + tFlagW / 2, tPosY - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() / 2, this.iActiveProv == nProvinceID ? CIV_NAME_TEXT_ACTIVE : CIV_NAME_TEXT);
         this.getCiv(this.getProv(nProvinceID).getCivId()).getFlagC().drawO(oSB, tPosX - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() / 2 - tFlagW / 2 - CFG.CIV_COLOR_W, tPosY - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() / 2 - this.getCiv(this.getProv(nProvinceID).getCivId()).getFlagC().getHeight(), tFlagW, tFlagH);
         IMGManager.getIMG(Images.flagRectSmall).drawO(oSB, tPosX - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameWidth() / 2 - tFlagW / 2 - CFG.CIV_COLOR_W, tPosY - this.getCiv(this.getProv(nProvinceID).getCivId()).getCivNameHeight() / 2 - IMGManager.getIMG(Images.flagRectSmall).getHeight(), tFlagW, tFlagH);
     }
