@@ -4,6 +4,7 @@
 package aoc.kingdoms.lukasz.jakowski.desktop;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
+import age.of.civilizations2.jakowski.lukasz.GameTaskScheduler;
 import aoc.kingdoms.lukasz.jakowski.AA_Game;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
@@ -18,6 +19,8 @@ import java.nio.charset.StandardCharsets;
 
 public class DesktopLauncher {
     public static void main(String[] arg) {
+        int desktopWorkers = Math.max(1, Runtime.getRuntime().availableProcessors() * 2);
+        GameTaskScheduler.install(desktopWorkers, Math.max(64, desktopWorkers * 8), "aoh2-desktop");
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle("Age of History 2: Definitive Edition");
         try {
@@ -88,7 +91,11 @@ public class DesktopLauncher {
         config.useVsync(tVSync);
         config.setAudioConfig(32, 512, 18);
         config.setForegroundFPS(60);
-        new Lwjgl3Application(new AA_Game(), config);
+        try {
+            new Lwjgl3Application(new AA_Game(), config);
+        } finally {
+            GameTaskScheduler.shutdownAndAwait();
+        }
     }
 }
 

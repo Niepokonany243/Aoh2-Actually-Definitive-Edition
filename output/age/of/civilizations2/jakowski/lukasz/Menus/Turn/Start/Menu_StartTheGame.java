@@ -6,6 +6,7 @@ import age.of.civilizations2.jakowski.lukasz.Button.MenuElemUI;
 import age.of.civilizations2.jakowski.lukasz.CFG;
 import age.of.civilizations2.jakowski.lukasz.CivsInRangeT;
 import age.of.civilizations2.jakowski.lukasz.GameCalendar;
+import age.of.civilizations2.jakowski.lukasz.GameTaskScheduler;
 import age.of.civilizations2.jakowski.lukasz.IMGManager;
 import age.of.civilizations2.jakowski.lukasz.Images;
 import age.of.civilizations2.jakowski.lukasz.Menu;
@@ -14,6 +15,7 @@ import age.of.civilizations2.jakowski.lukasz.View;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.ArrayList;
+import java.util.concurrent.Future;
 
 public class Menu_StartTheGame
 extends Menu {
@@ -21,7 +23,7 @@ extends Menu {
     private int iWidth1;
     private String s2 = "";
     private int iWidth2;
-    public CivsInRangeT civsInRangeTH;
+    public Future<?> civsInRangeTask;
 
     public Menu_StartTheGame() {
         ArrayList<MenuElemUI> menuElements = new ArrayList<MenuElemUI>();
@@ -44,8 +46,7 @@ extends Menu {
             CFG.exceptionStack(ex);
         }
         this.updateLang();
-        this.civsInRangeTH = new CivsInRangeT();
-        this.civsInRangeTH.start();
+        this.civsInRangeTask = GameTaskScheduler.submit(new CivsInRangeT());
     }
 
     @Override

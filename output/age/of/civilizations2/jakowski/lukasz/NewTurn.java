@@ -46,8 +46,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class NewTurn
-extends Thread {
+public class NewTurn {
     private static long tempTime;
     private static long tempTimeTotal;
     public static float ageRiskModifier;
@@ -58,18 +57,6 @@ extends Thread {
     public static List<Float> devUpdate;
     public static List<Float> ecoUpdate;
     private static final ThreadLocal<ArrayList<PopulationGrowth>> threadLocalPopGrowth = ThreadLocal.withInitial(() -> new ArrayList<PopulationGrowth>());
-
-    @Override
-    public void run() {
-        if (CFG.isAndroid()) {
-            try {
-                Thread.currentThread().setPriority(Thread.NORM_PRIORITY - 2);
-            }
-            catch (Exception ex) {
-            }
-        }
-        NewTurn.doAction();
-    }
 
     public static void checkOccupiedProvincesIfAreAtWar() {
         for (int i = 0; i < CFG.core.getProvinSize(); ++i) {
@@ -113,6 +100,7 @@ extends Thread {
 
     public static long lastTurnTime = 0L;
     public static final void doAction() {
+        GameTaskScheduler.checkpoint();
         long perfStart = System.currentTimeMillis();
         long perfMark = perfStart;
         CFG.resetModes();
@@ -135,6 +123,7 @@ extends Thread {
             }
             MilitaryRealism.updateMobilizationAllCivs();
             CFG.gameUpdate.updateCivs_Money();
+            GameTaskScheduler.checkpoint();
             long perfNow = System.currentTimeMillis(); if (perfNow - perfMark > 50) { CFG.LOG("PERF", "[doAction] updateCivs_Money: " + (perfNow - perfMark) + "ms"); } perfMark = perfNow;
 
             int[] playerCivToIdx = new int[CFG.core.getCivsSize()];
@@ -143,6 +132,7 @@ extends Thread {
             }
 
             for (int civIndex = CFG.core.getAliveCivCount() > 0 ? CFG.core.getNextAliveCiv(1) : -1; civIndex >= 0; civIndex = CFG.core.getNextAliveCiv(civIndex + 1)) {
+                GameTaskScheduler.checkpoint();
                 try {
                     Civilization civI = CFG.core.getCiv(civIndex);
 
@@ -175,11 +165,13 @@ extends Thread {
 
             CFG.plagueManager.runPlagues();
             CFG.core.cleanupWars();
+            GameTaskScheduler.checkpoint();
             long perfNow3 = System.currentTimeMillis(); if (perfNow3 - perfMark > 50) { CFG.LOG("PERF", "[doAction] cleanupWars: " + (perfNow3 - perfMark) + "ms"); } perfMark = perfNow3;
 
             NewTurn.updateCapitulation();
             NewTurn.checkOccupiedProvincesIfAreAtWar();
             NewTurn.updateGameData();
+            GameTaskScheduler.checkpoint();
             
             CFG.gameAction.updateCivsMovementPoints();
             CFG.gameAction.updateCivsDiploPoints();
@@ -206,6 +198,7 @@ extends Thread {
             NewTurn.updateDiplomaticSummits();
             NewTurn.updatePropaganda();
             NewTurn.updateSanctions();
+            GameTaskScheduler.checkpoint();
             NewTurn.updateLibertyDesireMessages();
             NewTurn.updateAirDefense();
             

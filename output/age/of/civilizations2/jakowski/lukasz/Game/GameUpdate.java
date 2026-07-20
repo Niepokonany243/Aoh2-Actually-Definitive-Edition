@@ -12,8 +12,6 @@ import age.of.civilizations2.jakowski.lukasz.MilitaryRealism;
 import age.of.civilizations2.jakowski.lukasz.Parallel;
 import age.of.civilizations2.jakowski.lukasz.Province;
 import age.of.civilizations2.jakowski.lukasz.Z_Other.ST.sUM;
-import com.codedisaster.steamworks.SteamFriends;
-import com.codedisaster.steamworks.SteamID;
 
 public class GameUpdate {
     public static final float TAXES_INFLUENCE_POP = 0.3f;
@@ -221,18 +219,6 @@ public class GameUpdate {
         return this.getResearchSpending(nCivID, iBudget) + this.getInvestmentsSpending(nCivID, iBudget);
     }
 
-    public String getFriendName(SteamID steamIDFriend) {
-        return sUM.uSF.getFriendPersonaName(steamIDFriend);
-    }
-
-    public void openFriendsOverlay(SteamFriends.OverlayDialog dialog) {
-        sUM.uSF.activateGameOverlay(dialog);
-    }
-
-    public void openCommunity(SteamFriends.OverlayDialog dialog) {
-        sUM.uSF.activateGameOverlay(dialog);
-    }
-
     public final float getInvestmentsSpending(int nCivID, long iBudget) {
         return (float)iBudget * CFG.core.getCiv(nCivID).getSpendingInvestmentsB();
     }
@@ -403,18 +389,6 @@ public class GameUpdate {
 
     public String getPlayerName() {
         return sUM.uSF.getPersonaName();
-    }
-
-    public int getFriends(SteamFriends.FriendFlags friendFlag) {
-        return sUM.uSF.getFriendCount(friendFlag);
-    }
-
-    public void openProfile(SteamFriends.OverlayToUserDialog dialog, SteamID steamID) {
-        sUM.uSF.activateGameOverlayToUser(dialog, steamID);
-    }
-
-    public void openWeb(String url, SteamFriends.OverlayToWebPageMode mode) {
-        sUM.uSF.activateGameOverlayToWebPage(url, mode);
     }
 
     public final void updatePlayableProvinces() {

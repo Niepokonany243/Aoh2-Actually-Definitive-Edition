@@ -60,16 +60,11 @@ public class Render {
         if (civsSize > cachedTempCivs.length) {
             cachedTempCivs = new int[civsSize + 64];
             lastCivsSize = civsSize;
-            for (int i = 0; i < lRegions_Civs_RegionsID.size(); ++i) {
-                lRegions_Civs_RegionsID.get(i).clear();
-            }
-            lRegions_Civs_RegionsID.clear();
         } else {
             java.util.Arrays.fill(cachedTempCivs, 0, civsSize, 0);
-            for (int i = 0; i < lRegions_Civs_RegionsID.size(); ++i) {
-                lRegions_Civs_RegionsID.get(i).clear();
-            }
-            lRegions_Civs_RegionsID.clear();
+        }
+        for (int i = 0; i < lRegions_Civs_RegionsID.size(); ++i) {
+            lRegions_Civs_RegionsID.get(i).clear();
         }
         try {
             int[] tempCivs = cachedTempCivs;
@@ -90,9 +85,15 @@ public class Render {
                 }
                 lRegions_Civs.add(provCivId);
                 tempCivs[provCivId] = lRegions_Civs.size();
-                ArrayList<Integer> newRegionList = new ArrayList<Integer>();
+                int regionListIndex = lRegions_Civs.size() - 1;
+                List<Integer> newRegionList;
+                if (regionListIndex < lRegions_Civs_RegionsID.size()) {
+                    newRegionList = lRegions_Civs_RegionsID.get(regionListIndex);
+                } else {
+                    newRegionList = new ArrayList<Integer>();
+                    lRegions_Civs_RegionsID.add(newRegionList);
+                }
                 newRegionList.add(CFG.core.getProv(CFG.core.getPIV(i)).getCivRegionID());
-                lRegions_Civs_RegionsID.add(newRegionList);
             }
             CFG.NUM_OF_REGIONS_IN_VIEW = lRegions_Civs.size();
         }

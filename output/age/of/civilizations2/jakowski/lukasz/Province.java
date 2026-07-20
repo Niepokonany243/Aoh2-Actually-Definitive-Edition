@@ -2900,6 +2900,7 @@ public class Province {
         this.provGD.trueOwnerOfProvince = nCivID;
         this.fromCivID = -1;
         ProvinceMesh.markDirty(this.iProvinceID);
+        VisibleProvinceCache.markOwnershipChanged();
     }
 
     public final void setCivId_LoadScenario(int nCivID) {
@@ -2910,10 +2911,12 @@ public class Province {
         this.provGD.armiesC.get(0).setCivID(nCivID);
         this.provGD.trueOwnerOfProvince = nCivID;
         ProvinceMesh.markDirty(this.iProvinceID);
+        VisibleProvinceCache.markOwnershipChanged();
     }
 
     public final void setCivId(int nCivID, boolean conquered) {
         ProvinceMesh.markDirty(this.iProvinceID);
+        VisibleProvinceCache.markOwnershipChanged();
         this.setCivId(nCivID, conquered, true);
     }
 
@@ -3869,6 +3872,7 @@ public class Province {
         }
         int oldCivID = this.getCivId();
         ProvinceMesh.markDirty(this.iProvinceID);
+        VisibleProvinceCache.markOwnershipChanged();
         try {
             if (oldCivID >= 0) {
                 CFG.core.getCiv(oldCivID).updateNumberOfUnits();

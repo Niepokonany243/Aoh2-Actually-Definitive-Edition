@@ -139,6 +139,40 @@ project(':core') {
     }
 }
 
+project(':mobile-core') {
+    apply plugin: 'java-library'
+    def mobileOverridesDir = rootProject.file('output/mobile-core/src/main/java')
+
+    sourceSets {
+        main {
+            java {
+                srcDirs = [rootProject.file('output/age'), rootProject.file('output/space'), mobileOverridesDir]
+                exclude { details ->
+                    def path = details.file.absolutePath.replace('\\', '/')
+                    def legacyRoot = rootProject.file('output/age/of/civilizations2/jakowski/lukasz').absolutePath.replace('\\', '/')
+                    path == "${legacyRoot}/Platform.java" ||
+                            path == "${legacyRoot}/UGCCallback.java" ||
+                            path == "${legacyRoot}/SteamGame.java" ||
+                            path == "${legacyRoot}/Steam_Game.java" ||
+                            path == "${legacyRoot}/Z_Other/ST/sUM.java" ||
+                            path == "${legacyRoot}/CapitalFlagRenderer.java" ||
+                            path == "${legacyRoot}/FlagAtlas.java" ||
+                            path == "${legacyRoot}/OverlayTextCache.java" ||
+                            path == "${legacyRoot}/MobileRenderBudget.java" ||
+                            path == "${legacyRoot}/FrameWorkScheduler.java" ||
+                            path.startsWith("${legacyRoot}/TurnThreads/")
+                }
+            }
+        }
+    }
+
+    dependencies {
+        implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+        implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+    }
+
+}
+
 project(':desktop') {
     apply plugin: 'application'
     ext.desktopMainClass = 'aoc.kingdoms.lukasz.jakowski.desktop.DesktopLauncher'

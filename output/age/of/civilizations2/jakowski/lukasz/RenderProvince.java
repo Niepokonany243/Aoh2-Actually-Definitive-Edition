@@ -1781,16 +1781,27 @@ public class RenderProvince {
 
     public static final void drawProvincesBorder(SpriteBatch oSB) {
         int i;
-        for (i = 0; i < CFG.NUM_OF_SEA_PROVINCES_IN_VIEW; ++i) {
-            CFG.core.getProv(CFG.core.getPSVI(i)).drawProvinBorder(oSB);
+        long borderStart = CFG.isAndroid() && AndroidPerfTracer.isEnabled() ? System.nanoTime() : 0L;
+        int renderCallsBefore = borderStart != 0L ? oSB.totalRenderCalls : 0;
+        ProvinceBorder.beginBatch();
+        try {
+            for (i = 0; i < CFG.NUM_OF_SEA_PROVINCES_IN_VIEW; ++i) {
+                CFG.core.getProv(CFG.core.getPSVI(i)).drawProvinBorder(oSB);
+            }
+            for (i = 0; i < CFG.NUM_OF_WASTELAND_PROVINCES_IN_VIEW; ++i) {
+                CFG.core.getProv(CFG.core.getWPIV(i)).drawProvinBorder(oSB);
+            }
+            for (i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
+                CFG.core.getProv(CFG.core.getPIV(i)).drawProvinBorder(oSB);
+            }
         }
-        for (i = 0; i < CFG.NUM_OF_WASTELAND_PROVINCES_IN_VIEW; ++i) {
-            CFG.core.getProv(CFG.core.getWPIV(i)).drawProvinBorder(oSB);
-        }
-        for (i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
-            CFG.core.getProv(CFG.core.getPIV(i)).drawProvinBorder(oSB);
+        finally {
+            ProvinceBorder.endBatch(oSB);
         }
         oSB.setColor(Color.WHITE);
+        if (borderStart != 0L) {
+            AndroidPerfTracer.recordBorders(System.nanoTime() - borderStart, oSB.totalRenderCalls - renderCallsBefore);
+        }
     }
 
     public static final void drawProvincesBorder_Only_CivilizationBorder(SpriteBatch oSB) {

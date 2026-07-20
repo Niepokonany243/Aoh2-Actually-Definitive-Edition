@@ -36,7 +36,7 @@ public class ProvinceMesh {
     private static final int INDICES_PER_PROVINCE = 6;
     private static final int COMPONENTS_PER_VERTEX = 5;
     private static final int VERTEX_LIMIT = 32767;
-    private static final int ANDROID_DIRTY_BATCH = 768;
+    private static final int ANDROID_DIRTY_BATCH = 2048;
     public static boolean needsUpdate = true;
     private static int totalProvincesRendered = 0;
     private static int logFrameCounter = 0;
@@ -336,6 +336,7 @@ public class ProvinceMesh {
         dirtyMax = dirtyArraySize - 1;
         dirtySweepCursor = 0;
         needsUpdate = true;
+        VisibleProvinceCache.markOwnershipChanged();
     }
 
     public static synchronized void markAllDirtyImmediate() {
@@ -348,6 +349,7 @@ public class ProvinceMesh {
         dirtySweepCursor = -1;
         colorsHaveOwnership = false;
         needsUpdate = true;
+        VisibleProvinceCache.markOwnershipChanged();
     }
 
     public static synchronized void markCivDirty(int civID) {
@@ -532,7 +534,7 @@ public class ProvinceMesh {
     }
 
     public static boolean canRenderWithColors() {
-        return canRender() && colorsHaveOwnership && !CFG.isAndroid();
+        return canRender() && colorsHaveOwnership;
     }
 
     public static void updateTexture() {

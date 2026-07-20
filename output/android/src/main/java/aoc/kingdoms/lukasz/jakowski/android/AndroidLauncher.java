@@ -3,11 +3,15 @@ package aoc.kingdoms.lukasz.jakowski.android;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Process;
 import android.util.Log;
+import android.view.Display;
+import android.view.Window;
+import android.view.WindowManager;
 
-import aoc.kingdoms.lukasz.jakowski.AA_Game;
+import age.of.civilizations2.jakowski.lukasz.GameTaskScheduler;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
@@ -47,6 +51,8 @@ public class AndroidLauncher extends AndroidApplication {
 
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         Process.setThreadPriority(Process.THREAD_PRIORITY_DISPLAY);
+        GameTaskScheduler.install(2, 64, "aoh2-mobile");
+        configureDisplayForSmoothRendering();
         logRuntimeLimits();
 
         config.useGL30 = true;
@@ -63,12 +69,41 @@ public class AndroidLauncher extends AndroidApplication {
         config.useGyroscope = false;
         config.useRotationVectorSensor = false;
         config.numSamples = 0;
-        config.maxSimultaneousSounds = 24;
+        config.maxSimultaneousSounds = 32;
         Log.i(TAG, "GL config request rgba=" + config.r + "/" + config.g + "/" + config.b + "/" + config.a
                 + " depth=" + config.depth + " stencil=" + config.stencil + " gl30=" + config.useGL30
                 + " samples=" + config.numSamples + " immersive=" + config.useImmersiveMode);
 
-        initialize(new AA_Game(), config);
+        initialize(new MobileGame(), config);
+    }
+
+    private void configureDisplayForSmoothRendering() {
+        Window window = getWindow();
+        if (window == null || Build.VERSION.SDK_INT < 23) {
+            return;
+        }
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Display.Mode[] modes = display.getSupportedModes();
+        if (modes == null || modes.length == 0) {
+            return;
+        }
+
+        Display.Mode bestMode = display.getMode();
+        for (Display.Mode mode : modes) {
+            if (mode.getPhysicalWidth() >= bestMode.getPhysicalWidth()
+                    && mode.getPhysicalHeight() >= bestMode.getPhysicalHeight()
+                    && mode.getRefreshRate() > bestMode.getRefreshRate()) {
+                bestMode = mode;
+            }
+        }
+
+        WindowManager.LayoutParams params = window.getAttributes();
+        params.preferredDisplayModeId = bestMode.getModeId();
+        params.preferredRefreshRate = bestMode.getRefreshRate();
+        window.setAttributes(params);
+        Log.i(TAG, "Preferred display mode " + bestMode.getPhysicalWidth() + "x"
+                + bestMode.getPhysicalHeight() + "@" + bestMode.getRefreshRate() + "Hz");
     }
 
     private void logRuntimeLimits() {
@@ -76,7 +111,7 @@ public class AndroidLauncher extends AndroidApplication {
         int memoryClass = activityManager == null ? -1 : activityManager.getMemoryClass();
         int largeMemoryClass = activityManager == null ? -1 : activityManager.getLargeMemoryClass();
         Runtime runtime = Runtime.getRuntime();
-        Log.i(TAG, "Runtime limits cores=" + runtime.availableProcessors()
+        Log.i(TAG, "Runtime limits workers=" + GameTaskScheduler.parallelism()
                 + " heapMaxMB=" + (runtime.maxMemory() / 1048576L)
                 + " activityMemoryClassMB=" + memoryClass
                 + " largeMemoryClassMB=" + largeMemoryClass);

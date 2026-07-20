@@ -3,12 +3,12 @@ package age.of.civilizations2.jakowski.lukasz;
 
 import age.of.civilizations2.jakowski.lukasz.CFG;
 
-public class CivsInRangeT
-extends Thread {
-    public static int DONE_CIVS = 1;
+public class CivsInRangeT implements Runnable {
+    public static volatile int DONE_CIVS = 1;
 
     @Override
     public void run() {
+        GameTaskScheduler.checkpoint();
         try {
             DONE_CIVS = 1;
             int i = 1;

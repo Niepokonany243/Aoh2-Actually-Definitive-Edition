@@ -241,6 +241,21 @@ public class Platform {
             });
         }
         sUM.loadSubscribedItems();
+        initialized = true;
+    }
+
+    public static void shutdown() {
+        if (!initialized) {
+            return;
+        }
+        try {
+            if (sUM.sU != null) sUM.sU.dispose();
+            if (sUM.sUT != null) sUM.sUT.dispose();
+            if (sUM.sUI != null) sUM.sUI.dispose();
+        } finally {
+            SteamAPI.shutdown();
+            initialized = false;
+        }
     }
 
     public static int getValue(String key) {

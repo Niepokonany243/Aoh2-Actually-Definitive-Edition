@@ -5,6 +5,7 @@ import age.of.civilizations2.jakowski.lukasz.Button.MenuElemUI;
 import age.of.civilizations2.jakowski.lukasz.CFG;
 import age.of.civilizations2.jakowski.lukasz.MapA.CitiesManager;
 import age.of.civilizations2.jakowski.lukasz.GameCalendar;
+import age.of.civilizations2.jakowski.lukasz.GameTaskScheduler;
 import age.of.civilizations2.jakowski.lukasz.IMGManager;
 import age.of.civilizations2.jakowski.lukasz.Images;
 import age.of.civilizations2.jakowski.lukasz.MapA.Challenge.ChallengesManager;
@@ -27,10 +28,17 @@ extends Menu {
     public static View goToView = View.eCREATE_NEW_GAME;
     public static int loadActionEND = 0;
     public static boolean loadingStarted = false;
+    public static boolean loadingFailed = false;
     public static CompletableFuture<Void> loadingFuture = null;
     public static int nTextureStep = -1;
 
     public Menu_LoadScenario() {
+        if (loadingFuture != null) {
+            loadingFuture.cancel(true);
+        }
+        loadingStarted = false;
+        loadingFailed = false;
+        loadingFuture = null;
         ArrayList<MenuElemUI> menuElements = new ArrayList<MenuElemUI>();
         this.initMenu(null, 0, 0, CFG.GAMEWIDTH, CFG.GAMEHEIGHT, menuElements);
     }
@@ -47,6 +55,10 @@ extends Menu {
     }
 
     public void loadScenario() {
+        if (loadingFailed) {
+            return;
+        }
+        boolean advanceStep = true;
         try {
             if (iStepID != 0) {
                 if (iStepID == 1) {
@@ -60,17 +72,27 @@ extends Menu {
                 } else if (iStepID == 7) {
                     if (!loadingStarted) {
                         loadingStarted = true;
-                        loadingFuture = CompletableFuture.allOf(
-                            CompletableFuture.runAsync(() -> CFG.core.loadScenario_3(editor)),
-                            CompletableFuture.runAsync(() -> CFG.core.loadScenario_4(editor)),
-                            CompletableFuture.runAsync(() -> CFG.core.loadScenario_5(editor)),
-                            CompletableFuture.runAsync(() -> CFG.core.loadScenario_6(editor)),
-                            CompletableFuture.runAsync(() -> CFG.core.loadScenario_7(editor)),
-                            CompletableFuture.runAsync(() -> CFG.core.loadScenario_8(editor)),
-                            CompletableFuture.runAsync(() -> CFG.core.loadScenario_9(editor))
-                        );
+                        final boolean editorSnapshot = editor;
+                        loadingFuture = CompletableFuture.runAsync(() -> {
+                            GameTaskScheduler.checkpoint();
+                            CFG.core.loadScenario_3(editorSnapshot);
+                            GameTaskScheduler.checkpoint();
+                            CFG.core.loadScenario_4(editorSnapshot);
+                            GameTaskScheduler.checkpoint();
+                            CFG.core.loadScenario_5(editorSnapshot);
+                            GameTaskScheduler.checkpoint();
+                            CFG.core.loadScenario_6(editorSnapshot);
+                            GameTaskScheduler.checkpoint();
+                            CFG.core.loadScenario_7(editorSnapshot);
+                            GameTaskScheduler.checkpoint();
+                            CFG.core.loadScenario_8(editorSnapshot);
+                            GameTaskScheduler.checkpoint();
+                            CFG.core.loadScenario_9(editorSnapshot);
+                        }, GameTaskScheduler.executor());
                     }
                     if (loadingFuture.isDone()) {
+                        loadingFuture.join();
+                        loadingFuture = null;
                         iStepID = 13; 
                         loadingStarted = false;
                     } else {
@@ -188,8 +210,18 @@ extends Menu {
         }
         catch (Exception ex) {
             CFG.exceptionStack(ex);
+            advanceStep = false;
+            loadingStarted = false;
+            loadingFuture = null;
+            loadingFailed = true;
+            try {
+                if (CFG.toastM != null) CFG.toastM.addM("Scenario loading failed");
+            } catch (Exception ignored) {
+            }
         }
-        ++iStepID;
+        if (advanceStep) {
+            ++iStepID;
+        }
     }
 }
 

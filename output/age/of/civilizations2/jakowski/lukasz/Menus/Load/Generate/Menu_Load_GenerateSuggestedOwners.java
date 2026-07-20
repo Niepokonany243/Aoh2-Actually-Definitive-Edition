@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 public class Menu_Load_GenerateSuggestedOwners
 extends Menu {
+    private boolean loadQueued;
     public Menu_Load_GenerateSuggestedOwners() {
         ArrayList<MenuElemUI> menuElements = new ArrayList<MenuElemUI>();
         CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 = 0;
@@ -29,19 +30,16 @@ extends Menu {
         IMGManager.getIMG(Images.gradient).drawO(oSB, iTranslateX, CFG.GAMEHEIGHT - IMGManager.getIMG(Images.gradient).getHeight() - CFG.PADD * 3 + iTranslateY, CFG.GAMEWIDTH, CFG.PADD * 3, false, true);
         CFG.drLOA(oSB, (int)((float)CFG.GAMEWIDTH * CFG.getLOAPAD()) + iTranslateX, CFG.GAMEHEIGHT - (int)((float)CFG.BUTTON_H * 0.8f) * 2 - CFG.PADD + iTranslateY, (int)((float)CFG.GAMEWIDTH * (1.0f - CFG.getLOAPAD() * 2.0f)), (int)((float)CFG.BUTTON_H * 0.8f), (float)CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 / (float)(Game_Scenarios.SCENARIOS_SIZE + CFG.map.getMapNumOfProvinces(CFG.map.getActiveMapIDN()) * 2));
         CFG.drawJakowskiGames_RIGHT_BOT(oSB, iTranslateX);
-        new Thread(new Runnable(){
-
-            @Override
-            public void run() {
-                Gdx.app.postRunnable(new Runnable(){
-
-                    @Override
-                    public void run() {
-                        Menu_Load_GenerateSuggestedOwners.this.loadData();
-                    }
-                });
-            }
-        }).start();
+        if (!this.loadQueued) {
+            this.loadQueued = true;
+            Gdx.app.postRunnable(() -> {
+                try {
+                    this.loadData();
+                } finally {
+                    this.loadQueued = false;
+                }
+            });
+        }
         CFG.drawVersionLB(oSB, iTranslateX);
         CFG.setRenderO(true);
     }

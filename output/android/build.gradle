@@ -60,7 +60,7 @@ android {
         targetSdkVersion 35
         versionCode 1
         versionName '1.0'
-        multiDexEnabled false
+        multiDexEnabled true
 
         ndk {
             abiFilters 'arm64-v8a', 'armeabi-v7a'
@@ -78,6 +78,7 @@ android {
     }
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -113,14 +114,14 @@ android {
 preBuild.dependsOn tasks.named('syncAndroidAssets'), tasks.named('packageAndroidAssets'), tasks.named('syncAndroidNatives')
 
 dependencies {
-    implementation project(':core')
+    implementation project(':mobile-core')
+    implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
     implementation "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
 
     androidNativesArm64 "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
-    androidNativesArm64 "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-arm64-v8a"
     androidNativesArm64 "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a"
 
     androidNativesArmv7 "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
-    androidNativesArmv7 "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-armeabi-v7a"
     androidNativesArmv7 "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
 }

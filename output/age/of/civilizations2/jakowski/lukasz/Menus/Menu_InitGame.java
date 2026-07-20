@@ -43,8 +43,6 @@ import age.of.civilizations2.jakowski.lukasz.SaveLoad.LoadManager;
 import age.of.civilizations2.jakowski.lukasz.ServiceRibbon_Manager;
 import age.of.civilizations2.jakowski.lukasz.Ships.ShipManager;
 import age.of.civilizations2.jakowski.lukasz.TerrainTypesManager;
-import age.of.civilizations2.jakowski.lukasz.TurnThreads.Turn_ThreadActions;
-import age.of.civilizations2.jakowski.lukasz.TurnThreads.Turn_ThreadNewTurn;
 import age.of.civilizations2.jakowski.lukasz.UnionsManager;
 import age.of.civilizations2.jakowski.lukasz.View;
 import age.of.civilizations2.jakowski.lukasz.Z_Other.PNM;
@@ -1050,17 +1048,6 @@ extends Menu {
                 if (this.iStepID == 59 + CFG.map.getMapNumOfProvinces(CFG.map.getActiveMapIDN()) * 2) {
                     CFG.mapModesManager = new MapModesManager();
                     CFG.linesManager = new LinesManager();
-                    try {
-                        CFG.gameAction.turnThreadNewTurn = new Turn_ThreadNewTurn();
-                        CFG.gameAction.turnThreadActions = new Turn_ThreadActions();
-                        if (CFG.isAndroid() || CFG.getIsDesktop() && GameValues.gvInGame.USE_NEW_TREAD_TURN_ACTION) {
-                            CFG.gameAction.turnThreadNewTurn.start();
-                            CFG.gameAction.turnThreadActions.start();
-                        }
-                    }
-                    catch (Exception ex) {
-                        CFG.exceptionStack(ex);
-                    }
                     ++this.iStepID;
                     break block105;
                 }

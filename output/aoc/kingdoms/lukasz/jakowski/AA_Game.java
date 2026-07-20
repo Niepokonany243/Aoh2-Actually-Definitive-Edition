@@ -4,6 +4,7 @@
 package aoc.kingdoms.lukasz.jakowski;
 
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
+import age.of.civilizations2.jakowski.lukasz.GameTaskScheduler;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 
@@ -46,6 +47,7 @@ extends ApplicationAdapter {
 
     @Override
     public void dispose() {
+        GameTaskScheduler.shutdownAndAwait();
         aocGame.dispose();
         super.dispose();
         Gdx.app.exit();

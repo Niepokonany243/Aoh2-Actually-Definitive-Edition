@@ -7,16 +7,30 @@ import age.of.civilizations2.jakowski.lukasz.IMGManager;
 import age.of.civilizations2.jakowski.lukasz.Images;
 import age.of.civilizations2.jakowski.lukasz.Province_Border_Line;
 import age.of.civilizations2.jakowski.lukasz.Renderer;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import space.earlygrey.shapedrewer.JoinType;
 
 public class ProvinceBorder {
+    private static final float[] BORDER_VERTICES = new float[20];
+    private static final int MAX_BATCH_FLOATS = 8191 * 20;
+    private static final float TEXTURE_SLOT_V_OFFSET = 256.0f;
+    private static final Image[] BATCH_IMAGES = new Image[4];
+    private static float[] batchVertices;
+    private static int batchImageCount;
+    private static int batchSize;
+    private static boolean batching;
+    private static ShaderProgram batchShader;
+    private static boolean batchShaderUnavailable;
     public Array<Vector2> nPath = new Array();
     private boolean civBorder = false;
     private boolean wastelandBorder = false;
@@ -521,8 +535,12 @@ public class ProvinceBorder {
     }
 
     public final void drawStraightBorder_Classic(SpriteBatch oSB, int nTranslateProvincePosX) {
+        Image image = IMGManager.getIMG(Images.pix255);
+        int mapPosY = CFG.map.getMpC().getPY();
+        int height = image.getHeight() * CFG.PROVINCE_BORDER_THICKNESS;
         for (int i = 0; i < this.provBorderLineSize; ++i) {
-            IMGManager.getIMG(Images.pix255).drawO(oSB, nTranslateProvincePosX + this.provBorderLine.get(i).getPosX(), CFG.map.getMpC().getPY() + this.provBorderLine.get(i).getPosY() - IMGManager.getIMG(Images.pix255).getHeight(), this.provBorderLine.get(i).getWidth(), IMGManager.getIMG(Images.pix255).getHeight() * CFG.PROVINCE_BORDER_THICKNESS, this.provBorderLine.get(i).getAngle());
+            Province_Border_Line line = this.provBorderLine.get(i);
+            ProvinceBorder.drawSegment(oSB, image, line, nTranslateProvincePosX, mapPosY, line.getWidth(), height, 0);
         }
     }
 
@@ -531,14 +549,21 @@ public class ProvinceBorder {
     }
 
     public final void drawStraightBorder_PercWidth(SpriteBatch oSB, float fPercent, int nTranslateProvincePosX) {
+        ProvinceBorder.flushBatch(oSB);
         int lineWidth = (int)((float)this.iLineWidth * fPercent);
         int i = 0;
+        Image image = IMGManager.getIMG(Images.pix255);
+        int mapPosY = CFG.map.getMpC().getPY();
+        int height = image.getHeight() * CFG.PROVINCE_BORDER_THICKNESS;
         for (int currentWidth = 0; i < this.provBorderLineSize && currentWidth <= lineWidth; currentWidth += this.provBorderLine.get(i).getWidth(), ++i) {
-            IMGManager.getIMG(Images.pix255).drawO(oSB, nTranslateProvincePosX + this.provBorderLine.get(i).getPosX(), CFG.map.getMpC().getPY() + this.provBorderLine.get(i).getPosY() - IMGManager.getIMG(Images.pix255).getHeight(), currentWidth + this.provBorderLine.get(i).getWidth() <= lineWidth ? this.provBorderLine.get(i).getWidth() : lineWidth - currentWidth, IMGManager.getIMG(Images.pix255).getHeight() * CFG.PROVINCE_BORDER_THICKNESS, this.provBorderLine.get(i).getAngle());
+            Province_Border_Line line = this.provBorderLine.get(i);
+            int width = currentWidth + line.getWidth() <= lineWidth ? line.getWidth() : lineWidth - currentWidth;
+            ProvinceBorder.drawSegment(oSB, image, line, nTranslateProvincePosX, mapPosY, width, height, 0);
         }
     }
 
     public final void drawDashedBorder_PercentageWidth_Full_Straight(SpriteBatch oSB, int iImageID, int offsetX, float fPercent, int nTranslateProvincePosX, Color activeColor, Color oldColor) {
+        ProvinceBorder.flushBatch(oSB);
         int i;
         int lineWidth = (int)((float)this.iLineWidth * fPercent);
         int iBeginDraw_ID = 0;
@@ -563,6 +588,7 @@ public class ProvinceBorder {
     }
 
     public final void drawStraightBorder_PercentageWidth_Full_Straight(SpriteBatch oSB, float fPercent, int nTranslateProvincePosX, Color activeColor, Color oldColor) {
+        ProvinceBorder.flushBatch(oSB);
         int i;
         int lineWidth = (int)((float)this.iLineWidth * fPercent);
         int iBeginDraw_ID = 0;
@@ -586,6 +612,7 @@ public class ProvinceBorder {
     }
 
     public final void drawDashedBorder_PercentageWidth_Full_Straight(SpriteBatch oSB, float fPercent, int nTranslateProvincePosX, Color activeColor, Color oldColor, int nImageIDActive, int nImageIDOld) {
+        ProvinceBorder.flushBatch(oSB);
         int i;
         int lineWidth = (int)((float)this.iLineWidth * fPercent);
         int iBeginDraw_ID = 0;
@@ -612,6 +639,7 @@ public class ProvinceBorder {
     }
 
     public final void drawStraightBorder_PercentageWidth_Full_Dashed(SpriteBatch oSB, float fPercent, int nTranslateProvincePosX, Color activeColor, Color oldColor) {
+        ProvinceBorder.flushBatch(oSB);
         int i;
         int lineWidth = (int)((float)this.iLineWidth * fPercent);
         int iBeginDraw_ID = 0;
@@ -649,13 +677,218 @@ public class ProvinceBorder {
     }
 
     public final void drawDashedBorder(SpriteBatch oSB, int iImageID, int offsetX, int nTranslateProvincePosX) {
+        Image image = IMGManager.getIMG(iImageID);
+        int mapPosY = CFG.map.getMpC().getPY();
+        int height = image.getHeight() * CFG.PROVINCE_BORDER_DASHED_THICKNESS;
         for (int i = 0; i < this.provBorderLineSize; ++i) {
-            IMGManager.getIMG(iImageID).drawO(oSB, nTranslateProvincePosX + this.provBorderLine.get(i).getPosX(), CFG.map.getMpC().getPY() + this.provBorderLine.get(i).getPosY() - IMGManager.getIMG(iImageID).getHeight(), this.provBorderLine.get(i).getWidth(), IMGManager.getIMG(iImageID).getHeight() * CFG.PROVINCE_BORDER_DASHED_THICKNESS, this.provBorderLine.get(i).getAngle(), offsetX);
-            offsetX += this.provBorderLine.get(i).getWidth();
+            Province_Border_Line line = this.provBorderLine.get(i);
+            ProvinceBorder.drawSegment(oSB, image, line, nTranslateProvincePosX, mapPosY, line.getWidth(), height, offsetX);
+            offsetX += line.getWidth();
         }
     }
 
+    private static void drawSegment(SpriteBatch oSB, Image image, Province_Border_Line line, int translateX, int mapPosY, int width, int height, int srcX) {
+        if (!CFG.isAndroid()) {
+            image.drawO(oSB, translateX + line.getPosX(), mapPosY + line.getPosY() - image.getHeight(), width, height, line.getAngle(), srcX);
+            return;
+        }
+        float x = translateX + line.getPosX();
+        float y = -mapPosY - line.getPosY();
+        float cos = line.getCos();
+        float sin = line.getSin();
+        float sinHeight = sin * height;
+        float cosHeight = cos * height;
+        float cosWidth = cos * width;
+        float sinWidth = sin * width;
+        float color = oSB.getPackedColor();
+        float u = (float)srcX / (float)image.getTexture().getWidth();
+        float u2 = (float)(srcX + width) / (float)image.getTexture().getWidth();
+        float v = (float)height / (float)image.getTexture().getHeight();
+
+        float x1 = 0.0f;
+        float y1 = 0.0f;
+        float x2 = sinHeight;
+        float y2 = -cosHeight;
+        float x3 = cosWidth + sinHeight;
+        float y3 = sinWidth - cosHeight;
+        float x4 = x1 + (x3 - x2);
+        float y4 = y3 - (y2 - y1);
+
+        BORDER_VERTICES[0] = x1 + x;
+        BORDER_VERTICES[1] = y1 + y;
+        BORDER_VERTICES[2] = color;
+        BORDER_VERTICES[3] = u;
+        BORDER_VERTICES[4] = v;
+        BORDER_VERTICES[5] = x2 + x;
+        BORDER_VERTICES[6] = y2 + y;
+        BORDER_VERTICES[7] = color;
+        BORDER_VERTICES[8] = u;
+        BORDER_VERTICES[9] = 0.0f;
+        BORDER_VERTICES[10] = x3 + x;
+        BORDER_VERTICES[11] = y3 + y;
+        BORDER_VERTICES[12] = color;
+        BORDER_VERTICES[13] = u2;
+        BORDER_VERTICES[14] = 0.0f;
+        BORDER_VERTICES[15] = x4 + x;
+        BORDER_VERTICES[16] = y4 + y;
+        BORDER_VERTICES[17] = color;
+        BORDER_VERTICES[18] = u2;
+        BORDER_VERTICES[19] = v;
+        if (batching && ProvinceBorder.appendToBatch(oSB, image)) {
+            return;
+        }
+        oSB.draw(image.getTexture(), BORDER_VERTICES, 0, BORDER_VERTICES.length);
+    }
+
+    public static void beginBatch() {
+        batching = CFG.isAndroid() && batchShader != null;
+        batchImageCount = 0;
+        batchSize = 0;
+    }
+
+    public static void endBatch(SpriteBatch oSB) {
+        if (!batching) return;
+        try {
+            ProvinceBorder.flushBatch(oSB);
+        }
+        finally {
+            batching = false;
+            ProvinceBorder.clearBatchImages();
+            batchSize = 0;
+        }
+    }
+
+    private static void flushBatch(SpriteBatch oSB) {
+        if (!batching || batchSize <= 0 || batchImageCount <= 0) return;
+        ShaderProgram oldShader = oSB.getShader();
+        try {
+            oSB.setShader(batchShader);
+            for (int i = 0; i < batchImageCount; ++i) {
+                BATCH_IMAGES[i].getTexture().bind(i);
+                if (i > 0) {
+                    batchShader.setUniformi("u_texture" + i, i);
+                }
+            }
+            Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
+            oSB.draw(BATCH_IMAGES[0].getTexture(), batchVertices, 0, batchSize);
+            oSB.flush();
+        }
+        finally {
+            Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0);
+            oSB.setShader(oldShader);
+            ProvinceBorder.clearBatchImages();
+            batchSize = 0;
+        }
+    }
+
+    private static boolean appendToBatch(SpriteBatch oSB, Image image) {
+        int textureSlot = ProvinceBorder.getBatchImageSlot(image);
+        if (textureSlot < 0) {
+            ProvinceBorder.flushBatch(oSB);
+            textureSlot = ProvinceBorder.getBatchImageSlot(image);
+            if (textureSlot < 0) return false;
+        }
+        if (batchSize + BORDER_VERTICES.length > MAX_BATCH_FLOATS) {
+            ProvinceBorder.flushBatch(oSB);
+            textureSlot = ProvinceBorder.getBatchImageSlot(image);
+            if (textureSlot < 0) return false;
+        }
+        int required = batchSize + BORDER_VERTICES.length;
+        if (batchVertices == null) {
+            batchVertices = new float[Math.min(MAX_BATCH_FLOATS, Math.max(4096, required))];
+        } else if (required > batchVertices.length) {
+            batchVertices = Arrays.copyOf(batchVertices, Math.min(MAX_BATCH_FLOATS, Math.max(required, batchVertices.length * 2)));
+        }
+        float textureOffset = textureSlot * TEXTURE_SLOT_V_OFFSET;
+        BORDER_VERTICES[4] += textureOffset;
+        BORDER_VERTICES[9] += textureOffset;
+        BORDER_VERTICES[14] += textureOffset;
+        BORDER_VERTICES[19] += textureOffset;
+        System.arraycopy(BORDER_VERTICES, 0, batchVertices, batchSize, BORDER_VERTICES.length);
+        batchSize = required;
+        return true;
+    }
+
+    private static int getBatchImageSlot(Image image) {
+        for (int i = 0; i < batchImageCount; ++i) {
+            if (BATCH_IMAGES[i] == image) return i;
+        }
+        if (batchImageCount >= BATCH_IMAGES.length) return -1;
+        BATCH_IMAGES[batchImageCount] = image;
+        return batchImageCount++;
+    }
+
+    private static void clearBatchImages() {
+        for (int i = 0; i < batchImageCount; ++i) {
+            BATCH_IMAGES[i] = null;
+        }
+        batchImageCount = 0;
+    }
+
+    private static boolean ensureBatchShader() {
+        if (batchShader != null) return true;
+        if (batchShaderUnavailable) return false;
+        String vertexShader = "attribute vec4 a_position;\n" +
+                "attribute vec4 a_color;\n" +
+                "attribute vec2 a_texCoord0;\n" +
+                "uniform mat4 u_projTrans;\n" +
+                "varying vec4 v_color;\n" +
+                "varying highp vec2 v_texCoords;\n" +
+                "void main() {\n" +
+                "    v_color = a_color;\n" +
+                "    v_texCoords = a_texCoord0;\n" +
+                "    gl_Position = u_projTrans * a_position;\n" +
+                "}";
+        String fragmentShader = "#ifdef GL_ES\n" +
+                "precision mediump float;\n" +
+                "#endif\n" +
+                "varying vec4 v_color;\n" +
+                "varying highp vec2 v_texCoords;\n" +
+                "uniform sampler2D u_texture;\n" +
+                "uniform sampler2D u_texture1;\n" +
+                "uniform sampler2D u_texture2;\n" +
+                "uniform sampler2D u_texture3;\n" +
+                "void main() {\n" +
+                "    float slot = floor(v_texCoords.y / 256.0);\n" +
+                "    vec2 uv = vec2(v_texCoords.x, v_texCoords.y - slot * 256.0);\n" +
+                "    vec4 texColor;\n" +
+                "    if (slot < 0.5) texColor = texture2D(u_texture, uv);\n" +
+                "    else if (slot < 1.5) texColor = texture2D(u_texture1, uv);\n" +
+                "    else if (slot < 2.5) texColor = texture2D(u_texture2, uv);\n" +
+                "    else texColor = texture2D(u_texture3, uv);\n" +
+                "    gl_FragColor = v_color * texColor;\n" +
+                "}";
+        batchShader = new ShaderProgram(vertexShader, fragmentShader);
+        if (!batchShader.isCompiled()) {
+            Gdx.app.log("ProvinceBorder", "Border batch shader compilation failed: " + batchShader.getLog());
+            batchShader.dispose();
+            batchShader = null;
+            batchShaderUnavailable = true;
+            return false;
+        }
+        return true;
+    }
+
+    public static void initBatch() {
+        if (CFG.isAndroid()) {
+            ProvinceBorder.ensureBatchShader();
+        }
+    }
+
+    public static void disposeBatch() {
+        if (batchShader != null) {
+            batchShader.dispose();
+            batchShader = null;
+        }
+        batchShaderUnavailable = false;
+        batching = false;
+        ProvinceBorder.clearBatchImages();
+        batchVertices = null;
+        batchSize = 0;
+    }
+
     public final void drawDashedBorder_PercentageWidth(SpriteBatch oSB, int iImageID, int offsetX, float fPercent, int nTranslateProvincePosX) {
+        ProvinceBorder.flushBatch(oSB);
         int lineWidth = (int)((float)this.iLineWidth * fPercent);
         int i = 0;
         for (int currentWidth = 0; i < this.provBorderLineSize && currentWidth <= lineWidth; currentWidth += this.provBorderLine.get(i).getWidth(), ++i) {
@@ -665,6 +898,7 @@ public class ProvinceBorder {
     }
 
     public final void drawDashedBorder_PercentageWidth_Full_SeaBySea(SpriteBatch oSB, int iImageID, int offsetX, float fPercent, int nTranslateProvincePosX, Color activeColor) {
+        ProvinceBorder.flushBatch(oSB);
         int i;
         int lineWidth = (int)((float)this.iLineWidth * fPercent);
         int iBeginDraw_ID = 0;

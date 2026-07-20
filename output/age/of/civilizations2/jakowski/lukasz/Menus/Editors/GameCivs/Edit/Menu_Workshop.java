@@ -15,6 +15,7 @@ import age.of.civilizations2.jakowski.lukasz.MenuE_HoverP.ME_Hover_v2;
 import age.of.civilizations2.jakowski.lukasz.Menus.Editors.GameCivs.Edit.Menu_Workshop_Load;
 import age.of.civilizations2.jakowski.lukasz.View;
 import age.of.civilizations2.jakowski.lukasz.Z_Other.ST.sSPT;
+import age.of.civilizations2.jakowski.lukasz.GameTaskScheduler;
 import age.of.civilizations2.jakowski.lukasz.Z_Other.ST.sUM;
 import age.of.civilizations2.jakowski.lukasz.Z_Other.Undo.Undo_AssignProvinceCiv;
 import com.badlogic.gdx.Gdx;
@@ -47,9 +48,7 @@ extends Menu {
                     if (Gdx.files.internal("mods/" + lMods.get(this.getCurr()) + "/mod.txt").exists() || FileManager.IS_MAC && Gdx.files.external("mods/" + lMods.get(this.getCurr()) + "/mod.txt").exists()) {
                         Menu_Workshop_Load.uploaded = false;
                         CFG.menus.setMenuIDWithoutAnim(View.eLOAD_WORKSHOP_PUBLISH);
-                        sSPT.key = lMods.get(this.getCurr());
-                        sSPT nSteamPublish = new sSPT();
-                        nSteamPublish.start();
+                        GameTaskScheduler.submit(new sSPT(lMods.get(this.getCurr())));
                     } else {
                         CFG.toastM.addM(CFG.lang.get("MissingFile") + ": mods/" + lMods.get(this.getCurr()) + "/mod.txt", CFG.COLOR_NEGATIVE_1);
                         CFG.toastM.setTimeInView(3500);

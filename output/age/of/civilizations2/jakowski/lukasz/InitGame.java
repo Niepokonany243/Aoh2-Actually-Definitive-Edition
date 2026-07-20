@@ -12,22 +12,7 @@ import com.badlogic.gdx.Gdx;
 
 public class InitGame {
     InitGame() {
-        new Thread(new Runnable(){
-
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(250);
-                } catch (InterruptedException e) {}
-                Gdx.app.postRunnable(new Runnable(){
-
-                    @Override
-                    public void run() {
-                        InitGame.this.Init();
-                    }
-                });
-            }
-        }).start();
+        Gdx.app.postRunnable(this::Init);
     }
 
     public final void Init() {

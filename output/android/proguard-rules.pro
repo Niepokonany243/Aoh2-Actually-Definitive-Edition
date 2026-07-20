@@ -1,5 +1,3 @@
 -keep class aoc.kingdoms.lukasz.jakowski.** { *; }
 -keep class age.of.civilizations2.jakowski.lukasz.** { *; }
 -keep class com.badlogic.gdx.** { *; }
--keep class com.codedisaster.steamworks.** { *; }
--dontwarn com.codedisaster.steamworks.**

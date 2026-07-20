@@ -1,5 +1,6 @@
-include ':core', ':desktop', ':app'
+include ':core', ':desktop', ':mobile-core', ':app'
 
 project(':core').projectDir = new File(settingsDir, 'output/core')
 project(':desktop').projectDir = new File(settingsDir, 'output/desktop')
+project(':mobile-core').projectDir = new File(settingsDir, 'output/mobile-core')
 project(':app').projectDir = new File(settingsDir, 'output/android')

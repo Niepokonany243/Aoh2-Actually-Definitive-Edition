@@ -1633,48 +1633,19 @@ public class Game_Scenarios {
         CFG.core.getCiv(0).setTechLevel(0.1f);
         
         int provSize = CFG.core.getProvinSize();
-        int chunks = Math.max(1, Math.min(Runtime.getRuntime().availableProcessors(), provSize));
-        int chunkSize = Math.max(1, (provSize + chunks - 1) / chunks);
-        java.util.concurrent.CountDownLatch latch1 = new java.util.concurrent.CountDownLatch(chunks);
-        for (int chunk = 0; chunk < chunks; ++chunk) {
-            final int start = chunk * chunkSize;
-            final int end = Math.min(provSize, start + chunkSize);
-            Core.EXECUTOR.execute(() -> {
-                try {
-                    for (int idx = start; idx < end; ++idx) {
-                        Province province = CFG.core.getProv(idx);
-                        if (!province.getSeaProv()) {
-                            province.getPop().clearData();
-                            province.setEco(0);
-                            province.incomeTaxation = 1.0f;
-                            province.incomeProduction = 1.0f;
-                            province.administrationCost = 0.0f;
-                        }
-                        province.setIsPartOfHolyRomanEmpire(false);
-                        province.provGD.resetData();
-                    }
-                } finally {
-                    latch1.countDown();
-                }
-            });
-        }
-        try { latch1.await(); } catch (InterruptedException e) { CFG.exceptionStack(e); }
-        
-        java.util.concurrent.CountDownLatch latch2 = new java.util.concurrent.CountDownLatch(chunks);
-        for (int chunk = 0; chunk < chunks; ++chunk) {
-            final int start = chunk * chunkSize;
-            final int end = Math.min(provSize, start + chunkSize);
-            Core.EXECUTOR.execute(() -> {
-                try {
-                    for (int idx = start; idx < end; ++idx) {
-                        CFG.core.getProv(idx).buildProvinceCore();
-                    }
-                } finally {
-                    latch2.countDown();
-                }
-            });
-        }
-        try { latch2.await(); } catch (InterruptedException e) { CFG.exceptionStack(e); }
+        Parallel.range(0, provSize, idx -> {
+            Province province = CFG.core.getProv(idx);
+            if (!province.getSeaProv()) {
+                province.getPop().clearData();
+                province.setEco(0);
+                province.incomeTaxation = 1.0f;
+                province.incomeProduction = 1.0f;
+                province.administrationCost = 0.0f;
+            }
+            province.setIsPartOfHolyRomanEmpire(false);
+            province.provGD.resetData();
+        });
+        Parallel.range(0, provSize, idx -> CFG.core.getProv(idx).buildProvinceCore());
         if (loadCoresData) {
             CFG.core.getGameScenars().loadCoresData();
             if (CFG.province_CoresGD != null) {

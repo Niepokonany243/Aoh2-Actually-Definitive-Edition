@@ -1126,10 +1126,10 @@ public class CFG {
                 return CFG.getColorStep(COLOR_POP_GRADIENT[9], COLOR_POP_GRADIENT[10], nData % 10, 10, nAlpha);
             }
             case 10: {
-                return new Color(CFG.COLOR_POP_GRADIENT[10].r, CFG.COLOR_POP_GRADIENT[10].g, CFG.COLOR_POP_GRADIENT[10].b, nAlpha);
+                return CFG.getColorStepReusable(CFG.COLOR_POP_GRADIENT[10], CFG.COLOR_POP_GRADIENT[10], 0, 1, nAlpha);
             }
         }
-        return new Color(CFG.COLOR_POP_GRADIENT[10].r, CFG.COLOR_POP_GRADIENT[10].g, CFG.COLOR_POP_GRADIENT[10].b, nAlpha);
+        return CFG.getColorStepReusable(CFG.COLOR_POP_GRADIENT[10], CFG.COLOR_POP_GRADIENT[10], 0, 1, nAlpha);
     }
 
     public static Color getWarDeathsColor(int nData, float nAlpha) {
@@ -1165,10 +1165,10 @@ public class CFG {
                 return CFG.getColorStep(COLOR_WAR_DEATHS[9], COLOR_WAR_DEATHS[10], nData % 10, 10, nAlpha);
             }
             case 10: {
-                return new Color(CFG.COLOR_WAR_DEATHS[10].r, CFG.COLOR_WAR_DEATHS[10].g, CFG.COLOR_WAR_DEATHS[10].b, nAlpha);
+                return CFG.getColorStepReusable(CFG.COLOR_WAR_DEATHS[10], CFG.COLOR_WAR_DEATHS[10], 0, 1, nAlpha);
             }
         }
-        return new Color(CFG.COLOR_WAR_DEATHS[10].r, CFG.COLOR_WAR_DEATHS[10].g, CFG.COLOR_WAR_DEATHS[10].b, nAlpha);
+        return CFG.getColorStepReusable(CFG.COLOR_WAR_DEATHS[10], CFG.COLOR_WAR_DEATHS[10], 0, 1, nAlpha);
     }
 
     public static final Color getPopulationColorRed(int nData, float nAlpha) {
@@ -1204,10 +1204,10 @@ public class CFG {
                 return CFG.getColorStep(COLOR_POP_RED[9], COLOR_POP_RED[10], nData % 10, 10, nAlpha);
             }
             case 10: {
-                return new Color(CFG.COLOR_POP_RED[10].r, CFG.COLOR_POP_RED[10].g, CFG.COLOR_POP_RED[10].b, nAlpha);
+                return CFG.getColorStepReusable(CFG.COLOR_POP_RED[10], CFG.COLOR_POP_RED[10], 0, 1, nAlpha);
             }
         }
-        return new Color(CFG.COLOR_POP_RED[10].r, CFG.COLOR_POP_RED[10].g, CFG.COLOR_POP_RED[10].b, nAlpha);
+        return CFG.getColorStepReusable(CFG.COLOR_POP_RED[10], CFG.COLOR_POP_RED[10], 0, 1, nAlpha);
     }
 
     public static final void wikiInforLink(String sCivTag) {
@@ -2748,10 +2748,10 @@ public class CFG {
                 return CFG.getColorStep(COLOR_GROWTH_RATE[9], COLOR_GROWTH_RATE[10], nGrowthRate % 10, 10, nAlpha);
             }
             case 10: {
-                return new Color(CFG.COLOR_GROWTH_RATE[CFG.COLOR_GROWTH_RATE.length - 1].r, CFG.COLOR_GROWTH_RATE[CFG.COLOR_GROWTH_RATE.length - 1].g, CFG.COLOR_GROWTH_RATE[CFG.COLOR_GROWTH_RATE.length - 1].b, nAlpha);
+                return CFG.getColorStepReusable(CFG.COLOR_GROWTH_RATE[CFG.COLOR_GROWTH_RATE.length - 1], CFG.COLOR_GROWTH_RATE[CFG.COLOR_GROWTH_RATE.length - 1], 0, 1, nAlpha);
             }
         }
-        return new Color(CFG.COLOR_GROWTH_RATE[CFG.COLOR_GROWTH_RATE.length - 1].r, CFG.COLOR_GROWTH_RATE[CFG.COLOR_GROWTH_RATE.length - 1].g, CFG.COLOR_GROWTH_RATE[CFG.COLOR_GROWTH_RATE.length - 1].b, nAlpha);
+        return CFG.getColorStepReusable(CFG.COLOR_GROWTH_RATE[CFG.COLOR_GROWTH_RATE.length - 1], CFG.COLOR_GROWTH_RATE[CFG.COLOR_GROWTH_RATE.length - 1], 0, 1, nAlpha);
     }
 
     public static final void updateMAX_Army() {
@@ -2834,49 +2834,27 @@ public class CFG {
                 return CFG.getColorStep(COLOR_ECONOMY_GRADIENT[9], COLOR_ECONOMY_GRADIENT[10], nData % 10, 10, nAlpha);
             }
             case 10: {
-                return new Color(CFG.COLOR_ECONOMY_GRADIENT[10].r, CFG.COLOR_ECONOMY_GRADIENT[10].g, CFG.COLOR_ECONOMY_GRADIENT[10].b, nAlpha);
+                return CFG.getColorStepReusable(CFG.COLOR_ECONOMY_GRADIENT[10], CFG.COLOR_ECONOMY_GRADIENT[10], 0, 1, nAlpha);
             }
         }
-        return new Color(CFG.COLOR_ECONOMY_GRADIENT[10].r, CFG.COLOR_ECONOMY_GRADIENT[10].g, CFG.COLOR_ECONOMY_GRADIENT[10].b, nAlpha);
+        return CFG.getColorStepReusable(CFG.COLOR_ECONOMY_GRADIENT[10], CFG.COLOR_ECONOMY_GRADIENT[10], 0, 1, nAlpha);
     }
 
     public static final Color getTechnologyLevelColor(int nData, float nAlpha) {
         switch (nData / 10) {
-            case 0: {
-                return CFG.getColorStep(COLOR_TECHNOLOGY_LEVEL[0], COLOR_TECHNOLOGY_LEVEL[1], nData % 10, 10, nAlpha);
-            }
-            case 1: {
-                return CFG.getColorStep(COLOR_TECHNOLOGY_LEVEL[1], COLOR_TECHNOLOGY_LEVEL[2], nData % 10, 10, nAlpha);
-            }
-            case 2: {
-                return CFG.getColorStep(COLOR_TECHNOLOGY_LEVEL[2], COLOR_TECHNOLOGY_LEVEL[3], nData % 10, 10, nAlpha);
-            }
-            case 3: {
-                return CFG.getColorStep(COLOR_TECHNOLOGY_LEVEL[3], COLOR_TECHNOLOGY_LEVEL[4], nData % 10, 10, nAlpha);
-            }
-            case 4: {
-                return CFG.getColorStep(COLOR_TECHNOLOGY_LEVEL[4], COLOR_TECHNOLOGY_LEVEL[5], nData % 10, 10, nAlpha);
-            }
-            case 5: {
-                return CFG.getColorStep(COLOR_TECHNOLOGY_LEVEL[5], COLOR_TECHNOLOGY_LEVEL[6], nData % 10, 10, nAlpha);
-            }
-            case 6: {
-                return CFG.getColorStep(COLOR_TECHNOLOGY_LEVEL[6], COLOR_TECHNOLOGY_LEVEL[7], nData % 10, 10, nAlpha);
-            }
-            case 7: {
-                return CFG.getColorStep(COLOR_TECHNOLOGY_LEVEL[7], COLOR_TECHNOLOGY_LEVEL[8], nData % 10, 10, nAlpha);
-            }
-            case 8: {
-                return CFG.getColorStep(COLOR_TECHNOLOGY_LEVEL[8], COLOR_TECHNOLOGY_LEVEL[9], nData % 10, 10, nAlpha);
-            }
-            case 9: {
-                return CFG.getColorStep(COLOR_TECHNOLOGY_LEVEL[9], COLOR_TECHNOLOGY_LEVEL[10], nData % 10, 10, nAlpha);
-            }
-            case 10: {
-                return new Color(CFG.COLOR_TECHNOLOGY_LEVEL[10].r, CFG.COLOR_TECHNOLOGY_LEVEL[10].g, CFG.COLOR_TECHNOLOGY_LEVEL[10].b, nAlpha);
-            }
+            case 0: return CFG.getColorStep(COLOR_TECHNOLOGY_LEVEL[0], COLOR_TECHNOLOGY_LEVEL[1], nData % 10, 10, nAlpha);
+            case 1: return CFG.getColorStep(COLOR_TECHNOLOGY_LEVEL[1], COLOR_TECHNOLOGY_LEVEL[2], nData % 10, 10, nAlpha);
+            case 2: return CFG.getColorStep(COLOR_TECHNOLOGY_LEVEL[2], COLOR_TECHNOLOGY_LEVEL[3], nData % 10, 10, nAlpha);
+            case 3: return CFG.getColorStep(COLOR_TECHNOLOGY_LEVEL[3], COLOR_TECHNOLOGY_LEVEL[4], nData % 10, 10, nAlpha);
+            case 4: return CFG.getColorStep(COLOR_TECHNOLOGY_LEVEL[4], COLOR_TECHNOLOGY_LEVEL[5], nData % 10, 10, nAlpha);
+            case 5: return CFG.getColorStep(COLOR_TECHNOLOGY_LEVEL[5], COLOR_TECHNOLOGY_LEVEL[6], nData % 10, 10, nAlpha);
+            case 6: return CFG.getColorStep(COLOR_TECHNOLOGY_LEVEL[6], COLOR_TECHNOLOGY_LEVEL[7], nData % 10, 10, nAlpha);
+            case 7: return CFG.getColorStep(COLOR_TECHNOLOGY_LEVEL[7], COLOR_TECHNOLOGY_LEVEL[8], nData % 10, 10, nAlpha);
+            case 8: return CFG.getColorStep(COLOR_TECHNOLOGY_LEVEL[8], COLOR_TECHNOLOGY_LEVEL[9], nData % 10, 10, nAlpha);
+            case 9: return CFG.getColorStep(COLOR_TECHNOLOGY_LEVEL[9], COLOR_TECHNOLOGY_LEVEL[10], nData % 10, 10, nAlpha);
+            case 10: return CFG.getColorStepReusable(CFG.COLOR_TECHNOLOGY_LEVEL[10], CFG.COLOR_TECHNOLOGY_LEVEL[10], 0, 1, nAlpha);
         }
-        return new Color(CFG.COLOR_TECHNOLOGY_LEVEL[10].r, CFG.COLOR_TECHNOLOGY_LEVEL[10].g, CFG.COLOR_TECHNOLOGY_LEVEL[10].b, nAlpha);
+        return CFG.getColorStepReusable(CFG.COLOR_TECHNOLOGY_LEVEL[10], CFG.COLOR_TECHNOLOGY_LEVEL[10], 0, 1, nAlpha);
     }
 
     public static final void initEditdiplomacyColors_GameData() {
@@ -2997,10 +2975,12 @@ public class CFG {
 
     public static void updateColorDashed() {
         try {
-            COLOR_PROVINCE_DASHED = map.getMpS().getCurrSc() > 1.0f ? (map.getMpS().getCurrSc() < 4.0f ? new Color(CFG.COLOR_PROVINCE_DASHED.r, CFG.COLOR_PROVINCE_DASHED.g, CFG.COLOR_PROVINCE_DASHED.b, 0.65f - 0.1f * (map.getMpS().getCurrSc() / 4.0f)) : new Color(CFG.COLOR_PROVINCE_DASHED.r, CFG.COLOR_PROVINCE_DASHED.g, CFG.COLOR_PROVINCE_DASHED.b, 0.54999995f)) : new Color(CFG.COLOR_PROVINCE_DASHED.r, CFG.COLOR_PROVINCE_DASHED.g, CFG.COLOR_PROVINCE_DASHED.b, 0.65f);
+            float baseAlpha = COLOR_PROVINCE_DASHED.a;
+            float newAlpha = map.getMpS().getCurrSc() > 1.0f ? (map.getMpS().getCurrSc() < 4.0f ? 0.65f - 0.1f * (map.getMpS().getCurrSc() / 4.0f) : 0.54999995f) : 0.65f;
+            COLOR_PROVINCE_DASHED.set(COLOR_PROVINCE_DASHED.r, COLOR_PROVINCE_DASHED.g, COLOR_PROVINCE_DASHED.b, newAlpha);
         }
         catch (Exception ex) {
-            COLOR_PROVINCE_DASHED = new Color(CFG.COLOR_PROVINCE_DASHED.r, CFG.COLOR_PROVINCE_DASHED.g, CFG.COLOR_PROVINCE_DASHED.b, 0.65f);
+            COLOR_PROVINCE_DASHED.set(COLOR_PROVINCE_DASHED.r, COLOR_PROVINCE_DASHED.g, COLOR_PROVINCE_DASHED.b, 0.65f);
         }
     }
 
@@ -3720,6 +3700,22 @@ public class CFG {
     public static final Color getColorMixed(Color iOld, Color iNew) {
         float tA = 1.0f - (1.0f - iOld.a) * (1.0f - iNew.a);
         return new Color(iNew.r * iNew.a / tA + iOld.r * iOld.a * (1.0f - iNew.a) / tA, iNew.g * iNew.a / tA + iOld.g * iOld.a * (1.0f - iNew.a) / tA, iNew.b * iNew.a / tA + iOld.b * iOld.a * (1.0f - iNew.a) / tA, iOld.a);
+    }
+
+    private static final Color tmpColorStep = new Color();
+
+    public static final void getColorStep(Color iOld, Color iNew, int iColorStepID, int numOfSteps, float fAlpha, Color out) {
+        out.set(iOld.r + (iNew.r - iOld.r) * (float)iColorStepID / (float)numOfSteps, iOld.g + (iNew.g - iOld.g) * (float)iColorStepID / (float)numOfSteps, iOld.b + (iNew.b - iOld.b) * (float)iColorStepID / (float)numOfSteps, fAlpha);
+    }
+
+    public static final Color getColorStepReusable(Color iOld, Color iNew, int iColorStepID, int numOfSteps, float fAlpha) {
+        tmpColorStep.set(iOld.r + (iNew.r - iOld.r) * (float)iColorStepID / (float)numOfSteps, iOld.g + (iNew.g - iOld.g) * (float)iColorStepID / (float)numOfSteps, iOld.b + (iNew.b - iOld.b) * (float)iColorStepID / (float)numOfSteps, fAlpha);
+        return tmpColorStep;
+    }
+
+    public static final Color getColorStepReusable(Color iOld, Color iNew, long iColorStepID, long numOfSteps, float fAlpha) {
+        tmpColorStep.set(iOld.r + (iNew.r - iOld.r) * (float)iColorStepID / (float)numOfSteps, iOld.g + (iNew.g - iOld.g) * (float)iColorStepID / (float)numOfSteps, iOld.b + (iNew.b - iOld.b) * (float)iColorStepID / (float)numOfSteps, fAlpha);
+        return tmpColorStep;
     }
 
     public static final float changeAnimationPos(int animationStepID, float animationChangeViewPos, boolean backAnimation, int nWidth) {

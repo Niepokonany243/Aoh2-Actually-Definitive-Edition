@@ -774,8 +774,11 @@ public class Civilization {
         return this.getRGB(1.0f);
     }
 
+    private static final Color tmpRGB = new Color();
+
     public final Color getRGB(float nAlpha) {
-        return new Color((float)this.getR() / 255.0f, (float)this.getG() / 255.0f, (float)this.getB() / 255.0f, nAlpha);
+        tmpRGB.set((float)this.getR() / 255.0f, (float)this.getG() / 255.0f, (float)this.getB() / 255.0f, nAlpha);
+        return tmpRGB;
     }
 
     public final Color getColor(float fAlpha) {

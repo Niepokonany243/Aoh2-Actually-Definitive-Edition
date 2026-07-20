@@ -141,9 +141,8 @@ import age.of.civilizations2.jakowski.lukasz.GameValues.GV_Wonder;
 import com.badlogic.gdx.utils.Json;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 import com.badlogic.gdx.files.FileHandle;
-import age.of.civilizations2.jakowski.lukasz.Core.Core;
+import age.of.civilizations2.jakowski.lukasz.Parallel;
 
 public class GameValues {
     public static GV_DefensivePosition gvDefensivePosition = new GV_DefensivePosition();
@@ -304,13 +303,7 @@ public class GameValues {
 
     private static void runParallel(List<Runnable> tasks) {
         if (tasks.isEmpty()) return;
-        java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(tasks.size());
-        for (Runnable task : tasks) {
-            Core.EXECUTOR.execute(() -> {
-                try { task.run(); } finally { latch.countDown(); }
-            });
-        }
-        try { latch.await(); } catch (InterruptedException e) { CFG.exceptionStack(e); }
+        Parallel.range(0, tasks.size(), index -> tasks.get(index).run());
     }
 
     public static final void init() {

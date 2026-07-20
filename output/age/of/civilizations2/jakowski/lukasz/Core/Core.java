@@ -6,6 +6,8 @@ import age.of.civilizations2.jakowski.lukasz.Alliance;
 import age.of.civilizations2.jakowski.lukasz.AoCGame;
 import age.of.civilizations2.jakowski.lukasz.BetterUI_Manager;
 import age.of.civilizations2.jakowski.lukasz.CFG;
+import age.of.civilizations2.jakowski.lukasz.GameTaskScheduler;
+import age.of.civilizations2.jakowski.lukasz.Parallel;
 import age.of.civilizations2.jakowski.lukasz.Scenario_CustomJSON;
 import age.of.civilizations2.jakowski.lukasz.Scenario_GameData_Technology;
 import age.of.civilizations2.jakowski.lukasz.Province_Core;
@@ -21,6 +23,7 @@ import java.util.BitSet;
 import java.util.List;
 import age.of.civilizations2.jakowski.lukasz.ProvinceAtlas;
 import age.of.civilizations2.jakowski.lukasz.ProvinceMesh;
+import age.of.civilizations2.jakowski.lukasz.VisibleProvinceCache;
 import age.of.civilizations2.jakowski.lukasz.Image;
 import age.of.civilizations2.jakowski.lukasz.Province;
 import age.of.civilizations2.jakowski.lukasz.Files.FileManager;
@@ -173,8 +176,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class Core {
-    public static final int NUM_THREADS = Runtime.getRuntime().availableProcessors();
-    public static final java.util.concurrent.ExecutorService EXECUTOR = java.util.concurrent.Executors.newFixedThreadPool(NUM_THREADS);
+    public static final int NUM_THREADS = GameTaskScheduler.parallelism();
     private final Color tmpCityNameColor = new Color();
     private static final Color CIV_NAME_TEXT_ACTIVE = new Color(0.12156863f, 0.12156863f, 0.12156863f, 1.0f);
     private static final Color CIV_NAME_TEXT = new Color(0.9843137f, 0.9843137f, 0.9843137f, 1.0f);
@@ -337,62 +339,46 @@ public class Core {
         final boolean[] usedFallback = new boolean[numProvinces];
         final String baseDataPath = "map/" + CFG.map.getFileActiveMapPath() + "data/" + "provinces/";
         final String baseUpdatePath = "map/" + CFG.map.getFileActiveMapPath() + "update/";
-        final int chunks = Math.max(1, Math.min(Runtime.getRuntime().availableProcessors(), numProvinces));
-        final int chunkSize = Math.max(1, (numProvinces + chunks - 1) / chunks);
-        java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(chunks);
-
-        for (int c = 0; c < chunks; ++c) {
-            final int startProvince = c * chunkSize;
-            final int endProvince = Math.min(startProvince + chunkSize, numProvinces);
-            EXECUTOR.execute(() -> {
+        Parallel.range(0, numProvinces, provinceID -> {
+            try {
+                FileHandle f = FileManager.loadFile(baseDataPath + provinceID);
                 try {
-                    for (int provinceID = startProvince; provinceID < endProvince; ++provinceID) {
-                        try {
-                            FileHandle f = FileManager.loadFile(baseDataPath + provinceID);
-                            try {
-                                gdArray[provinceID] = (Province_GameData2)CFG.deserialize(f.readBytes());
-                            } catch (Exception e) {
-                                try {
-                                    FileHandle uf = FileManager.loadFile(baseUpdatePath + provinceID);
-                                    String text = uf.readString();
-                                    int semi = text.indexOf(';');
-                                    String xs = semi >= 0 ? text.substring(0, semi) : "";
-                                    String ys = semi >= 0 ? text.substring(semi + 1) : "";
-                                    int count = 0;
-                                    int idx = 0, n;
-                                    while ((n = xs.indexOf(',', idx)) >= 0) { count++; idx = n + 1; }
-                                    if (xs.length() > 0) count++;
-                                    ArrayList<Short> px = new ArrayList<Short>(count);
-                                    ArrayList<Short> py = new ArrayList<Short>(count);
-                                    idx = 0;
-                                    for (int j = 0; j < count; ++j) {
-                                        n = xs.indexOf(',', idx);
-                                        px.add((short)Integer.parseInt(n >= 0 ? xs.substring(idx, n) : xs.substring(idx)));
-                                        idx = n + 1;
-                                    }
-                                    idx = 0;
-                                    for (int j = 0; j < count; ++j) {
-                                        n = ys.indexOf(',', idx);
-                                        py.add((short)Integer.parseInt(n >= 0 ? ys.substring(idx, n) : ys.substring(idx)));
-                                        idx = n + 1;
-                                    }
-                                    gdArray[provinceID] = new Province_GameData2(-1, px, py, null, new ArrayList<Short>(), new ArrayList<Short>());
-                                    usedFallback[provinceID] = true;
-                                } catch (Exception e2) {
-                                    usedFallback[provinceID] = true;
-                                }
-                            }
-                        } catch (Exception e) {
-                            usedFallback[provinceID] = true;
+                    gdArray[provinceID] = (Province_GameData2)CFG.deserialize(f.readBytes());
+                } catch (Exception e) {
+                    try {
+                        FileHandle uf = FileManager.loadFile(baseUpdatePath + provinceID);
+                        String text = uf.readString();
+                        int semi = text.indexOf(';');
+                        String xs = semi >= 0 ? text.substring(0, semi) : "";
+                        String ys = semi >= 0 ? text.substring(semi + 1) : "";
+                        int count = 0;
+                        int idx = 0, n;
+                        while ((n = xs.indexOf(',', idx)) >= 0) { count++; idx = n + 1; }
+                        if (xs.length() > 0) count++;
+                        ArrayList<Short> px = new ArrayList<Short>(count);
+                        ArrayList<Short> py = new ArrayList<Short>(count);
+                        idx = 0;
+                        for (int j = 0; j < count; ++j) {
+                            n = xs.indexOf(',', idx);
+                            px.add((short)Integer.parseInt(n >= 0 ? xs.substring(idx, n) : xs.substring(idx)));
+                            idx = n + 1;
                         }
+                        idx = 0;
+                        for (int j = 0; j < count; ++j) {
+                            n = ys.indexOf(',', idx);
+                            py.add((short)Integer.parseInt(n >= 0 ? ys.substring(idx, n) : ys.substring(idx)));
+                            idx = n + 1;
+                        }
+                        gdArray[provinceID] = new Province_GameData2(-1, px, py, null, new ArrayList<Short>(), new ArrayList<Short>());
+                        usedFallback[provinceID] = true;
+                    } catch (Exception e2) {
+                        usedFallback[provinceID] = true;
                     }
-                } finally {
-                    latch.countDown();
                 }
-            });
-        }
-
-        try { latch.await(); } catch (InterruptedException e) { CFG.exceptionStack(e); }
+            } catch (Exception e) {
+                usedFallback[provinceID] = true;
+            }
+        });
 
         try {
             java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream(numProvinces * 1024);
@@ -948,39 +934,27 @@ public class Core {
             }
         }
         
-        java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(numProvinces);
         Province_GameData2[] gdArray = new Province_GameData2[numProvinces];
         boolean[] usedFallback = new boolean[numProvinces];
-        
-        for (int i = 0; i < numProvinces; ++i) {
-            final int provinceID = i;
-            EXECUTOR.execute(() -> {
+        Parallel.range(0, numProvinces, provinceID -> {
+            try {
+                FileHandle fileProvinceData = FileManager.loadFile("map/" + CFG.map.getFileActiveMapPath() + "data/" + "provinces/" + provinceID);
                 try {
-                    FileHandle fileProvinceData = FileManager.loadFile("map/" + CFG.map.getFileActiveMapPath() + "data/" + "provinces/" + provinceID);
-                    try {
-                        Province_GameData2 gd = (Province_GameData2)CFG.deserialize(fileProvinceData.readBytes());
-                        Province p = new Province(provinceID, gd);
-                        synchronized (Core.this.lProvs) {
-                            Core.this.lProvs.set(provinceID, p);
-                        }
-                        gdArray[provinceID] = gd;
-                    } catch (Exception e) {
-                        Core.this.build_LoadProvince_ThreadSafe(provinceID);
-                        usedFallback[provinceID] = true;
+                    Province_GameData2 gd = (Province_GameData2)CFG.deserialize(fileProvinceData.readBytes());
+                    Province p = new Province(provinceID, gd);
+                    synchronized (Core.this.lProvs) {
+                        Core.this.lProvs.set(provinceID, p);
                     }
+                    gdArray[provinceID] = gd;
                 } catch (Exception e) {
                     Core.this.build_LoadProvince_ThreadSafe(provinceID);
                     usedFallback[provinceID] = true;
-                } finally {
-                    latch.countDown();
                 }
-            });
-        }
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            CFG.exceptionStack(e);
-        }
+            } catch (Exception e) {
+                Core.this.build_LoadProvince_ThreadSafe(provinceID);
+                usedFallback[provinceID] = true;
+            }
+        });
         this.updateProvincesSize();
         
         try {
@@ -1616,46 +1590,23 @@ public class Core {
         if (count <= 0) return;
         final byte[][] cache = provinceTextureDataCache;
         if (cache == null) return;
-        int maxProcessors = CFG.isAndroid() ? Math.min(8, Math.max(2, Runtime.getRuntime().availableProcessors() - 1)) : Runtime.getRuntime().availableProcessors();
-        int processors = Math.max(1, Math.min(maxProcessors, count));
-        int chunkSize = Math.max(1, (count + processors - 1) / processors);
-        java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(processors);
         java.util.concurrent.atomic.AtomicInteger decoded = new java.util.concurrent.atomic.AtomicInteger(0);
         java.util.concurrent.atomic.AtomicInteger nullDecoded = new java.util.concurrent.atomic.AtomicInteger(0);
-        for (int t = 0; t < processors; ++t) {
-            final int chunkStart = start + t * chunkSize;
-            final int chunkEnd = Math.min(chunkStart + chunkSize, end);
-            if (chunkStart >= chunkEnd) {
-                latch.countDown();
-                continue;
-            }
-            EXECUTOR.execute(() -> {
-                try {
-                    for (int i = chunkStart; i < chunkEnd; ++i) {
-                        try {
-                            if (cache[i] != null) {
-                                Pixmap pixmap = Core.readCIMFromBytes(cache[i]);
-                                if (pixmap != null) {
-                                    ProvinceAtlas.addProvince(i, pixmap);
-                                    decoded.incrementAndGet();
-                                    pixmap.dispose();
-                                } else {
-                                    nullDecoded.incrementAndGet();
-                                }
-                            }
-                        }
-                        catch (Exception ex) {}
+        Parallel.range(start, end, i -> {
+            try {
+                if (cache[i] != null) {
+                    Pixmap pixmap = Core.readCIMFromBytes(cache[i]);
+                    if (pixmap != null) {
+                        ProvinceAtlas.addProvince(i, pixmap);
+                        decoded.incrementAndGet();
+                        pixmap.dispose();
+                    } else {
+                        nullDecoded.incrementAndGet();
                     }
-                } finally {
-                    latch.countDown();
                 }
-            });
-        }
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            CFG.exceptionStack(e);
-        }
+            } catch (Exception ex) {
+            }
+        });
         logProvinceTexture("Batch packed start=" + start + " end=" + end + " decoded=" + decoded.get() + " nullDecoded=" + nullDecoded.get() + " decodeFailures=" + provinceTextureDecodeFailures);
     }
     
@@ -7210,6 +7161,18 @@ lbl94:
     }
 
     public final void drawAllCivilizations_Flag_InCapitals_WithCrown(SpriteBatch oSB, float nScale) {
+        if (CFG.isAndroid()) {
+            VisibleProvinceCache.rebuildIfNeeded();
+            int n = VisibleProvinceCache.getVisibleCapitalCount();
+            if (n > 0) {
+                java.util.List<Integer> caps = VisibleProvinceCache.getVisibleCapitals();
+                for (int j = 0; j < n; j++) {
+                    int pid = caps.get(j);
+                    if (pid >= 0) this.drawProvinceFlag_Capital(oSB, pid, CFG.COLOR_ARMYBG, CFG.COLOR_ARMY_TEXT, nScale);
+                }
+            }
+            return;
+        }
         for (int i = 1; i < this.getCivsSize(); ++i) {
             if (this.getCiv(i).getCapitalProvID() < 0 || this.getProv(this.getCiv(i).getCapitalProvID()).getCivId() != i || !this.getProv(this.getCiv(i).getCapitalProvID()).getDrawProv()) continue;
             this.drawProvinceFlag_Capital(oSB, this.getCiv(i).getCapitalProvID(), CFG.COLOR_ARMYBG, CFG.COLOR_ARMY_TEXT, nScale);
@@ -7217,6 +7180,10 @@ lbl94:
     }
 
     public final void drawAllCivilizations_Flag_InCapitals_WithCrown_Sea(SpriteBatch oSB, float nScale) {
+        if (CFG.isAndroid()) {
+            this.drawAllCivilizations_Flag_InCapitals_WithCrown(oSB, nScale);
+            return;
+        }
         for (int i = 1; i < this.getCivsSize(); ++i) {
             if (this.getCiv(i).getCapitalProvID() < 0 || this.getProv(this.getCiv(i).getCapitalProvID()).getCivId() != i || !this.getProv(this.getCiv(i).getCapitalProvID()).getDrawProv()) continue;
             this.drawProvinceFlag_Capital(oSB, this.getCiv(i).getCapitalProvID(), CFG.COLOR_ARMYBG, CFG.COLOR_ARMY_TEXT, nScale);

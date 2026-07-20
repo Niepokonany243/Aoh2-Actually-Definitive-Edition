@@ -33,12 +33,10 @@ import age.of.civilizations2.jakowski.lukasz.Render;
 import age.of.civilizations2.jakowski.lukasz.Renderer;
 import age.of.civilizations2.jakowski.lukasz.RendererSpriteBatch;
 import age.of.civilizations2.jakowski.lukasz.SFXManager;
-import age.of.civilizations2.jakowski.lukasz.Steam_Game;
 import age.of.civilizations2.jakowski.lukasz.Touch;
 import age.of.civilizations2.jakowski.lukasz.TouchManager;
 import age.of.civilizations2.jakowski.lukasz.View;
 import age.of.civilizations2.jakowski.lukasz.Z_Other.ConfigINI;
-import age.of.civilizations2.jakowski.lukasz.Z_Other.ST.sUM;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -50,13 +48,13 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.CpuSpriteBatch;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.codedisaster.steamworks.SteamAPI;
 import java.util.List;
 
 public class AoCGame {
@@ -97,7 +95,6 @@ public class AoCGame {
     private long lScrollTime_MAP = 0L;
     private float iScroll_MAPY = 12.0f;
     private long lScrollTime_MAPY = 0L;
-    public static Steam_Game steamGame;
     public static final int TYPE_NUMBER_RESET_TIME = 625;
     public static long TYPE_NUMER_TIME;
     public static int TYPE_NUMBER;
@@ -146,7 +143,7 @@ public class AoCGame {
         boolean continuous = this.shouldAndroidRenderContinuously();
         long now = System.currentTimeMillis();
         if (continuous) {
-            this.androidContinuousUntil = now + 250L;
+            this.androidContinuousUntil = now + 1000L;
         } else {
             continuous = now < this.androidContinuousUntil;
         }
@@ -206,6 +203,8 @@ public class AoCGame {
         if (CFG.isAndroid()) {
             CFG.LOG_PERF = true;
             CFG.LOG_PERF_VERBOSE = false;
+            AndroidPerfTracer.setEnabled(true);
+            AndroidPerfTracer.setVerbose(false);
         }
         CFG.LANDSCAPE = ConfigINI.landscape;
         if (CFG.isAndroid()) {
@@ -246,7 +245,7 @@ public class AoCGame {
         this.updateRequestRendering(true);
         CFG.loadSettings();
         if (CFG.isAndroid()) {
-            Gdx.graphics.setForegroundFPS(120);
+            Gdx.graphics.setForegroundFPS(0);
         }
         Gdx.graphics.setContinuousRendering(true);
         RankingSettings.load();
@@ -256,8 +255,11 @@ public class AoCGame {
         }
         if (ConfigINI.iUIScale <= 0) {
             if (CFG.isAndroid()) {
-                CFG.XHDPI = Gdx.graphics.getPpiX() >= 300.0f || CFG.GAMEWIDTH >= 1200 || CFG.GAMEHEIGHT >= 1200;
-                CFG.XXHDPI = Gdx.graphics.getPpiX() >= 380.0f || CFG.GAMEWIDTH >= 1800 || CFG.GAMEHEIGHT >= 1800;
+                float mobilePpi = Math.max(Gdx.graphics.getPpiX(), Gdx.graphics.getPpiY());
+                int longSide = Math.max(CFG.GAMEWIDTH, CFG.GAMEHEIGHT);
+                CFG.XHDPI = mobilePpi >= 280.0f || longSide >= 1200;
+                CFG.XXHDPI = mobilePpi >= 380.0f || longSide >= 1800;
+                CFG.XXXHDPI = mobilePpi >= 480.0f || longSide >= 2600;
             } else if (CFG.getIsDesktop()) {
                 CFG.XHDPI = CFG.GAMEWIDTH >= 2400;
             }
@@ -282,13 +284,11 @@ public class AoCGame {
             CFG.XXHDPI = true;
             CFG.XXXHDPI = true;
         }
-        this.oSB.oSBR = new SpriteBatch();
-        this.oSBNames = new SpriteBatch();
+        this.oSB.oSBR = CFG.isAndroid() ? new CpuSpriteBatch(8191) : new SpriteBatch();
+        this.oSBNames = CFG.isAndroid() ? new CpuSpriteBatch(8191) : new SpriteBatch();
         this.initInput();
         Gdx.input.setCatchKey(Input.Keys.BACK, true);
-        if (CFG.getIsDesktop()) {
-            Platform.init();
-        }
+        Platform.init();
         Images.btnMenuH = IMGManager.addIMG("UI/" + CFG.getResPath() + "buttons/" + "menu.png");
         Images.btnClear = IMGManager.addIMG("UI/" + CFG.getResPath() + "buttons/" + "clear.png");
         Images.btnClose = IMGManager.addIMG("UI/" + CFG.getResPath() + "buttons/" + "close.png");
@@ -312,6 +312,10 @@ public class AoCGame {
         CFG.BUTTON_W = CFG.XXXHDPI ? 180 : (CFG.XXHDPI ? 160 : (CFG.XHDPI ? 120 : 90));
         CFG.GUI_SCALE = 100.0f * (float)CFG.BUTTON_H / 68.0f / 100.0f;
         CFG.PADD = (int)(5.0f * CFG.GUI_SCALE);
+        if (CFG.isAndroid()) {
+            CFG.PADD = Math.max(CFG.PADD, (int)(6.0f * CFG.GUI_SCALE));
+            CFG.BUTTON_W = Math.max(CFG.BUTTON_W, (int)(96.0f * CFG.GUI_SCALE));
+        }
         CFG.CIV_INFO_MENU_WIDTH = (int)((float)CFG.CIV_INFO_MENU_WIDTH * CFG.GUI_SCALE);
         CFG.CIV_COLOR_W = (int)((float)CFG.CIV_COLOR_W * CFG.GUI_SCALE);
         CFG.SERVICE_RIBBON_WIDTH = (int)((float)CFG.SERVICE_RIBBON_WIDTH * CFG.GUI_SCALE);
@@ -351,9 +355,12 @@ public class AoCGame {
         shaderDef = new ShaderProgram(defaultVertex, defaultFragment);
         blackWhiteShdr = new ShaderProgram(defaultVertex, blackWhiteFragment);
         nextPlayerTurnShdr = new ShaderProgram(nextPlayerTurnVertex, nextPlayerTurnFragment);
+        ProvinceBorder.initBatch();
         AoCGame.loadCursor(true);
-        steamGame = new Steam_Game();
         Menu_InGame_2.initTopBox();
+        if (CFG.isAndroid()) {
+            VisibleProvinceCache.init();
+        }
     }
 
     public static final void loadCursor(boolean inInit) {
@@ -405,188 +412,92 @@ public class AoCGame {
 
     public void render() {
         long renderStart = System.currentTimeMillis();
-        try {
-            this.update();
-            this.updateMoveMap();
-        }
-        catch (Exception ex) {
-        }
-        long perfUpdate = System.currentTimeMillis();
-        long perfPhase1 = 0L;
-        long perfPhase2 = 0L;
-        long perfPhase3 = 0L;
-        long perfPhase4 = 0L;
+        if (CFG.isAndroid()) AndroidPerfTracer.beginFrame();
+        try { this.update(); this.updateMoveMap(); } catch (Exception ex) {}
+        long perfPhase1 = 0L, perfPhase2 = 0L, perfPhase3 = 0L, perfPhase4 = 0L;
         if (CFG.core != null) {
-            try {
-                ProvinceBorder.drawProvBorder_Prepare();
-            }
-            catch (Exception ex) {
-            }
-            try {
-                long phaseStart = System.currentTimeMillis();
-                Gdx.gl.glClearColor(CFG.BG_COLOR.r, CFG.BG_COLOR.g, CFG.BG_COLOR.b, CFG.BG_COLOR.a);
-                Gdx.gl.glClear(16640);
-                viewport.setWorldSize((float)CFG.GAMEWIDTH / CFG.map.getMpS().getCurrSc(), (float)CFG.GAMEHEIGHT / CFG.map.getMpS().getCurrSc());
-                viewport.apply();
-                cameraOrt.setToOrtho(true, (float)CFG.GAMEWIDTH / CFG.map.getMpS().getCurrSc(), (float)(-CFG.GAMEHEIGHT) / CFG.map.getMpS().getCurrSc());
-                this.oSB.oSBR.setProjectionMatrix(AoCGame.cameraOrt.combined);
-                Renderer.oSBBorder2.oSBR.setProjectionMatrix(AoCGame.cameraOrt.combined);
+            try { ProvinceBorder.drawProvBorder_Prepare(); } catch (Exception ex) {}
+            {
                 try {
-                    this.oSB.end();
-                }
-                catch (Exception ex) {
-                    
-                }
-                try {
-                    Renderer.oSBBorder2.end();
-                }
-                catch (Exception ex) {
-                    
-                }
-                this.oSB.begin();
-                try {
-                    Renderer.oSBBorder2.begin();
-                }
-                catch (Exception ex) {
-                    
-                }
-                this.oSB.oSBR.setShader(shaderDef);
-                Render.draw(this.oSB.oSBR);
-                perfPhase1 = System.currentTimeMillis() - phaseStart;
-                this.oSB.end();
-                try {
-                    Renderer.oSBBorder2.end();
-                }
-                catch (Exception ex) {
-                    
-                }
-                cameraOrt.setToOrtho(false, CFG.GAMEWIDTH, -CFG.GAMEHEIGHT);
-                viewport.setWorldSize(CFG.GAMEWIDTH, CFG.GAMEHEIGHT);
-                viewport.apply();
-                this.oSB.oSBR.setProjectionMatrix(AoCGame.cameraOrt.combined);
-                this.oSBNames.setProjectionMatrix(AoCGame.cameraOrt.combined);
-                Renderer.oSBBorder2.oSBR.setProjectionMatrix(AoCGame.cameraOrt.combined);
-                try {
-                    this.oSB.end();
-                }
-                catch (Exception ex) {
-                    
-                }
-                try {
-                    Renderer.oSBBorder2.end();
-                }
-                catch (Exception ex) {
-                    
-                }
-                this.oSB.begin();
-                try {
-                    this.oSBNames.begin();
-                }
-                catch (Exception ex) {
+                    long phaseStart = System.currentTimeMillis();
+                    Gdx.gl.glClearColor(CFG.BG_COLOR.r, CFG.BG_COLOR.g, CFG.BG_COLOR.b, CFG.BG_COLOR.a);
+                    Gdx.gl.glClear(16640);
+                    viewport.setWorldSize((float)CFG.GAMEWIDTH / CFG.map.getMpS().getCurrSc(), (float)CFG.GAMEHEIGHT / CFG.map.getMpS().getCurrSc());
+                    viewport.apply();
+                    cameraOrt.setToOrtho(true, (float)CFG.GAMEWIDTH / CFG.map.getMpS().getCurrSc(), (float)(-CFG.GAMEHEIGHT) / CFG.map.getMpS().getCurrSc());
+                    this.oSB.oSBR.setProjectionMatrix(AoCGame.cameraOrt.combined);
+                    Renderer.oSBBorder2.oSBR.setProjectionMatrix(AoCGame.cameraOrt.combined);
+                    if (this.oSB.oSBR.isDrawing()) this.oSB.end();
+                    if (Renderer.oSBBorder2.oSBR.isDrawing()) Renderer.oSBBorder2.end();
+                    this.oSB.begin();
+                    if (!Renderer.oSBBorder2.oSBR.isDrawing()) Renderer.oSBBorder2.begin();
+                    this.oSB.oSBR.setShader(shaderDef);
+                    if (CFG.isAndroid()) { AndroidPerfTracer.beginPhase(); Render.draw(this.oSB.oSBR); AndroidPerfTracer.endPhase("WorldScaled"); }
+                    else { Render.draw(this.oSB.oSBR); }
+                    perfPhase1 = System.currentTimeMillis() - phaseStart;
+                    if (this.oSB.oSBR.isDrawing()) this.oSB.end();
+                    if (Renderer.oSBBorder2.oSBR.isDrawing()) Renderer.oSBBorder2.end();
+                    cameraOrt.setToOrtho(false, CFG.GAMEWIDTH, -CFG.GAMEHEIGHT);
+                    viewport.setWorldSize(CFG.GAMEWIDTH, CFG.GAMEHEIGHT);
+                    viewport.apply();
+                    this.oSB.oSBR.setProjectionMatrix(AoCGame.cameraOrt.combined);
+                    this.oSBNames.setProjectionMatrix(AoCGame.cameraOrt.combined);
+                    Renderer.oSBBorder2.oSBR.setProjectionMatrix(AoCGame.cameraOrt.combined);
+                    if (this.oSB.oSBR.isDrawing()) this.oSB.end();
+                    if (Renderer.oSBBorder2.oSBR.isDrawing()) Renderer.oSBBorder2.end();
+                    this.oSB.begin();
+                    if (!this.oSBNames.isDrawing()) this.oSBNames.begin();
+                    if (!Renderer.oSBBorder2.oSBR.isDrawing()) Renderer.oSBBorder2.begin();
+                    if (CFG.isAndroid()) AndroidPerfTracer.beginPhase();
+                    long phase2Start = System.currentTimeMillis();
+                    Render.drawWithoutScale(this.oSB.oSBR, this.oSBNames);
+                    if (CFG.isAndroid()) AndroidPerfTracer.endPhase("DrawWithoutScale");
+                    perfPhase2 = System.currentTimeMillis() - phase2Start;
+                    if (this.oSB.oSBR.isDrawing()) this.oSB.end();
+                    if (this.oSBNames.isDrawing()) this.oSBNames.end();
+                    if (Renderer.oSBBorder2.oSBR.isDrawing()) Renderer.oSBBorder2.end();
+                    viewport.setWorldSize((float)CFG.GAMEWIDTH / CFG.map.getMpS().getCurrSc(), (float)CFG.GAMEHEIGHT / CFG.map.getMpS().getCurrSc());
+                    viewport.apply();
+                    cameraOrt.setToOrtho(true, (float)CFG.GAMEWIDTH / CFG.map.getMpS().getCurrSc(), (float)(-CFG.GAMEHEIGHT) / CFG.map.getMpS().getCurrSc());
+                    this.oSB.oSBR.setProjectionMatrix(AoCGame.cameraOrt.combined);
+                    Renderer.oSBBorder2.oSBR.setProjectionMatrix(AoCGame.cameraOrt.combined);
+                    if (this.oSB.oSBR.isDrawing()) this.oSB.end();
+                    if (Renderer.oSBBorder2.oSBR.isDrawing()) Renderer.oSBBorder2.end();
+                    this.oSB.begin();
+                    if (!Renderer.oSBBorder2.oSBR.isDrawing()) Renderer.oSBBorder2.begin();
+                    long phase3Start = System.currentTimeMillis();
+                    this.oSB.oSBR.setShader(shaderDef);
+                    if (CFG.isAndroid()) AndroidPerfTracer.beginPhase();
+                    Render.drawMapDetails(this.oSB.oSBR);
+                    CFG.cloudsAnimation.cloudsInterface.drawCloudsInterface(this.oSB.oSBR);
+                    if (CFG.isAndroid()) AndroidPerfTracer.endPhase("Overlays");
+                    perfPhase3 = System.currentTimeMillis() - phase3Start;
+                    if (this.oSB.oSBR.isDrawing()) this.oSB.end();
+                    if (Renderer.oSBBorder2.oSBR.isDrawing()) Renderer.oSBBorder2.end();
+                } catch (IllegalStateException ex) {
                     CFG.exceptionStack(ex);
-                }
-                try {
-                    Renderer.oSBBorder2.begin();
-                }
-                catch (Exception ex) {
-                    
-                }
-                long phase2Start = System.currentTimeMillis();
-                Render.drawWithoutScale(this.oSB.oSBR, this.oSBNames);
-                perfPhase2 = System.currentTimeMillis() - phase2Start;
-                this.oSB.end();
-                try {
-                    this.oSBNames.end();
-                }
-                catch (Exception ex) {
+                    try { if (this.oSB.oSBR.isDrawing()) this.oSB.end(); } catch (Exception ex2) {}
+                } catch (Exception ex) {
                     CFG.exceptionStack(ex);
-                }
-                try {
-                    Renderer.oSBBorder2.end();
-                }
-                catch (Exception ex) {
-                    
-                }
-                viewport.setWorldSize((float)CFG.GAMEWIDTH / CFG.map.getMpS().getCurrSc(), (float)CFG.GAMEHEIGHT / CFG.map.getMpS().getCurrSc());
-                viewport.apply();
-                cameraOrt.setToOrtho(true, (float)CFG.GAMEWIDTH / CFG.map.getMpS().getCurrSc(), (float)(-CFG.GAMEHEIGHT) / CFG.map.getMpS().getCurrSc());
-                this.oSB.oSBR.setProjectionMatrix(AoCGame.cameraOrt.combined);
-                Renderer.oSBBorder2.oSBR.setProjectionMatrix(AoCGame.cameraOrt.combined);
-                try {
-                    this.oSB.end();
-                }
-                catch (Exception ex) {
-                    
-                }
-                try {
-                    Renderer.oSBBorder2.end();
-                }
-                catch (Exception ex) {
-                    
-                }
-                this.oSB.begin();
-                try {
-                    Renderer.oSBBorder2.begin();
-                }
-                catch (Exception ex) {
-                    
-                }
-                long phase3Start = System.currentTimeMillis();
-                this.oSB.oSBR.setShader(shaderDef);
-                Render.drawMapDetails(this.oSB.oSBR);
-                CFG.cloudsAnimation.cloudsInterface.drawCloudsInterface(this.oSB.oSBR);
-                perfPhase3 = System.currentTimeMillis() - phase3Start;
-                this.oSB.end();
-                try {
-                    Renderer.oSBBorder2.end();
-                }
-                catch (Exception ex) {
-                    
-                }
-                cameraOrt.setToOrtho(false, CFG.GAMEWIDTH, -CFG.GAMEHEIGHT);
-                viewport.setWorldSize(CFG.GAMEWIDTH, CFG.GAMEHEIGHT);
-                viewport.apply();
-                this.oSB.oSBR.setProjectionMatrix(AoCGame.cameraOrt.combined);
-                Renderer.oSBBorder2.oSBR.setProjectionMatrix(AoCGame.cameraOrt.combined);
-                try {
-                    this.oSB.end();
-                }
-                catch (Exception ex) {
-                    
-                }
-                long phase4Start = System.currentTimeMillis();
-                this.oSB.begin();
-                this.oSB.oSBR.setColor(Color.WHITE);
-                CFG.menus.drawMM(this.oSB.oSBR);
-                CFG.editorManager.draw(this.oSB.oSBR);
-                if (drawFPS) {
-                    try {
-                        CFG.drawTextDefaultWithShadow(this.oSB.oSBR, "FPS: " + CFG.iNumOfFPS, CFG.PADD * 2, CFG.PADD * 2, Color.WHITE);
-                    }
-                    catch (Exception ex) {
-                        
-                    }
-                }
-                this.oSB.oSBR.setColor(Color.WHITE);
-                this.oSB.end();
-                perfPhase4 = System.currentTimeMillis() - phase4Start;
-            }
-            catch (IllegalStateException ex) {
-                CFG.exceptionStack(ex);
-                try {
-                    this.oSB.end();
-                }
-                catch (IllegalStateException illegalStateException) {}
-            }
-            catch (Exception ex) {
-                CFG.exceptionStack(ex);
-                try {
-                    this.oSB.end();
-                }
-                catch (Exception exception) {
-                    
+                    try { if (this.oSB.oSBR.isDrawing()) this.oSB.end(); } catch (Exception ex2) {}
                 }
             }
+            if (CFG.isAndroid()) AndroidPerfTracer.beginPhase();
+            long phase4Start = System.currentTimeMillis();
+            cameraOrt.setToOrtho(false, CFG.GAMEWIDTH, -CFG.GAMEHEIGHT);
+            viewport.setWorldSize(CFG.GAMEWIDTH, CFG.GAMEHEIGHT);
+            viewport.apply();
+            this.oSB.oSBR.setProjectionMatrix(AoCGame.cameraOrt.combined);
+            Renderer.oSBBorder2.oSBR.setProjectionMatrix(AoCGame.cameraOrt.combined);
+            this.oSB.begin();
+            this.oSB.oSBR.setColor(Color.WHITE);
+            CFG.menus.drawMM(this.oSB.oSBR);
+            CFG.editorManager.draw(this.oSB.oSBR);
+            if (drawFPS) { try { CFG.drawTextDefaultWithShadow(this.oSB.oSBR, "FPS: " + CFG.iNumOfFPS, CFG.PADD * 2, CFG.PADD * 2, Color.WHITE); } catch (Exception ex) {} }
+            this.oSB.oSBR.setColor(Color.WHITE);
+            this.oSB.end();
+            if (CFG.isAndroid()) AndroidPerfTracer.endPhase("MenuMM");
+            perfPhase4 = System.currentTimeMillis() - phase4Start;
         } else {
             try {
                 Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -597,27 +508,14 @@ public class AoCGame {
                 this.oSB.oSBR.setProjectionMatrix(AoCGame.cameraOrt.combined);
                 this.oSB.begin();
                 this.oSB.oSBR.setColor(Color.WHITE);
-                if (CFG.menus != null) {
-                    CFG.menus.drawMM(this.oSB.oSBR);
-                }
+                if (CFG.menus != null) CFG.menus.drawMM(this.oSB.oSBR);
                 this.oSB.end();
-            } catch (Exception ex) {
-                try {
-                    this.oSB.end();
-                } catch (Exception e2) {}
-            }
-        }
-        if (CFG.getIsDesktop()) {
-            
+            } catch (Exception ex) { try { if (this.oSB.oSBR.isDrawing()) this.oSB.end(); } catch (Exception e2) {} }
         }
         this.updateAndroidRenderMode();
         this.requestRendering.update();
-        long renderEnd = System.currentTimeMillis();
-        long renderTotalMs = renderEnd - renderStart;
-        long perfThreshold = CFG.isAndroid() ? 100L : 50L;
-        if (renderTotalMs > perfThreshold && (CFG.LOG_PERF_VERBOSE || CFG.getIsDesktop())) {
-            CFG.LOG("PERF", "[render] TOTAL: " + renderTotalMs + "ms (update: " + (perfUpdate - renderStart) + "ms) [phase1_map:" + perfPhase1 + "ms][phase2_overlay:" + perfPhase2 + "ms][phase3_details:" + perfPhase3 + "ms][phase4_ui:" + perfPhase4 + "ms]");
-        }
+        if (CFG.isAndroid()) AndroidPerfTracer.endFrame();
+        long renderTotalMs = System.currentTimeMillis() - renderStart;
         perfRenderTotalNs += renderTotalMs;
         if (++perfRenderCount >= 300) {
             if (CFG.LOG_PERF) {
@@ -626,11 +524,7 @@ public class AoCGame {
                 long used = (rt.totalMemory() - rt.freeMemory()) / 1048576L;
                 long totalMem = rt.totalMemory() / 1048576L;
                 long maxMem = rt.maxMemory() / 1048576L;
-                if (CFG.LOG_PERF_VERBOSE || avgMs > 50) {
-                    CFG.LOG("PERF", "[avg] " + avgMs + "ms/frame over " + perfRenderCount + " frames  mem=" + used + "/" + totalMem + "/" + maxMem + "MB  fps=" + CFG.iNumOfFPS);
-                } else {
-                    CFG.LOG("PERF", "[avg] " + avgMs + "ms/frame over " + perfRenderCount + " frames  mem=" + used + "/" + totalMem + "/" + maxMem + "MB");
-                }
+                CFG.LOG("PERF", "[avg] " + avgMs + "ms/frame over " + perfRenderCount + " frames  mem=" + used + "/" + totalMem + "/" + maxMem + "MB" + (avgMs > 50 ? "  fps=" + CFG.iNumOfFPS : ""));
             }
             perfRenderTotalNs = 0;
             perfRenderCount = 0;
@@ -664,13 +558,10 @@ public class AoCGame {
 
     public void dispose() {
         try {
-            if (CFG.getIsDesktop()) {
-                sUM.sU.dispose();
-                sUM.sUT.dispose();
-                sUM.sUI.dispose();
-                SteamAPI.shutdown();
-            }
+            Platform.shutdown();
+            ProvinceBorder.disposeBatch();
             this.oSB.oSBR.dispose();
+            this.oSBNames.dispose();
             Renderer.oSBBorder2.oSBR.dispose();
             try {
                 for (int a = 0; a < CFG.fontMain.size(); ++a) {
@@ -750,20 +641,9 @@ public class AoCGame {
                 CFG.exceptionStack(ex);
             }
             try {
-                if (GameValues.gvInGame.USE_NEW_TREAD_TURN_ACTION) {
-                    CFG.gameAction.turnThreadNewTurn.interrupt();
-                }
+                VisibleProvinceCache.dispose();
             }
             catch (Exception ex) {
-                CFG.exceptionStack(ex);
-            }
-            try {
-                if (GameValues.gvInGame.USE_NEW_TREAD_TURN_ACTION) {
-                    CFG.gameAction.turnThreadActions.interrupt();
-                }
-            }
-            catch (Exception ex) {
-                CFG.exceptionStack(ex);
             }
         }
         catch (Exception ex) {

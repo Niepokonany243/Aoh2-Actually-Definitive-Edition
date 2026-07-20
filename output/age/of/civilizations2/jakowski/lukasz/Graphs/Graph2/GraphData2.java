@@ -66,44 +66,10 @@ public class GraphData2 {
         block13: {
             try {
                 try {
-                    oSB.setColor(new Color(CFG.core.getCiv(this.iCivID).getR(), CFG.core.getCiv(this.iCivID).getG(), CFG.core.getCiv(this.iCivID).getB(), active ? 1.0f : 0.8f));
+                    oSB.setColor(CFG.core.getCiv(this.iCivID).getR(), CFG.core.getCiv(this.iCivID).getG(), CFG.core.getCiv(this.iCivID).getB(), active ? 1.0f : 0.8f);
                 }
                 catch (Exception ex) {
-                    oSB.setColor(new Color(0.05882353f, 0.05882353f, 0.05882353f, active ? 1.0f : 0.8f));
-                }
-                try {
-                    Renderer.oSBBorder2.end();
-                }
-                catch (Exception ex) {
-                    CFG.exceptionStack(ex);
-                }
-                try {
-                    Renderer.oSBBorder2.begin();
-                }
-                catch (Exception ex) {
-                    CFG.exceptionStack(ex);
-                }
-                if (this.lVectorPoints.size <= 1) break block13;
-                Array<Vector2> nPath = new Array<Vector2>();
-                nPath.add(new Vector2((float)iPosX + this.lVectorPoints.get((int)0).x, (float)(-iPosY) + -this.lVectorPoints.get((int)0).y));
-                int iSize = this.lVectorPoints.size;
-                for (int i = 1; i < iSize; ++i) {
-                    if (this.lVectorPoints.get((int)i).x == this.lVectorPoints.get((int)(i - 1)).x) continue;
-                    nPath.add(new Vector2((float)iPosX + this.lVectorPoints.get((int)i).x, (float)(-iPosY) + -this.lVectorPoints.get((int)i).y));
-                }
-                
-                
-                try {
-                    Renderer.oSBBorder2.end();
-                }
-                catch (Exception ex) {
-                    CFG.exceptionStack(ex);
-                }
-                try {
-                    Renderer.oSBBorder2.begin();
-                }
-                catch (Exception ex) {
-                    CFG.exceptionStack(ex);
+                    oSB.setColor(0.05882353f, 0.05882353f, 0.05882353f, active ? 1.0f : 0.8f);
                 }
             }
             catch (Exception ex) {
@@ -113,17 +79,21 @@ public class GraphData2 {
     }
 
     protected final void drawCivButton(SpriteBatch oSB, int iPosX, int iPosY, boolean active) {
-        oSB.setColor(new Color(Graph2.GRAPH_BG_COLOR.r, Graph2.GRAPH_BG_COLOR.g, Graph2.GRAPH_BG_COLOR.b, active ? Graph2.GRAPH_BG_COLOR.a * 2.0f : (this.drawData ? Graph2.GRAPH_BG_COLOR.a : Graph2.GRAPH_BG_COLOR.a / 4.0f)));
+        oSB.setColor(Graph2.GRAPH_BG_COLOR.r, Graph2.GRAPH_BG_COLOR.g, Graph2.GRAPH_BG_COLOR.b, active ? Graph2.GRAPH_BG_COLOR.a * 2.0f : (this.drawData ? Graph2.GRAPH_BG_COLOR.a : Graph2.GRAPH_BG_COLOR.a / 4.0f));
         Images.pix.draw(oSB, iPosX, iPosY, Graph2.getGraphButtonWidth(), Graph2.getGraphButtonHeight());
-        oSB.setColor(new Color(Graph2.GRAPH_BORDERS_COLOR.r, Graph2.GRAPH_BORDERS_COLOR.g, Graph2.GRAPH_BORDERS_COLOR.b, this.drawData ? Graph2.GRAPH_BORDERS_COLOR.a : 0.25f));
+        oSB.setColor(Graph2.GRAPH_BORDERS_COLOR.r, Graph2.GRAPH_BORDERS_COLOR.g, Graph2.GRAPH_BORDERS_COLOR.b, this.drawData ? Graph2.GRAPH_BORDERS_COLOR.a : 0.25f);
         try {
-            oSB.setColor(new Color(CFG.core.getCiv(this.iCivID).getR(), CFG.core.getCiv(this.iCivID).getG(), CFG.core.getCiv(this.iCivID).getB(), this.drawData ? 0.8f : 0.4f));
+            oSB.setColor(CFG.core.getCiv(this.iCivID).getR(), CFG.core.getCiv(this.iCivID).getG(), CFG.core.getCiv(this.iCivID).getB(), this.drawData ? 0.8f : 0.4f);
         }
         catch (IndexOutOfBoundsException ex) {
-            oSB.setColor(new Color(0.05882353f, 0.05882353f, 0.05882353f, this.drawData ? 0.8f : 0.4f));
+            oSB.setColor(0.05882353f, 0.05882353f, 0.05882353f, this.drawData ? 0.8f : 0.4f);
         }
         Images.pix.draw(oSB, iPosX, iPosY, CFG.CIV_COLOR_W, Graph2.getGraphButtonHeight());
-        oSB.setColor(this.drawData ? Color.WHITE : new Color(1.0f, 1.0f, 1.0f, 0.25f));
+        if (this.drawData) {
+            oSB.setColor(Color.WHITE);
+        } else {
+            oSB.setColor(1.0f, 1.0f, 1.0f, 0.25f);
+        }
         try {
             CFG.core.getCiv(this.iCivID).getFlagC().draw(oSB, iPosX + Graph2.getGraphButtonWidth() / 2 - CFG.CIV_FLAG_WIDTH / 2, iPosY + Graph2.getGraphButtonHeight() / 2 - CFG.CIV_FLAG_HEIGHT / 2, CFG.CIV_FLAG_WIDTH, CFG.CIV_FLAG_HEIGHT);
         }

@@ -52,8 +52,6 @@ import age.of.civilizations2.jakowski.lukasz.Report_Data;
 import age.of.civilizations2.jakowski.lukasz.SFXManager;
 import age.of.civilizations2.jakowski.lukasz.Save.SaveGameManager;
 import age.of.civilizations2.jakowski.lukasz.TechManager;
-import age.of.civilizations2.jakowski.lukasz.TurnThreads.Turn_ThreadActions;
-import age.of.civilizations2.jakowski.lukasz.TurnThreads.Turn_ThreadNewTurn;
 import age.of.civilizations2.jakowski.lukasz.VictoryManager;
 import age.of.civilizations2.jakowski.lukasz.View;
 import age.of.civilizations2.jakowski.lukasz.Z_Other.ST.sUM;
@@ -61,10 +59,12 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public class GameAction {
-    private NewTurn newTurnT;
-    private Actions actions;
+    private Future<?> newTurnTask;
+    private Future<?> actionsTask;
     public int eRTO_START = 0;
     public int eRTO_START2 = 0;
     public int eRTO_START3 = 0;
@@ -89,8 +89,24 @@ public class GameAction {
     public static boolean SKIP_ALL_COMBAT_MOVEMENT_ONCE = false;
     public boolean updatePosOfMap_NewTurn = false;
     public static boolean gameEnded = false;
-    public Turn_ThreadNewTurn turnThreadNewTurn;
-    public Turn_ThreadActions turnThreadActions;
+
+    private boolean taskCompletedSuccessfully(Future<?> task, String taskName) {
+        try {
+            task.get();
+            return true;
+        } catch (InterruptedException interrupted) {
+            Thread.currentThread().interrupt();
+            CFG.exceptionStack(interrupted);
+        } catch (ExecutionException failed) {
+            Throwable cause = failed.getCause();
+            CFG.exceptionStack(cause == null ? failed : cause);
+        }
+        try {
+            if (CFG.toastM != null) CFG.toastM.addM(taskName + " failed");
+        } catch (Exception ignored) {
+        }
+        return false;
+    }
 
     private final void updatePlayerData() {
         Player player = CFG.core.getPlayer(CFG.PLAYER_TURN_ID);
@@ -2917,6 +2933,13 @@ public class GameAction {
     }
 
     public final void nextTurn() {
+        if (this.actionsTask != null && this.actionsTask.isDone()) {
+            Future<?> completedTask = this.actionsTask;
+            this.actionsTask = null;
+            if (!this.taskCompletedSuccessfully(completedTask, "Turn actions")) {
+                throw new IllegalStateException("Turn actions failed; refusing to advance partial state");
+            }
+        }
         this.resetTurnData();
         this.hideAllViews();
         switch (this.activeTurnAction) {
@@ -2940,12 +2963,14 @@ public class GameAction {
                 return;
             }
             case LOADING_NEXT_TURN: {
-                if (GameValues.gvInGame.USE_NEW_TREAD_TURN_ACTION || CFG.isAndroid()) {
-                    if (this.turnThreadNewTurn != null && !this.turnThreadNewTurn.getProcessTurn()) {
+                if (this.newTurnTask != null && this.newTurnTask.isDone()) {
+                    Future<?> completedTask = this.newTurnTask;
+                    this.newTurnTask = null;
+                    if (this.taskCompletedSuccessfully(completedTask, "New turn")) {
                         this.startNewTurn_End();
+                    } else {
+                        throw new IllegalStateException("New turn failed; refusing to advance partial state");
                     }
-                } else if (this.newTurnT != null && !this.newTurnT.isAlive()) {
-                    this.startNewTurn_End();
                 }
                 return;
             }
@@ -2983,16 +3008,7 @@ public class GameAction {
         if (!CFG.getIsDesktop()) {
             Actions.runRevolts();
         }
-        if (GameValues.gvInGame.USE_NEW_TREAD_TURN_ACTION || CFG.isAndroid()) {
-            if (this.turnThreadActions == null) {
-                this.turnThreadActions = new age.of.civilizations2.jakowski.lukasz.TurnThreads.Turn_ThreadActions();
-                this.turnThreadActions.start();
-            }
-            this.turnThreadActions.triggerTurn();
-        } else {
-            this.actions = new Actions();
-            this.actions.start();
-        }
+        this.actionsTask = GameTaskScheduler.submit(Actions::doActions);
     }
 
     public final void startNewTurn() {
@@ -3005,16 +3021,7 @@ public class GameAction {
         }
         
         this.activeTurnAction = TurnStates.LOADING_NEXT_TURN;
-        if (GameValues.gvInGame.USE_NEW_TREAD_TURN_ACTION || CFG.isAndroid()) {
-            if (this.turnThreadNewTurn == null) {
-                this.turnThreadNewTurn = new age.of.civilizations2.jakowski.lukasz.TurnThreads.Turn_ThreadNewTurn();
-                this.turnThreadNewTurn.start();
-            }
-            this.turnThreadNewTurn.triggerTurn();
-        } else {
-            this.newTurnT = new NewTurn();
-            this.newTurnT.start();
-        }
+        this.newTurnTask = GameTaskScheduler.submit(NewTurn::doAction);
     }
 
     public final void startNewTurn_End() {
@@ -3401,6 +3408,9 @@ public class GameAction {
     }
 
     public final void loadActivePlayerData() {
+        if (CFG.isAndroid()) {
+            ProvinceMesh.markAllDirtyImmediate();
+        }
         if (CFG.FOG_OF_WAR > 0) {
             int i;
             if (CFG.FOG_OF_WAR == 2) {

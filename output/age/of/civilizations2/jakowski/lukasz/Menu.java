@@ -239,7 +239,6 @@ public class Menu {
             MenuElemUI elem = this.menuElem.get(i);
             if (!elem.getVisibleE() || !elem.getIsInView()) continue;
             
-            
             if (menuPosY + elem.getPosY() + elem.getHeightE() < parentPosY || menuPosY + elem.getPosY() > parentPosY + parentHeight) {
                 continue;
             }

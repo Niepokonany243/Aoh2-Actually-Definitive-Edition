@@ -72,6 +72,12 @@ public class FileManager {
 
             @Override
             public FileHandle loadFile(String sFile) {
+                for (int i = 0; i < sUM.sUFS; ++i) {
+                    FileHandle modFile = Gdx.files.local(sUM.sUF.get(i) + sFile);
+                    if (modFile.exists()) {
+                        return modFile;
+                    }
+                }
                 if (Gdx.files.local(sFile).exists()) {
                     return Gdx.files.local(sFile);
                 }

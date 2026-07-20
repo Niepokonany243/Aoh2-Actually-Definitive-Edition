@@ -11,22 +11,10 @@ import age.of.civilizations2.jakowski.lukasz.MoveUnitsB.MoveUnits;
 import age.of.civilizations2.jakowski.lukasz.MoveUnitsB.MoveUnits_Plunder;
 import java.util.stream.IntStream;
 
-public class Actions
-extends Thread {
-    @Override
-    public void run() {
-        if (CFG.isAndroid()) {
-            try {
-                Thread.currentThread().setPriority(Thread.NORM_PRIORITY - 2);
-            }
-            catch (Exception ex) {
-            }
-        }
-        Actions.doActions();
-    }
-
+public class Actions {
     
     public static void doActions() {
+        GameTaskScheduler.checkpoint();
         long perfStart = System.currentTimeMillis();
         long perfMark = perfStart;
         long time = System.nanoTime();
@@ -75,6 +63,7 @@ extends Thread {
             long perfNow2 = System.currentTimeMillis(); if (perfNow2 - perfMark > 50) { CFG.LOG("PERF", "[Actions] buildAI_Data: " + (perfNow2 - perfMark) + "ms"); } perfMark = perfNow2;
             time = System.nanoTime();
             try {
+                GameTaskScheduler.checkpoint();
                 CFG.oAI.turnOrders_0();
             }
             catch (Exception ex) {
@@ -113,6 +102,7 @@ extends Thread {
             long perfNow3 = System.currentTimeMillis(); if (perfNow3 - perfMark > 50) { CFG.LOG("PERF", "[Actions] turnOrders: " + (perfNow3 - perfMark) + "ms"); } perfMark = perfNow3;
             time = System.nanoTime();
             for (int civIndex = 1; civIndex < CFG.core.getCivsSize(); ++civIndex) {
+                GameTaskScheduler.checkpoint();
                 try {
                     Civilization civLambda = CFG.core.getCiv(civIndex);
                     int moveUnitsSize = civLambda.moveUnitsSize();

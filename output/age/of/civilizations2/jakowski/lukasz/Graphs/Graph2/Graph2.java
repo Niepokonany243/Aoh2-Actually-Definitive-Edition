@@ -441,9 +441,9 @@ lbl186:
     }
 
     public void drawBG(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive, boolean scrollableY) {
-        oSB.setColor(new Color(0.06666667f, 0.07450981f, 0.09019608f, 1.0f));
+        oSB.setColor(0.06666667f, 0.07450981f, 0.09019608f, 1.0f);
         Renderer.drawBox2(oSB, -2 + this.getPosXE() + iTranslateX, -2 + this.getPosY() + iTranslateY, 4 + this.getGraphWidth(), 4 + this.getHeightE(), 1.0f);
-        oSB.setColor(new Color(Colors.COLOR_GRADIENT_OVER_BLUE.r, Colors.COLOR_GRADIENT_OVER_BLUE.g, Colors.COLOR_GRADIENT_OVER_BLUE.b, 0.8f));
+        oSB.setColor(Colors.COLOR_GRADIENT_OVER_BLUE.r, Colors.COLOR_GRADIENT_OVER_BLUE.g, Colors.COLOR_GRADIENT_OVER_BLUE.b, 0.8f);
         IMGManager.getIMG(Images.gradientVertical).draw(oSB, this.getPosXE() + iTranslateX, this.getPosY() + iTranslateY, this.getGraphWidth(), this.getHeightE(), false, true);
         IMGManager.getIMG(Images.gradientXY).draw(oSB, this.getPosXE() + iTranslateX, this.getPosY() + iTranslateY, this.getGraphWidth(), this.getHeightE());
     }
