@@ -38,6 +38,7 @@ public class ProvinceBorder {
     private int provBorderLineSize;
     private int iLineWidth = 0;
     private short withProvinceID;
+    private final String animKey;
     public DrawProvBorder drawProvBorder;
     public List<Short> pX;
     public List<Short> pY;
@@ -67,6 +68,7 @@ public class ProvinceBorder {
         for (i = 0; i < this.provBorderLineSize; ++i) {
             this.iLineWidth += this.provBorderLine.get(i).getWidth();
         }
+        this.animKey = withProvinceID + "_" + this.iLineWidth;
         for (i = 0; i < this.provBorderLineSize; ++i) {
             this.nPath.add(new Vector2(this.provBorderLine.get(i).getPosX(), -this.provBorderLine.get(i).getPosY()));
         }
@@ -141,20 +143,20 @@ public class ProvinceBorder {
                 this.updateDrawProvinceBorder(nProvinceID);
             } else if (newState_IsCivBorder == this.civBorder) {
                 this.updateDrawProvinceBorder(nProvinceID);
-                CFG.PROVINCE_BORDER_ANIMATION_TIME.remove("" + this.getWithProvinceID() + "_" + this.iLineWidth);
+                CFG.PROVINCE_BORDER_ANIMATION_TIME.remove(this.animKey);
             } else if (this.provBorderLineSize == 1) {
                 this.civBorder = newState_IsCivBorder;
                 this.updateDrawProvinceBorder(nProvinceID);
             } else if (newState_IsCivBorder) {
-                CFG.PROVINCE_BORDER_ANIMATION_TIME.put("" + this.getWithProvinceID() + "_" + this.iLineWidth, System.currentTimeMillis());
+                CFG.PROVINCE_BORDER_ANIMATION_TIME.put(this.animKey, System.currentTimeMillis());
                 this.drawProvBorder = new DrawProvBorder(){
 
                     @Override
                     public void drawPB(SpriteBatch oSB, int nTranslateProvincePosX) {
-                        long tempTime = CFG.getPROVINCE_BORDER_ANIMATION_TIME("" + ProvinceBorder.this.getWithProvinceID() + "_" + ProvinceBorder.this.iLineWidth);
+                        long tempTime = CFG.getPROVINCE_BORDER_ANIMATION_TIME(ProvinceBorder.this.animKey);
                         float tempPerc = (float)(System.currentTimeMillis() - tempTime) / (float)GameValues.gvProvinceAnimation.PROVINCE_ANIMATION_OWNER_COLOR_INTERVAL;
                         if (tempPerc >= 1.0f) {
-                            CFG.PROVINCE_BORDER_ANIMATION_TIME.remove("" + ProvinceBorder.this.getWithProvinceID() + "_" + ProvinceBorder.this.iLineWidth);
+                            CFG.PROVINCE_BORDER_ANIMATION_TIME.remove(ProvinceBorder.this.animKey);
                             tempPerc = 0.99f;
                             ProvinceBorder.this.updateDrawProvinceBorder(-1);
                         }
@@ -162,15 +164,15 @@ public class ProvinceBorder {
                     }
                 };
             } else {
-                CFG.PROVINCE_BORDER_ANIMATION_TIME.put("" + this.getWithProvinceID() + "_" + this.iLineWidth, System.currentTimeMillis());
+                CFG.PROVINCE_BORDER_ANIMATION_TIME.put(this.animKey, System.currentTimeMillis());
                 this.drawProvBorder = new DrawProvBorder(){
 
                     @Override
                     public void drawPB(SpriteBatch oSB, int nTranslateProvincePosX) {
-                        long tempTime = CFG.getPROVINCE_BORDER_ANIMATION_TIME("" + ProvinceBorder.this.getWithProvinceID() + "_" + ProvinceBorder.this.iLineWidth);
+                        long tempTime = CFG.getPROVINCE_BORDER_ANIMATION_TIME(ProvinceBorder.this.animKey);
                         float tempPerc = (float)(System.currentTimeMillis() - tempTime) / (float)GameValues.gvProvinceAnimation.PROVINCE_ANIMATION_OWNER_COLOR_INTERVAL;
                         if (tempPerc >= 1.0f) {
-                            CFG.PROVINCE_BORDER_ANIMATION_TIME.remove("" + ProvinceBorder.this.getWithProvinceID() + "_" + ProvinceBorder.this.iLineWidth);
+                            CFG.PROVINCE_BORDER_ANIMATION_TIME.remove(ProvinceBorder.this.animKey);
                             tempPerc = 0.99f;
                             ProvinceBorder.this.updateDrawProvinceBorder(-1);
                         }
