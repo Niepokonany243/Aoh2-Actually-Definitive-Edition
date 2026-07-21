@@ -420,10 +420,25 @@ public class ProvinceMesh {
             a = CFG.settingsGD.COLOR_PROVINCE_DISCOVERY_ALPHA;
             fr = 1; fg = 1; fb = 1; fa = 1;
         } else if (diplomacyActive && p.getCivId() > 0 && diplomacyPlayerCivID >= 0) {
-            float[] dipRGB = new float[3];
-            float[] dipAlpha = new float[1];
-            getDiplomacyColor(provinceID, dipRGB, dipAlpha);
-            r = dipRGB[0]; g = dipRGB[1]; b = dipRGB[2]; a = dipAlpha[0];
+            int ownerCivID = p.getCivId();
+            if (ownerCivID == diplomacyPlayerCivID) {
+                r = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR();
+                g = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG();
+                b = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB();
+            } else if (CFG.core.getCivsAtWar(ownerCivID, diplomacyPlayerCivID)) {
+                r = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_AT_WAR.getR();
+                g = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_AT_WAR.getG();
+                b = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_AT_WAR.getB();
+            } else if (CFG.core.getCiv(ownerCivID).getAlliance() > 0 && CFG.core.getCiv(ownerCivID).getAlliance() == CFG.core.getCiv(diplomacyPlayerCivID).getAlliance()) {
+                r = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_ALLIANCE.getR();
+                g = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_ALLIANCE.getG();
+                b = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_ALLIANCE.getB();
+            } else {
+                r = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR();
+                g = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG();
+                b = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB();
+            }
+            a = CFG.ALPHA_DIPLOMACY;
         } else {
             int civID = p.getCivId();
             Civilization civ = CFG.core.getCiv(civID);
@@ -674,8 +689,9 @@ public class ProvinceMesh {
     }
 
     public static void setDiplomacyMode(boolean active, int playerCivID) {
+        if (active == diplomacyActive && playerCivID == diplomacyPlayerCivID) return;
         diplomacyActive = active;
-        diplomacyPlayerCivID = playerCivID;
+        diplomacyPlayerCivID = active ? playerCivID : -1;
         if (initialized) {
             markAllDirtyImmediate(true);
             CFG.LOG("[dip]", "setDiplomacyMode: active=" + active + " playerCivID=" + playerCivID + " forced dirtyImmediate");

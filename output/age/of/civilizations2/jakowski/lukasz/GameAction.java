@@ -3421,9 +3421,6 @@ public class GameAction {
     }
 
     public final void loadActivePlayerData() {
-        if (CFG.isAndroid()) {
-            ProvinceMesh.markAllDirtyImmediate();
-        }
         if (CFG.FOG_OF_WAR > 0) {
             int i;
             if (CFG.FOG_OF_WAR == 2) {

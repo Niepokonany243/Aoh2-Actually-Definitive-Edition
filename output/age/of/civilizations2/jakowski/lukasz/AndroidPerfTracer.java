@@ -35,6 +35,10 @@ public class AndroidPerfTracer {
     private static int countMenuMM;
     private static int countMenuInGame2;
     private static int countBorders;
+    private static long timerMapTiles;
+    private static int countMapTiles;
+    private static long timerProvRenderer;
+    private static int countProvRenderer;
 
     private static Runtime runtime = Runtime.getRuntime();
     private static long prevUsedMem;
@@ -93,6 +97,10 @@ public class AndroidPerfTracer {
         countMenuMM = 0;
         countMenuInGame2 = 0;
         countBorders = 0;
+        timerMapTiles = 0;
+        countMapTiles = 0;
+        timerProvRenderer = 0;
+        countProvRenderer = 0;
         peakUsedMem = 0;
         prevUsedMem = 0;
         sumRenderCalls = 0;
@@ -120,6 +128,14 @@ public class AndroidPerfTracer {
             case "WorldScaled":
                 timerWorldScaled += elapsed;
                 countWorldScaled++;
+                break;
+            case "MapTiles":
+                timerMapTiles += elapsed;
+                countMapTiles++;
+                break;
+            case "ProvRenderer":
+                timerProvRenderer += elapsed;
+                countProvRenderer++;
                 break;
             case "ProvinceColor":
                 timerProvinceColor += elapsed;
@@ -237,6 +253,12 @@ public class AndroidPerfTracer {
 
         if (countWorldScaled > 0) {
             sb.append(" world=").append(timerWorldScaled / countWorldScaled).append("ms");
+        }
+        if (countMapTiles > 0) {
+            sb.append(" tiles=").append(timerMapTiles / countMapTiles).append("ms");
+        }
+        if (countProvRenderer > 0) {
+            sb.append(" render=").append(timerProvRenderer / countProvRenderer).append("ms");
         }
         if (countDrawWithoutScale > 0) {
             sb.append(" overlay=").append(timerDrawWithoutScale / countDrawWithoutScale).append("ms");

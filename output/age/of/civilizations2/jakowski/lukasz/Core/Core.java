@@ -7168,7 +7168,7 @@ lbl94:
             int n = VisibleProvinceCache.getVisibleCapitalCount();
             if (n > 0) {
                 java.util.List<Integer> caps = VisibleProvinceCache.getVisibleCapitals();
-                if (CapitalFlagRenderer.isInitialized() && nScale == 1.0f) {
+                if (CapitalFlagRenderer.isInitialized() && nScale >= 0.3f) {
                     CapitalFlagRenderer.drawFlags(oSB);
                     Image frameImg = IMGManager.getIMG(Images.army_capital_frame);
                     int fw = frameImg.getWidth();

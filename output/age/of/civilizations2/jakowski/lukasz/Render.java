@@ -101,11 +101,15 @@ public class Render {
     }
 
     public static final void draw(SpriteBatch oSB) {
+        if (CFG.isAndroid()) AndroidPerfTracer.beginPhase();
         CFG.map.drawMap(oSB);
+        if (CFG.isAndroid()) AndroidPerfTracer.endPhase("MapTiles");
         if (CFG.menus.getInGameView() && CFG.map.getMpS().getCurrSc() < 1.0f && CFG.map.getMpS().getCurrSc() > CFG.cloudsAnimation.cloudsSettings.drawCloudsMinScale) {
             ShipManager.drawCurrentScale(oSB);
         }
+        if (CFG.isAndroid()) AndroidPerfTracer.beginPhase();
         oRenderer.drawRenderer(oSB);
+        if (CFG.isAndroid()) AndroidPerfTracer.endPhase("ProvRenderer");
         if ((!Render.mobileFullMapLowDetail() && CFG.map.getMpS().getCurrSc() < CIV_NAMES_START_DRAWING_NAMES_MAP_SCALE) || Core.DRAW_PROVINCE_NAMES_ALPHA < 0.99f) {
             rendererCivRegionNames.update();
             rendererCivRegionNames.drawCRN(oSB);
