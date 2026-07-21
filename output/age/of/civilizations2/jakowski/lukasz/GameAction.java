@@ -34,6 +34,7 @@ import age.of.civilizations2.jakowski.lukasz.Menus.Stats.Menu_InGame_CensusOfPro
 import age.of.civilizations2.jakowski.lukasz.Menus.Turn.Menu_NextPlayerTurn;
 import age.of.civilizations2.jakowski.lukasz.Menus.Wars.Details.Menu_InGame_WarDetails;
 import age.of.civilizations2.jakowski.lukasz.Menus.ZRest.Menu_InGame_2;
+import age.of.civilizations2.jakowski.lukasz.ProvinceMesh;
 import age.of.civilizations2.jakowski.lukasz.Messages.Info.HRE.Message_HRE_ElectionsInNextTurn;
 import age.of.civilizations2.jakowski.lukasz.Messages.Info.HRE.Message_HRE_Elections_NewEmperor;
 import age.of.civilizations2.jakowski.lukasz.Messages.Province.Message_Revolt;
@@ -3026,6 +3027,10 @@ public class GameAction {
     }
 
     public final void startNewTurn_End() {
+        boolean wasDiplomacyMode = ProvinceMesh.isDiplomacyActive();
+        int dipCivID = -1;
+        if (wasDiplomacyMode) dipCivID = ProvinceMesh.getDiplomacyPlayerCivID();
+        if (CFG.LOGs) CFG.LOG("[turn]", "startNewTurn_End: save dipMode=" + wasDiplomacyMode + " civID=" + dipCivID);
         try {
             CFG.PLAYER_TURN_ID = 0;
             CFG.gameAction.loadActivePlayerData();
@@ -3033,6 +3038,11 @@ public class GameAction {
         }
         catch (Exception ex) {
             CFG.exceptionStack(ex);
+        }
+        if (wasDiplomacyMode && CFG.isAndroid() && dipCivID >= 0) {
+            ProvinceMesh.setDiplomacyMode(true, dipCivID);
+            try { CFG.menus.setVisible_InGame_CivInfo(true); } catch (Exception e) {}
+            if (CFG.LOGs) CFG.LOG("[dip]", "startNewTurn_End: restored diplomacy mode+UI civID=" + dipCivID);
         }
         try {
             CFG.menus.updateInGameTopAll(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId());

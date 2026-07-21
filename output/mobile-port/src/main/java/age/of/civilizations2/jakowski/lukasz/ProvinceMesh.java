@@ -419,26 +419,18 @@ public class ProvinceMesh {
             r = c[0]; g = c[1]; b = c[2];
             a = CFG.settingsGD.COLOR_PROVINCE_DISCOVERY_ALPHA;
             fr = 1; fg = 1; fb = 1; fa = 1;
-        } else if (diplomacyActive && p.getCivId() > 0 && diplomacyPlayerCivID >= 0) {
+        } else if (diplomacyActive && p.getCivId() > 0 && diplomacyPlayerCivID >= 0 && civsAtWarCache != null) {
             int ownerCivID = p.getCivId();
             if (ownerCivID == diplomacyPlayerCivID) {
-                r = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR();
-                g = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG();
-                b = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB();
-            } else if (CFG.core.getCivsAtWar(ownerCivID, diplomacyPlayerCivID)) {
-                r = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_AT_WAR.getR();
-                g = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_AT_WAR.getG();
-                b = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_AT_WAR.getB();
-            } else if (CFG.core.getCiv(ownerCivID).getAlliance() > 0 && CFG.core.getCiv(ownerCivID).getAlliance() == CFG.core.getCiv(diplomacyPlayerCivID).getAlliance()) {
-                r = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_ALLIANCE.getR();
-                g = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_ALLIANCE.getG();
-                b = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_ALLIANCE.getB();
+                r = dipOwnR; g = dipOwnG; b = dipOwnB;
+            } else if (ownerCivID >= 0 && ownerCivID < civsAtWarCache.length && civsAtWarCache[ownerCivID]) {
+                r = dipWarR; g = dipWarG; b = dipWarB;
+            } else if (ownerCivID > 0 && CFG.core.getCiv(ownerCivID).getAlliance() > 0 && CFG.core.getCiv(ownerCivID).getAlliance() == CFG.core.getCiv(diplomacyPlayerCivID).getAlliance()) {
+                r = dipAllianceR; g = dipAllianceG; b = dipAllianceB;
             } else {
-                r = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR();
-                g = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG();
-                b = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB();
+                r = dipNeutralR; g = dipNeutralG; b = dipNeutralB;
             }
-            a = CFG.ALPHA_DIPLOMACY;
+            a = dipAlpha;
         } else {
             int civID = p.getCivId();
             Civilization civ = CFG.core.getCiv(civID);
@@ -665,6 +657,12 @@ public class ProvinceMesh {
     private static int diplomacyPlayerCivID = -1;
     private static int[] capitalProvinceIDs;
     private static int capitalCount = 0;
+    private static boolean[] civsAtWarCache;
+    private static float dipAlpha;
+    private static float dipOwnR, dipOwnG, dipOwnB;
+    private static float dipWarR, dipWarG, dipWarB;
+    private static float dipAllianceR, dipAllianceG, dipAllianceB;
+    private static float dipNeutralR, dipNeutralG, dipNeutralB;
 
     private static void getDiplomacyColor(int provinceID, float[] outRGB, float[] outAlpha) {
         int ownerCivID = CFG.core.getProv(provinceID).getCivId();
@@ -689,17 +687,53 @@ public class ProvinceMesh {
     }
 
     public static void setDiplomacyMode(boolean active, int playerCivID) {
-        if (active == diplomacyActive && playerCivID == diplomacyPlayerCivID) return;
+        if (active == diplomacyActive && playerCivID == diplomacyPlayerCivID) {
+            if (CFG.LOGs) CFG.LOG("[dip]", "setDiplomacyMode: skipped (already in this mode) playerCivID=" + playerCivID);
+            return;
+        }
+        long t0 = CFG.LOGs ? System.nanoTime() : 0L;
         diplomacyActive = active;
         diplomacyPlayerCivID = active ? playerCivID : -1;
         if (initialized) {
+            if (active) {
+                int nCiv = CFG.core.getCivsSize();
+                if (civsAtWarCache == null || civsAtWarCache.length < nCiv) civsAtWarCache = new boolean[Math.max(nCiv, 1)];
+                for (int i = 0; i < nCiv; i++) {
+                    try { civsAtWarCache[i] = CFG.core.getCivsAtWar(i, playerCivID); }
+                    catch (Exception e) { civsAtWarCache[i] = false; }
+                }
+                dipAlpha = CFG.ALPHA_DIPLOMACY;
+                try {
+                    dipOwnR = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getR();
+                    dipOwnG = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getG();
+                    dipOwnB = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_OWN_PROVINCES.getB();
+                    dipWarR = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_AT_WAR.getR();
+                    dipWarG = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_AT_WAR.getG();
+                    dipWarB = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_AT_WAR.getB();
+                    dipAllianceR = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_ALLIANCE.getR();
+                    dipAllianceG = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_ALLIANCE.getG();
+                    dipAllianceB = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_ALLIANCE.getB();
+                    dipNeutralR = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR();
+                    dipNeutralG = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG();
+                    dipNeutralB = CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB();
+                } catch (Exception e) {
+                    if (CFG.LOGs) CFG.LOG("[dip]", "setDiplomacyMode: failed to read diplomacy colors: " + e.getMessage());
+                }
+                if (CFG.LOGs) CFG.LOG("[dip]", "setDiplomacyMode: cached civsAtWar[" + nCiv + "] in " + ((System.nanoTime() - t0) / 1000000L) + "ms");
+            } else {
+                civsAtWarCache = null;
+            }
             markAllDirtyImmediate(true);
-            CFG.LOG("[dip]", "setDiplomacyMode: active=" + active + " playerCivID=" + playerCivID + " forced dirtyImmediate");
+            if (CFG.LOGs) CFG.LOG("[dip]", "setDiplomacyMode: active=" + active + " playerCivID=" + playerCivID + " total=" + ((System.nanoTime() - t0) / 1000000L) + "ms");
         }
     }
 
     public static boolean isDiplomacyActive() {
         return diplomacyActive;
+    }
+
+    public static int getDiplomacyPlayerCivID() {
+        return diplomacyPlayerCivID;
     }
 
     public static void draw(SpriteBatch oSB) {

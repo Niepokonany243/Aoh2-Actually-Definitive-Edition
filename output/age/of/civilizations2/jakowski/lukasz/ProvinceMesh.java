@@ -542,6 +542,10 @@ public class ProvinceMesh {
         return diplomacyActive;
     }
 
+    public static int getDiplomacyPlayerCivID() {
+        return -1;
+    }
+
     public static boolean canRender() {
         return initialized && renderAvailable && shader != null && colorTexture != null && flagTexture != null && pageMeshes.size() > 0;
     }

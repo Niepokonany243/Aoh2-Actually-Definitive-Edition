@@ -474,6 +474,7 @@ public class Core {
     public List<Integer> prIV = new ArrayList<Integer>();
     public List<Integer> sortedPIV = new ArrayList<Integer>();
     public boolean updateSortedPIV = true;
+    private int[] provinceTextureHash;
     public float fDashedLine_Percentage_HighlitedProvinceBorder = 0.0f;
     private long lDashedLineTime_Percentage_HighlitedProvinceBorder;
     private boolean highlightedProvinceBorder_BackAnimation = false;
@@ -4401,7 +4402,7 @@ lbl94:
     private float lastScale = -1.0f;
 
     public final void updateProvincesInView() {
-        if (!this.uPRV && Math.abs(this.lastPosX - CFG.map.getMpC().getPX()) < 2.0f && Math.abs(this.lastPosY - CFG.map.getMpC().getPY()) < 2.0f && Math.abs(this.lastScale - CFG.map.getMpS().getCurrSc()) < 0.001f) {
+        if (!this.uPRV && Math.abs(this.lastPosX - CFG.map.getMpC().getPX()) < 200.0f && Math.abs(this.lastPosY - CFG.map.getMpC().getPY()) < 200.0f && Math.abs(this.lastScale - CFG.map.getMpS().getCurrSc()) < 0.001f) {
             return;
         }
         this.lastPosX = CFG.map.getMpC().getPX();
@@ -4439,29 +4440,35 @@ lbl94:
         CFG.NUM_OF_WASTELAND_PROVINCES_IN_VIEW = this.wPIV.size();
         
         if (this.updateSortedPIV || CFG.NUM_OF_PROVINCES_IN_VIEW != this.sortedPIV.size()) {
+            long tSort = CFG.LOGs ? System.nanoTime() : 0L;
             this.sortedPIV.clear();
             this.sortedPIV.addAll(this.prIV);
-            this.sortedPIV.sort((a, b) -> {
-                Province pA = this.getProv(a);
-                Province pB = this.getProv(b);
-                
-                com.badlogic.gdx.graphics.g2d.TextureRegion regA = ProvinceAtlas.getRegion(a);
-                com.badlogic.gdx.graphics.g2d.TextureRegion regB = ProvinceAtlas.getRegion(b);
-                
-                if (regA != null && regB != null) {
-                    int texCompare = Integer.compare(regA.getTexture().hashCode(), regB.getTexture().hashCode());
+            int totalProv = CFG.core.getProvinSize();
+            if (this.provinceTextureHash == null || this.provinceTextureHash.length < totalProv) {
+                try {
+                    this.provinceTextureHash = new int[totalProv + 1];
+                    for (int idx = 0; idx < totalProv; idx++) {
+                        com.badlogic.gdx.graphics.g2d.TextureRegion reg = ProvinceAtlas.getRegion(idx);
+                        this.provinceTextureHash[idx] = (reg != null) ? reg.getTexture().hashCode() : 0;
+                    }
+                } catch (Exception e) { if (CFG.LOGs) CFG.LOG("[sort]", "provinceTextureHash build failed: " + e.getMessage()); }
+            }
+            try {
+                this.sortedPIV.sort((a, b) -> {
+                    if (a < 0 || b < 0 || a >= this.provinceTextureHash.length || b >= this.provinceTextureHash.length) return Integer.compare(a, b);
+                    int texCompare = Integer.compare(this.provinceTextureHash[a], this.provinceTextureHash[b]);
                     if (texCompare != 0) return texCompare;
-                }
-
-                int civCompare = Integer.compare(pA.getCivId(), pB.getCivId());
-                if (civCompare != 0) return civCompare;
-                
-                int metCompare = Boolean.compare(CFG.getMetProv(a), CFG.getMetProv(b));
-                if (metCompare != 0) return metCompare;
-                
-                return Integer.compare(a, b);
-            });
+                    int civA = this.getProv(a).getCivId();
+                    int civB = this.getProv(b).getCivId();
+                    if (civA != civB) return Integer.compare(civA, civB);
+                    boolean metA = CFG.getMetProv(a);
+                    boolean metB = CFG.getMetProv(b);
+                    if (metA != metB) return metA ? -1 : 1;
+                    return Integer.compare(a, b);
+                });
+            } catch (Exception e) { if (CFG.LOGs) CFG.LOG("[sort]", "sortedPIV.sort failed: " + e.getMessage()); }
             this.updateSortedPIV = false;
+            if (CFG.LOGs) CFG.LOG("[sort]", "sortedPIV re-sort n=" + CFG.NUM_OF_PROVINCES_IN_VIEW + " time=" + ((System.nanoTime() - tSort) / 1000000L) + "ms");
         }
     }
 
@@ -7169,37 +7176,40 @@ lbl94:
             if (n > 0) {
                 java.util.List<Integer> caps = VisibleProvinceCache.getVisibleCapitals();
                 if (CapitalFlagRenderer.isInitialized() && nScale >= 0.3f) {
+                    if (CFG.LOGs && CFG.LOG_PERF) CFG.LOG("[PERF]", "[flags] drawing " + n + " capitals flags");
                     CapitalFlagRenderer.drawFlags(oSB);
-                    Image frameImg = IMGManager.getIMG(Images.army_capital_frame);
-                    int fw = frameImg.getWidth();
-                    int fh = frameImg.getHeight();
-                    int afh = CFG.ARMY_HEIGHT + CFG.ARMY_BG_EXTRA_HEIGHT * 2;
-                    for (int j = 0; j < n; j++) {
-                        int pid = caps.get(j);
-                        if (pid < 0) continue;
-                        Province p = this.getProv(pid);
-                        int cx = p.getCeX() + p.getShPX() + p.getTranslateProvPosX();
-                        int cy = p.getCeY() + p.getShPY() + CFG.map.getMpC().getPY();
-                        int tw = (int)((float)afh * 100.0f / (float)CFG.CIV_FLAG_HEIGHT * (float)CFG.CIV_FLAG_WIDTH / 100.0f);
-                        int fy = cy - CFG.ARMY_HEIGHT / 2 - CFG.ARMY_BG_EXTRA_HEIGHT;
-                        int fx1 = cx - (int)Math.floor(tw / 2.0f);
-                        int fx2 = cx + (int)Math.ceil(tw / 2.0f) - fw;
-                        oSB.setColor(CFG.COLOR_ARMYBG);
-                        frameImg.draw2(oSB, fx1, fy, tw - fw, afh - fh);
-                        frameImg.draw2(oSB, fx2, fy, fw, afh - fh, true);
-                        frameImg.draw2(oSB, fx1, fy + afh - fh, tw - fw, fh, false, true);
-                        frameImg.draw2(oSB, fx2, fy + afh - fh, fw, fh, true, true);
-                        oSB.setColor(Color.WHITE);
-                    }
-                    for (int j = 0; j < n; j++) {
-                        int pid = caps.get(j);
-                        if (pid < 0) continue;
-                        Province p = this.getProv(pid);
-                        int cx = p.getCeX() + p.getShPX() + p.getTranslateProvPosX();
-                        int cy = p.getCeY() + p.getShPY() + CFG.map.getMpC().getPY();
-                        int tw = (int)((float)afh * 100.0f / (float)CFG.CIV_FLAG_HEIGHT * (float)CFG.CIV_FLAG_WIDTH / 100.0f);
-                        float fs = (float)afh * 100.0f / (float)CFG.CIV_FLAG_HEIGHT / 100.0f;
-                        this.drawProvinceFlag_Capital_Begin(oSB, pid, CFG.COLOR_ARMYBG, CFG.COLOR_ARMY_TEXT, nScale, cx, cy, tw, fs);
+                    if (CFG.map.getMpS().getCurrSc() >= 0.7f) {
+                        Image frameImg = IMGManager.getIMG(Images.army_capital_frame);
+                        int fw = frameImg.getWidth();
+                        int fh = frameImg.getHeight();
+                        int afh = CFG.ARMY_HEIGHT + CFG.ARMY_BG_EXTRA_HEIGHT * 2;
+                        for (int j = 0; j < n; j++) {
+                            int pid = caps.get(j);
+                            if (pid < 0) continue;
+                            Province p = this.getProv(pid);
+                            int cx = p.getCeX() + p.getShPX() + p.getTranslateProvPosX();
+                            int cy = p.getCeY() + p.getShPY() + CFG.map.getMpC().getPY();
+                            int tw = (int)((float)afh * 100.0f / (float)CFG.CIV_FLAG_HEIGHT * (float)CFG.CIV_FLAG_WIDTH / 100.0f);
+                            int fy = cy - CFG.ARMY_HEIGHT / 2 - CFG.ARMY_BG_EXTRA_HEIGHT;
+                            int fx1 = cx - (int)Math.floor(tw / 2.0f);
+                            int fx2 = cx + (int)Math.ceil(tw / 2.0f) - fw;
+                            oSB.setColor(CFG.COLOR_ARMYBG);
+                            frameImg.draw2(oSB, fx1, fy, tw - fw, afh - fh);
+                            frameImg.draw2(oSB, fx2, fy, fw, afh - fh, true);
+                            frameImg.draw2(oSB, fx1, fy + afh - fh, tw - fw, fh, false, true);
+                            frameImg.draw2(oSB, fx2, fy + afh - fh, fw, fh, true, true);
+                            oSB.setColor(Color.WHITE);
+                        }
+                        for (int j = 0; j < n; j++) {
+                            int pid = caps.get(j);
+                            if (pid < 0) continue;
+                            Province p = this.getProv(pid);
+                            int cx = p.getCeX() + p.getShPX() + p.getTranslateProvPosX();
+                            int cy = p.getCeY() + p.getShPY() + CFG.map.getMpC().getPY();
+                            int tw = (int)((float)afh * 100.0f / (float)CFG.CIV_FLAG_HEIGHT * (float)CFG.CIV_FLAG_WIDTH / 100.0f);
+                            float fs = (float)afh * 100.0f / (float)CFG.CIV_FLAG_HEIGHT / 100.0f;
+                            this.drawProvinceFlag_Capital_Begin(oSB, pid, CFG.COLOR_ARMYBG, CFG.COLOR_ARMY_TEXT, nScale, cx, cy, tw, fs);
+                        }
                     }
                 } else {
                     for (int j = 0; j < n; j++) {
