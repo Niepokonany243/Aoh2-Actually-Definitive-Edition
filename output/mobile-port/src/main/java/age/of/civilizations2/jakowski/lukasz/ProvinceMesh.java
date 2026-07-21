@@ -299,15 +299,32 @@ public class ProvinceMesh {
                                 "uniform sampler2D u_flags;\n" +
                                 "uniform highp float u_colorStep;\n" +
                                 "uniform float u_discoveryFade;\n" +
+                                "uniform float u_activeProvinceID;\n" +
                                 "void main() {\n" +
                                 "    highp float provinceSlot = floor(v_provinceID + 0.5);\n" +
                                 "    highp vec2 colorUV = vec2((provinceSlot + 0.5) * u_colorStep, 0.5);\n" +
                                 "    vec4 mask = texture2D(u_texture, v_texCoord);\n" +
                                 "    vec4 provColor = texture2D(u_colors, colorUV);\n" +
-                                "    float flag = texture2D(u_flags, colorUV).a;\n" +
+                                "    vec4 flagsData = texture2D(u_flags, colorUV);\n" +
+                                "    float wl = flagsData.g * 63.0;\n" +
+                                "    float isOccupied = flagsData.b;\n" +
                                 "    float finalAlpha = provColor.a;\n" +
-                                "    if (flag > 0.5) {\n" +
+                                "    if (flagsData.a > 0.5) {\n" +
                                 "        finalAlpha = provColor.a * u_discoveryFade;\n" +
+                                "    }\n" +
+                                "    if (wl > 0.5) {\n" +
+                                "        float wlFactor = wl / 10.0;\n" +
+                                "        if (wlFactor > 1.0) wlFactor = 1.0;\n" +
+                                "        provColor.rgb *= (1.0 - 0.5 * wlFactor);\n" +
+                                "        finalAlpha = provColor.a * 0.6;\n" +
+                                "    }\n" +
+                                "    if (isOccupied > 0.5) {\n" +
+                                "        float stripe = step(0.5, fract(gl_FragCoord.x * 0.025 + gl_FragCoord.y * 0.025));\n" +
+                                "        finalAlpha *= mix(0.3, 1.0, stripe);\n" +
+                                "    }\n" +
+                                "    if (u_activeProvinceID >= 0.0 && abs(provinceSlot - u_activeProvinceID) < 0.5) {\n" +
+                                "        provColor.rgb = provColor.rgb * 1.5;\n" +
+                                "        finalAlpha = min(finalAlpha * 1.3, 1.0);\n" +
                                 "    }\n" +
                                 "    gl_FragColor = vec4(provColor.rgb * mask.rgb, finalAlpha * mask.a);\n" +
                                 "}";
@@ -409,11 +426,12 @@ public class ProvinceMesh {
         if (p.getSeaProv()) {
             r = 0; g = 0; b = 0; a = 0;
         } else if (p.getWastelandLvl() >= 0) {
-            float wl = p.getWastelandLvl();
-            r = CFG.settingsGD.COLOR_PROVINCE_BG_WASTELAND.getR() - 0.0627f * wl;
-            g = CFG.settingsGD.COLOR_PROVINCE_BG_WASTELAND.getG() - 0.0529f * wl;
-            b = CFG.settingsGD.COLOR_PROVINCE_BG_WASTELAND.getB() - 0.0443f * wl;
-            a = CFG.settingsGD.PROVINCE_ALPHA_WASTELAND;
+            int wl = p.getWastelandLvl();
+            int civID = p.getCivId();
+            Civilization civ = CFG.core.getCiv(civID);
+            if (civ == null) { r = 1; g = 0; b = 1; a = 0.039f; }
+            else { r = (float)civ.getR() / 255.0f; g = (float)civ.getG() / 255.0f; b = (float)civ.getB() / 255.0f; a = (float)CFG.settingsGD.PROV_ALPHA / 255.0f; }
+            fr = 0; fg = Math.min(wl, 63) / 63.0f; fb = 0; fa = 0;
         } else if (CFG.FOG_OF_WAR == 2 && !CFG.getMetProv(provinceID)) {
             float[] c = CFG.settingsGD.COLOR_DISCOVERY_FLOAT;
             r = c[0]; g = c[1]; b = c[2];
@@ -442,6 +460,9 @@ public class ProvinceMesh {
                 g = (float)civ.getG() / 255.0f;
                 b = (float)civ.getB() / 255.0f;
             }
+            fr = 0; fg = 0;
+            fb = (civID != p.getTrueOwnerOfProv() && civID > 0) ? 1.0f : 0.0f;
+            fa = 0;
         }
         int off = provinceID * 4;
         ByteBuffer colorBuf = colorPixmap.getPixels();
@@ -757,6 +778,7 @@ public class ProvinceMesh {
             shader.setUniformi("u_flags", 2);
             shader.setUniformf("u_colorStep", 1.0f / colorTexture.getWidth());
             shader.setUniformf("u_discoveryFade", getDiscoveryFade());
+            shader.setUniformf("u_activeProvinceID", (float)CFG.core.getActiveProvID());
             
             colorTexture.bind(1);
             flagTexture.bind(2);

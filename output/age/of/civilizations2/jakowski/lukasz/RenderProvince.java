@@ -946,6 +946,7 @@ public class RenderProvince {
     }
 
     public static final void drawOccupiedProvinces(SpriteBatch oSB) {
+        if (CFG.isAndroid() && ProvinceMesh.canRenderWithColors()) return;
         oSB.setShader(AoCGame.shaderAlpha3);
         for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
             Province province = CFG.core.getProv(CFG.core.getPIV(i));
@@ -956,6 +957,7 @@ public class RenderProvince {
     }
 
     public static final void drawOccupiedProvinces_FogOfWar(SpriteBatch oSB) {
+        if (CFG.isAndroid() && ProvinceMesh.canRenderWithColors()) return;
         oSB.setShader(AoCGame.shaderAlpha3);
         for (int i = 0; i < CFG.NUM_OF_PROVINCES_IN_VIEW; ++i) {
             int provID = CFG.core.getPIV(i);
@@ -1416,6 +1418,7 @@ public class RenderProvince {
     }
 
     public static final void drawProvincesInGame_StandardWasteland_FogOFWar(SpriteBatch oSB) {
+        if (CFG.isAndroid() && ProvinceMesh.canRenderWithColors()) return;
         float[] c = CFG.settingsGD.COLOR_DISCOVERY_FLOAT;
         boolean colorSet = false;
         for (int i = 0; i < CFG.NUM_OF_WASTELAND_PROVINCES_IN_VIEW; ++i) {
