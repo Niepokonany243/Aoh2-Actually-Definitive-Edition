@@ -4,6 +4,7 @@ package age.of.civilizations2.jakowski.lukasz;
 import age.of.civilizations2.jakowski.lukasz.CFG;
 import age.of.civilizations2.jakowski.lukasz.GameAction;
 import age.of.civilizations2.jakowski.lukasz.Menus.RTO.Menu_InGame_RTO2;
+import age.of.civilizations2.jakowski.lukasz.Menus.ZRest.Menu_InGame_2;
 import age.of.civilizations2.jakowski.lukasz.RTS;
 import age.of.civilizations2.jakowski.lukasz.Render;
 import age.of.civilizations2.jakowski.lukasz.TechManager;
@@ -160,6 +161,7 @@ public class Actions {
         }
         CFG.setRenderO(true);
         Menu_InGame_RTO2.TIME_CONTINUE = System.currentTimeMillis();
+        Menu_InGame_2.TIME_CONTINUE = System.currentTimeMillis();
     }
 
     public static final void runRevolts() {

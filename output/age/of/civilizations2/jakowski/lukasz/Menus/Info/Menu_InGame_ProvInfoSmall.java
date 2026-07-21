@@ -1084,10 +1084,6 @@ extends Menu {
         switch (iID) {
             case 0: {
                 if (CFG.gameAction.getActiveTurnStateID() == GameAction.TurnStates.INPUT_ORDERS) {
-                    if (!RTS.PAUSE) {
-                        RTS.PAUSED_BY_NEXT_TURN = true;
-                    }
-                    RTS.PAUSE = true;
                     RTS.resetTime();
                 }
                 Menu_InGame_ProvInfo.clickEndTurn();

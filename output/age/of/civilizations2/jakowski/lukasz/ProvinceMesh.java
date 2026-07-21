@@ -56,6 +56,11 @@ public class ProvinceMesh {
     private static int dirtyMax = -1;
     private static int dirtySweepCursor = -1;
     private static boolean colorsHaveOwnership = false;
+    private static boolean diplomacyActive = false;
+
+    public static void setDiplomacyMode(boolean active, int playerCivID) {
+        diplomacyActive = active;
+    }
     private static final Matrix4 combinedMatrix = new Matrix4();
 
     public static void init() {
@@ -527,6 +532,14 @@ public class ProvinceMesh {
     
     public static boolean isInitialized() {
         return initialized;
+    }
+
+    public static int getDirtyCount() {
+        return 0;
+    }
+
+    public static boolean isDiplomacyActive() {
+        return diplomacyActive;
     }
 
     public static boolean canRender() {

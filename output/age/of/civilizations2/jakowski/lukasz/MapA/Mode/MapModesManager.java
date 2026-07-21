@@ -9400,9 +9400,7 @@ nData.add(new ME_Hover_2Type_Text("" + (int)(fQ * 100.0f) + "%", fQ > 0.6f ? CFG
     public final void setActiveMapModeID(int iID) {
         try {
             if (this.iActiveMapModeID == iID) {
-                int tempActive = this.iActiveMapModeID;
-                this.iActiveMapModeID = -1;
-                this.lMapModes.get(tempActive).disableViewAction();
+                return;
             } else if (this.iActiveMapModeID >= 0) {
                 int tempActive = this.iActiveMapModeID;
                 this.iActiveMapModeID = iID;

@@ -123,10 +123,9 @@ extends Menu {
         CFG.map.getMpB().updateWorldMap_Shaders();
         CFG.core.disableDrawCivilizationRegions(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId());
         Menu_NextPlayerTurn.clickEnd();
-        if (RTS.PAUSED_BY_NEXT_TURN) {
-            RTS.PAUSE = false;
-            RTS.resetTime();
-            RTS.PAUSED_BY_NEXT_TURN = false;
+        if (RTS.PAUSE_BEFORE_NEXT_TURN != RTS.PAUSE) {
+            RTS.PAUSE = RTS.PAUSE_BEFORE_NEXT_TURN;
+            if (!RTS.PAUSE) RTS.resetTime();
         }
     }
 

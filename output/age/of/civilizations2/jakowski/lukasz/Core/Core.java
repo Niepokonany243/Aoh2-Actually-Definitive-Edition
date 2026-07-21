@@ -54,6 +54,7 @@ import age.of.civilizations2.jakowski.lukasz.Graphs.Graph2.Graph2;
 import age.of.civilizations2.jakowski.lukasz.HistoryLog.HistoryLog_IsVassal;
 import age.of.civilizations2.jakowski.lukasz.HistoryLog.HistoryLog_Peace;
 import age.of.civilizations2.jakowski.lukasz.HistoryLog.HistoryLog_WarDeclaration;
+import age.of.civilizations2.jakowski.lukasz.CapitalFlagRenderer;
 import age.of.civilizations2.jakowski.lukasz.IMGManager;
 import age.of.civilizations2.jakowski.lukasz.Images;
 import age.of.civilizations2.jakowski.lukasz.LeaderOfCiv_GameData;
@@ -7161,14 +7162,50 @@ lbl94:
     }
 
     public final void drawAllCivilizations_Flag_InCapitals_WithCrown(SpriteBatch oSB, float nScale) {
+        if (ProvinceMesh.isDiplomacyActive()) return;
         if (CFG.isAndroid()) {
             VisibleProvinceCache.rebuildIfNeeded();
             int n = VisibleProvinceCache.getVisibleCapitalCount();
             if (n > 0) {
                 java.util.List<Integer> caps = VisibleProvinceCache.getVisibleCapitals();
-                for (int j = 0; j < n; j++) {
-                    int pid = caps.get(j);
-                    if (pid >= 0) this.drawProvinceFlag_Capital(oSB, pid, CFG.COLOR_ARMYBG, CFG.COLOR_ARMY_TEXT, nScale);
+                if (CapitalFlagRenderer.isInitialized() && nScale == 1.0f) {
+                    CapitalFlagRenderer.drawFlags(oSB);
+                    Image frameImg = IMGManager.getIMG(Images.army_capital_frame);
+                    int fw = frameImg.getWidth();
+                    int fh = frameImg.getHeight();
+                    int afh = CFG.ARMY_HEIGHT + CFG.ARMY_BG_EXTRA_HEIGHT * 2;
+                    for (int j = 0; j < n; j++) {
+                        int pid = caps.get(j);
+                        if (pid < 0) continue;
+                        Province p = this.getProv(pid);
+                        int cx = p.getCeX() + p.getShPX() + p.getTranslateProvPosX();
+                        int cy = p.getCeY() + p.getShPY() + CFG.map.getMpC().getPY();
+                        int tw = (int)((float)afh * 100.0f / (float)CFG.CIV_FLAG_HEIGHT * (float)CFG.CIV_FLAG_WIDTH / 100.0f);
+                        int fy = cy - CFG.ARMY_HEIGHT / 2 - CFG.ARMY_BG_EXTRA_HEIGHT;
+                        int fx1 = cx - (int)Math.floor(tw / 2.0f);
+                        int fx2 = cx + (int)Math.ceil(tw / 2.0f) - fw;
+                        oSB.setColor(CFG.COLOR_ARMYBG);
+                        frameImg.draw2(oSB, fx1, fy, tw - fw, afh - fh);
+                        frameImg.draw2(oSB, fx2, fy, fw, afh - fh, true);
+                        frameImg.draw2(oSB, fx1, fy + afh - fh, tw - fw, fh, false, true);
+                        frameImg.draw2(oSB, fx2, fy + afh - fh, fw, fh, true, true);
+                        oSB.setColor(Color.WHITE);
+                    }
+                    for (int j = 0; j < n; j++) {
+                        int pid = caps.get(j);
+                        if (pid < 0) continue;
+                        Province p = this.getProv(pid);
+                        int cx = p.getCeX() + p.getShPX() + p.getTranslateProvPosX();
+                        int cy = p.getCeY() + p.getShPY() + CFG.map.getMpC().getPY();
+                        int tw = (int)((float)afh * 100.0f / (float)CFG.CIV_FLAG_HEIGHT * (float)CFG.CIV_FLAG_WIDTH / 100.0f);
+                        float fs = (float)afh * 100.0f / (float)CFG.CIV_FLAG_HEIGHT / 100.0f;
+                        this.drawProvinceFlag_Capital_Begin(oSB, pid, CFG.COLOR_ARMYBG, CFG.COLOR_ARMY_TEXT, nScale, cx, cy, tw, fs);
+                    }
+                } else {
+                    for (int j = 0; j < n; j++) {
+                        int pid = caps.get(j);
+                        if (pid >= 0) this.drawProvinceFlag_Capital(oSB, pid, CFG.COLOR_ARMYBG, CFG.COLOR_ARMY_TEXT, nScale);
+                    }
                 }
             }
             return;
@@ -13009,6 +13046,27 @@ lbl94:
         float fFlagScale = (float)(CFG.ARMY_HEIGHT + CFG.ARMY_BG_EXTRA_HEIGHT * 2) * 100.0f / (float)CFG.CIV_FLAG_HEIGHT / 100.0f;
         this.drawProvinceFlag_Capital_Begin(oSB, nProvinceID, bgColor, armyColor, nScale, tCenterX, tCenterY, tFlagWidth, fFlagScale);
         drawCapitalFlagMap.drawProvinceFlagCapital_End(oSB, nProvinceID, bgColor, armyColor, nScale, tCenterX, tCenterY, tFlagWidth, fFlagScale);
+    }
+
+    public final void drawProvinceFlag_Capital_FrameAndCrown(SpriteBatch oSB, int nProvinceID, Color bgColor, Color armyColor, float nScale) {
+        int tCenterX = (int)((float)(this.getProv(nProvinceID).getCeX() + this.getProv(nProvinceID).getShPX() + this.getProv(nProvinceID).getTranslateProvPosX()) * nScale);
+        int tCenterY = (int)((float)(this.getProv(nProvinceID).getCeY() + this.getProv(nProvinceID).getShPY() + CFG.map.getMpC().getPY()) * nScale);
+        int tFlagWidth = (int)((float)(CFG.ARMY_HEIGHT + CFG.ARMY_BG_EXTRA_HEIGHT * 2) * 100.0f / (float)CFG.CIV_FLAG_HEIGHT * (float)CFG.CIV_FLAG_WIDTH / 100.0f);
+        float fFlagScale = (float)(CFG.ARMY_HEIGHT + CFG.ARMY_BG_EXTRA_HEIGHT * 2) * 100.0f / (float)CFG.CIV_FLAG_HEIGHT / 100.0f;
+        this.drawProvinceFlag_Capital_Begin(oSB, nProvinceID, bgColor, armyColor, nScale, tCenterX, tCenterY, tFlagWidth, fFlagScale);
+        Image frameImg = IMGManager.getIMG(Images.army_capital_frame);
+        int fw = frameImg.getWidth();
+        int fh2 = frameImg.getHeight();
+        int fy = tCenterY - CFG.ARMY_HEIGHT / 2 - CFG.ARMY_BG_EXTRA_HEIGHT;
+        int fx1 = tCenterX - (int)Math.floor(tFlagWidth / 2.0f);
+        int fx2 = tCenterX + (int)Math.ceil(tFlagWidth / 2.0f) - fw;
+        int fh = CFG.ARMY_HEIGHT + CFG.ARMY_BG_EXTRA_HEIGHT * 2;
+        oSB.setColor(bgColor);
+        frameImg.draw2(oSB, fx1, fy, tFlagWidth - fw, fh - fh2);
+        frameImg.draw2(oSB, fx2, fy, fw, fh - fh2, true);
+        frameImg.draw2(oSB, fx1, fy + fh - fh2, tFlagWidth - fw, fh2, false, true);
+        frameImg.draw2(oSB, fx2, fy + fh - fh2, fw, fh2, true, true);
+        oSB.setColor(Color.WHITE);
     }
 
     public final void drawProvinceFlag_Capital_FlagCivID(SpriteBatch oSB, int nProvinceID, Color bgColor, Color armyColor, float nScale, int nCivID) {

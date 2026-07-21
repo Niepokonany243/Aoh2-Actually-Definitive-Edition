@@ -21,6 +21,7 @@ import age.of.civilizations2.jakowski.lukasz.Keyboard;
 import age.of.civilizations2.jakowski.lukasz.MapA.Minimap;
 import age.of.civilizations2.jakowski.lukasz.MapA.Mode.MapModesManager;
 import age.of.civilizations2.jakowski.lukasz.Menu;
+import age.of.civilizations2.jakowski.lukasz.ProvinceMesh;
 import age.of.civilizations2.jakowski.lukasz.MenuE_HoverP.MEHover_2E;
 import age.of.civilizations2.jakowski.lukasz.MenuE_HoverP.ME_Hover_2Type;
 import age.of.civilizations2.jakowski.lukasz.MenuE_HoverP.ME_Hover_2Type_Color;
@@ -1096,9 +1097,12 @@ extends Menu {
     @Override
     public void draw(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean sliderMenuIsActive) {
         int nElemWidthID;
-        if (CFG.gameAction.getActiveTurnStateID() == GameAction.TurnStates.LOADING_NEXT_TURN && TIME_CONTINUE > 0L && TIME_CONTINUE < System.currentTimeMillis() - 6L) {
-            TIME_CONTINUE = -1L;
-            Menu_InGame_ProvInfo.clickEndTurn();
+        if (TIME_CONTINUE > 0L && TIME_CONTINUE < System.currentTimeMillis() - 6L) {
+            GameAction.TurnStates st = CFG.gameAction.getActiveTurnStateID();
+            if (st == GameAction.TurnStates.LOADING_NEXT_TURN || st == GameAction.TurnStates.LOAD_AI_RTO || st == GameAction.TurnStates.TURN_ACTIONS) {
+                TIME_CONTINUE = -1L;
+                Menu_InGame_ProvInfo.clickEndTurn();
+            }
         }
         int n = nElemWidthID = this.getMenuElem(10).getVisibleE() ? 10 : 3;
         if (!MENU_AOC_1) {
@@ -1269,17 +1273,24 @@ extends Menu {
     }
 
     public static void actionDiplomacy() {
-        CFG.mapModesManager.setActiveMapModeID(MapModesManager.VIEW_DIPLOMACY_MODE);
         if (CFG.mapModesManager.getActiveMapModeID() == MapModesManager.VIEW_DIPLOMACY_MODE) {
-            if (CFG.menus.getVisible_InGame_FlagAction()) {
-                CFG.menus.setVisible_InGame_FlagAction(false);
-            }
-            if (CFG.menus.getInGame_Budget().getVisibleM()) {
-                CFG.menus.getInGame_Budget().setVisibleM(false);
-            }
-            CFG.mapModesManager.getActiveView().updateActiveCivInfo_ExtraAction(CFG.getActiveCivInfoId());
-        } else {
+            CFG.mapModesManager.setActiveMapModeID(-1);
             CFG.menus.setVisible_InGame_CivInfo(false);
+            ProvinceMesh.setDiplomacyMode(false, -1);
+            CFG.LOG("[dip]", "actionDiplomacy: toggled OFF (restored normal view)");
+        } else {
+            CFG.mapModesManager.setActiveMapModeID(MapModesManager.VIEW_DIPLOMACY_MODE);
+            if (CFG.mapModesManager.getActiveMapModeID() == MapModesManager.VIEW_DIPLOMACY_MODE) {
+                if (CFG.menus.getVisible_InGame_FlagAction()) {
+                    CFG.menus.setVisible_InGame_FlagAction(false);
+                }
+                if (CFG.menus.getInGame_Budget().getVisibleM()) {
+                    CFG.menus.getInGame_Budget().setVisibleM(false);
+                }
+                ProvinceMesh.setDiplomacyMode(true, CFG.getActiveCivInfoId());
+                CFG.mapModesManager.getActiveView().updateActiveCivInfo_ExtraAction(CFG.getActiveCivInfoId());
+                CFG.LOG("[dip]", "actionDiplomacy: toggled ON playerCivID=" + CFG.getActiveCivInfoId());
+            }
         }
     }
 

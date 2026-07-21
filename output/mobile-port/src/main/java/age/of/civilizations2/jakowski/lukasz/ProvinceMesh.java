@@ -348,7 +348,8 @@ public class ProvinceMesh {
 
     public static synchronized void markAllDirty() {
         if (!initialized) return;
-        if (dirtyCount == dirtyArraySize && dirtySweepCursor >= 0) return;
+        if (dirtyCount == dirtyArraySize) return;
+        if (dirtySweepCursor >= 0 && dirtyCount > 0) return;
         java.util.Arrays.fill(dirtyFlags, true);
         dirtyListSize = 0;
         dirtyCount = dirtyArraySize;
@@ -357,10 +358,19 @@ public class ProvinceMesh {
         dirtySweepCursor = 0;
         needsUpdate = true;
         VisibleProvinceCache.markOwnershipChanged();
+        CapitalFlagRenderer.invalidate();
     }
 
     public static synchronized void markAllDirtyImmediate() {
+        markAllDirtyImmediate(false);
+    }
+
+    public static synchronized void markAllDirtyImmediate(boolean force) {
         if (!initialized) return;
+        if (!force) {
+            if (dirtyCount == dirtyArraySize) return;
+            if (dirtySweepCursor >= 0 && dirtyCount > 0) return;
+        }
         java.util.Arrays.fill(dirtyFlags, true);
         dirtyListSize = 0;
         dirtyCount = dirtyArraySize;
@@ -369,6 +379,7 @@ public class ProvinceMesh {
         dirtySweepCursor = -1;
         needsUpdate = true;
         VisibleProvinceCache.markOwnershipChanged();
+        CapitalFlagRenderer.invalidate();
     }
 
     public static synchronized void markCivDirty(int civID) {
@@ -445,20 +456,25 @@ public class ProvinceMesh {
             int numProv = CFG.core.getProvinSize();
             int lim = Math.min(numProv, dirtyArraySize);
             int processed = 0;
-            if (dirtyCount > dirtyArraySize / 2) {
-                for (int i = 0; i < lim; i++) {
+            if (dirtyCount == dirtyArraySize) {
+                int toProcess = Math.min(lim, ANDROID_DIRTY_BATCH);
+                int uploadStart = -1;
+                int uploadEnd = -1;
+                for (int i = 0; i < toProcess; i++) {
                     if (dirtyFlags[i]) {
                         dirtyFlags[i] = false;
                         updateProvinceColor(i);
                         ++processed;
+                        if (uploadStart < 0) uploadStart = i;
+                        uploadEnd = i;
                     }
                 }
-                updateTexture();
-                dirtySweepCursor = -1;
+                if (uploadStart >= 0) uploadDirtyTextures(uploadStart, uploadEnd);
+                dirtySweepCursor = toProcess >= lim ? -1 : toProcess;
                 dirtyListSize = 0;
             } else if (dirtySweepCursor >= 0 || dirtyCount == dirtyArraySize || dirtyListSize == 0) {
                 int start = dirtySweepCursor >= 0 ? dirtySweepCursor : 0;
-                int end = (dirtySweepCursor >= 0 && dirtyCount < dirtyArraySize) ? Math.min(lim, start + ANDROID_DIRTY_BATCH) : lim;
+                int end = (dirtySweepCursor >= 0 || dirtyCount == dirtyArraySize) ? Math.min(lim, start + ANDROID_DIRTY_BATCH) : lim;
                 int uploadStart = -1;
                 int uploadEnd = -1;
                 for (int i = start; i < end; i++) {
@@ -472,7 +488,7 @@ public class ProvinceMesh {
                 }
                 if (uploadStart >= 0) {
                     if (start == 0 && end >= lim) {
-                        updateTexture();
+                        uploadDirtyTextures(0, colorPixmap.getWidth() - 1);
                     } else {
                         uploadDirtyTextures(uploadStart, uploadEnd);
                     }
@@ -575,6 +591,10 @@ public class ProvinceMesh {
         return initialized;
     }
 
+    public static int getDirtyCount() {
+        return dirtyCount;
+    }
+
     public static boolean canRender() {
         return initialized && renderAvailable && shader != null && colorTexture != null && flagTexture != null && pageMeshes.size() > 0;
     }
@@ -656,7 +676,10 @@ public class ProvinceMesh {
     public static void setDiplomacyMode(boolean active, int playerCivID) {
         diplomacyActive = active;
         diplomacyPlayerCivID = playerCivID;
-        if (initialized) markAllDirtyImmediate();
+        if (initialized) {
+            markAllDirtyImmediate(true);
+            CFG.LOG("[dip]", "setDiplomacyMode: active=" + active + " playerCivID=" + playerCivID + " forced dirtyImmediate");
+        }
     }
 
     public static boolean isDiplomacyActive() {

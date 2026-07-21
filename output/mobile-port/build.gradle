@@ -15,8 +15,6 @@ project(':mobile-port') {
                     path == "${legacyRoot}/SteamGame.java" ||
                     path == "${legacyRoot}/Steam_Game.java" ||
                     path == "${legacyRoot}/Z_Other/ST/sUM.java" ||
-                    path == "${legacyRoot}/CapitalFlagRenderer.java" ||
-                    path == "${legacyRoot}/FlagAtlas.java" ||
                     path == "${legacyRoot}/OverlayTextCache.java" ||
                     path == "${legacyRoot}/MobileRenderBudget.java" ||
                     path == "${legacyRoot}/FrameWorkScheduler.java" ||

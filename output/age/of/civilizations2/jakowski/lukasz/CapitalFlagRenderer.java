@@ -74,12 +74,14 @@ public class CapitalFlagRenderer {
 
     private static void rebuild() {
         if (!initialized || CFG.core == null || CFG.map == null) return;
+        rebuildStart = System.nanoTime();
         flagData.clear();
         flagCount = 0;
         int px = CFG.map.getMpC().getPX();
         int py = CFG.map.getMpC().getPY();
         float zoom = CFG.map.getMpS().getCurrSc();
         currentScale = zoom < 1.0f ? zoom : 1.0f;
+        if (zoom < 0.25f) { valid = true; return; }
 
         int visibleProvCount = VisibleProvinceCache.getVisibleCapitalCount();
         List<Integer> capitals = VisibleProvinceCache.getVisibleCapitals();
@@ -118,7 +120,10 @@ public class CapitalFlagRenderer {
         lastZoom = zoom;
         lastFogOfWar = (CFG.FOG_OF_WAR == 2);
         valid = true;
+        if (CFG.LOG_PERF) CFG.LOG("[PERF]", "[CapitalFlags] rebuild capitals=" + flagCount + " zoom=" + zoom + " time=" + (System.nanoTime() - rebuildStart) / 1000000L + "ms");
     }
+
+    private static long rebuildStart = 0L;
 
     public static void drawFlags(SpriteBatch oSB) {
         if (!initialized || flagCount == 0 || CFG.map == null) return;

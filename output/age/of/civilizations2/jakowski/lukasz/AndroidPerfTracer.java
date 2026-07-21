@@ -40,6 +40,15 @@ public class AndroidPerfTracer {
     private static long prevUsedMem;
     private static long peakUsedMem;
 
+    private static long lastLogTime;
+    private static final long LOG_INTERVAL_MS = 10000;
+
+    private static int sumRenderCalls;
+    private static int sumTotalRenderCalls;
+    private static int prevTotalRenderCalls;
+    private static int maxSpritesInBatch;
+    private static int lastDirtyCount;
+
     public static void setEnabled(boolean e) {
         enabled = e;
         if (!e) {
@@ -86,6 +95,12 @@ public class AndroidPerfTracer {
         countBorders = 0;
         peakUsedMem = 0;
         prevUsedMem = 0;
+        sumRenderCalls = 0;
+        sumTotalRenderCalls = 0;
+        prevTotalRenderCalls = 0;
+        maxSpritesInBatch = 0;
+        lastDirtyCount = 0;
+        lastLogTime = System.currentTimeMillis();
     }
 
     public static void beginFrame() {
@@ -160,6 +175,18 @@ public class AndroidPerfTracer {
         countBorders++;
     }
 
+    public static void recordBatchStats(int renderCalls, int totalRenderCalls, int maxSprites) {
+        if (!enabled) return;
+        sumRenderCalls += renderCalls;
+        int delta = totalRenderCalls - prevTotalRenderCalls;
+        if (delta > 0) sumTotalRenderCalls += delta;
+        prevTotalRenderCalls = totalRenderCalls;
+        if (maxSprites > maxSpritesInBatch) maxSpritesInBatch = maxSprites;
+        if (ProvinceMesh.isInitialized()) {
+            lastDirtyCount = ProvinceMesh.getDirtyCount();
+        }
+    }
+
     public static void endFrame() {
         if (!enabled) return;
         long now = System.nanoTime();
@@ -170,7 +197,7 @@ public class AndroidPerfTracer {
         long usedMem = (runtime.totalMemory() - runtime.freeMemory()) / 1048576L;
         if (usedMem > peakUsedMem) peakUsedMem = usedMem;
 
-        if (frameCount >= 300) {
+        if (frameCount >= 300 || System.currentTimeMillis() - lastLogTime >= LOG_INTERVAL_MS) {
             logSummary();
             resetAll();
         }
@@ -233,9 +260,19 @@ public class AndroidPerfTracer {
         if (timerAI > 0) {
             sb.append(" AI=").append(timerAI / Math.max(1, frameCount)).append("ms");
         }
+        if (lastDirtyCount > 0) {
+            sb.append(" dirty=").append(lastDirtyCount);
+        }
+        if (frameCount > 0 && sumRenderCalls > 0) {
+            sb.append(" draws=").append(sumRenderCalls / frameCount);
+            sb.append(" totalDraws=").append(sumTotalRenderCalls / frameCount);
+            sb.append(" maxBatch=").append(maxSpritesInBatch);
+        }
 
         Gdx.app.log("AndroidPerfTracer", sb.toString());
     }
 
-
+    public static int getDirtyProvinceCount() {
+        return lastDirtyCount;
+    }
 }

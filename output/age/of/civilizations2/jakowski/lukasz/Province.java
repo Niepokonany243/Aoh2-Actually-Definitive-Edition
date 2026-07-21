@@ -882,6 +882,11 @@ public class Province {
     }
 
     public final void drawProvinBorder(SpriteBatch oSB) {
+        if (CFG.isAndroid() && CFG.map != null) {
+            float sc = CFG.map.getMpS().getCurrSc();
+            if ((this.getMaX7() - this.getMiX2()) * sc < 5 || (this.getMaY6() - this.getMiY4()) * sc < 5) return;
+        }
+        if (this.iProviBordersLandByLandSize <= 0 && this.iProvBordersSeaBySeaSize <= 0) return;
         int i;
         for (i = 0; i < this.iProviBordersLandByLandSize; ++i) {
             this.provinceBordersLandByLand.get((int)i).drawProvBorder.drawPB(oSB, this.iTranslateProvincePosX);

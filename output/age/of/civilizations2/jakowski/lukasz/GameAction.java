@@ -2926,6 +2926,7 @@ public class GameAction {
                 if (!CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).getCivDiploGD().messageBox.getMessage((int)i).willPauseTheGame && !CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).getCivDiploGD().messageBox.getMessage((int)i).requestsResponse) continue;
                 CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).getCivDiploGD().messageBox.getMessage((int)i).willPauseTheGame = false;
                 if (RTS.PAUSE) continue;
+                CFG.LOG("[turn]", "checkMessagesPauseRTS: toggling PAUSE false->true for message idx=" + i);
                 RTS.pauseUnpause();
                 return;
             }
@@ -3059,6 +3060,18 @@ public class GameAction {
         catch (Exception ex) {
             CFG.exceptionStack(ex);
         }
+        try {
+            int pciv = CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId();
+            int msgs = CFG.core.getCiv(pciv).getCivDiploGD().messageBox.getMessagesSize();
+            for (int i = 0; i < msgs; i++) {
+                CFG.core.getCiv(pciv).getCivDiploGD().messageBox.getMessage(i).willPauseTheGame = false;
+            }
+        } catch (Exception ex) {}
+        if (RTS.PAUSE_BEFORE_NEXT_TURN != RTS.PAUSE) {
+            RTS.PAUSE = RTS.PAUSE_BEFORE_NEXT_TURN;
+            if (!RTS.PAUSE) RTS.resetTime();
+        }
+        CFG.LOG("[turn]", "startNewTurn_End: PAUSE=" + RTS.PAUSE + " (restored from PAUSE_BEFORE_NEXT_TURN=" + RTS.PAUSE_BEFORE_NEXT_TURN + ") turnID=" + GameCalendar.TURNID + " state=INPUT_ORDERS");
         CFG.gameAction.setActiveTurnState(TurnStates.INPUT_ORDERS);
         Render.updateDrawMoveUnits();
         CFG.core.updateDrawMoveUnitsArmy();
@@ -4990,12 +5003,17 @@ public class GameAction {
             CFG.menus.centerInGame_Event();
         } else {
             if (!CFG.SPECTATOR_MODE && this.activeTurnAction == TurnStates.INPUT_ORDERS) {
+                RTS.PAUSE_BEFORE_NEXT_TURN = RTS.PAUSE;
+                RTS.PAUSE = true;
+                RTS.resetTime();
+                CFG.LOG("[turn]", "takeNextTurn(INPUT_ORDERS): saved PAUSE_BEFORE_NEXT_TURN=" + RTS.PAUSE_BEFORE_NEXT_TURN + " forced PAUSE=true turnID=" + GameCalendar.TURNID);
                 for (int i = 0; i < CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).getCivDiploGD().messageBox.getMessagesSize(); ++i) {
                     if (!CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).getCivDiploGD().messageBox.getMessage((int)i).requestsResponse || CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).getCivDiploGD().messageBox.getMessage((int)i).numOfTurnsLeft > 1) continue;
                     this.checkMessagesPauseRTS();
                     CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).getCivDiploGD().messageBox.getMessage(i).onAction(i);
                     CFG.toastM.addM(CFG.lang.get("TheMessageRequiresAResponse"), CFG.COLOR_TEXT_NUM_OF_PROVINCES);
                     CFG.toastM.setTimeInView(2500);
+                    CFG.LOG("[turn]", "takeNextTurn: early return (message idx=" + i + " requires response) turnID=" + GameCalendar.TURNID);
                     return;
                 }
                 this.checkMessagesPauseRTS();

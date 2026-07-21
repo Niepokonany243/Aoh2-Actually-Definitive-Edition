@@ -10,7 +10,7 @@ public class RTS {
     public static final int MAXSPEED = 6;
     public static int SPEED = 1;
     public static boolean PAUSE = true;
-    public static boolean PAUSED_BY_NEXT_TURN = false;
+    public static boolean PAUSE_BEFORE_NEXT_TURN = true;
     public static int SOURCE = 0;
     public static final int[] TIME_REQUIRED_TO_ACTION = new int[]{1, 6500, 4000, 3000, 2000, 1250, 1};
     public static final int[] TIME_REQUIRED_TO_ACTION_MOVEUNITS = new int[]{1, 1750, 1250, 1000, 1000, 750, 50};
@@ -35,6 +35,7 @@ public class RTS {
         }
         if (RTS.timePasted()) {
             TIME_PAST = 0L;
+            if (ProvinceMesh.isDiplomacyActive()) { RTS.resetTime(); return; }
             if (CFG.gameAction.getActiveTurnStateID() == GameAction.TurnStates.INPUT_ORDERS) {
                 CFG.gameAction.takeNextTurn();
             } else if (CFG.gameAction.getActiveTurnStateID() == GameAction.TurnStates.TURN_ACTIONS) {
@@ -106,7 +107,6 @@ public class RTS {
 
     public static final void reset() {
         PAUSE = true;
-        PAUSED_BY_NEXT_TURN = false;
         RTS.resetTime();
     }
 
@@ -116,7 +116,6 @@ public class RTS {
 
     public static void pauseUnpause() {
         PAUSE = !PAUSE;
-        PAUSED_BY_NEXT_TURN = false;
         if (!PAUSE) {
             TIME_LAST_UPDATE = System.currentTimeMillis();
         }

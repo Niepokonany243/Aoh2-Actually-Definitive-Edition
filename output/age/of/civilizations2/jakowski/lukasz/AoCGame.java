@@ -43,6 +43,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Cursor;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -360,6 +361,11 @@ public class AoCGame {
         Menu_InGame_2.initTopBox();
         if (CFG.isAndroid()) {
             VisibleProvinceCache.init();
+            String renderer = Gdx.gl.glGetString(GL20.GL_RENDERER);
+            if (renderer == null || !renderer.contains("Mali")) {
+                FlagAtlas.init();
+                CapitalFlagRenderer.init();
+            }
         }
     }
 
@@ -496,7 +502,10 @@ public class AoCGame {
             if (drawFPS) { try { CFG.drawTextDefaultWithShadow(this.oSB.oSBR, "FPS: " + CFG.iNumOfFPS, CFG.PADD * 2, CFG.PADD * 2, Color.WHITE); } catch (Exception ex) {} }
             this.oSB.oSBR.setColor(Color.WHITE);
             this.oSB.end();
-            if (CFG.isAndroid()) AndroidPerfTracer.endPhase("MenuMM");
+            if (CFG.isAndroid()) {
+                AndroidPerfTracer.recordBatchStats(this.oSB.oSBR.renderCalls, this.oSB.oSBR.totalRenderCalls, this.oSB.oSBR.maxSpritesInBatch);
+                AndroidPerfTracer.endPhase("MenuMM");
+            }
             perfPhase4 = System.currentTimeMillis() - phase4Start;
         } else {
             try {
@@ -642,6 +651,16 @@ public class AoCGame {
             }
             try {
                 VisibleProvinceCache.dispose();
+            }
+            catch (Exception ex) {
+            }
+            try {
+                FlagAtlas.dispose();
+            }
+            catch (Exception ex) {
+            }
+            try {
+                CapitalFlagRenderer.dispose();
             }
             catch (Exception ex) {
             }
