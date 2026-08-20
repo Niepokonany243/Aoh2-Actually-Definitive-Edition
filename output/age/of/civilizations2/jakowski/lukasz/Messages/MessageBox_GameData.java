@@ -102,7 +102,7 @@ implements Serializable {
     }
 
     public final int getMessagesSize() {
-        return this.iMessagesSize;
+        return this.lMessages.size();
     }
 }
 

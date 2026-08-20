@@ -934,7 +934,17 @@ public class GameManager {
     }
 
     public static final long supportRevolution_MaxGold(int iOnCivID) {
-        return Math.max(1L, (long)IdeologiesManager.getChangeGovernmentCost(iOnCivID) * 2L);
+        if (iOnCivID <= 0 || iOnCivID >= CFG.core.getCivsSize()) {
+            return 1L;
+        }
+        long totalPop = 0L;
+        long totalEco = 0L;
+        for (int i = 0; i < CFG.core.getCiv(iOnCivID).getNumOfProvs(); ++i) {
+            int provID = CFG.core.getCiv(iOnCivID).getProvID(i);
+            totalPop += CFG.core.getProv(provID).getPop().getPops();
+            totalEco += CFG.core.getProv(provID).getEco();
+        }
+        return Math.max(1L, (long)((float)totalPop * GameValues.gvRebelsSupport.SUPPORT_REV_POP_COST_MODIFIER + (float)totalEco * GameValues.gvRebelsSupport.SUPPORT_REV_ECO_COST_MODIFIER));
     }
 
     public static final float supportRevolution_Pressure(int iOnCivID, long nMoney) {

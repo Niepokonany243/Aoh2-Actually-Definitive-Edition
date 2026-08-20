@@ -8,6 +8,6 @@ public class GV_RevolutionaryRisk {
     public float REVOLT_RISK_TAXATION_BASE = 0.0725f;
     public float REVOLT_RISK_HAPPINESS_DIVISOR = 14.0f;
     public int REVOLT_RISK_BANKRUPTCY_THRESHOLD = -1000;
-    public float REV_RISK_MAX = 20.0f;
+    public float REV_RISK_MAX = 1.5f;
 }
 

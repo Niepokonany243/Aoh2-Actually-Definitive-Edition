@@ -13,6 +13,8 @@
             <option value="$PROJECT_DIR$/output/android" />
             <option value="$PROJECT_DIR$/output/core" />
             <option value="$PROJECT_DIR$/output/desktop" />
+            <option value="$PROJECT_DIR$/output/mobile-core" />
+            <option value="$PROJECT_DIR$/output/mobile-port" />
           </set>
         </option>
       </GradleProjectSettings>

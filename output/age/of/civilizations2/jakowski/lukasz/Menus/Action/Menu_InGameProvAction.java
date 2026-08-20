@@ -738,7 +738,6 @@ extends Menu {
             public boolean getVisibleE() {
                 try {
                     Province p = CFG.core.getProv(CFG.core.getActiveProvID());
-                    if (CFG.settingsGD.ANNEXATION_DELAY && p.getOccupationTurnsLeft() > 0) return false;
                     return p.isOccupied() && p.getCivId() != CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId() && p.getTrueOwnerOfProv() != CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId();
                 }
                 catch (Exception ex) {
@@ -766,7 +765,7 @@ extends Menu {
                     ArrayList<MEHover_2E> nElements = new ArrayList<MEHover_2E>();
                     ArrayList<ME_Hover_2Type> nData = new ArrayList<ME_Hover_2Type>();
                     Province p = CFG.core.getProv(CFG.core.getActiveProvID());
-                    if (p.isOccupied() && !(CFG.settingsGD.ANNEXATION_DELAY && p.getOccupationTurnsLeft() > 0)) {
+                    if (p.isOccupied()) {
                         if (p.getName().length() > 0) {
                             nData.add(new ME_Hover_2Type_Flag_Big(p.getTrueOwnerOfProv()));
                             nData.add(new ME_Hover_2Type_Text_Big(CFG.lang.get("Plunder") + ": ", CFG.COLOR_HOVER_TITLE));
@@ -792,7 +791,7 @@ extends Menu {
                         nElements.add(new MEHover_2E(nData));
                         nData.clear();
                     } else {
-                        nData.add(new ME_Hover_2Type_Text("Plunder not available during annexation period", CFG.COLOR_NEGATIVE_2));
+                        nData.add(new ME_Hover_2Type_Text(CFG.lang.get("OnlyOccupiedProvinceCanBePlundered"), CFG.COLOR_NEGATIVE_2));
                         nElements.add(new MEHover_2E(nData));
                         nData.clear();
                     }

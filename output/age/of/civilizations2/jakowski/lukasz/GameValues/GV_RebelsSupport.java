@@ -18,5 +18,7 @@ public class GV_RebelsSupport {
     public float SUPPORT_REBELS_MAX_COST_MODIFIER = 2.5f;
     public float SUPPORT_REBELS_MONEY_TO_POPULATION_RATIO_MODIFIER = 0.0747f;
     public float SUPPORT_REBELS_REV_RISK_CHANGE_BASE_VALUE = 0.275f;
+    public float SUPPORT_REV_POP_COST_MODIFIER = 1000.0f;
+    public float SUPPORT_REV_ECO_COST_MODIFIER = 25000.0f;
 }
 

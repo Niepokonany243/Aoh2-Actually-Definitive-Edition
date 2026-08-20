@@ -891,9 +891,6 @@ public class NewTurn {
             if (province.getHappi() < GameValues.gvRebels.RISE_REVOLT_RISK_IN_PROVINCE_IF_HAPPINESS_BELOW) {
                 float nModifier = provinceCiv.getGold() < (long)GameValues.gvRevolutionaryRisk.REVOLT_RISK_BANKRUPTCY_THRESHOLD ? 1.0f : Math.min(GameValues.gvRevolutionaryRisk.REVOLT_RISK_TAXATION_BASE + provinceCiv.getTaxationLvl() / CFG.ideologiesMgr.getAcceptableTaxation(ideologyId, civId), 1.0f);
                 float riskBoost = 1.0f;
-                if (fRisk > 1.0f) {
-                    riskBoost = fRisk * 2.0f;
-                }
                 fRisk += riskBoost * nModifier * ageRiskModifier * (GameValues.gvRebels.RISE_REVOLT_RISK_IN_PROVINCE_IF_HAPPINESS_BELOW - province.getHappi()) / GameValues.gvRevolutionaryRisk.REVOLT_RISK_HAPPINESS_DIVISOR;
             }
             province.setRevRisk(fRisk);

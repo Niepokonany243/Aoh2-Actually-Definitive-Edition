@@ -27,27 +27,6 @@ public class Menu_InGame_Strategy extends Menu {
             return;
         }
 
-        
-        int tabW = (fixedStrategyWidth - CFG.PADD * 2) / 4;
-        for (int i = 0; i < 4; i++) {
-            final int strategyID = i;
-            menuElements.add(new Button_Game(getStrategyName(i), -1, CFG.PADD + i * tabW, tY, tabW, CFG.BUTTON_H * 3 / 4, true) {
-                @Override
-                public void actionElem(int iID) {
-                    civ.civGD.iBattleStrategy = strategyID;
-                    CFG.menus.rebuildInGame_Strategy();
-                }
-                @Override
-                public Color getColorE(boolean isActive) {
-                    if (civ.civGD.iBattleStrategy == strategyID) {
-                        return CFG.COLOR_TEXT_GREEN;
-                    }
-                    return super.getColorE(isActive);
-                }
-            });
-        }
-        tY += CFG.BUTTON_H * 3 / 4 + CFG.PADD;
-
         menuElements.add(new Text_Static("-------------------", -1, CFG.PADD, tY, fixedStrategyWidth - CFG.PADD * 2, CFG.BUTTON_H / 2));
         tY += CFG.BUTTON_H / 2 + CFG.PADD;
 
@@ -232,15 +211,5 @@ public class Menu_InGame_Strategy extends Menu {
         BetterUI_Manager.drawBetterButtonBorder(oSB, this.getPosX() + iTranslateX, this.getPosY() + iTranslateY, this.getWidthM(), this.getHeightM(), false, false, false);
         oSB.setColor(Color.WHITE);
         super.beginClipM(oSB, iTranslateX, iTranslateY, sliderMenuIsActive);
-    }
-
-    private String getStrategyName(int id) {
-        switch(id) {
-            case 0: return "Def";
-            case 1: return "Agg";
-            case 2: return "Bal";
-            case 3: return "Tac";
-            default: return "S" + id;
-        }
     }
 }

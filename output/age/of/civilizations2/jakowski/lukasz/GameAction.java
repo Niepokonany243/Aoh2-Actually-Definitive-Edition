@@ -5486,7 +5486,9 @@ public class GameAction {
                 joinProvinces.add(nOverMin.get(i5));
             }
         }
-        for (i = 0; i < joinProvinces.size(); ++i) {
+        int maxJoin = Math.max(1, (int)((float)CFG.core.getCiv(nCivID).getNumOfProvs() * (GameValues.gvRebels.UPRAISE_PERC_OF_PROVINCES_TO_UPRAISE_BASE + (float)CFG.oR.nextInt(GameValues.gvRebels.UPRAISE_PERC_OF_PROVINCES_TO_UPRAISE_RANDOM_100 + 1) / 100.0f)));
+        int numJoined = 0;
+        for (i = 0; i < joinProvinces.size() && numJoined < maxJoin; ++i) {
             int joinProvID = (Integer)joinProvinces.get(i);
             if (!GameManager.canProvinceRevoltAgainstCiv(nCivID, joinProvID)) continue;
             if (CFG.core.getProv(joinProvID).getCivId() == nRebelsCivID) continue;
@@ -5501,6 +5503,7 @@ public class GameAction {
             CFG.core.getProv(joinProvID).setCivId(nRebelsCivID, true);
             this.spawnRevolutionaryArmy(joinProvID, nCivID, nRebelsCivID);
             this.updateProvinceAfterRevolution(joinProvID);
+            ++numJoined;
         }
         CFG.core.getCiv(nRebelsCivID).buildCivPersonality();
         for (i = 0; i < tempArmies.size(); ++i) {

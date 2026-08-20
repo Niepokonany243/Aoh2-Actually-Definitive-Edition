@@ -38,6 +38,7 @@ public class DesktopLauncher {
         int tSamples = -1;
         boolean tValidConfig = false;
         boolean tVSync = false;
+        String tOpenGLBackend = "default";
         BufferedReader bfr = null;
         String sLine = "";
         System.out.println("File encoding: " + System.getProperty("file.encoding"));
@@ -73,6 +74,14 @@ public class DesktopLauncher {
                 catch (Exception ex) {
                     // Skip bad line
                 }
+                if (sLine.startsWith("OPENGL_BACKEND=")) {
+                    try {
+                        tOpenGLBackend = sLine.replace(";", "").split("=")[1].trim();
+                    }
+                    catch (Exception ex2) {
+                        // Use default backend on a bad value
+                    }
+                }
             }
         }
         catch (IOException ex) {
@@ -91,8 +100,21 @@ public class DesktopLauncher {
         config.useVsync(tVSync);
         config.setAudioConfig(32, 512, 18);
         config.setForegroundFPS(60);
+        if (tOpenGLBackend.equalsIgnoreCase("angle")) {
+            config.setOpenGLEmulation(Lwjgl3ApplicationConfiguration.GLEmulation.ANGLE_GLES20, 3, 2);
+            System.out.println("OpenGL backend: ANGLE (GLES2 over Direct3D)");
+        } else {
+            System.out.println("OpenGL backend: default (native OpenGL) - set OPENGL_BACKEND=angle in settings/config.txt if OpenGL init fails on this system");
+        }
         try {
             new Lwjgl3Application(new AA_Game(), config);
+        }
+        catch (Throwable ex) {
+            System.out.println("Could not start the game window/OpenGL context: " + (ex.getMessage() == null ? ex.toString() : ex.getMessage()));
+            System.out.println("If this is an Intel Ivy Bridge (HD 2500/4000) system on Windows 11, set OPENGL_BACKEND=angle in settings/config.txt");
+            System.out.println("and make sure libEGL.dll and libGLESv2.dll are present in the game folder and the jre/bin folder. Alternatively place the Mesa software opengl32.dll in jre/bin.");
+            CFG.exceptionStack(ex);
+            System.exit(1);
         } finally {
             GameTaskScheduler.shutdownAndAwait();
         }

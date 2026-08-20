@@ -498,8 +498,26 @@ public class Province {
     }
 
     public final void drawOccupiedProv(SpriteBatch oSB) {
-        if (this.provBG == null) return;
+        if (this.getCivId() == this.getTrueOwnerOfProv()) return;
         oSB.setColor(1.0f, 1.0f, 1.0f, (float)CFG.settingsGD.OCCUPIED_PROV_ALPHA / 255.0f);
+        TextureRegion region = ProvinceAtlas.getRegion(this.iProvinceID);
+        if (region != null) {
+            int w = (int)(region.getRegionWidth() * CFG.map.getMpB().getMapExtraScale());
+            int h = (int)(region.getRegionHeight() * CFG.map.getMpB().getMapExtraScale());
+            float x = this.iTranslateProvincePosX + this.miX * CFG.map.getMpB().getMapSc3();
+            float y = -(CFG.map.getMpC().getPY() + this.miY * CFG.map.getMpB().getMapSc3() + h);
+            float spanX = Math.max(1.0f / 1024.0f, region.getU2() - region.getU());
+            float maskScale = CFG.settingsGD.OCCUPIED_STRIPES_SIZE * Math.max((float)w / (float)IMGManager.getIMG(Images.patternReversed).getWidth(), (float)h / (float)IMGManager.getIMG(Images.patternReversed).getHeight()) / spanX;
+            AoCGame.shaderAlpha3.setUniformf("u_maskScale", maskScale);
+            AoCGame.shaderAlpha3.setUniformf("u_maskOffset", -(maskScale - 1.0f) / 2.0f - maskScale * region.getU(), 0.0f);
+            region.getTexture().bind(1);
+            Gdx.gl.glActiveTexture(33984);
+            IMGManager.getIMG(Images.patternExtraAlpha).getTexture().bind(0);
+            oSB.draw(IMGManager.getIMG(Images.patternExtraAlpha).getTexture(), x, y, w, h, region.getU(), region.getV2(), region.getU2(), region.getV());
+            oSB.flush();
+            return;
+        }
+        if (this.provBG == null) return;
         AoCGame.shaderAlpha3.setUniformf("u_maskScale", CFG.settingsGD.OCCUPIED_STRIPES_SIZE * Math.max((float)this.provBG.getWidth() / (float)IMGManager.getIMG(Images.patternReversed).getWidth(), (float)this.provBG.getHeight() / (float)IMGManager.getIMG(Images.patternReversed).getHeight()));
         this.provBG.getTexture().bind(1);
         Gdx.gl.glActiveTexture(33984);
@@ -508,8 +526,26 @@ public class Province {
     }
 
     public final void drawOccupiedProv2(SpriteBatch oSB) {
-        if (this.provBG == null) return;
+        if (this.getCivId() == this.getTrueOwnerOfProv()) return;
         oSB.setColor(1.0f, 1.0f, 1.0f, (float)(CFG.settingsGD.OCCUPIED_PROV_ALPHA * 2) / 255.0f);
+        TextureRegion region = ProvinceAtlas.getRegion(this.iProvinceID);
+        if (region != null) {
+            int w = (int)(region.getRegionWidth() * CFG.map.getMpB().getMapExtraScale());
+            int h = (int)(region.getRegionHeight() * CFG.map.getMpB().getMapExtraScale());
+            float x = this.iTranslateProvincePosX + this.miX * CFG.map.getMpB().getMapSc3();
+            float y = -(CFG.map.getMpC().getPY() + this.miY * CFG.map.getMpB().getMapSc3() + h);
+            float spanX = Math.max(1.0f / 1024.0f, region.getU2() - region.getU());
+            float maskScale = CFG.settingsGD.OCCUPIED_STRIPES_SIZE * Math.max((float)w / (float)IMGManager.getIMG(Images.patternReversed).getWidth(), (float)h / (float)IMGManager.getIMG(Images.patternReversed).getHeight()) / spanX;
+            AoCGame.shaderAlpha3.setUniformf("u_maskScale", maskScale);
+            AoCGame.shaderAlpha3.setUniformf("u_maskOffset", -(maskScale - 1.0f) / 2.0f - maskScale * region.getU(), 0.0f);
+            region.getTexture().bind(1);
+            Gdx.gl.glActiveTexture(33984);
+            IMGManager.getIMG(Images.patternExtraAlpha).getTexture().bind(0);
+            oSB.draw(IMGManager.getIMG(Images.patternExtraAlpha).getTexture(), x, y, w, h, region.getU(), region.getV2(), region.getU2(), region.getV());
+            oSB.flush();
+            return;
+        }
+        if (this.provBG == null) return;
         AoCGame.shaderAlpha3.setUniformf("u_maskScale", CFG.settingsGD.OCCUPIED_STRIPES_SIZE * Math.max((float)this.provBG.getWidth() / (float)IMGManager.getIMG(Images.patternReversed).getWidth(), (float)this.provBG.getHeight() / (float)IMGManager.getIMG(Images.patternReversed).getHeight()));
         this.provBG.getTexture().bind(1);
         Gdx.gl.glActiveTexture(33984);

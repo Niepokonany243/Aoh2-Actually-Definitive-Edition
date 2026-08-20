@@ -46,6 +46,8 @@ public class ProvinceMesh {
     private static int perfUpdateCount = 0;
     private static Texture flagTexture;
     private static Pixmap flagPixmap;
+    private static Texture occupiedTexture;
+    private static Pixmap occupiedPixmap;
     private static float lastDiscoveryFade = -1f;
     private static boolean[] dirtyFlags;
     private static int[] dirtyList;
@@ -244,17 +246,23 @@ public class ProvinceMesh {
         flagTexture = new Texture(flagPixmap);
         flagTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
+        occupiedPixmap = new Pixmap(texWidth, 1, Pixmap.Format.RGBA8888);
+        occupiedTexture = new Texture(occupiedPixmap);
+        occupiedTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
         String vertexShader = "attribute vec2 a_position;\n" +
                               "attribute vec2 a_texCoord;\n" +
                               "attribute float a_provinceID;\n" +
                               "uniform mat4 u_projTrans;\n" +
                               "uniform float u_translateX;\n" +
                               "uniform float u_translateY;\n" +
-                              "varying highp vec2 v_texCoord;\n" +
-                              "varying highp float v_provinceID;\n" +
+                              "varying vec2 v_texCoord;\n" +
+                              "varying float v_provinceID;\n" +
+                              "varying vec2 v_worldPos;\n" +
                               "void main() {\n" +
                               "    v_texCoord = a_texCoord;\n" +
                               "    v_provinceID = a_provinceID;\n" +
+                              "    v_worldPos = a_position.xy + vec2(u_translateX, u_translateY);\n" +
                               "    gl_Position = u_projTrans * vec4(a_position.x + u_translateX, a_position.y + u_translateY, 0, 1);\n" +
                               "}";
         
@@ -265,22 +273,29 @@ public class ProvinceMesh {
                                 "precision mediump float;\n" +
                                 "#endif\n" +
                                 "#endif\n" +
-                                "varying highp vec2 v_texCoord;\n" +
-                                "varying highp float v_provinceID;\n" +
+                                "varying vec2 v_texCoord;\n" +
+                                "varying float v_provinceID;\n" +
+                                "varying vec2 v_worldPos;\n" +
                                 "uniform sampler2D u_texture;\n" +
                                 "uniform sampler2D u_colors;\n" +
                                 "uniform sampler2D u_flags;\n" +
-                                "uniform highp float u_colorStep;\n" +
+                                "uniform sampler2D u_occupied;\n" +
+                                "uniform float u_colorStep;\n" +
                                 "uniform float u_discoveryFade;\n" +
+                                "uniform float u_stripeDensity;\n" +
                                 "void main() {\n" +
-                                "    highp float provinceSlot = floor(v_provinceID + 0.5);\n" +
-                                "    highp vec2 colorUV = vec2((provinceSlot + 0.5) * u_colorStep, 0.5);\n" +
+                                "    float provinceSlot = floor(v_provinceID + 0.5);\n" +
+                                "    vec2 colorUV = vec2((provinceSlot + 0.5) * u_colorStep, 0.5);\n" +
                                 "    vec4 mask = texture2D(u_texture, v_texCoord);\n" +
                                 "    vec4 provColor = texture2D(u_colors, colorUV);\n" +
                                 "    float flag = texture2D(u_flags, colorUV).a;\n" +
                                 "    float finalAlpha = provColor.a;\n" +
                                 "    if (flag > 0.5) {\n" +
                                 "        finalAlpha = provColor.a * u_discoveryFade;\n" +
+                                "    }\n" +
+                                "    if (texture2D(u_occupied, colorUV).a > 0.5) {\n" +
+                                "        float stripe = step(0.5, fract((v_worldPos.x - v_worldPos.y) * u_stripeDensity));\n" +
+                                "        provColor.rgb *= mix(1.0, 0.5, stripe);\n" +
                                 "    }\n" +
                                 "    gl_FragColor = vec4(provColor.rgb, finalAlpha * mask.a);\n" +
                                 "}";
@@ -383,6 +398,7 @@ public class ProvinceMesh {
         }
         Province p = CFG.core.getProv(provinceID);
         
+        boolean occupied = p.isOccupied();
         if (p.getSeaProv() || p.getWastelandLvl() >= 0) {
             colorPixmap.setColor(0, 0, 0, 0);
             flagPixmap.setColor(0, 0, 0, 0);
@@ -404,8 +420,10 @@ public class ProvinceMesh {
             }
             flagPixmap.setColor(0, 0, 0, 0);
         }
+        occupiedPixmap.setColor(occupied ? 1f : 0f, 0f, 0f, occupied ? 1f : 0f);
         colorPixmap.drawPixel(provinceID, 0);
         flagPixmap.drawPixel(provinceID, 0);
+        occupiedPixmap.drawPixel(provinceID, 0);
     }
     
     public static synchronized void updateAllStates() {
@@ -486,6 +504,7 @@ public class ProvinceMesh {
         int width = end - start + 1;
         uploadPixmapRow(colorTexture, colorPixmap, start, width);
         uploadPixmapRow(flagTexture, flagPixmap, start, width);
+        uploadPixmapRow(occupiedTexture, occupiedPixmap, start, width);
     }
 
     private static void uploadPixmapRow(Texture texture, Pixmap pixmap, int x, int width) {
@@ -558,6 +577,7 @@ public class ProvinceMesh {
         if (initialized) {
             colorTexture.draw(colorPixmap, 0, 0);
             flagTexture.draw(flagPixmap, 0, 0);
+            occupiedTexture.draw(occupiedPixmap, 0, 0);
         }
     }
 
@@ -587,11 +607,14 @@ public class ProvinceMesh {
             shader.setUniformf("u_translateY", -CFG.map.getMpC().getPY());
             shader.setUniformi("u_colors", 1);
             shader.setUniformi("u_flags", 2);
+            shader.setUniformi("u_occupied", 3);
             shader.setUniformf("u_colorStep", 1.0f / colorTexture.getWidth());
             shader.setUniformf("u_discoveryFade", getDiscoveryFade());
+            shader.setUniformf("u_stripeDensity", CFG.settingsGD.OCCUPIED_STRIPES_SIZE / 60.0f);
             
             colorTexture.bind(1);
             flagTexture.bind(2);
+            occupiedTexture.bind(3);
             
             boolean worldMap = CFG.map.getIsMapWorldMap(CFG.map.getActiveMapIDN());
             int pX = CFG.map.getMpC().getPX();
@@ -663,10 +686,14 @@ public class ProvinceMesh {
         if (colorPixmap != null) colorPixmap.dispose();
         if (flagTexture != null) flagTexture.dispose();
         if (flagPixmap != null) flagPixmap.dispose();
+        if (occupiedTexture != null) occupiedTexture.dispose();
+        if (occupiedPixmap != null) occupiedPixmap.dispose();
         colorPixmap = null;
         colorTexture = null;
         flagPixmap = null;
         flagTexture = null;
+        occupiedPixmap = null;
+        occupiedTexture = null;
         initialized = false;
         renderAvailable = false;
         needsUpdate = true;

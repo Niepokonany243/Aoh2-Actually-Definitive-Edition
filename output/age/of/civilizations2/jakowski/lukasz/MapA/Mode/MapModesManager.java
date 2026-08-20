@@ -468,6 +468,14 @@ public class MapModesManager {
                     }
                     lastMet = met;
                 }
+                oSB.setShader(AoCGame.shaderAlpha3);
+                for (int i = 0; i < CFG.core.sortedPIV.size(); ++i) {
+                    int provinceID = CFG.core.sortedPIV.get(i);
+                    Province province = CFG.core.getProv(provinceID);
+                    if (province.getCivId() <= 0 || !CFG.getMetProv(provinceID)) continue;
+                    province.drawOccupiedProv(oSB);
+                }
+                oSB.setShader(AoCGame.shaderDef);
             }
         } : new RenderProvince.DrawProvinces(){
 
@@ -515,6 +523,14 @@ public class MapModesManager {
                     }
                     province.drawLandProv(oSB);
                 }
+                oSB.setShader(AoCGame.shaderAlpha3);
+                for (int i = 0; i < CFG.core.sortedPIV.size(); ++i) {
+                    int provinceID = CFG.core.sortedPIV.get(i);
+                    Province province = CFG.core.getProv(provinceID);
+                    if (province.getCivId() <= 0) continue;
+                    province.drawOccupiedProv(oSB);
+                }
+                oSB.setShader(AoCGame.shaderDef);
             }
         });
         VIEW_POPULATION_MODE = this.addViewToTheGame(new MapMode(){
@@ -9399,8 +9415,10 @@ nData.add(new ME_Hover_2Type_Text("" + (int)(fQ * 100.0f) + "%", fQ > 0.6f ? CFG
 
     public final void setActiveMapModeID(int iID) {
         try {
-            if (this.iActiveMapModeID == iID) {
-                return;
+            if (this.iActiveMapModeID == iID && iID >= 0) {
+                int tempActive = this.iActiveMapModeID;
+                this.iActiveMapModeID = -1;
+                this.lMapModes.get(tempActive).disableViewAction();
             } else if (this.iActiveMapModeID >= 0) {
                 int tempActive = this.iActiveMapModeID;
                 this.iActiveMapModeID = iID;

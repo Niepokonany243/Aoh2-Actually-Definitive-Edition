@@ -398,7 +398,7 @@ public class MapCoords {
     }
 
     public final boolean getDisableMovingMap() {
-        return this.disableMovingTheMap || this.disableMovingMapRefCount > 0;
+        return this.disableMovingTheMap || (CFG.isAndroid() && this.disableMovingMapRefCount > 0);
     }
 
     public final void setDisableMovingMap(boolean disableMovingTheMap) {

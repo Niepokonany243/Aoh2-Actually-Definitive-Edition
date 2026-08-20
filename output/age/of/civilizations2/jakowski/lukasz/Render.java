@@ -2715,6 +2715,7 @@ public class Render {
             @Override
             public void drawRenderer(SpriteBatch oSB) {
                 RenderProvince.drawProvinces(oSB);
+                RenderProvince.drawOccupiedProvinces(oSB);
                 if (CFG.map.getMpS().getCurrSc() >= DISABLE_INNER_BORDERS) {
                     RenderProvince.drawProvincesBorder(oSB);
                 } else {

@@ -52,9 +52,6 @@ public class Plunder {
         if (nProvinceID < 0 || !CFG.core.getProv(nProvinceID).isOccupied() || CFG.core.getProv(nProvinceID).getSeaProv()) {
             return;
         }
-        if (CFG.settingsGD.ANNEXATION_DELAY && CFG.core.getProv(nProvinceID).getOccupationTurnsLeft() > 0) {
-            return;
-        }
         if (CFG.core.getProv(nProvinceID).getCivId() == iCivID || CFG.core.getProv(nProvinceID).getTrueOwnerOfProv() == iCivID) {
             return;
         }
@@ -85,9 +82,6 @@ public class Plunder {
 
     public static final void plunder(int iCivID, int nProvinceID, long nArmy) {
         if (CFG.core.getProv(nProvinceID).getTrueOwnerOfProv() == iCivID) {
-            return;
-        }
-        if (CFG.settingsGD.ANNEXATION_DELAY && CFG.core.getProv(nProvinceID).getOccupationTurnsLeft() > 0) {
             return;
         }
         if (CFG.core.getProv(nProvinceID).getCivId() == iCivID) {
