@@ -1840,13 +1840,13 @@ public class AIPlaystyle {
         for (n4 = CFG.core.getCiv(n).getSeaAccess_Provinces_Size() - 1; n4 >= 0; --n4) {
             if (CFG.core.getProv(CFG.core.getCiv(n).getSeaAccessProvinces().get(n4)).isOccupied()) continue;
             for (int i = 0; i < CFG.core.getProv(CFG.core.getCiv(n).getSeaAccessProvinces().get(n4)).getNeighSeaProvincesSize(); ++i) {
-                arrayList2.set(CFG.core.getProv(CFG.core.getProv(CFG.core.getCiv(n).getSeaAccessProvinces().get(n4)).getNeighSeaProvinces(i)).getBasinID(), true);
+                CFG.basinSet(arrayList2, CFG.core.getProv(CFG.core.getProv(CFG.core.getCiv(n).getSeaAccessProvinces().get(n4)).getNeighSeaProvinces(i)).getBasinID(), true);
             }
         }
         for (n4 = CFG.oAI.lNeutralProvincesWithSeaAccess.size() - 1; n4 >= 0; --n4) {
             bl = false;
             for (n3 = 0; n3 < CFG.core.getProv(CFG.oAI.lNeutralProvincesWithSeaAccess.get(n4)).getNeighSeaProvincesSize(); ++n3) {
-                if (!((Boolean)arrayList2.get(CFG.core.getProv(CFG.core.getProv(CFG.oAI.lNeutralProvincesWithSeaAccess.get(n4)).getNeighSeaProvinces(n3)).getBasinID())).booleanValue()) continue;
+                if (!CFG.basinGet(arrayList2, CFG.core.getProv(CFG.core.getProv(CFG.oAI.lNeutralProvincesWithSeaAccess.get(n4)).getNeighSeaProvinces(n3)).getBasinID())) continue;
                 bl = true;
                 break;
             }
@@ -1857,7 +1857,7 @@ public class AIPlaystyle {
             for (n4 = CFG.oAI.lWastelandProvincesWithSeaAccess.size() - 1; n4 >= 0; --n4) {
                 bl = false;
                 for (n3 = 0; n3 < CFG.core.getProv(CFG.oAI.lWastelandProvincesWithSeaAccess.get(n4)).getNeighSeaProvincesSize(); ++n3) {
-                    if (!((Boolean)arrayList2.get(CFG.core.getProv(CFG.core.getProv(CFG.oAI.lWastelandProvincesWithSeaAccess.get(n4)).getNeighSeaProvinces(n3)).getBasinID())).booleanValue()) continue;
+                    if (!CFG.basinGet(arrayList2, CFG.core.getProv(CFG.core.getProv(CFG.oAI.lWastelandProvincesWithSeaAccess.get(n4)).getNeighSeaProvinces(n3)).getBasinID())) continue;
                     bl = true;
                     break;
                 }
@@ -3706,13 +3706,13 @@ public class AIPlaystyle {
                 if (!bl) {
                     for (n6 = civilization.getSeaAccess_PortProvinces_Size() - 1; n6 >= 0; --n6) {
                         for (n2 = 0; n2 < CFG.core.getProv(civilization.getSeaAccess_PortProvinces().get(n6)).getNeighSeaProvincesSize(); ++n2) {
-                            arrayList2.set(CFG.core.getProv(CFG.core.getProv(civilization.getSeaAccess_PortProvinces().get(n6)).getNeighSeaProvinces(n2)).getBasinID(), true);
+                            CFG.basinSet(arrayList2, CFG.core.getProv(CFG.core.getProv(civilization.getSeaAccess_PortProvinces().get(n6)).getNeighSeaProvinces(n2)).getBasinID(), true);
                         }
                     }
                 } else {
                     for (n6 = civilization.getSeaAccess_Provinces_Size() - 1; n6 >= 0; --n6) {
                         for (n2 = 0; n2 < CFG.core.getProv(civilization.getSeaAccessProvinces().get(n6)).getNeighSeaProvincesSize(); ++n2) {
-                            arrayList2.set(CFG.core.getProv(CFG.core.getProv(civilization.getSeaAccessProvinces().get(n6)).getNeighSeaProvinces(n2)).getBasinID(), true);
+                            CFG.basinSet(arrayList2, CFG.core.getProv(CFG.core.getProv(civilization.getSeaAccessProvinces().get(n6)).getNeighSeaProvinces(n2)).getBasinID(), true);
                         }
                     }
                 }
@@ -3722,13 +3722,14 @@ public class AIPlaystyle {
                     Civilization civilization2 = CFG.core.getCiv((Integer)arrayList.get(n5));
                     for (n4 = civilization2.getSeaAccess_Provinces_Size() - 1; n4 >= 0; --n4) {
                         for (n3 = 0; n3 < CFG.core.getProv(civilization2.getSeaAccessProvinces().get(n4)).getNeighSeaProvincesSize(); ++n3) {
-                            if (!((Boolean)arrayList2.get(CFG.core.getProv(CFG.core.getProv(civilization2.getSeaAccessProvinces().get(n4)).getNeighSeaProvinces(n3)).getBasinID())).booleanValue()) continue;
+                            int basinID3 = CFG.core.getProv(CFG.core.getProv(civilization2.getSeaAccessProvinces().get(n4)).getNeighSeaProvinces(n3)).getBasinID();
+                            if (!CFG.basinGet(arrayList2, basinID3)) continue;
                             if (CFG.core.getProv(civilization2.getSeaAccessProvinces().get(n4)).getTrueOwnerOfProv() == n) {
-                                ((List)arrayList3.get(CFG.core.getProv(CFG.core.getProv(civilization2.getSeaAccessProvinces().get(n4)).getNeighSeaProvinces(n3)).getBasinID())).add(civilization2.getSeaAccessProvinces().get(n4));
+                                if (CFG.basinValid(arrayList3, basinID3)) ((List)arrayList3.get(basinID3)).add(civilization2.getSeaAccessProvinces().get(n4));
                                 ++n8;
                                 continue;
                             }
-                            ((List)arrayList4.get(CFG.core.getProv(CFG.core.getProv(civilization2.getSeaAccessProvinces().get(n4)).getNeighSeaProvinces(n3)).getBasinID())).add(civilization2.getSeaAccessProvinces().get(n4));
+                            if (CFG.basinValid(arrayList4, basinID3)) ((List)arrayList4.get(basinID3)).add(civilization2.getSeaAccessProvinces().get(n4));
                             ++n9;
                         }
                     }
@@ -3806,7 +3807,7 @@ public class AIPlaystyle {
                 arrayList.add(false);
             }
             for (n5 = 0; n5 < CFG.core.getProv(n2).getNeighSeaProvincesSize(); ++n5) {
-                arrayList.set(CFG.core.getProv(CFG.core.getProv(n2).getNeighSeaProvinces(n5)).getBasinID(), true);
+                CFG.basinSet(arrayList, CFG.core.getProv(CFG.core.getProv(n2).getNeighSeaProvinces(n5)).getBasinID(), true);
             }
             int n6 = -1;
             float f = -1.0f;
@@ -3818,7 +3819,7 @@ public class AIPlaystyle {
                 if (CFG.core.getProv(CFG.core.getCiv(n).getSeaAccessProvinces().get(n4)).isOccupied() && GameCalendar.TURNID % GameValues.gvAiWar.NAVAL_INVASION_FROM_OCCUPIED_ONLY_EVERY_X_TURNS != 0) continue;
                 for (n3 = 0; n3 < CFG.core.getProv(CFG.core.getCiv(n).getSeaAccessProvinces().get(n4)).getNeighSeaProvincesSize(); ++n3) {
                     float f2;
-                    if (!((Boolean)arrayList.get(CFG.core.getProv(CFG.core.getProv(CFG.core.getCiv(n).getSeaAccessProvinces().get(n4)).getNeighSeaProvinces(n3)).getBasinID())).booleanValue()) continue;
+                    if (!CFG.basinGet(arrayList, CFG.core.getProv(CFG.core.getProv(CFG.core.getCiv(n).getSeaAccessProvinces().get(n4)).getNeighSeaProvinces(n3)).getBasinID())) continue;
                     if (CFG.core.getCiv(n).getCivRegion(CFG.core.getProv(CFG.core.getCiv(n).getSeaAccessProvinces().get(n4)).getCivRegionID()).checkRegionBordersWithEnemy(n) || !((f2 = this.moveAtWar_AtSea_FromProvinceID_Score_New(n, CFG.core.getCiv(n).getSeaAccessProvinces().get(n4), n2, false, n7)) > f)) continue block4;
                     n6 = CFG.core.getCiv(n).getSeaAccessProvinces().get(n4);
                     f = f2;
@@ -3906,13 +3907,13 @@ public class AIPlaystyle {
                         if (!bl) {
                             for (n7 = civilization.getSeaAccess_PortProvinces_Size() - 1; n7 >= 0; --n7) {
                                 for (n3 = 0; n3 < CFG.core.getProv(civilization.getSeaAccess_PortProvinces().get(n7)).getNeighSeaProvincesSize(); ++n3) {
-                                    arrayList2.set(CFG.core.getProv(CFG.core.getProv(civilization.getSeaAccess_PortProvinces().get(n7)).getNeighSeaProvinces(n3)).getBasinID(), true);
+                                    CFG.basinSet(arrayList2, CFG.core.getProv(CFG.core.getProv(civilization.getSeaAccess_PortProvinces().get(n7)).getNeighSeaProvinces(n3)).getBasinID(), true);
                                 }
                             }
                         } else {
                             for (n7 = civilization.getSeaAccess_Provinces_Size() - 1; n7 >= 0; --n7) {
                                 for (n3 = 0; n3 < CFG.core.getProv(civilization.getSeaAccessProvinces().get(n7)).getNeighSeaProvincesSize(); ++n3) {
-                                    arrayList2.set(CFG.core.getProv(CFG.core.getProv(civilization.getSeaAccessProvinces().get(n7)).getNeighSeaProvinces(n3)).getBasinID(), true);
+                                    CFG.basinSet(arrayList2, CFG.core.getProv(CFG.core.getProv(civilization.getSeaAccessProvinces().get(n7)).getNeighSeaProvinces(n3)).getBasinID(), true);
                                 }
                             }
                         }
@@ -3922,13 +3923,14 @@ public class AIPlaystyle {
                             Civilization civilization2 = CFG.core.getCiv((Integer)arrayList.get(n6));
                             for (n5 = civilization2.getSeaAccess_Provinces_Size() - 1; n5 >= 0; --n5) {
                                 for (n4 = 0; n4 < CFG.core.getProv(civilization2.getSeaAccessProvinces().get(n5)).getNeighSeaProvincesSize(); ++n4) {
-                                    if (!((Boolean)arrayList2.get(CFG.core.getProv(CFG.core.getProv(civilization2.getSeaAccessProvinces().get(n5)).getNeighSeaProvinces(n4)).getBasinID())).booleanValue()) continue;
+                                    int basinID4 = CFG.core.getProv(CFG.core.getProv(civilization2.getSeaAccessProvinces().get(n5)).getNeighSeaProvinces(n4)).getBasinID();
+                                    if (!CFG.basinGet(arrayList2, basinID4)) continue;
                                     if (CFG.core.getProv(civilization2.getSeaAccessProvinces().get(n5)).getTrueOwnerOfProv() == n) {
-                                        ((List)arrayList3.get(CFG.core.getProv(CFG.core.getProv(civilization2.getSeaAccessProvinces().get(n5)).getNeighSeaProvinces(n4)).getBasinID())).add(civilization2.getSeaAccessProvinces().get(n5));
+                                        if (CFG.basinValid(arrayList3, basinID4)) ((List)arrayList3.get(basinID4)).add(civilization2.getSeaAccessProvinces().get(n5));
                                         ++n8;
                                         continue;
                                     }
-                                    ((List)arrayList4.get(CFG.core.getProv(CFG.core.getProv(civilization2.getSeaAccessProvinces().get(n5)).getNeighSeaProvinces(n4)).getBasinID())).add(civilization2.getSeaAccessProvinces().get(n5));
+                                    if (CFG.basinValid(arrayList4, basinID4)) ((List)arrayList4.get(basinID4)).add(civilization2.getSeaAccessProvinces().get(n5));
                                     ++n9;
                                 }
                             }
@@ -3979,7 +3981,7 @@ public class AIPlaystyle {
             arrayList.add(false);
         }
         for (n5 = 0; n5 < CFG.core.getProv(n2).getNeighSeaProvincesSize(); ++n5) {
-            arrayList.set(CFG.core.getProv(CFG.core.getProv(n2).getNeighSeaProvinces(n5)).getBasinID(), true);
+            CFG.basinSet(arrayList, CFG.core.getProv(CFG.core.getProv(n2).getNeighSeaProvinces(n5)).getBasinID(), true);
         }
         int n6 = -1;
         float f = -1.0f;
@@ -3987,7 +3989,7 @@ public class AIPlaystyle {
         block2: for (n4 = CFG.core.getCiv(n).getSeaAccess_Provinces_Size() - 1; n4 >= 0; --n4) {
             for (n3 = 0; n3 < CFG.core.getProv(CFG.core.getCiv(n).getSeaAccessProvinces().get(n4)).getNeighSeaProvincesSize(); ++n3) {
                 float f2;
-                if (!((Boolean)arrayList.get(CFG.core.getProv(CFG.core.getProv(CFG.core.getCiv(n).getSeaAccessProvinces().get(n4)).getNeighSeaProvinces(n3)).getBasinID())).booleanValue()) continue;
+                if (!CFG.basinGet(arrayList, CFG.core.getProv(CFG.core.getProv(CFG.core.getCiv(n).getSeaAccessProvinces().get(n4)).getNeighSeaProvinces(n3)).getBasinID())) continue;
                 if (CFG.core.getCiv(n).getCivRegion(CFG.core.getProv(CFG.core.getCiv(n).getSeaAccessProvinces().get(n4)).getCivRegionID()).checkRegionBordersWithEnemy(n) || !((f2 = this.moveAtWar_AtSea_FromProvinceID_Score(n, CFG.core.getCiv(n).getSeaAccessProvinces().get(n4), n2, false, n7)) > f)) continue block2;
                 n6 = CFG.core.getCiv(n).getSeaAccessProvinces().get(n4);
                 f = f2;

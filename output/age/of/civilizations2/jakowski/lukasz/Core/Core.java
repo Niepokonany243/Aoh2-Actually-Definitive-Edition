@@ -199,6 +199,7 @@ public class Core {
     private RandomTurnOrder oRTO;
     public Wonders_Manager wondersMgr = new Wonders_Manager();
     private List<Province> lProvs = null;
+    private volatile Province[] provArr = null;
     private int iProvincesSize = 0;
     private static Province_GameData2[] provCache = null;
     private static boolean provCacheLoaded = false;
@@ -1369,6 +1370,7 @@ public class Core {
 
     public final void updateProvincesSize() {
         this.iProvincesSize = this.lProvs.size();
+        this.provArr = this.lProvs.toArray(new Province[0]);
     }
 
     public final void disposeMapData() {
@@ -1387,6 +1389,7 @@ public class Core {
         this.lRegions.clear();
         this.iRegionsSize = 0;
         this.lProvs = null;
+        this.provArr = null;
         this.lProvs = new ArrayList<Province>();
         this.iProvincesSize = 0;
         this.scenarioID = -1;
@@ -13284,6 +13287,10 @@ lbl94:
     }
 
     public final Province getProv(int ID) {
+        Province[] arr = this.provArr;
+        if (arr != null) {
+            return arr[ID];
+        }
         return this.lProvs.get(ID);
     }
 

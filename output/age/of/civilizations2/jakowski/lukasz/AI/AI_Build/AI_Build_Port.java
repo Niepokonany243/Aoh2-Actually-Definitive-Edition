@@ -60,7 +60,7 @@ extends AI_Build {
         }
         for (i = CFG.core.getCiv(nCivID).getSeaAccess_Provinces_Size() - 1; i >= 0; --i) {
             for (j = 0; j < CFG.core.getProv(CFG.core.getCiv(nCivID).getSeaAccessProvinces().get(i)).getNeighSeaProvincesSize(); ++j) {
-                this.haveAccessToBasins.set(CFG.core.getProv(CFG.core.getProv(CFG.core.getCiv(nCivID).getSeaAccessProvinces().get(i)).getNeighSeaProvinces(j)).getBasinID(), true);
+                CFG.basinSet(this.haveAccessToBasins, CFG.core.getProv(CFG.core.getProv(CFG.core.getCiv(nCivID).getSeaAccessProvinces().get(i)).getNeighSeaProvinces(j)).getBasinID(), true);
             }
         }
         for (i = this.lProvincesToBuild.size() - 1; i >= 0; --i) {
@@ -106,7 +106,7 @@ extends AI_Build {
     public boolean haveAccessToBasinWithoutPort(int nProvinceID) {
         boolean out = false;
         for (int i = 0; i < CFG.core.getProv(nProvinceID).getNeighSeaProvincesSize(); ++i) {
-            if (this.haveAccessToBasins.get(CFG.core.getProv(CFG.core.getProv(nProvinceID).getNeighSeaProvinces(i)).getBasinID()).booleanValue()) continue;
+            if (CFG.basinGet(this.haveAccessToBasins, CFG.core.getProv(CFG.core.getProv(nProvinceID).getNeighSeaProvinces(i)).getBasinID())) continue;
             out = true;
             break;
         }

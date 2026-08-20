@@ -955,15 +955,19 @@ public class AI {
             }
             recentlyAdded.clear();
             for (a = currProvinces.size() - 1; a >= 0; --a) {
-                for (int i = 0; i < CFG.core.getProv((Integer)currProvinces.get(a)).getNeighProvincesSize(); ++i) {
-                    if (CFG.core.getProv((int)CFG.core.getProv((int)((Integer)currProvinces.get((int)a)).intValue()).getNeighProvinces((int)i)).wasInProv) continue;
-                    was.add(CFG.core.getProv((Integer)currProvinces.get(a)).getNeighProvinces(i));
-                    CFG.core.getProv((int)CFG.core.getProv((int)((Integer)currProvinces.get((int)a)).intValue()).getNeighProvinces((int)i)).wasInProv = true;
-                    if (CFG.core.getProv(CFG.core.getProv((Integer)currProvinces.get(a)).getNeighProvinces(i)).getCivId() == nCivID) {
-                        out.add(new AI_NeighProvinces(CFG.core.getProv((Integer)currProvinces.get(a)).getNeighProvinces(i), nIteration_Distance));
+                Province currProv = CFG.core.getProv((Integer)currProvinces.get(a));
+                int nSize = currProv.getNeighProvincesSize();
+                for (int i = 0; i < nSize; ++i) {
+                    int v = currProv.getNeighProvinces(i);
+                    Province vProv = CFG.core.getProv(v);
+                    if (vProv.wasInProv) continue;
+                    was.add(v);
+                    vProv.wasInProv = true;
+                    if (vProv.getCivId() == nCivID) {
+                        out.add(new AI_NeighProvinces(v, nIteration_Distance));
                         iFirstFoundRange = nIteration_Distance;
                     }
-                    recentlyAdded.add(CFG.core.getProv((Integer)currProvinces.get(a)).getNeighProvinces(i));
+                    recentlyAdded.add(v);
                 }
             }
             if (iFirstFoundRange <= 0 || iFirstFoundRange + 4 >= nIteration_Distance) continue;

@@ -5512,6 +5512,20 @@ public class CFG {
         return sUM.sUT.getImageWidth(image);
     }
 
+    public static boolean basinValid(List<?> basins, int basinID) {
+        return basinID >= 0 && basinID < basins.size();
+    }
+
+    public static void basinSet(List<Boolean> basins, int basinID, boolean val) {
+        if (basinID >= 0 && basinID < basins.size()) basins.set(basinID, val);
+    }
+
+    public static boolean basinGet(List<Boolean> basins, int basinID) {
+        if (basinID < 0 || basinID >= basins.size()) return false;
+        Boolean b = basins.get(basinID);
+        return b != null && b.booleanValue();
+    }
+
     public int getImageHeight(int image) {
         return sUM.sUT.getImageHeight(image);
     }

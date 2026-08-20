@@ -113,8 +113,8 @@ public class Province {
     private byte iNumOfNeighboringNeutralProvinces = 0;
     private boolean bordersWithEnemy = false;
     private float provinceStability = 1.0f;
-    public List<Short> lNeighboringProvinces = new ArrayList<Short>();
-    public List<Short> lNeighboringSeaProvinces = new ArrayList<Short>();
+    public short[] lNeighboringProvinces = new short[0];
+    public short[] lNeighboringSeaProvinces = new short[0];
     private int iBasin = -1;
     public int neighboringProvincesSize;
     public int neighboringSeaProvincesSize;
@@ -178,13 +178,13 @@ public class Province {
         this.provGD = new Province_Save_GD();
         this.provGD.pops = new Province_Population();
         for (i = 0; i < nProvince_GameData.getNeighboringProvinces().size(); ++i) {
-            this.lNeighboringProvinces.add(nProvince_GameData.getNeighboringProvinces().get(i));
+            this.lNeighboringProvinces = growShort(this.lNeighboringProvinces, this.lNeighboringProvinces.length, nProvince_GameData.getNeighboringProvinces().get(i).shortValue());
         }
-        this.neighboringProvincesSize = this.lNeighboringProvinces.size();
+        this.neighboringProvincesSize = this.lNeighboringProvinces.length;
         for (i = 0; i < nProvince_GameData.getNeighboringSeaProvinces().size(); ++i) {
-            this.lNeighboringSeaProvinces.add(nProvince_GameData.getNeighboringSeaProvinces().get(i));
+            this.lNeighboringSeaProvinces = growShort(this.lNeighboringSeaProvinces, this.lNeighboringSeaProvinces.length, nProvince_GameData.getNeighboringSeaProvinces().get(i).shortValue());
         }
-        this.neighboringSeaProvincesSize = this.lNeighboringSeaProvinces.size();
+        this.neighboringSeaProvincesSize = this.lNeighboringSeaProvinces.length;
         this.pointsX = nProvince_GameData.getPointsX();
         this.pointsY = nProvince_GameData.getPointsY();
         int iSize = this.pointsX.size();
@@ -229,14 +229,14 @@ public class Province {
                 }
                 boolean bContinue = false;
                 for (j = 0; j < this.neighboringProvincesSize; ++j) {
-                    if (this.lNeighboringProvinces.get(j).shortValue() != nProvince_GameData.getProvinceBorder().get(i).getWithProvinceID()) continue;
+                    if (this.lNeighboringProvinces[j] != nProvince_GameData.getProvinceBorder().get(i).getWithProvinceID()) continue;
                     this.provinceBordersLandByLand.add(new ProvinceBorder(nProvince_GameData.getProvinceBorder().get(i).getWithProvinceID(), nProvince_GameData.getProvinceBorder().get(i).getPointsX(), nProvince_GameData.getProvinceBorder().get(i).getPointsY()));
                     bContinue = true;
                     break;
                 }
                 if (bContinue) continue;
                 for (j = 0; j < this.neighboringSeaProvincesSize; ++j) {
-                    if (this.lNeighboringSeaProvinces.get(j).shortValue() != nProvince_GameData.getProvinceBorder().get(i).getWithProvinceID()) continue;
+                    if (this.lNeighboringSeaProvinces[j] != nProvince_GameData.getProvinceBorder().get(i).getWithProvinceID()) continue;
                     this.provinceBordersLandBySea.add(new ProvinceBorder(nProvince_GameData.getProvinceBorder().get(i).getWithProvinceID(), nProvince_GameData.getProvinceBorder().get(i).getPointsX(), nProvince_GameData.getProvinceBorder().get(i).getPointsY()));
                     bContinue = true;
                     break;
@@ -3595,15 +3595,15 @@ public class Province {
     }
 
     public final void addNeighboringProv(int nProvinceID) {
-        this.lNeighboringProvinces.add((short)nProvinceID);
-        this.neighboringProvincesSize = this.lNeighboringProvinces.size();
+        this.lNeighboringProvinces = growShort(this.lNeighboringProvinces, this.neighboringProvincesSize, (short)nProvinceID);
+        this.neighboringProvincesSize = this.lNeighboringProvinces.length;
     }
 
     public final void removeNeighboringProv(int nProvinceID) {
         for (int i = 0; i < this.neighboringProvincesSize; ++i) {
             if (nProvinceID != this.getNeighProvinces(i)) continue;
-            this.lNeighboringProvinces.remove(i);
-            this.neighboringProvincesSize = this.lNeighboringProvinces.size();
+            this.lNeighboringProvinces = removeShort(this.lNeighboringProvinces, this.neighboringProvincesSize, i);
+            this.neighboringProvincesSize = this.lNeighboringProvinces.length;
             return;
         }
     }
@@ -3617,25 +3617,43 @@ public class Province {
     }
 
     public final void addNeighboringSeaProvince(int nProvinceID) {
-        this.lNeighboringSeaProvinces.add((short)nProvinceID);
-        this.neighboringSeaProvincesSize = this.lNeighboringSeaProvinces.size();
+        this.lNeighboringSeaProvinces = growShort(this.lNeighboringSeaProvinces, this.neighboringSeaProvincesSize, (short)nProvinceID);
+        this.neighboringSeaProvincesSize = this.lNeighboringSeaProvinces.length;
     }
 
     public final void removeNeighboringSeaProvince(int nProvinceID) {
         for (int i = 0; i < this.neighboringSeaProvincesSize; ++i) {
             if (nProvinceID != this.getNeighSeaProvinces(i)) continue;
-            this.lNeighboringSeaProvinces.remove(i);
-            this.neighboringSeaProvincesSize = this.lNeighboringSeaProvinces.size();
+            this.lNeighboringSeaProvinces = removeShort(this.lNeighboringSeaProvinces, this.neighboringSeaProvincesSize, i);
+            this.neighboringSeaProvincesSize = this.lNeighboringSeaProvinces.length;
             return;
         }
     }
 
     public final int getNeighProvinces(int i) {
-        return this.lNeighboringProvinces.get(i).shortValue();
+        return this.lNeighboringProvinces[i];
     }
 
     public final int getNeighSeaProvinces(int i) {
-        return this.lNeighboringSeaProvinces.get(i).shortValue();
+        return this.lNeighboringSeaProvinces[i];
+    }
+
+    private static short[] growShort(short[] arr, int size, short value) {
+        if (arr.length == size) {
+            short[] grown = new short[size + 1];
+            System.arraycopy(arr, 0, grown, 0, size);
+            arr = grown;
+        }
+        arr[size] = value;
+        return arr;
+    }
+
+    private static short[] removeShort(short[] arr, int size, int index) {
+        int newSize = size - 1;
+        short[] out = new short[Math.max(0, newSize)];
+        System.arraycopy(arr, 0, out, 0, index);
+        System.arraycopy(arr, index + 1, out, index, newSize - index);
+        return out;
     }
 
     public final boolean getIsBelowZero() {

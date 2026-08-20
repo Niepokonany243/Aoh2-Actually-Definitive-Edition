@@ -52,13 +52,13 @@ extends CivArmyMission {
         ArrayList<Integer> lPossibleProvincesFrom = new ArrayList<Integer>();
         ArrayList<Integer> lPossibleProvincesTo = new ArrayList<Integer>();
         for (i2 = 0; i2 < CFG.core.getProv(this.iColonizeProvinceID).getNeighSeaProvincesSize(); ++i2) {
-            haveAccessToBasins.set(CFG.core.getProv(CFG.core.getProv(this.iColonizeProvinceID).getNeighSeaProvinces(i2)).getBasinID(), true);
+            CFG.basinSet(haveAccessToBasins, CFG.core.getProv(CFG.core.getProv(this.iColonizeProvinceID).getNeighSeaProvinces(i2)).getBasinID(), true);
             lPossibleProvincesTo.add(CFG.core.getProv(this.iColonizeProvinceID).getNeighSeaProvinces(i2));
         }
         block2: for (i2 = 0; i2 < CFG.core.getCiv(this.iCivID).getNumOfProvs(); ++i2) {
             if (CFG.core.getProv(CFG.core.getCiv(this.iCivID).getProvID(i2)).isOccupied() || CFG.core.getProv(CFG.core.getCiv(this.iCivID).getProvID(i2)).getLvlOfPort() <= 0) continue;
             for (j2 = 0; j2 < CFG.core.getProv(CFG.core.getCiv(this.iCivID).getProvID(i2)).getNeighSeaProvincesSize(); ++j2) {
-                if (!((Boolean)haveAccessToBasins.get(CFG.core.getProv(CFG.core.getProv(CFG.core.getCiv(this.iCivID).getProvID(i2)).getNeighSeaProvinces(j2)).getBasinID())).booleanValue()) continue;
+                if (!CFG.basinGet(haveAccessToBasins, CFG.core.getProv(CFG.core.getProv(CFG.core.getCiv(this.iCivID).getProvID(i2)).getNeighSeaProvinces(j2)).getBasinID())) continue;
                 lPossibleProvincesFrom.add(CFG.core.getCiv(this.iCivID).getProvID(i2));
                 continue block2;
             }
@@ -105,7 +105,7 @@ extends CivArmyMission {
         block6: for (i2 = 0; i2 < CFG.core.getCiv(this.iCivID).getNumOfProvs(); ++i2) {
             if (CFG.core.getProv(CFG.core.getCiv(this.iCivID).getProvID(i2)).isOccupied()) continue;
             for (j2 = 0; j2 < CFG.core.getProv(CFG.core.getCiv(this.iCivID).getProvID(i2)).getNeighSeaProvincesSize(); ++j2) {
-                if (!((Boolean)haveAccessToBasins.get(CFG.core.getProv(CFG.core.getProv(CFG.core.getCiv(this.iCivID).getProvID(i2)).getNeighSeaProvinces(j2)).getBasinID())).booleanValue()) continue;
+                if (!CFG.basinGet(haveAccessToBasins, CFG.core.getProv(CFG.core.getProv(CFG.core.getCiv(this.iCivID).getProvID(i2)).getNeighSeaProvinces(j2)).getBasinID())) continue;
                 lPossibleProvincesFrom.add(CFG.core.getCiv(this.iCivID).getProvID(i2));
                 continue block6;
             }

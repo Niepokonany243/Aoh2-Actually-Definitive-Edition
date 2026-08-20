@@ -8,6 +8,7 @@ import age.of.civilizations2.jakowski.lukasz.Province;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class RegroupArmy
@@ -104,145 +105,123 @@ implements Serializable {
     }
 
     public boolean buildPath2(int civID, List<Integer> in, List<List<Integer>> inPath, int from, int lookingFor, boolean forDirection, boolean landOnly, List<Boolean> wasBool, List<Integer> nIN, List<List<Integer>> nINPath) {
-        try {
-            nIN.clear();
-            nINPath.clear();
-            if (forDirection) {
-                for (int i = 0; i < in.size(); ++i) {
-                    ArrayList<Integer> tPL;
-                    int j;
-                    for (j = 0; j < CFG.core.getProv(in.get(i)).getNeighProvincesSize(); ++j) {
-                        if (wasBool.get(CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighProvinces(j)).getProvID()).booleanValue() || !RegroupArmy.canBeUsedInPath(civID, CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighProvinces(j)).getProvID(), RegroupArmy.isFriendlyProvince(civID, lookingFor), lookingFor)) continue;
-                        if (CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighProvinces(j)).getProvID() == lookingFor) {
-                            this.setPath(from, lookingFor, inPath.get(i), lookingFor);
-                            return true;
-                        }
-                        nIN.add(CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighProvinces(j)).getProvID());
-                        tPL = new ArrayList<Integer>((Collection)inPath.get(i));
-                        tPL.add(CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighProvinces(j)).getProvID());
-                        nINPath.add(tPL);
-                        wasBool.set(CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighProvinces(j)).getProvID(), true);
-                    }
-                    if (CFG.core.getProv(in.get(i)).getSeaProv() || CFG.core.getProv(in.get(i)).getLvlOfPort() <= 0) continue;
-                    for (j = 0; j < CFG.core.getProv(in.get(i)).getNeighSeaProvincesSize(); ++j) {
-                        if (wasBool.get(CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighSeaProvinces(j)).getProvID()).booleanValue()) continue;
-                        if (CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighSeaProvinces(j)).getProvID() == lookingFor) {
-                            this.setPath(from, lookingFor, inPath.get(i), lookingFor);
-                            return true;
-                        }
-                        nIN.add(CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighSeaProvinces(j)).getProvID());
-                        tPL = new ArrayList(inPath.get(i));
-                        tPL.add(CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighSeaProvinces(j)).getProvID());
-                        nINPath.add(tPL);
-                        wasBool.set(CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighSeaProvinces(j)).getProvID(), true);
-                    }
-                }
-            } else {
-                for (int i = 0; i < in.size(); ++i) {
-                    ArrayList<Integer> tPL;
-                    int j;
-                    for (j = CFG.core.getProv(in.get(i)).getNeighProvincesSize() - 1; j >= 0; --j) {
-                        if (wasBool.get(CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighProvinces(j)).getProvID()).booleanValue() || !RegroupArmy.canBeUsedInPath(civID, CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighProvinces(j)).getProvID(), RegroupArmy.isFriendlyProvince(civID, lookingFor), lookingFor)) continue;
-                        if (CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighProvinces(j)).getProvID() == lookingFor) {
-                            this.setPath(from, lookingFor, inPath.get(i), lookingFor);
-                            return true;
-                        }
-                        nIN.add(CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighProvinces(j)).getProvID());
-                        tPL = new ArrayList<Integer>((Collection)inPath.get(i));
-                        tPL.add(CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighProvinces(j)).getProvID());
-                        nINPath.add(tPL);
-                        wasBool.set(CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighProvinces(j)).getProvID(), true);
-                    }
-                    if (CFG.core.getProv(in.get(i)).getSeaProv() || CFG.core.getProv(in.get(i)).getLvlOfPort() <= 0) continue;
-                    for (j = CFG.core.getProv(in.get(i)).getNeighSeaProvincesSize() - 1; j >= 0; --j) {
-                        if (wasBool.get(CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighSeaProvinces(j)).getProvID()).booleanValue()) continue;
-                        if (CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighSeaProvinces(j)).getProvID() == lookingFor) {
-                            this.setPath(from, lookingFor, inPath.get(i), lookingFor);
-                            return true;
-                        }
-                        nIN.add(CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighSeaProvinces(j)).getProvID());
-                        tPL = new ArrayList(inPath.get(i));
-                        tPL.add(CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighSeaProvinces(j)).getProvID());
-                        nINPath.add(tPL);
-                        wasBool.set(CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighSeaProvinces(j)).getProvID(), true);
-                    }
-                }
-            }
-            if (nIN.isEmpty()) {
-                return false;
-            }
-        }
-        catch (Exception ex) {
-            return false;
-        }
-        try {
-            return this.buildPath2(civID, nIN, nINPath, from, lookingFor, !forDirection, landOnly, wasBool, in, inPath);
-        }
-        catch (StackOverflowError ex) {
-            return false;
-        }
-        catch (Exception ex) {
-            return false;
-        }
+        return bfsFindPath(civID, from, lookingFor, in, false, null, true);
     }
 
     public boolean buildPath(int nCivID, List<Integer> was, List<Integer> in, List<List<Integer>> inPath, int from, int lookingFor) {
-        int i;
-        ArrayList<Integer> nIN = new ArrayList<Integer>();
-        ArrayList<List<Integer>> nINPath = new ArrayList<List<Integer>>();
-        for (i = 0; i < in.size(); ++i) {
-            if (CFG.core.getProv(in.get(i)).getProvID() != lookingFor) continue;
-            this.setPath(from, lookingFor, inPath.get(i), lookingFor);
-            this.clearWas(was);
+        return bfsFindPath(nCivID, from, lookingFor, in, true, was, false);
+    }
+
+    /**
+     * Iterative level-synchronous BFS with parent pointers. Replaces the old
+     * recursive implementation that copied the entire path list for every
+     * expanded neighbor (O(n^2) allocation) and could recurse into a
+     * StackOverflowError. Behavior is preserved: the same first-discovered
+     * shortest path is returned, and neighbor-iteration direction (forward /
+     * backward per level) is replicated for the legacy toggle semantics.
+     */
+    private boolean bfsFindPath(int nCivID, int from, int lookingFor, List<Integer> initFrontier,
+                                boolean useWasInProv, List<Integer> was, boolean toggleDirection) {
+        int n = CFG.core.getProvinSize();
+        if (n <= 0) return false;
+        int[] parent = new int[n];
+        boolean[] visited = new boolean[n];
+        java.util.Arrays.fill(parent, -2);
+
+        ArrayList<Integer> frontier = new ArrayList<Integer>(initFrontier.size());
+        for (int i = 0; i < initFrontier.size(); ++i) {
+            int id = initFrontier.get(i);
+            if (id < 0 || id >= n) continue;
+            if (parent[id] != -2) continue; // already visited (e.g. from)
+            parent[id] = from;
+            visited[id] = true;
+            if (useWasInProv) { CFG.core.getProv(id).wasInProv = true; was.add(id); }
+            frontier.add(id);
+        }
+        if (from >= 0 && from < n) {
+            visited[from] = true;
+            parent[from] = -2;
+            if (useWasInProv && !was.contains(from)) { CFG.core.getProv(from).wasInProv = true; was.add(from); }
+        }
+
+        if (from == lookingFor) {
+            this.route.clear();
+            this.route.add(lookingFor);
+            this.routeSize = this.route.size();
+            this.iObsolete = Math.max(10, (int)(this.routeSize * 1.5f + 1.0f));
+            if (useWasInProv) clearWas(was);
             return true;
         }
-        for (i = 0; i < in.size(); ++i) {
-            int u;
-            ArrayList<Integer> tPL;
-            int j;
-            for (j = 0; j < CFG.core.getProv(in.get(i)).getNeighProvincesSize(); ++j) {
-                if (!RegroupArmy.canBeUsedInPath(nCivID, CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighProvinces(j)).getProvID(), RegroupArmy.isFriendlyProvince(nCivID, lookingFor), lookingFor) || CFG.core.getProv((int)CFG.core.getProv((int)CFG.core.getProv((int)in.get((int)i).intValue()).getNeighProvinces((int)j)).getProvID()).wasInProv) continue;
-                if (CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighProvinces(j)).getProvID() == lookingFor) {
-                    this.setPath(from, lookingFor, inPath.get(i), lookingFor);
-                    this.clearWas(was);
-                    return true;
+        if (visited[lookingFor]) {
+            return finishPath(from, lookingFor, parent, useWasInProv, was);
+        }
+
+        boolean forward = toggleDirection;
+        ArrayList<Integer> next = new ArrayList<Integer>();
+        while (!frontier.isEmpty()) {
+            next.clear();
+            for (int fi = 0; fi < frontier.size(); ++fi) {
+                int pid = frontier.get(fi);
+                if (pid < 0 || pid >= n) continue;
+                Province p = CFG.core.getProv(pid);
+
+                int nSize = p.getNeighProvincesSize();
+                int jStart = forward ? 0 : nSize - 1;
+                int jEnd = forward ? nSize : -1;
+                int jStep = forward ? 1 : -1;
+                for (int j = jStart; j != jEnd; j += jStep) {
+                    int v = p.getNeighProvinces(j);
+                    if (v < 0 || v >= n || visited[v]) continue;
+                    if (!RegroupArmy.canBeUsedInPath(nCivID, v, RegroupArmy.isFriendlyProvince(nCivID, lookingFor), lookingFor)) continue;
+                    parent[v] = pid;
+                    visited[v] = true;
+                    if (v == lookingFor) return finishPath(from, lookingFor, parent, useWasInProv, was);
+                    if (useWasInProv) { CFG.core.getProv(v).wasInProv = true; was.add(v); }
+                    next.add(v);
                 }
-                nIN.add(CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighProvinces(j)).getProvID());
-                tPL = new ArrayList<Integer>();
-                for (u = 0; u < inPath.get(i).size(); ++u) {
-                    tPL.add(inPath.get(i).get(u));
+
+                if (p.getSeaProv() || p.getLvlOfPort() <= 0) continue;
+                int nSeaSize = p.getNeighSeaProvincesSize();
+                int sStart = forward ? 0 : nSeaSize - 1;
+                int sEnd = forward ? nSeaSize : -1;
+                int sStep = forward ? 1 : -1;
+                for (int j = sStart; j != sEnd; j += sStep) {
+                    int v = p.getNeighSeaProvinces(j);
+                    if (v < 0 || v >= n || visited[v]) continue;
+                    parent[v] = pid;
+                    visited[v] = true;
+                    if (v == lookingFor) return finishPath(from, lookingFor, parent, useWasInProv, was);
+                    if (useWasInProv) { CFG.core.getProv(v).wasInProv = true; was.add(v); }
+                    next.add(v);
                 }
-                tPL.add(CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighProvinces(j)).getProvID());
-                nINPath.add(tPL);
-                CFG.core.getProv((int)CFG.core.getProv((int)CFG.core.getProv((int)in.get((int)i).intValue()).getNeighProvinces((int)j)).getProvID()).wasInProv = true;
-                was.add(CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighProvinces(j)).getProvID());
             }
-            if (CFG.core.getProv(in.get(i)).getSeaProv() || CFG.core.getProv(in.get(i)).getLvlOfPort() <= 0) continue;
-            for (j = 0; j < CFG.core.getProv(in.get(i)).getNeighSeaProvincesSize(); ++j) {
-                if (CFG.core.getProv((int)CFG.core.getProv((int)CFG.core.getProv((int)in.get((int)i).intValue()).getNeighSeaProvinces((int)j)).getProvID()).wasInProv) continue;
-                if (CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighSeaProvinces(j)).getProvID() == lookingFor) {
-                    this.setPath(from, lookingFor, inPath.get(i), lookingFor);
-                    this.clearWas(was);
-                    return true;
-                }
-                nIN.add(CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighSeaProvinces(j)).getProvID());
-                tPL = new ArrayList();
-                for (u = 0; u < inPath.get(i).size(); ++u) {
-                    tPL.add(inPath.get(i).get(u));
-                }
-                tPL.add(CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighSeaProvinces(j)).getProvID());
-                nINPath.add(tPL);
-                CFG.core.getProv((int)CFG.core.getProv((int)CFG.core.getProv((int)in.get((int)i).intValue()).getNeighSeaProvinces((int)j)).getProvID()).wasInProv = true;
-                was.add(CFG.core.getProv(CFG.core.getProv(in.get(i)).getNeighSeaProvinces(j)).getProvID());
-            }
+            ArrayList<Integer> tmp = frontier;
+            frontier = next;
+            next = tmp;
+            forward = !forward;
         }
-        try {
-            return this.buildPath(nCivID, was, nIN, nINPath, from, lookingFor);
+
+        if (useWasInProv) clearWas(was);
+        return false;
+    }
+
+    private boolean finishPath(int from, int lookingFor, int[] parent, boolean useWasInProv, List<Integer> was) {
+        ArrayList<Integer> path = new ArrayList<Integer>();
+        int cur = lookingFor;
+        path.add(cur);
+        while (cur != from && cur >= 0 && parent[cur] != -2) {
+            cur = parent[cur];
+            path.add(cur);
         }
-        catch (StackOverflowError ex) {
-            this.clearWas(was);
-            return false;
+        Collections.reverse(path);
+        this.route.clear();
+        for (int i = 1; i < path.size(); ++i) {
+            this.route.add(path.get(i));
         }
+        this.routeSize = this.route.size();
+        this.iObsolete = Math.max(10, (int)(this.routeSize * 1.5f + 1.0f));
+        if (useWasInProv) clearWas(was);
+        return true;
     }
 
     public final void clearWas(List<Integer> was) {
@@ -263,17 +242,21 @@ implements Serializable {
     }
 
     public static final boolean isFriendlyProvince(int nCivID, int toProvinceID) {
-        return CFG.core.getProv(toProvinceID).getCivId() == nCivID || CFG.core.getProv(toProvinceID).getSeaProv() || CFG.core.getCiv(CFG.core.getProv(toProvinceID).getCivId()).getAlliance() > 0 && CFG.core.getCiv(CFG.core.getProv(toProvinceID).getCivId()).getAlliance() == CFG.core.getCiv(nCivID).getAlliance() || CFG.core.getCiv(nCivID).getPuppetOfCiv() == CFG.core.getProv(toProvinceID).getCivId() || CFG.core.getCiv(CFG.core.getProv(toProvinceID).getCivId()).getPuppetOfCiv() == nCivID || CFG.core.getMilitaryAccess(nCivID, CFG.core.getProv(toProvinceID).getCivId()) > 0;
+        Province p = CFG.core.getProv(toProvinceID);
+        int pCivId = p.getCivId();
+        return pCivId == nCivID || p.getSeaProv() || CFG.core.getCiv(pCivId).getAlliance() > 0 && CFG.core.getCiv(pCivId).getAlliance() == CFG.core.getCiv(nCivID).getAlliance() || CFG.core.getCiv(nCivID).getPuppetOfCiv() == pCivId || CFG.core.getCiv(pCivId).getPuppetOfCiv() == nCivID || CFG.core.getMilitaryAccess(nCivID, pCivId) > 0;
     }
 
     public static boolean canBeUsedInPath(int nCivID, int nProvinceID, boolean moveToFriendlyProvince, int toProvinceID) {
-        if (CFG.core.getProv(nProvinceID).getWastelandLvl() >= 0) {
+        Province p = CFG.core.getProv(nProvinceID);
+        if (p.getWastelandLvl() >= 0) {
             return false;
         }
-        if (nCivID == CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId() && CFG.FOG_OF_WAR == 2 && !CFG.core.getProv(nProvinceID).getSeaProv() && nProvinceID != toProvinceID && !CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getMetProv(nProvinceID)) {
+        if (nCivID == CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId() && CFG.FOG_OF_WAR == 2 && !p.getSeaProv() && nProvinceID != toProvinceID && !CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getMetProv(nProvinceID)) {
             return false;
         }
-        return CFG.core.getProv(nProvinceID).getCivId() == nCivID || CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getPuppetOfCiv() == nCivID || CFG.core.getCiv(nCivID).getPuppetOfCiv() == CFG.core.getProv(nProvinceID).getCivId() || !moveToFriendlyProvince && CFG.core.getProv(nProvinceID).getCivId() == 0 && !GameCalendar.ENABLE_COLONIZATION_NEUTRAL_PROVINCES && (CFG.FOG_OF_WAR != 2 || CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getMetProv(nProvinceID)) || CFG.core.getProv(nProvinceID).getSeaProv() || CFG.core.getCiv(nCivID).getAlliance() > 0 && CFG.core.getCiv(nCivID).getAlliance() == CFG.core.getCiv(CFG.core.getProv(nProvinceID).getCivId()).getAlliance() || CFG.core.getMilitaryAccess(nCivID, CFG.core.getProv(nProvinceID).getCivId()) > 0 || !moveToFriendlyProvince && (int)CFG.core.getCivRelationOfCivB(nCivID, CFG.core.getProv(nProvinceID).getCivId()) == GameValues.gvDiplomacy.RELATION_AT_WAR;
+        int pCivId = p.getCivId();
+        return pCivId == nCivID || CFG.core.getCiv(pCivId).getPuppetOfCiv() == nCivID || CFG.core.getCiv(nCivID).getPuppetOfCiv() == pCivId || !moveToFriendlyProvince && pCivId == 0 && !GameCalendar.ENABLE_COLONIZATION_NEUTRAL_PROVINCES && (CFG.FOG_OF_WAR != 2 || CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getMetProv(nProvinceID)) || p.getSeaProv() || CFG.core.getCiv(nCivID).getAlliance() > 0 && CFG.core.getCiv(nCivID).getAlliance() == CFG.core.getCiv(pCivId).getAlliance() || CFG.core.getMilitaryAccess(nCivID, pCivId) > 0 || !moveToFriendlyProvince && (int)CFG.core.getCivRelationOfCivB(nCivID, pCivId) == GameValues.gvDiplomacy.RELATION_AT_WAR;
     }
 
     public final int getFromProvinceID() {

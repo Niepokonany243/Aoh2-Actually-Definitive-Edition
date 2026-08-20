@@ -419,6 +419,9 @@ public class AoCGame {
     public void render() {
         long renderStart = System.currentTimeMillis();
         if (CFG.isAndroid()) AndroidPerfTracer.beginFrame();
+        if (CFG.core != null && CFG.menus != null && CFG.menus.getInGameView()) {
+            PerfAnalyzer.maybeStart(30000L, 30000L);
+        }
         try { this.update(); this.updateMoveMap(); } catch (Exception ex) {}
         long perfPhase1 = 0L, perfPhase2 = 0L, perfPhase3 = 0L, perfPhase4 = 0L;
         if (CFG.core != null) {
