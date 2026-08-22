@@ -51,6 +51,11 @@ implements Serializable {
         }
     }
 
+    public final void removeAllCivilizations() {
+        this.lCivilizations.clear();
+        this.iCivilizationsSize = 0;
+    }
+
     public final void updateCivilizationID(int i, int nNewCivID) {
         block2: {
             try {

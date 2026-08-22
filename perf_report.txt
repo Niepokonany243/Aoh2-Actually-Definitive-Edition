@@ -49092,3 +49092,1263 @@ Session duration: 30000 ms
     via ThreadMXBean.getThreadAllocatedBytes (exact per-thread bytes), not stack
     sampling, because allocation happens at object-creation sites.
   - Methods deeper in the stack are callers; the frame at depth 0 is the leaf.
+============================================================
+AoH2 TEMPORARY CPU / RAM PROFILER REPORT
+Session started : Sat Aug 22 14:41:30 CEST 2026
+Session duration: 30000 ms
+============================================================
+
+[SYSTEM LEVEL]
+  availableProcessors : 8
+  systemCpuLoad       : 0,299
+  processCpuLoad(peak): 0,623
+  totalPhysicalMemory : 24543 MB
+  freePhysicalMemory  : 6414 MB
+  totalSwap           : 61350 MB
+
+[JVM HEAP]
+  heap used/committed/max : 611/1024/4096 MB
+  heap peak used (session): 609 MB
+  non-heap used           : 48 MB
+  stack samples collected : 4131
+
+[PER-THREAD CPU TIME + ALLOCATION]
+  Each row = the exact thread that consumed CPU / allocated RAM
+  during the session. allocDelta is the RAM that thread pushed into
+  the heap (attributed to the function that ran on it).
+  NOTE: the 'PerfAnalyzer' thread (the sampler itself) is EXCLUDED so
+  its own overhead does not distort the game's CPU numbers.
+  id=1        cpu=    7218 ms  alloc=      89 MB  thread=main
+  id=2        cpu=       0 ms  alloc=       0 MB  thread=Reference Handler
+  id=3        cpu=       0 ms  alloc=       0 MB  thread=Finalizer
+  id=4        cpu=       0 ms  alloc=       0 MB  thread=Signal Dispatcher
+  id=5        cpu=       0 ms  alloc=       0 MB  thread=Attach Listener
+  id=13       cpu=       0 ms  alloc=       0 MB  thread=Notification Thread
+  id=14       cpu=       0 ms  alloc=       0 MB  thread=Common-Cleaner
+  id=15       cpu=       0 ms  alloc=       0 MB  thread=Thread-0
+  id=16       cpu=       0 ms  alloc=       0 MB  thread=LWJGL3 Timer
+  id=17       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-1
+  id=18       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-2
+  id=19       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-3
+  id=20       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-4
+  id=21       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-5
+  id=22       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-6
+  id=23       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-7
+  id=24       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-8
+  id=25       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-9
+  id=26       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-10
+  id=27       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-11
+  id=28       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-12
+  id=29       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-13
+  id=30       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-14
+  id=31       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-15
+  id=32       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-16
+
+[TOP CPU FUNCTIONS (exact class#method(line), from stack sampling)]
+  topHits = times the function was the CURRENTLY EXECUTING frame.
+  hits    = times the function appeared anywhere on a sampled stack.
+  Higher topHits == the exact function that actually burns CPU.
+  topHits=3888   hits=3888    jdk.internal.misc.Unsafe#park(-2)
+  topHits=243    hits=243     java.lang.Thread#sleep(-2)
+  topHits=0      hits=4131    java.lang.Thread#run(840)
+  topHits=0      hits=3888    java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject#await(1630)
+  topHits=0      hits=3888    java.util.concurrent.ForkJoinPool#unmanagedBlock(3465)
+  topHits=0      hits=3888    java.util.concurrent.ThreadPoolExecutor#getTask(1062)
+  topHits=0      hits=3888    java.util.concurrent.ThreadPoolExecutor#runWorker(1122)
+  topHits=0      hits=3888    java.util.concurrent.ThreadPoolExecutor$Worker#run(635)
+  topHits=0      hits=3888    java.util.concurrent.locks.LockSupport#park(341)
+  topHits=0      hits=3888    java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode#block(506)
+  topHits=0      hits=3888    java.util.concurrent.ForkJoinPool#managedBlock(3436)
+  topHits=0      hits=3888    java.util.concurrent.ArrayBlockingQueue#take(420)
+  topHits=0      hits=243     com.badlogic.gdx.backends.lwjgl3.Sync$1#run(111)
+
+[LIVE 1-SEC SAMPLES]
+[live] usedHeap=513MB cpuLoad=0,62 samples=17
+[live] usedHeap=513MB cpuLoad=0,19 samples=170
+[live] usedHeap=515MB cpuLoad=0,25 samples=323
+[live] usedHeap=525MB cpuLoad=0,58 samples=459
+[live] usedHeap=535MB cpuLoad=0,39 samples=595
+[live] usedHeap=541MB cpuLoad=0,23 samples=748
+[live] usedHeap=543MB cpuLoad=0,23 samples=901
+[live] usedHeap=549MB cpuLoad=0,28 samples=1054
+[live] usedHeap=551MB cpuLoad=0,13 samples=1207
+[live] usedHeap=555MB cpuLoad=0,16 samples=1360
+[live] usedHeap=559MB cpuLoad=0,14 samples=1513
+[live] usedHeap=561MB cpuLoad=0,15 samples=1666
+[live] usedHeap=565MB cpuLoad=0,18 samples=1819
+[live] usedHeap=567MB cpuLoad=0,14 samples=1972
+[live] usedHeap=569MB cpuLoad=0,16 samples=2125
+[live] usedHeap=573MB cpuLoad=0,19 samples=2278
+[live] usedHeap=577MB cpuLoad=0,17 samples=2431
+[live] usedHeap=581MB cpuLoad=0,24 samples=2584
+[live] usedHeap=583MB cpuLoad=0,15 samples=2737
+[live] usedHeap=585MB cpuLoad=0,16 samples=2890
+[live] usedHeap=589MB cpuLoad=0,16 samples=3043
+[live] usedHeap=591MB cpuLoad=0,16 samples=3196
+[live] usedHeap=595MB cpuLoad=0,15 samples=3349
+[live] usedHeap=599MB cpuLoad=0,17 samples=3502
+[live] usedHeap=601MB cpuLoad=0,16 samples=3655
+[live] usedHeap=605MB cpuLoad=0,20 samples=3808
+[live] usedHeap=607MB cpuLoad=0,15 samples=3961
+[live] usedHeap=609MB cpuLoad=0,22 samples=4114
+
+[NOTES]
+  - allocSamples map intentionally unused: RAM attribution is done per-thread
+    via ThreadMXBean.getThreadAllocatedBytes (exact per-thread bytes), not stack
+    sampling, because allocation happens at object-creation sites.
+  - Methods deeper in the stack are callers; the frame at depth 0 is the leaf.
+============================================================
+AoH2 TEMPORARY CPU / RAM PROFILER REPORT
+Session started : Sat Aug 22 15:02:26 CEST 2026
+Session duration: 30000 ms
+============================================================
+
+[SYSTEM LEVEL]
+  availableProcessors : 8
+  systemCpuLoad       : 0,932
+  processCpuLoad(peak): 0,404
+  totalPhysicalMemory : 24543 MB
+  freePhysicalMemory  : 5816 MB
+  totalSwap           : 61350 MB
+
+[JVM HEAP]
+  heap used/committed/max : 300/1024/4096 MB
+  heap peak used (session): 305 MB
+  non-heap used           : 50 MB
+  stack samples collected : 3876
+
+[PER-THREAD CPU TIME + ALLOCATION]
+  Each row = the exact thread that consumed CPU / allocated RAM
+  during the session. allocDelta is the RAM that thread pushed into
+  the heap (attributed to the function that ran on it).
+  NOTE: the 'PerfAnalyzer' thread (the sampler itself) is EXCLUDED so
+  its own overhead does not distort the game's CPU numbers.
+  id=1        cpu=    7640 ms  alloc=      17 MB  thread=main
+  id=15       cpu=      15 ms  alloc=       0 MB  thread=Thread-0
+  id=2        cpu=       0 ms  alloc=       0 MB  thread=Reference Handler
+  id=3        cpu=       0 ms  alloc=       0 MB  thread=Finalizer
+  id=4        cpu=       0 ms  alloc=       0 MB  thread=Signal Dispatcher
+  id=5        cpu=       0 ms  alloc=       0 MB  thread=Attach Listener
+  id=13       cpu=       0 ms  alloc=       0 MB  thread=Notification Thread
+  id=14       cpu=       0 ms  alloc=       0 MB  thread=Common-Cleaner
+  id=16       cpu=       0 ms  alloc=       0 MB  thread=LWJGL3 Timer
+  id=17       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-1
+  id=18       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-2
+  id=19       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-3
+  id=20       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-4
+  id=21       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-5
+  id=22       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-6
+  id=23       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-7
+  id=24       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-8
+  id=25       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-9
+  id=26       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-10
+  id=27       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-11
+  id=28       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-12
+  id=29       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-13
+  id=30       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-14
+  id=31       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-15
+  id=32       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-16
+
+[TOP CPU FUNCTIONS (exact class#method(line), from stack sampling)]
+  topHits = times the function was the CURRENTLY EXECUTING frame.
+  hits    = times the function appeared anywhere on a sampled stack.
+  Higher topHits == the exact function that actually burns CPU.
+  topHits=3648   hits=3648    jdk.internal.misc.Unsafe#park(-2)
+  topHits=228    hits=228     java.lang.Thread#sleep(-2)
+  topHits=0      hits=3876    java.lang.Thread#run(840)
+  topHits=0      hits=3648    java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject#await(1630)
+  topHits=0      hits=3648    java.util.concurrent.ForkJoinPool#unmanagedBlock(3465)
+  topHits=0      hits=3648    java.util.concurrent.ThreadPoolExecutor#getTask(1062)
+  topHits=0      hits=3648    java.util.concurrent.ThreadPoolExecutor#runWorker(1122)
+  topHits=0      hits=3648    java.util.concurrent.ThreadPoolExecutor$Worker#run(635)
+  topHits=0      hits=3648    java.util.concurrent.locks.LockSupport#park(341)
+  topHits=0      hits=3648    java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode#block(506)
+  topHits=0      hits=3648    java.util.concurrent.ForkJoinPool#managedBlock(3436)
+  topHits=0      hits=3648    java.util.concurrent.ArrayBlockingQueue#take(420)
+  topHits=0      hits=228     com.badlogic.gdx.backends.lwjgl3.Sync$1#run(111)
+
+[LIVE 1-SEC SAMPLES]
+[live] usedHeap=297MB cpuLoad=0,40 samples=17
+[live] usedHeap=297MB cpuLoad=0,22 samples=153
+[live] usedHeap=299MB cpuLoad=0,28 samples=289
+[live] usedHeap=299MB cpuLoad=0,15 samples=442
+[live] usedHeap=301MB cpuLoad=0,23 samples=578
+[live] usedHeap=301MB cpuLoad=0,25 samples=714
+[live] usedHeap=303MB cpuLoad=0,19 samples=850
+[live] usedHeap=303MB cpuLoad=0,24 samples=986
+[live] usedHeap=305MB cpuLoad=0,20 samples=1139
+[live] usedHeap=284MB cpuLoad=0,32 samples=1275
+[live] usedHeap=284MB cpuLoad=0,25 samples=1411
+[live] usedHeap=286MB cpuLoad=0,30 samples=1547
+[live] usedHeap=286MB cpuLoad=0,26 samples=1683
+[live] usedHeap=288MB cpuLoad=0,21 samples=1836
+[live] usedHeap=288MB cpuLoad=0,30 samples=1989
+[live] usedHeap=290MB cpuLoad=0,24 samples=2125
+[live] usedHeap=290MB cpuLoad=0,24 samples=2261
+[live] usedHeap=290MB cpuLoad=0,22 samples=2414
+[live] usedHeap=292MB cpuLoad=0,17 samples=2550
+[live] usedHeap=292MB cpuLoad=0,16 samples=2686
+[live] usedHeap=292MB cpuLoad=0,18 samples=2822
+[live] usedHeap=294MB cpuLoad=0,20 samples=2958
+[live] usedHeap=294MB cpuLoad=0,23 samples=3111
+[live] usedHeap=296MB cpuLoad=0,15 samples=3247
+[live] usedHeap=296MB cpuLoad=0,22 samples=3383
+[live] usedHeap=298MB cpuLoad=0,19 samples=3519
+[live] usedHeap=298MB cpuLoad=0,22 samples=3655
+[live] usedHeap=298MB cpuLoad=0,19 samples=3791
+
+[NOTES]
+  - allocSamples map intentionally unused: RAM attribution is done per-thread
+    via ThreadMXBean.getThreadAllocatedBytes (exact per-thread bytes), not stack
+    sampling, because allocation happens at object-creation sites.
+  - Methods deeper in the stack are callers; the frame at depth 0 is the leaf.
+============================================================
+AoH2 TEMPORARY CPU / RAM PROFILER REPORT
+Session started : Sat Aug 22 15:02:56 CEST 2026
+Session duration: 30000 ms
+============================================================
+
+[SYSTEM LEVEL]
+  availableProcessors : 8
+  systemCpuLoad       : 0,926
+  processCpuLoad(peak): 0,421
+  totalPhysicalMemory : 24543 MB
+  freePhysicalMemory  : 5842 MB
+  totalSwap           : 61350 MB
+
+[JVM HEAP]
+  heap used/committed/max : 370/1024/4096 MB
+  heap peak used (session): 370 MB
+  non-heap used           : 53 MB
+  stack samples collected : 4012
+
+[PER-THREAD CPU TIME + ALLOCATION]
+  Each row = the exact thread that consumed CPU / allocated RAM
+  during the session. allocDelta is the RAM that thread pushed into
+  the heap (attributed to the function that ran on it).
+  NOTE: the 'PerfAnalyzer' thread (the sampler itself) is EXCLUDED so
+  its own overhead does not distort the game's CPU numbers.
+  id=1        cpu=    7843 ms  alloc=      61 MB  thread=main
+  id=15       cpu=      15 ms  alloc=       0 MB  thread=Thread-0
+  id=2        cpu=       0 ms  alloc=       0 MB  thread=Reference Handler
+  id=3        cpu=       0 ms  alloc=       0 MB  thread=Finalizer
+  id=4        cpu=       0 ms  alloc=       0 MB  thread=Signal Dispatcher
+  id=5        cpu=       0 ms  alloc=       0 MB  thread=Attach Listener
+  id=13       cpu=       0 ms  alloc=       0 MB  thread=Notification Thread
+  id=14       cpu=       0 ms  alloc=       0 MB  thread=Common-Cleaner
+  id=16       cpu=       0 ms  alloc=       0 MB  thread=LWJGL3 Timer
+  id=17       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-1
+  id=18       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-2
+  id=19       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-3
+  id=20       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-4
+  id=21       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-5
+  id=22       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-6
+  id=23       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-7
+  id=24       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-8
+  id=25       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-9
+  id=26       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-10
+  id=27       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-11
+  id=28       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-12
+  id=29       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-13
+  id=30       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-14
+  id=31       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-15
+  id=32       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-16
+
+[TOP CPU FUNCTIONS (exact class#method(line), from stack sampling)]
+  topHits = times the function was the CURRENTLY EXECUTING frame.
+  hits    = times the function appeared anywhere on a sampled stack.
+  Higher topHits == the exact function that actually burns CPU.
+  topHits=3776   hits=3776    jdk.internal.misc.Unsafe#park(-2)
+  topHits=236    hits=236     java.lang.Thread#sleep(-2)
+  topHits=0      hits=4012    java.lang.Thread#run(840)
+  topHits=0      hits=3776    java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject#await(1630)
+  topHits=0      hits=3776    java.util.concurrent.ForkJoinPool#unmanagedBlock(3465)
+  topHits=0      hits=3776    java.util.concurrent.ThreadPoolExecutor#getTask(1062)
+  topHits=0      hits=3776    java.util.concurrent.ThreadPoolExecutor#runWorker(1122)
+  topHits=0      hits=3776    java.util.concurrent.ThreadPoolExecutor$Worker#run(635)
+  topHits=0      hits=3776    java.util.concurrent.locks.LockSupport#park(341)
+  topHits=0      hits=3776    java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode#block(506)
+  topHits=0      hits=3776    java.util.concurrent.ForkJoinPool#managedBlock(3436)
+  topHits=0      hits=3776    java.util.concurrent.ArrayBlockingQueue#take(420)
+  topHits=0      hits=236     com.badlogic.gdx.backends.lwjgl3.Sync$1#run(111)
+
+[LIVE 1-SEC SAMPLES]
+[live] usedHeap=300MB cpuLoad=0,23 samples=17
+[live] usedHeap=300MB cpuLoad=0,26 samples=170
+[live] usedHeap=302MB cpuLoad=0,16 samples=306
+[live] usedHeap=302MB cpuLoad=0,20 samples=442
+[live] usedHeap=304MB cpuLoad=0,21 samples=578
+[live] usedHeap=304MB cpuLoad=0,20 samples=714
+[live] usedHeap=306MB cpuLoad=0,33 samples=850
+[live] usedHeap=310MB cpuLoad=0,27 samples=986
+[live] usedHeap=310MB cpuLoad=0,27 samples=1122
+[live] usedHeap=314MB cpuLoad=0,20 samples=1258
+[live] usedHeap=318MB cpuLoad=0,37 samples=1394
+[live] usedHeap=320MB cpuLoad=0,25 samples=1530
+[live] usedHeap=324MB cpuLoad=0,18 samples=1666
+[live] usedHeap=328MB cpuLoad=0,32 samples=1802
+[live] usedHeap=330MB cpuLoad=0,17 samples=1955
+[live] usedHeap=334MB cpuLoad=0,27 samples=2108
+[live] usedHeap=336MB cpuLoad=0,18 samples=2244
+[live] usedHeap=340MB cpuLoad=0,20 samples=2397
+[live] usedHeap=344MB cpuLoad=0,18 samples=2533
+[live] usedHeap=346MB cpuLoad=0,19 samples=2686
+[live] usedHeap=350MB cpuLoad=0,28 samples=2822
+[live] usedHeap=352MB cpuLoad=0,21 samples=2958
+[live] usedHeap=354MB cpuLoad=0,16 samples=3094
+[live] usedHeap=358MB cpuLoad=0,20 samples=3230
+[live] usedHeap=360MB cpuLoad=0,15 samples=3383
+[live] usedHeap=364MB cpuLoad=0,18 samples=3536
+[live] usedHeap=366MB cpuLoad=0,13 samples=3689
+[live] usedHeap=368MB cpuLoad=0,12 samples=3808
+[live] usedHeap=368MB cpuLoad=0,09 samples=3944
+
+[NOTES]
+  - allocSamples map intentionally unused: RAM attribution is done per-thread
+    via ThreadMXBean.getThreadAllocatedBytes (exact per-thread bytes), not stack
+    sampling, because allocation happens at object-creation sites.
+  - Methods deeper in the stack are callers; the frame at depth 0 is the leaf.
+============================================================
+AoH2 TEMPORARY CPU / RAM PROFILER REPORT
+Session started : Sat Aug 22 15:22:59 CEST 2026
+Session duration: 30000 ms
+============================================================
+
+[SYSTEM LEVEL]
+  availableProcessors : 8
+  systemCpuLoad       : 0,249
+  processCpuLoad(peak): 0,496
+  totalPhysicalMemory : 24543 MB
+  freePhysicalMemory  : 6296 MB
+  totalSwap           : 61350 MB
+
+[JVM HEAP]
+  heap used/committed/max : 458/1024/4096 MB
+  heap peak used (session): 684 MB
+  non-heap used           : 55 MB
+  stack samples collected : 4284
+
+[PER-THREAD CPU TIME + ALLOCATION]
+  Each row = the exact thread that consumed CPU / allocated RAM
+  during the session. allocDelta is the RAM that thread pushed into
+  the heap (attributed to the function that ran on it).
+  NOTE: the 'PerfAnalyzer' thread (the sampler itself) is EXCLUDED so
+  its own overhead does not distort the game's CPU numbers.
+  id=1        cpu=   10828 ms  alloc=     181 MB  thread=main
+  id=2        cpu=       0 ms  alloc=       0 MB  thread=Reference Handler
+  id=3        cpu=       0 ms  alloc=       0 MB  thread=Finalizer
+  id=4        cpu=       0 ms  alloc=       0 MB  thread=Signal Dispatcher
+  id=5        cpu=       0 ms  alloc=       0 MB  thread=Attach Listener
+  id=13       cpu=       0 ms  alloc=       0 MB  thread=Notification Thread
+  id=14       cpu=       0 ms  alloc=       0 MB  thread=Common-Cleaner
+  id=15       cpu=       0 ms  alloc=       0 MB  thread=Thread-0
+  id=16       cpu=       0 ms  alloc=       0 MB  thread=LWJGL3 Timer
+  id=17       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-1
+  id=18       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-2
+  id=19       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-3
+  id=20       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-4
+  id=21       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-5
+  id=22       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-6
+  id=23       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-7
+  id=24       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-8
+  id=25       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-9
+  id=26       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-10
+  id=27       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-11
+  id=28       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-12
+  id=29       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-13
+  id=30       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-14
+  id=31       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-15
+  id=32       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-16
+
+[TOP CPU FUNCTIONS (exact class#method(line), from stack sampling)]
+  topHits = times the function was the CURRENTLY EXECUTING frame.
+  hits    = times the function appeared anywhere on a sampled stack.
+  Higher topHits == the exact function that actually burns CPU.
+  topHits=4032   hits=4032    jdk.internal.misc.Unsafe#park(-2)
+  topHits=252    hits=252     java.lang.Thread#sleep(-2)
+  topHits=0      hits=4284    java.lang.Thread#run(840)
+  topHits=0      hits=4032    java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject#await(1630)
+  topHits=0      hits=4032    java.util.concurrent.ForkJoinPool#unmanagedBlock(3465)
+  topHits=0      hits=4032    java.util.concurrent.ThreadPoolExecutor#getTask(1062)
+  topHits=0      hits=4032    java.util.concurrent.ThreadPoolExecutor#runWorker(1122)
+  topHits=0      hits=4032    java.util.concurrent.ThreadPoolExecutor$Worker#run(635)
+  topHits=0      hits=4032    java.util.concurrent.locks.LockSupport#park(341)
+  topHits=0      hits=4032    java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode#block(506)
+  topHits=0      hits=4032    java.util.concurrent.ForkJoinPool#managedBlock(3436)
+  topHits=0      hits=4032    java.util.concurrent.ArrayBlockingQueue#take(420)
+  topHits=0      hits=252     com.badlogic.gdx.backends.lwjgl3.Sync$1#run(111)
+
+[LIVE 1-SEC SAMPLES]
+[live] usedHeap=660MB cpuLoad=0,01 samples=17
+[live] usedHeap=660MB cpuLoad=0,16 samples=170
+[live] usedHeap=660MB cpuLoad=0,12 samples=323
+[live] usedHeap=670MB cpuLoad=0,42 samples=476
+[live] usedHeap=680MB cpuLoad=0,43 samples=629
+[live] usedHeap=302MB cpuLoad=0,46 samples=782
+[live] usedHeap=314MB cpuLoad=0,37 samples=935
+[live] usedHeap=328MB cpuLoad=0,44 samples=1088
+[live] usedHeap=344MB cpuLoad=0,37 samples=1241
+[live] usedHeap=358MB cpuLoad=0,29 samples=1394
+[live] usedHeap=376MB cpuLoad=0,36 samples=1547
+[live] usedHeap=394MB cpuLoad=0,38 samples=1700
+[live] usedHeap=408MB cpuLoad=0,27 samples=1853
+[live] usedHeap=426MB cpuLoad=0,35 samples=2006
+[live] usedHeap=444MB cpuLoad=0,28 samples=2159
+[live] usedHeap=452MB cpuLoad=0,08 samples=2312
+[live] usedHeap=454MB cpuLoad=0,08 samples=2465
+[live] usedHeap=454MB cpuLoad=0,07 samples=2618
+[live] usedHeap=454MB cpuLoad=0,10 samples=2771
+[live] usedHeap=456MB cpuLoad=0,02 samples=2924
+[live] usedHeap=456MB cpuLoad=0,02 samples=3077
+[live] usedHeap=456MB cpuLoad=0,02 samples=3230
+[live] usedHeap=456MB cpuLoad=0,03 samples=3383
+[live] usedHeap=456MB cpuLoad=0,02 samples=3536
+[live] usedHeap=456MB cpuLoad=0,02 samples=3689
+[live] usedHeap=456MB cpuLoad=0,02 samples=3842
+[live] usedHeap=458MB cpuLoad=0,02 samples=3995
+[live] usedHeap=458MB cpuLoad=0,02 samples=4148
+
+[NOTES]
+  - allocSamples map intentionally unused: RAM attribution is done per-thread
+    via ThreadMXBean.getThreadAllocatedBytes (exact per-thread bytes), not stack
+    sampling, because allocation happens at object-creation sites.
+  - Methods deeper in the stack are callers; the frame at depth 0 is the leaf.
+============================================================
+AoH2 TEMPORARY CPU / RAM PROFILER REPORT
+Session started : Sat Aug 22 17:38:38 CEST 2026
+Session duration: 30000 ms
+============================================================
+
+[SYSTEM LEVEL]
+  availableProcessors : 8
+  systemCpuLoad       : 0,473
+  processCpuLoad(peak): 0,788
+  totalPhysicalMemory : 24543 MB
+  freePhysicalMemory  : 5965 MB
+  totalSwap           : 61350 MB
+
+[JVM HEAP]
+  heap used/committed/max : 476/1024/4096 MB
+  heap peak used (session): 476 MB
+  non-heap used           : 59 MB
+  stack samples collected : 4097
+
+[PER-THREAD CPU TIME + ALLOCATION]
+  Each row = the exact thread that consumed CPU / allocated RAM
+  during the session. allocDelta is the RAM that thread pushed into
+  the heap (attributed to the function that ran on it).
+  NOTE: the 'PerfAnalyzer' thread (the sampler itself) is EXCLUDED so
+  its own overhead does not distort the game's CPU numbers.
+  id=1        cpu=   11687 ms  alloc=      89 MB  thread=main
+  id=25       cpu=     437 ms  alloc=       9 MB  thread=aoh2-desktop-9
+  id=23       cpu=     296 ms  alloc=       3 MB  thread=aoh2-desktop-7
+  id=31       cpu=     250 ms  alloc=       3 MB  thread=aoh2-desktop-15
+  id=19       cpu=     187 ms  alloc=       3 MB  thread=aoh2-desktop-3
+  id=20       cpu=     187 ms  alloc=       2 MB  thread=aoh2-desktop-4
+  id=18       cpu=     140 ms  alloc=       1 MB  thread=aoh2-desktop-2
+  id=24       cpu=     140 ms  alloc=       1 MB  thread=aoh2-desktop-8
+  id=22       cpu=     109 ms  alloc=       2 MB  thread=aoh2-desktop-6
+  id=29       cpu=     109 ms  alloc=       0 MB  thread=aoh2-desktop-13
+  id=30       cpu=     109 ms  alloc=       0 MB  thread=aoh2-desktop-14
+  id=21       cpu=      78 ms  alloc=       0 MB  thread=aoh2-desktop-5
+  id=32       cpu=      31 ms  alloc=       0 MB  thread=aoh2-desktop-16
+  id=2        cpu=       0 ms  alloc=       0 MB  thread=Reference Handler
+  id=3        cpu=       0 ms  alloc=       0 MB  thread=Finalizer
+  id=4        cpu=       0 ms  alloc=       0 MB  thread=Signal Dispatcher
+  id=5        cpu=       0 ms  alloc=       0 MB  thread=Attach Listener
+  id=13       cpu=       0 ms  alloc=       0 MB  thread=Notification Thread
+  id=14       cpu=       0 ms  alloc=       0 MB  thread=Common-Cleaner
+  id=15       cpu=       0 ms  alloc=       0 MB  thread=Thread-0
+  id=16       cpu=       0 ms  alloc=       0 MB  thread=LWJGL3 Timer
+  id=17       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-1
+  id=26       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-10
+  id=27       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-11
+  id=28       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-12
+
+[TOP CPU FUNCTIONS (exact class#method(line), from stack sampling)]
+  topHits = times the function was the CURRENTLY EXECUTING frame.
+  hits    = times the function appeared anywhere on a sampled stack.
+  Higher topHits == the exact function that actually burns CPU.
+  topHits=3842   hits=3842    jdk.internal.misc.Unsafe#park(-2)
+  topHits=241    hits=241     java.lang.Thread#sleep(-2)
+  topHits=2      hits=2       age.of.civilizations2.jakowski.lukasz.Province#getArmyCivID1(3681)
+  topHits=1      hits=1       age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle.AIPlaystyle#diplomacyActions_CivsInRange(1748)
+  topHits=1      hits=1       age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle.AIPlaystyle#billionaireRecruitment(2173)
+  topHits=1      hits=1       java.io.FileOutputStream#writeBytes(-2)
+  topHits=1      hits=1       age.of.civilizations2.jakowski.lukasz.GameAction#startUprising(1527)
+  topHits=1      hits=1       java.io.WinNTFileSystem#getBooleanAttributes(-2)
+  topHits=1      hits=1       age.of.civilizations2.jakowski.lukasz.AI.AI#buildProvinceData(601)
+  topHits=1      hits=1       age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle.AIPlaystyle#hostFestivals(5470)
+  topHits=1      hits=1       age.of.civilizations2.jakowski.lukasz.NewTurn#updateGameData_Province(840)
+  topHits=1      hits=1       age.of.civilizations2.jakowski.lukasz.NewTurn#updateProvinceVolunteerArmySent(1254)
+  topHits=1      hits=1       age.of.civilizations2.jakowski.lukasz.GameAction#updateIsSupplied(528)
+  topHits=1      hits=1       age.of.civilizations2.jakowski.lukasz.Province#isOccupied(2773)
+  topHits=1      hits=1       age.of.civilizations2.jakowski.lukasz.AI.AI#buildProvinceData(605)
+  topHits=0      hits=4097    java.lang.Thread#run(840)
+  topHits=0      hits=3856    java.util.concurrent.ThreadPoolExecutor$Worker#run(635)
+  topHits=0      hits=3842    java.util.concurrent.ThreadPoolExecutor#getTask(1062)
+  topHits=0      hits=3842    java.util.concurrent.locks.LockSupport#park(341)
+  topHits=0      hits=3842    java.util.concurrent.ForkJoinPool#unmanagedBlock(3465)
+  topHits=0      hits=3842    java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode#block(506)
+  topHits=0      hits=3842    java.util.concurrent.ForkJoinPool#managedBlock(3436)
+  topHits=0      hits=3842    java.util.concurrent.ThreadPoolExecutor#runWorker(1122)
+  topHits=0      hits=3842    java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject#await(1630)
+  topHits=0      hits=3842    java.util.concurrent.ArrayBlockingQueue#take(420)
+  topHits=0      hits=241     com.badlogic.gdx.backends.lwjgl3.Sync$1#run(111)
+  topHits=0      hits=14      java.util.concurrent.FutureTask#run(264)
+  topHits=0      hits=14      java.util.concurrent.ThreadPoolExecutor#runWorker(1136)
+  topHits=0      hits=14      java.util.concurrent.Executors$RunnableAdapter#call(539)
+  topHits=0      hits=9       age.of.civilizations2.jakowski.lukasz.GameAction$$Lambda$238/0x000001ff4e2de400#run(-1)
+  topHits=0      hits=5       age.of.civilizations2.jakowski.lukasz.GameAction$$Lambda$241/0x000001ff4e2e42d8#run(-1)
+  topHits=0      hits=4       age.of.civilizations2.jakowski.lukasz.AI.AI#turnOrders(187)
+  topHits=0      hits=4       age.of.civilizations2.jakowski.lukasz.Actions#doActions(86)
+  topHits=0      hits=2       age.of.civilizations2.jakowski.lukasz.Game.GameUpdate#getMilitaryUpkeepP(275)
+  topHits=0      hits=2       age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle.AIPlaystyle#turnOrders(209)
+  topHits=0      hits=2       age.of.civilizations2.jakowski.lukasz.Game.GameUpdate#getMilitaryUpkeep_Total(80)
+  topHits=0      hits=2       age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle.AIPlaystyle#recruitMilitary_MinSpending(2069)
+  topHits=0      hits=2       age.of.civilizations2.jakowski.lukasz.Actions#doActions(74)
+  topHits=0      hits=2       age.of.civilizations2.jakowski.lukasz.AI.AI#buildAI_Data(449)
+  topHits=0      hits=2       age.of.civilizations2.jakowski.lukasz.AI.AI#turnOrders_1(132)
+  topHits=0      hits=1       jdk.internal.loader.BuiltinClassLoader#findClassOnClassPathOrNull(757)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.NewTurn$$Lambda$245/0x000001ff4e2e4b58#accept(-1)
+  topHits=0      hits=1       java.io.FileOutputStream#write(349)
+  topHits=0      hits=1       java.io.PrintStream#write(568)
+  topHits=0      hits=1       jdk.internal.loader.BuiltinClassLoader#loadClassOrNull(681)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.Actions#runRevolts(180)
+  topHits=0      hits=1       java.io.BufferedOutputStream#flushBuffer(81)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle.AIPlaystyle#diplomacyActions_BuildCivsInRange(1394)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle.AIPlaystyle#turnOrders(268)
+  topHits=0      hits=1       java.io.PrintStream#writeln(723)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.NewTurn#doAction(206)
+  topHits=0      hits=1       java.io.FileSystem#hasBooleanAttributes(125)
+  topHits=0      hits=1       com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application#log(305)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.Province#updateFogOfWar(812)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.Actions#doActions(63)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.NewTurn#doAction(125)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle.AIPlaystyle#respondToMessages(6121)
+  topHits=0      hits=1       jdk.internal.loader.BuiltinClassLoader#loadClass(639)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.GameLogger$1#write(45)
+  topHits=0      hits=1       java.io.PrintStream#write(570)
+
+[LIVE 1-SEC SAMPLES]
+[live] usedHeap=348MB cpuLoad=0,49 samples=17
+[live] usedHeap=356MB cpuLoad=0,62 samples=153
+[live] usedHeap=366MB cpuLoad=0,39 samples=306
+[live] usedHeap=376MB cpuLoad=0,75 samples=459
+[live] usedHeap=380MB cpuLoad=0,22 samples=612
+[live] usedHeap=384MB cpuLoad=0,16 samples=765
+[live] usedHeap=386MB cpuLoad=0,02 samples=918
+[live] usedHeap=390MB cpuLoad=0,18 samples=1071
+[live] usedHeap=392MB cpuLoad=0,07 samples=1224
+[live] usedHeap=394MB cpuLoad=0,12 samples=1377
+[live] usedHeap=396MB cpuLoad=0,09 samples=1530
+[live] usedHeap=396MB cpuLoad=0,09 samples=1683
+[live] usedHeap=398MB cpuLoad=0,38 samples=1836
+[live] usedHeap=410MB cpuLoad=0,28 samples=1989
+[live] usedHeap=418MB cpuLoad=0,39 samples=2142
+[live] usedHeap=434MB cpuLoad=0,52 samples=2295
+[live] usedHeap=438MB cpuLoad=0,67 samples=2431
+[live] usedHeap=440MB cpuLoad=0,47 samples=2584
+[live] usedHeap=444MB cpuLoad=0,30 samples=2737
+[live] usedHeap=450MB cpuLoad=0,29 samples=2873
+[live] usedHeap=458MB cpuLoad=0,68 samples=3026
+[live] usedHeap=460MB cpuLoad=0,64 samples=3162
+[live] usedHeap=462MB cpuLoad=0,42 samples=3298
+[live] usedHeap=470MB cpuLoad=0,30 samples=3451
+[live] usedHeap=470MB cpuLoad=0,54 samples=3604
+[live] usedHeap=474MB cpuLoad=0,31 samples=3757
+[live] usedHeap=474MB cpuLoad=0,05 samples=3910
+[live] usedHeap=476MB cpuLoad=0,38 samples=4063
+
+[NOTES]
+  - allocSamples map intentionally unused: RAM attribution is done per-thread
+    via ThreadMXBean.getThreadAllocatedBytes (exact per-thread bytes), not stack
+    sampling, because allocation happens at object-creation sites.
+  - Methods deeper in the stack are callers; the frame at depth 0 is the leaf.
+============================================================
+AoH2 TEMPORARY CPU / RAM PROFILER REPORT
+Session started : Sat Aug 22 17:39:08 CEST 2026
+Session duration: 30000 ms
+============================================================
+
+[SYSTEM LEVEL]
+  availableProcessors : 8
+  systemCpuLoad       : 0,647
+  processCpuLoad(peak): 0,635
+  totalPhysicalMemory : 24543 MB
+  freePhysicalMemory  : 5770 MB
+  totalSwap           : 61350 MB
+
+[JVM HEAP]
+  heap used/committed/max : 590/1024/4096 MB
+  heap peak used (session): 590 MB
+  non-heap used           : 62 MB
+  stack samples collected : 4063
+
+[PER-THREAD CPU TIME + ALLOCATION]
+  Each row = the exact thread that consumed CPU / allocated RAM
+  during the session. allocDelta is the RAM that thread pushed into
+  the heap (attributed to the function that ran on it).
+  NOTE: the 'PerfAnalyzer' thread (the sampler itself) is EXCLUDED so
+  its own overhead does not distort the game's CPU numbers.
+  id=1        cpu=   12187 ms  alloc=      95 MB  thread=main
+  id=22       cpu=     156 ms  alloc=       3 MB  thread=aoh2-desktop-6
+  id=26       cpu=     109 ms  alloc=       2 MB  thread=aoh2-desktop-10
+  id=17       cpu=      93 ms  alloc=       0 MB  thread=aoh2-desktop-1
+  id=32       cpu=      78 ms  alloc=       0 MB  thread=aoh2-desktop-16
+  id=24       cpu=      15 ms  alloc=       0 MB  thread=aoh2-desktop-8
+  id=27       cpu=      15 ms  alloc=       0 MB  thread=aoh2-desktop-11
+  id=28       cpu=      15 ms  alloc=       0 MB  thread=aoh2-desktop-12
+  id=2        cpu=       0 ms  alloc=       0 MB  thread=Reference Handler
+  id=3        cpu=       0 ms  alloc=       0 MB  thread=Finalizer
+  id=4        cpu=       0 ms  alloc=       0 MB  thread=Signal Dispatcher
+  id=5        cpu=       0 ms  alloc=       0 MB  thread=Attach Listener
+  id=13       cpu=       0 ms  alloc=       0 MB  thread=Notification Thread
+  id=14       cpu=       0 ms  alloc=       0 MB  thread=Common-Cleaner
+  id=15       cpu=       0 ms  alloc=       0 MB  thread=Thread-0
+  id=16       cpu=       0 ms  alloc=       0 MB  thread=LWJGL3 Timer
+  id=18       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-2
+  id=19       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-3
+  id=20       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-4
+  id=21       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-5
+  id=23       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-7
+  id=25       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-9
+  id=29       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-13
+  id=30       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-14
+  id=31       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-15
+
+[TOP CPU FUNCTIONS (exact class#method(line), from stack sampling)]
+  topHits = times the function was the CURRENTLY EXECUTING frame.
+  hits    = times the function appeared anywhere on a sampled stack.
+  Higher topHits == the exact function that actually burns CPU.
+  topHits=3819   hits=3819    jdk.internal.misc.Unsafe#park(-2)
+  topHits=239    hits=239     java.lang.Thread#sleep(-2)
+  topHits=2      hits=2       age.of.civilizations2.jakowski.lukasz.Province#isOccupied(2773)
+  topHits=1      hits=2       age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle.AIPlaystyle#billionaireRecruitment(2174)
+  topHits=1      hits=1       age.of.civilizations2.jakowski.lukasz.AI.AI#buildProvinceData(605)
+  topHits=1      hits=1       age.of.civilizations2.jakowski.lukasz.Province#getArmyCivID1(3681)
+  topHits=0      hits=4063    java.lang.Thread#run(840)
+  topHits=0      hits=3824    java.util.concurrent.ThreadPoolExecutor$Worker#run(635)
+  topHits=0      hits=3819    java.util.concurrent.ForkJoinPool#unmanagedBlock(3465)
+  topHits=0      hits=3819    java.util.concurrent.ThreadPoolExecutor#getTask(1062)
+  topHits=0      hits=3819    java.util.concurrent.locks.LockSupport#park(341)
+  topHits=0      hits=3819    java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode#block(506)
+  topHits=0      hits=3819    java.util.concurrent.ForkJoinPool#managedBlock(3436)
+  topHits=0      hits=3819    java.util.concurrent.ArrayBlockingQueue#take(420)
+  topHits=0      hits=3819    java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject#await(1630)
+  topHits=0      hits=3819    java.util.concurrent.ThreadPoolExecutor#runWorker(1122)
+  topHits=0      hits=239     com.badlogic.gdx.backends.lwjgl3.Sync$1#run(111)
+  topHits=0      hits=5       java.util.concurrent.Executors$RunnableAdapter#call(539)
+  topHits=0      hits=5       java.util.concurrent.FutureTask#run(264)
+  topHits=0      hits=5       java.util.concurrent.ThreadPoolExecutor#runWorker(1136)
+  topHits=0      hits=3       age.of.civilizations2.jakowski.lukasz.GameAction$$Lambda$238/0x000001ff4e2de400#run(-1)
+  topHits=0      hits=2       age.of.civilizations2.jakowski.lukasz.AI.AI#turnOrders(187)
+  topHits=0      hits=2       age.of.civilizations2.jakowski.lukasz.Actions#doActions(86)
+  topHits=0      hits=2       age.of.civilizations2.jakowski.lukasz.GameAction$$Lambda$241/0x000001ff4e2e42d8#run(-1)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle.AIPlaystyle#recruitMilitary_MinSpending(2069)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle.AIPlaystyle#turnOrders(209)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle.AIPlaystyle#turnOrders(266)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.NewTurn#checkOccupiedProvincesIfAreAtWar(64)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.NewTurn#doAction(172)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.Game.GameUpdate#getMilitarySpending(166)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.GameManager#updateGoldenAge(1406)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.AI.AI#buildAI_Data(449)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.Game.GameUpdate#getMilitaryUpkeep_Total(80)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.NewTurn#doAction(206)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.Game.GameUpdate#getMilitaryUpkeepP(275)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.Actions#doActions(63)
+
+[LIVE 1-SEC SAMPLES]
+[live] usedHeap=478MB cpuLoad=0,38 samples=17
+[live] usedHeap=480MB cpuLoad=0,39 samples=153
+[live] usedHeap=482MB cpuLoad=0,27 samples=306
+[live] usedHeap=484MB cpuLoad=0,09 samples=442
+[live] usedHeap=486MB cpuLoad=0,24 samples=595
+[live] usedHeap=490MB cpuLoad=0,42 samples=731
+[live] usedHeap=490MB cpuLoad=0,37 samples=867
+[live] usedHeap=494MB cpuLoad=0,44 samples=1020
+[live] usedHeap=500MB cpuLoad=0,52 samples=1173
+[live] usedHeap=506MB cpuLoad=0,52 samples=1309
+[live] usedHeap=512MB cpuLoad=0,42 samples=1445
+[live] usedHeap=518MB cpuLoad=0,28 samples=1598
+[live] usedHeap=522MB cpuLoad=0,35 samples=1751
+[live] usedHeap=526MB cpuLoad=0,25 samples=1904
+[live] usedHeap=530MB cpuLoad=0,18 samples=2057
+[live] usedHeap=534MB cpuLoad=0,38 samples=2193
+[live] usedHeap=534MB cpuLoad=0,27 samples=2346
+[live] usedHeap=540MB cpuLoad=0,36 samples=2499
+[live] usedHeap=550MB cpuLoad=0,40 samples=2652
+[live] usedHeap=558MB cpuLoad=0,48 samples=2788
+[live] usedHeap=566MB cpuLoad=0,51 samples=2924
+[live] usedHeap=574MB cpuLoad=0,42 samples=3077
+[live] usedHeap=578MB cpuLoad=0,39 samples=3230
+[live] usedHeap=586MB cpuLoad=0,39 samples=3383
+[live] usedHeap=588MB cpuLoad=0,16 samples=3536
+[live] usedHeap=590MB cpuLoad=0,14 samples=3689
+[live] usedHeap=590MB cpuLoad=0,02 samples=3774
+[live] usedHeap=590MB cpuLoad=0,02 samples=3910
+[live] usedHeap=590MB cpuLoad=0,02 samples=4063
+
+[NOTES]
+  - allocSamples map intentionally unused: RAM attribution is done per-thread
+    via ThreadMXBean.getThreadAllocatedBytes (exact per-thread bytes), not stack
+    sampling, because allocation happens at object-creation sites.
+  - Methods deeper in the stack are callers; the frame at depth 0 is the leaf.
+============================================================
+AoH2 TEMPORARY CPU / RAM PROFILER REPORT
+Session started : Sat Aug 22 17:40:11 CEST 2026
+Session duration: 30000 ms
+============================================================
+
+[SYSTEM LEVEL]
+  availableProcessors : 8
+  systemCpuLoad       : 0,316
+  processCpuLoad(peak): 0,456
+  totalPhysicalMemory : 24543 MB
+  freePhysicalMemory  : 5950 MB
+  totalSwap           : 61350 MB
+
+[JVM HEAP]
+  heap used/committed/max : 353/1024/4096 MB
+  heap peak used (session): 686 MB
+  non-heap used           : 64 MB
+  stack samples collected : 4267
+
+[PER-THREAD CPU TIME + ALLOCATION]
+  Each row = the exact thread that consumed CPU / allocated RAM
+  during the session. allocDelta is the RAM that thread pushed into
+  the heap (attributed to the function that ran on it).
+  NOTE: the 'PerfAnalyzer' thread (the sampler itself) is EXCLUDED so
+  its own overhead does not distort the game's CPU numbers.
+  id=1        cpu=   14203 ms  alloc=     156 MB  thread=main
+  id=2        cpu=       0 ms  alloc=       0 MB  thread=Reference Handler
+  id=3        cpu=       0 ms  alloc=       0 MB  thread=Finalizer
+  id=4        cpu=       0 ms  alloc=       0 MB  thread=Signal Dispatcher
+  id=5        cpu=       0 ms  alloc=       0 MB  thread=Attach Listener
+  id=13       cpu=       0 ms  alloc=       0 MB  thread=Notification Thread
+  id=14       cpu=       0 ms  alloc=       0 MB  thread=Common-Cleaner
+  id=15       cpu=       0 ms  alloc=       0 MB  thread=Thread-0
+  id=16       cpu=       0 ms  alloc=       0 MB  thread=LWJGL3 Timer
+  id=17       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-1
+  id=18       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-2
+  id=19       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-3
+  id=20       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-4
+  id=21       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-5
+  id=22       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-6
+  id=23       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-7
+  id=24       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-8
+  id=25       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-9
+  id=26       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-10
+  id=27       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-11
+  id=28       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-12
+  id=29       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-13
+  id=30       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-14
+  id=31       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-15
+  id=32       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-16
+
+[TOP CPU FUNCTIONS (exact class#method(line), from stack sampling)]
+  topHits = times the function was the CURRENTLY EXECUTING frame.
+  hits    = times the function appeared anywhere on a sampled stack.
+  Higher topHits == the exact function that actually burns CPU.
+  topHits=4016   hits=4016    jdk.internal.misc.Unsafe#park(-2)
+  topHits=251    hits=251     java.lang.Thread#sleep(-2)
+  topHits=0      hits=4267    java.lang.Thread#run(840)
+  topHits=0      hits=4016    java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject#await(1630)
+  topHits=0      hits=4016    java.util.concurrent.ForkJoinPool#unmanagedBlock(3465)
+  topHits=0      hits=4016    java.util.concurrent.ThreadPoolExecutor#getTask(1062)
+  topHits=0      hits=4016    java.util.concurrent.ThreadPoolExecutor#runWorker(1122)
+  topHits=0      hits=4016    java.util.concurrent.ThreadPoolExecutor$Worker#run(635)
+  topHits=0      hits=4016    java.util.concurrent.locks.LockSupport#park(341)
+  topHits=0      hits=4016    java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode#block(506)
+  topHits=0      hits=4016    java.util.concurrent.ForkJoinPool#managedBlock(3436)
+  topHits=0      hits=4016    java.util.concurrent.ArrayBlockingQueue#take(420)
+  topHits=0      hits=251     com.badlogic.gdx.backends.lwjgl3.Sync$1#run(111)
+
+[LIVE 1-SEC SAMPLES]
+[live] usedHeap=590MB cpuLoad=0,00 samples=17
+[live] usedHeap=596MB cpuLoad=0,20 samples=170
+[live] usedHeap=604MB cpuLoad=0,29 samples=323
+[live] usedHeap=616MB cpuLoad=0,31 samples=476
+[live] usedHeap=630MB cpuLoad=0,31 samples=629
+[live] usedHeap=632MB cpuLoad=0,46 samples=782
+[live] usedHeap=634MB cpuLoad=0,37 samples=935
+[live] usedHeap=644MB cpuLoad=0,36 samples=1088
+[live] usedHeap=656MB cpuLoad=0,40 samples=1241
+[live] usedHeap=664MB cpuLoad=0,37 samples=1394
+[live] usedHeap=672MB cpuLoad=0,29 samples=1547
+[live] usedHeap=682MB cpuLoad=0,35 samples=1700
+[live] usedHeap=289MB cpuLoad=0,29 samples=1853
+[live] usedHeap=297MB cpuLoad=0,31 samples=2006
+[live] usedHeap=307MB cpuLoad=0,28 samples=2159
+[live] usedHeap=315MB cpuLoad=0,37 samples=2312
+[live] usedHeap=327MB cpuLoad=0,35 samples=2465
+[live] usedHeap=333MB cpuLoad=0,26 samples=2618
+[live] usedHeap=337MB cpuLoad=0,27 samples=2771
+[live] usedHeap=339MB cpuLoad=0,18 samples=2924
+[live] usedHeap=343MB cpuLoad=0,19 samples=3077
+[live] usedHeap=345MB cpuLoad=0,24 samples=3230
+[live] usedHeap=347MB cpuLoad=0,18 samples=3383
+[live] usedHeap=351MB cpuLoad=0,23 samples=3536
+[live] usedHeap=351MB cpuLoad=0,05 samples=3689
+[live] usedHeap=351MB cpuLoad=0,02 samples=3842
+[live] usedHeap=353MB cpuLoad=0,01 samples=3995
+[live] usedHeap=353MB cpuLoad=0,02 samples=4148
+
+[NOTES]
+  - allocSamples map intentionally unused: RAM attribution is done per-thread
+    via ThreadMXBean.getThreadAllocatedBytes (exact per-thread bytes), not stack
+    sampling, because allocation happens at object-creation sites.
+  - Methods deeper in the stack are callers; the frame at depth 0 is the leaf.
+============================================================
+AoH2 TEMPORARY CPU / RAM PROFILER REPORT
+Session started : Sat Aug 22 17:40:45 CEST 2026
+Session duration: 30000 ms
+============================================================
+
+[SYSTEM LEVEL]
+  availableProcessors : 8
+  systemCpuLoad       : 0,292
+  processCpuLoad(peak): 0,316
+  totalPhysicalMemory : 24543 MB
+  freePhysicalMemory  : 5777 MB
+  totalSwap           : 61350 MB
+
+[JVM HEAP]
+  heap used/committed/max : 389/1024/4096 MB
+  heap peak used (session): 389 MB
+  non-heap used           : 64 MB
+  stack samples collected : 4301
+
+[PER-THREAD CPU TIME + ALLOCATION]
+  Each row = the exact thread that consumed CPU / allocated RAM
+  during the session. allocDelta is the RAM that thread pushed into
+  the heap (attributed to the function that ran on it).
+  NOTE: the 'PerfAnalyzer' thread (the sampler itself) is EXCLUDED so
+  its own overhead does not distort the game's CPU numbers.
+  id=1        cpu=    3062 ms  alloc=      27 MB  thread=main
+  id=2        cpu=       0 ms  alloc=       0 MB  thread=Reference Handler
+  id=3        cpu=       0 ms  alloc=       0 MB  thread=Finalizer
+  id=4        cpu=       0 ms  alloc=       0 MB  thread=Signal Dispatcher
+  id=5        cpu=       0 ms  alloc=       0 MB  thread=Attach Listener
+  id=13       cpu=       0 ms  alloc=       0 MB  thread=Notification Thread
+  id=14       cpu=       0 ms  alloc=       0 MB  thread=Common-Cleaner
+  id=15       cpu=       0 ms  alloc=       0 MB  thread=Thread-0
+  id=16       cpu=       0 ms  alloc=       0 MB  thread=LWJGL3 Timer
+  id=17       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-1
+  id=18       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-2
+  id=19       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-3
+  id=20       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-4
+  id=21       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-5
+  id=22       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-6
+  id=23       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-7
+  id=24       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-8
+  id=25       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-9
+  id=26       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-10
+  id=27       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-11
+  id=28       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-12
+  id=29       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-13
+  id=30       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-14
+  id=31       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-15
+  id=32       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-16
+
+[TOP CPU FUNCTIONS (exact class#method(line), from stack sampling)]
+  topHits = times the function was the CURRENTLY EXECUTING frame.
+  hits    = times the function appeared anywhere on a sampled stack.
+  Higher topHits == the exact function that actually burns CPU.
+  topHits=4048   hits=4048    jdk.internal.misc.Unsafe#park(-2)
+  topHits=253    hits=253     java.lang.Thread#sleep(-2)
+  topHits=0      hits=4301    java.lang.Thread#run(840)
+  topHits=0      hits=4048    java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject#await(1630)
+  topHits=0      hits=4048    java.util.concurrent.ForkJoinPool#unmanagedBlock(3465)
+  topHits=0      hits=4048    java.util.concurrent.ThreadPoolExecutor#getTask(1062)
+  topHits=0      hits=4048    java.util.concurrent.ThreadPoolExecutor#runWorker(1122)
+  topHits=0      hits=4048    java.util.concurrent.ThreadPoolExecutor$Worker#run(635)
+  topHits=0      hits=4048    java.util.concurrent.locks.LockSupport#park(341)
+  topHits=0      hits=4048    java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode#block(506)
+  topHits=0      hits=4048    java.util.concurrent.ForkJoinPool#managedBlock(3436)
+  topHits=0      hits=4048    java.util.concurrent.ArrayBlockingQueue#take(420)
+  topHits=0      hits=253     com.badlogic.gdx.backends.lwjgl3.Sync$1#run(111)
+
+[LIVE 1-SEC SAMPLES]
+[live] usedHeap=353MB cpuLoad=0,00 samples=17
+[live] usedHeap=355MB cpuLoad=0,14 samples=170
+[live] usedHeap=357MB cpuLoad=0,15 samples=323
+[live] usedHeap=359MB cpuLoad=0,01 samples=476
+[live] usedHeap=359MB cpuLoad=0,02 samples=629
+[live] usedHeap=359MB cpuLoad=0,02 samples=782
+[live] usedHeap=359MB cpuLoad=0,02 samples=935
+[live] usedHeap=359MB cpuLoad=0,02 samples=1088
+[live] usedHeap=359MB cpuLoad=0,02 samples=1241
+[live] usedHeap=361MB cpuLoad=0,02 samples=1394
+[live] usedHeap=361MB cpuLoad=0,02 samples=1547
+[live] usedHeap=361MB cpuLoad=0,02 samples=1700
+[live] usedHeap=361MB cpuLoad=0,02 samples=1853
+[live] usedHeap=361MB cpuLoad=0,02 samples=2006
+[live] usedHeap=361MB cpuLoad=0,01 samples=2159
+[live] usedHeap=361MB cpuLoad=0,02 samples=2312
+[live] usedHeap=363MB cpuLoad=0,01 samples=2465
+[live] usedHeap=363MB cpuLoad=0,02 samples=2618
+[live] usedHeap=363MB cpuLoad=0,02 samples=2771
+[live] usedHeap=363MB cpuLoad=0,02 samples=2924
+[live] usedHeap=363MB cpuLoad=0,01 samples=3077
+[live] usedHeap=363MB cpuLoad=0,02 samples=3230
+[live] usedHeap=365MB cpuLoad=0,02 samples=3383
+[live] usedHeap=365MB cpuLoad=0,02 samples=3536
+[live] usedHeap=365MB cpuLoad=0,16 samples=3689
+[live] usedHeap=369MB cpuLoad=0,22 samples=3842
+[live] usedHeap=373MB cpuLoad=0,19 samples=3995
+[live] usedHeap=381MB cpuLoad=0,31 samples=4148
+[live] usedHeap=389MB cpuLoad=0,19 samples=4284
+
+[NOTES]
+  - allocSamples map intentionally unused: RAM attribution is done per-thread
+    via ThreadMXBean.getThreadAllocatedBytes (exact per-thread bytes), not stack
+    sampling, because allocation happens at object-creation sites.
+  - Methods deeper in the stack are callers; the frame at depth 0 is the leaf.
+============================================================
+AoH2 TEMPORARY CPU / RAM PROFILER REPORT
+Session started : Sat Aug 22 17:41:15 CEST 2026
+Session duration: 30000 ms
+============================================================
+
+[SYSTEM LEVEL]
+  availableProcessors : 8
+  systemCpuLoad       : 0,751
+  processCpuLoad(peak): 0,416
+  totalPhysicalMemory : 24543 MB
+  freePhysicalMemory  : 5732 MB
+  totalSwap           : 61350 MB
+
+[JVM HEAP]
+  heap used/committed/max : 485/1024/4096 MB
+  heap peak used (session): 485 MB
+  non-heap used           : 65 MB
+  stack samples collected : 4080
+
+[PER-THREAD CPU TIME + ALLOCATION]
+  Each row = the exact thread that consumed CPU / allocated RAM
+  during the session. allocDelta is the RAM that thread pushed into
+  the heap (attributed to the function that ran on it).
+  NOTE: the 'PerfAnalyzer' thread (the sampler itself) is EXCLUDED so
+  its own overhead does not distort the game's CPU numbers.
+  id=1        cpu=   14171 ms  alloc=      87 MB  thread=main
+  id=15       cpu=      15 ms  alloc=       0 MB  thread=Thread-0
+  id=2        cpu=       0 ms  alloc=       0 MB  thread=Reference Handler
+  id=3        cpu=       0 ms  alloc=       0 MB  thread=Finalizer
+  id=4        cpu=       0 ms  alloc=       0 MB  thread=Signal Dispatcher
+  id=5        cpu=       0 ms  alloc=       0 MB  thread=Attach Listener
+  id=13       cpu=       0 ms  alloc=       0 MB  thread=Notification Thread
+  id=14       cpu=       0 ms  alloc=       0 MB  thread=Common-Cleaner
+  id=16       cpu=       0 ms  alloc=       0 MB  thread=LWJGL3 Timer
+  id=17       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-1
+  id=18       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-2
+  id=19       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-3
+  id=20       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-4
+  id=21       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-5
+  id=22       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-6
+  id=23       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-7
+  id=24       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-8
+  id=25       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-9
+  id=26       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-10
+  id=27       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-11
+  id=28       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-12
+  id=29       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-13
+  id=30       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-14
+  id=31       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-15
+  id=32       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-16
+
+[TOP CPU FUNCTIONS (exact class#method(line), from stack sampling)]
+  topHits = times the function was the CURRENTLY EXECUTING frame.
+  hits    = times the function appeared anywhere on a sampled stack.
+  Higher topHits == the exact function that actually burns CPU.
+  topHits=3840   hits=3840    jdk.internal.misc.Unsafe#park(-2)
+  topHits=240    hits=240     java.lang.Thread#sleep(-2)
+  topHits=0      hits=4080    java.lang.Thread#run(840)
+  topHits=0      hits=3840    java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject#await(1630)
+  topHits=0      hits=3840    java.util.concurrent.ForkJoinPool#unmanagedBlock(3465)
+  topHits=0      hits=3840    java.util.concurrent.ThreadPoolExecutor#getTask(1062)
+  topHits=0      hits=3840    java.util.concurrent.ThreadPoolExecutor#runWorker(1122)
+  topHits=0      hits=3840    java.util.concurrent.ThreadPoolExecutor$Worker#run(635)
+  topHits=0      hits=3840    java.util.concurrent.locks.LockSupport#park(341)
+  topHits=0      hits=3840    java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode#block(506)
+  topHits=0      hits=3840    java.util.concurrent.ForkJoinPool#managedBlock(3436)
+  topHits=0      hits=3840    java.util.concurrent.ArrayBlockingQueue#take(420)
+  topHits=0      hits=240     com.badlogic.gdx.backends.lwjgl3.Sync$1#run(111)
+
+[LIVE 1-SEC SAMPLES]
+[live] usedHeap=391MB cpuLoad=0,19 samples=17
+[live] usedHeap=395MB cpuLoad=0,37 samples=170
+[live] usedHeap=403MB cpuLoad=0,33 samples=323
+[live] usedHeap=407MB cpuLoad=0,28 samples=459
+[live] usedHeap=411MB cpuLoad=0,27 samples=595
+[live] usedHeap=415MB cpuLoad=0,30 samples=731
+[live] usedHeap=421MB cpuLoad=0,31 samples=867
+[live] usedHeap=425MB cpuLoad=0,29 samples=1020
+[live] usedHeap=429MB cpuLoad=0,35 samples=1156
+[live] usedHeap=431MB cpuLoad=0,30 samples=1292
+[live] usedHeap=433MB cpuLoad=0,32 samples=1428
+[live] usedHeap=435MB cpuLoad=0,37 samples=1564
+[live] usedHeap=439MB cpuLoad=0,42 samples=1717
+[live] usedHeap=445MB cpuLoad=0,26 samples=1853
+[live] usedHeap=451MB cpuLoad=0,30 samples=1989
+[live] usedHeap=459MB cpuLoad=0,27 samples=2142
+[live] usedHeap=465MB cpuLoad=0,30 samples=2278
+[live] usedHeap=469MB cpuLoad=0,29 samples=2414
+[live] usedHeap=475MB cpuLoad=0,35 samples=2567
+[live] usedHeap=479MB cpuLoad=0,31 samples=2703
+[live] usedHeap=483MB cpuLoad=0,21 samples=2856
+[live] usedHeap=483MB cpuLoad=0,07 samples=2992
+[live] usedHeap=483MB cpuLoad=0,04 samples=3128
+[live] usedHeap=483MB cpuLoad=0,03 samples=3281
+[live] usedHeap=485MB cpuLoad=0,03 samples=3434
+[live] usedHeap=485MB cpuLoad=0,02 samples=3587
+[live] usedHeap=485MB cpuLoad=0,02 samples=3740
+[live] usedHeap=485MB cpuLoad=0,02 samples=3893
+[live] usedHeap=485MB cpuLoad=0,07 samples=4046
+
+[NOTES]
+  - allocSamples map intentionally unused: RAM attribution is done per-thread
+    via ThreadMXBean.getThreadAllocatedBytes (exact per-thread bytes), not stack
+    sampling, because allocation happens at object-creation sites.
+  - Methods deeper in the stack are callers; the frame at depth 0 is the leaf.
+============================================================
+AoH2 TEMPORARY CPU / RAM PROFILER REPORT
+Session started : Sat Aug 22 17:42:49 CEST 2026
+Session duration: 30000 ms
+============================================================
+
+[SYSTEM LEVEL]
+  availableProcessors : 8
+  systemCpuLoad       : 0,461
+  processCpuLoad(peak): 0,632
+  totalPhysicalMemory : 24543 MB
+  freePhysicalMemory  : 5193 MB
+  totalSwap           : 61350 MB
+
+[JVM HEAP]
+  heap used/committed/max : 360/1024/4096 MB
+  heap peak used (session): 745 MB
+  non-heap used           : 68 MB
+  stack samples collected : 4250
+
+[PER-THREAD CPU TIME + ALLOCATION]
+  Each row = the exact thread that consumed CPU / allocated RAM
+  during the session. allocDelta is the RAM that thread pushed into
+  the heap (attributed to the function that ran on it).
+  NOTE: the 'PerfAnalyzer' thread (the sampler itself) is EXCLUDED so
+  its own overhead does not distort the game's CPU numbers.
+  id=1        cpu=   11546 ms  alloc=      97 MB  thread=main
+  id=29       cpu=     187 ms  alloc=       9 MB  thread=aoh2-desktop-13
+  id=30       cpu=     187 ms  alloc=       2 MB  thread=aoh2-desktop-14
+  id=23       cpu=     171 ms  alloc=       3 MB  thread=aoh2-desktop-7
+  id=18       cpu=     109 ms  alloc=       1 MB  thread=aoh2-desktop-2
+  id=20       cpu=     109 ms  alloc=       2 MB  thread=aoh2-desktop-4
+  id=27       cpu=      93 ms  alloc=       0 MB  thread=aoh2-desktop-11
+  id=19       cpu=      78 ms  alloc=       0 MB  thread=aoh2-desktop-3
+  id=15       cpu=      15 ms  alloc=       0 MB  thread=Thread-0
+  id=2        cpu=       0 ms  alloc=       0 MB  thread=Reference Handler
+  id=3        cpu=       0 ms  alloc=       0 MB  thread=Finalizer
+  id=4        cpu=       0 ms  alloc=       0 MB  thread=Signal Dispatcher
+  id=5        cpu=       0 ms  alloc=       0 MB  thread=Attach Listener
+  id=13       cpu=       0 ms  alloc=       0 MB  thread=Notification Thread
+  id=14       cpu=       0 ms  alloc=       0 MB  thread=Common-Cleaner
+  id=16       cpu=       0 ms  alloc=       0 MB  thread=LWJGL3 Timer
+  id=17       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-1
+  id=21       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-5
+  id=22       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-6
+  id=24       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-8
+  id=25       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-9
+  id=26       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-10
+  id=28       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-12
+  id=31       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-15
+  id=32       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-16
+
+[TOP CPU FUNCTIONS (exact class#method(line), from stack sampling)]
+  topHits = times the function was the CURRENTLY EXECUTING frame.
+  hits    = times the function appeared anywhere on a sampled stack.
+  Higher topHits == the exact function that actually burns CPU.
+  topHits=3993   hits=3993    jdk.internal.misc.Unsafe#park(-2)
+  topHits=250    hits=250     java.lang.Thread#sleep(-2)
+  topHits=2      hits=2       age.of.civilizations2.jakowski.lukasz.MilitaryRealism#getTargetMobilization(116)
+  topHits=1      hits=1       age.of.civilizations2.jakowski.lukasz.AI.AI#buildProvinceData(675)
+  topHits=1      hits=1       age.of.civilizations2.jakowski.lukasz.GameAction#gMARY(4130)
+  topHits=1      hits=1       age.of.civilizations2.jakowski.lukasz.GameAction#updateIsSupplied(531)
+  topHits=1      hits=1       age.of.civilizations2.jakowski.lukasz.Province#getArmyCivID1(3681)
+  topHits=1      hits=1       age.of.civilizations2.jakowski.lukasz.AI.AI#buildProvinceData(711)
+  topHits=0      hits=4250    java.lang.Thread#run(840)
+  topHits=0      hits=4000    java.util.concurrent.ThreadPoolExecutor$Worker#run(635)
+  topHits=0      hits=3993    java.util.concurrent.ForkJoinPool#unmanagedBlock(3465)
+  topHits=0      hits=3993    java.util.concurrent.ThreadPoolExecutor#getTask(1062)
+  topHits=0      hits=3993    java.util.concurrent.locks.LockSupport#park(341)
+  topHits=0      hits=3993    java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode#block(506)
+  topHits=0      hits=3993    java.util.concurrent.ForkJoinPool#managedBlock(3436)
+  topHits=0      hits=3993    java.util.concurrent.ArrayBlockingQueue#take(420)
+  topHits=0      hits=3993    java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject#await(1630)
+  topHits=0      hits=3993    java.util.concurrent.ThreadPoolExecutor#runWorker(1122)
+  topHits=0      hits=250     com.badlogic.gdx.backends.lwjgl3.Sync$1#run(111)
+  topHits=0      hits=7       java.util.concurrent.Executors$RunnableAdapter#call(539)
+  topHits=0      hits=7       java.util.concurrent.FutureTask#run(264)
+  topHits=0      hits=7       java.util.concurrent.ThreadPoolExecutor#runWorker(1136)
+  topHits=0      hits=4       age.of.civilizations2.jakowski.lukasz.GameAction$$Lambda$238/0x000001ff4e2de400#run(-1)
+  topHits=0      hits=3       age.of.civilizations2.jakowski.lukasz.GameAction$$Lambda$241/0x000001ff4e2e42d8#run(-1)
+  topHits=0      hits=2       age.of.civilizations2.jakowski.lukasz.MilitaryRealism#updateMobilization(51)
+  topHits=0      hits=2       age.of.civilizations2.jakowski.lukasz.NewTurn#doAction(124)
+  topHits=0      hits=2       age.of.civilizations2.jakowski.lukasz.AI.AI#buildAI_Data(449)
+  topHits=0      hits=2       age.of.civilizations2.jakowski.lukasz.MilitaryRealism#updateMobilizationAllCivs(39)
+  topHits=0      hits=2       age.of.civilizations2.jakowski.lukasz.Actions#doActions(63)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle.AIPlaystyle#updateMilitarySpending(5290)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.NewTurn#doAction_End(488)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle.AIPlaystyle#billionaireRecruitment(2177)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle.AIPlaystyle#turnOrders(266)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.NewTurn#doAction(283)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.AI.AI#turnOrders(187)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle.AIPlaystyle#turnOrdersEssential(594)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.Actions#doActions(86)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.Actions#doActions(74)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.Game.GameUpdate#getMilitaryUpkeep_Total(80)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.AI.AI#turnOrders_1(132)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.Game.GameUpdate#getMilitaryUpkeepP(275)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.AI.AI_Playstyle.AIPlaystyle#manageBudget(5217)
+  topHits=0      hits=1       age.of.civilizations2.jakowski.lukasz.GameAction#gMARY(3561)
+
+[LIVE 1-SEC SAMPLES]
+[live] usedHeap=671MB cpuLoad=0,14 samples=17
+[live] usedHeap=673MB cpuLoad=0,21 samples=170
+[live] usedHeap=673MB cpuLoad=0,17 samples=323
+[live] usedHeap=685MB cpuLoad=0,44 samples=476
+[live] usedHeap=695MB cpuLoad=0,29 samples=629
+[live] usedHeap=697MB cpuLoad=0,18 samples=782
+[live] usedHeap=701MB cpuLoad=0,20 samples=935
+[live] usedHeap=705MB cpuLoad=0,20 samples=1088
+[live] usedHeap=707MB cpuLoad=0,24 samples=1241
+[live] usedHeap=709MB cpuLoad=0,35 samples=1394
+[live] usedHeap=713MB cpuLoad=0,19 samples=1547
+[live] usedHeap=715MB cpuLoad=0,16 samples=1700
+[live] usedHeap=719MB cpuLoad=0,25 samples=1853
+[live] usedHeap=733MB cpuLoad=0,63 samples=2006
+[live] usedHeap=741MB cpuLoad=0,56 samples=2142
+[live] usedHeap=745MB cpuLoad=0,59 samples=2295
+[live] usedHeap=312MB cpuLoad=0,27 samples=2448
+[live] usedHeap=314MB cpuLoad=0,22 samples=2601
+[live] usedHeap=318MB cpuLoad=0,36 samples=2737
+[live] usedHeap=322MB cpuLoad=0,28 samples=2890
+[live] usedHeap=326MB cpuLoad=0,27 samples=3043
+[live] usedHeap=330MB cpuLoad=0,25 samples=3196
+[live] usedHeap=334MB cpuLoad=0,27 samples=3349
+[live] usedHeap=338MB cpuLoad=0,21 samples=3502
+[live] usedHeap=342MB cpuLoad=0,21 samples=3655
+[live] usedHeap=346MB cpuLoad=0,21 samples=3808
+[live] usedHeap=352MB cpuLoad=0,23 samples=3961
+[live] usedHeap=356MB cpuLoad=0,28 samples=4114
+
+[NOTES]
+  - allocSamples map intentionally unused: RAM attribution is done per-thread
+    via ThreadMXBean.getThreadAllocatedBytes (exact per-thread bytes), not stack
+    sampling, because allocation happens at object-creation sites.
+  - Methods deeper in the stack are callers; the frame at depth 0 is the leaf.
+============================================================
+AoH2 TEMPORARY CPU / RAM PROFILER REPORT
+Session started : Sat Aug 22 17:43:19 CEST 2026
+Session duration: 30000 ms
+============================================================
+
+[SYSTEM LEVEL]
+  availableProcessors : 8
+  systemCpuLoad       : 0,210
+  processCpuLoad(peak): 0,405
+  totalPhysicalMemory : 24543 MB
+  freePhysicalMemory  : 5338 MB
+  totalSwap           : 61350 MB
+
+[JVM HEAP]
+  heap used/committed/max : 384/1024/4096 MB
+  heap peak used (session): 384 MB
+  non-heap used           : 69 MB
+  stack samples collected : 4335
+
+[PER-THREAD CPU TIME + ALLOCATION]
+  Each row = the exact thread that consumed CPU / allocated RAM
+  during the session. allocDelta is the RAM that thread pushed into
+  the heap (attributed to the function that ran on it).
+  NOTE: the 'PerfAnalyzer' thread (the sampler itself) is EXCLUDED so
+  its own overhead does not distort the game's CPU numbers.
+  id=1        cpu=    2078 ms  alloc=      15 MB  thread=main
+  id=2        cpu=       0 ms  alloc=       0 MB  thread=Reference Handler
+  id=3        cpu=       0 ms  alloc=       0 MB  thread=Finalizer
+  id=4        cpu=       0 ms  alloc=       0 MB  thread=Signal Dispatcher
+  id=5        cpu=       0 ms  alloc=       0 MB  thread=Attach Listener
+  id=13       cpu=       0 ms  alloc=       0 MB  thread=Notification Thread
+  id=14       cpu=       0 ms  alloc=       0 MB  thread=Common-Cleaner
+  id=15       cpu=       0 ms  alloc=       0 MB  thread=Thread-0
+  id=16       cpu=       0 ms  alloc=       0 MB  thread=LWJGL3 Timer
+  id=17       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-1
+  id=18       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-2
+  id=19       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-3
+  id=20       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-4
+  id=21       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-5
+  id=22       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-6
+  id=23       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-7
+  id=24       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-8
+  id=25       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-9
+  id=26       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-10
+  id=27       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-11
+  id=28       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-12
+  id=29       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-13
+  id=30       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-14
+  id=31       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-15
+  id=32       cpu=       0 ms  alloc=       0 MB  thread=aoh2-desktop-16
+
+[TOP CPU FUNCTIONS (exact class#method(line), from stack sampling)]
+  topHits = times the function was the CURRENTLY EXECUTING frame.
+  hits    = times the function appeared anywhere on a sampled stack.
+  Higher topHits == the exact function that actually burns CPU.
+  topHits=4080   hits=4080    jdk.internal.misc.Unsafe#park(-2)
+  topHits=255    hits=255     java.lang.Thread#sleep(-2)
+  topHits=0      hits=4335    java.lang.Thread#run(840)
+  topHits=0      hits=4080    java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject#await(1630)
+  topHits=0      hits=4080    java.util.concurrent.ForkJoinPool#unmanagedBlock(3465)
+  topHits=0      hits=4080    java.util.concurrent.ThreadPoolExecutor#getTask(1062)
+  topHits=0      hits=4080    java.util.concurrent.ThreadPoolExecutor#runWorker(1122)
+  topHits=0      hits=4080    java.util.concurrent.ThreadPoolExecutor$Worker#run(635)
+  topHits=0      hits=4080    java.util.concurrent.locks.LockSupport#park(341)
+  topHits=0      hits=4080    java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode#block(506)
+  topHits=0      hits=4080    java.util.concurrent.ForkJoinPool#managedBlock(3436)
+  topHits=0      hits=4080    java.util.concurrent.ArrayBlockingQueue#take(420)
+  topHits=0      hits=255     com.badlogic.gdx.backends.lwjgl3.Sync$1#run(111)
+
+[LIVE 1-SEC SAMPLES]
+[live] usedHeap=360MB cpuLoad=0,36 samples=17
+[live] usedHeap=364MB cpuLoad=0,35 samples=153
+[live] usedHeap=368MB cpuLoad=0,38 samples=306
+[live] usedHeap=372MB cpuLoad=0,32 samples=459
+[live] usedHeap=376MB cpuLoad=0,35 samples=595
+[live] usedHeap=378MB cpuLoad=0,26 samples=748
+[live] usedHeap=378MB cpuLoad=0,01 samples=901
+[live] usedHeap=378MB cpuLoad=0,02 samples=1054
+[live] usedHeap=378MB cpuLoad=0,02 samples=1207
+[live] usedHeap=378MB cpuLoad=0,02 samples=1360
+[live] usedHeap=380MB cpuLoad=0,02 samples=1513
+[live] usedHeap=380MB cpuLoad=0,02 samples=1666
+[live] usedHeap=380MB cpuLoad=0,02 samples=1819
+[live] usedHeap=380MB cpuLoad=0,02 samples=1972
+[live] usedHeap=380MB cpuLoad=0,02 samples=2125
+[live] usedHeap=380MB cpuLoad=0,01 samples=2278
+[live] usedHeap=380MB cpuLoad=0,01 samples=2431
+[live] usedHeap=382MB cpuLoad=0,02 samples=2584
+[live] usedHeap=382MB cpuLoad=0,02 samples=2737
+[live] usedHeap=382MB cpuLoad=0,02 samples=2890
+[live] usedHeap=382MB cpuLoad=0,02 samples=3043
+[live] usedHeap=382MB cpuLoad=0,02 samples=3196
+[live] usedHeap=382MB cpuLoad=0,01 samples=3349
+[live] usedHeap=384MB cpuLoad=0,02 samples=3502
+[live] usedHeap=384MB cpuLoad=0,01 samples=3655
+[live] usedHeap=384MB cpuLoad=0,01 samples=3808
+[live] usedHeap=384MB cpuLoad=0,02 samples=3961
+[live] usedHeap=384MB cpuLoad=0,01 samples=4114
+[live] usedHeap=384MB cpuLoad=0,02 samples=4267
+
+[NOTES]
+  - allocSamples map intentionally unused: RAM attribution is done per-thread
+    via ThreadMXBean.getThreadAllocatedBytes (exact per-thread bytes), not stack
+    sampling, because allocation happens at object-creation sites.
+  - Methods deeper in the stack are callers; the frame at depth 0 is the leaf.

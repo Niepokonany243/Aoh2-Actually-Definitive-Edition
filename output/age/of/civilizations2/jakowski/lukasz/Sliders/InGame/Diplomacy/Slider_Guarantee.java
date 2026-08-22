@@ -57,8 +57,8 @@ extends Slider_BG {
     @Override
     public void drawSliderText(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive, boolean scrollableY) {
         Renderer.drawText(oSB, this.fontID, this.getDrawText(), this.getPosXE() + CFG.PADD * 2 + iTranslateX, this.getPosY() + this.getHeightE() / 2 - this.getTextHeight() / 2 + iTranslateY, new Color(0.945f, 0.945f, 0.945f, 1.0f));
-        IMGManager.getIMG(Images.time).drawO(oSB, this.getPosXE() + this.getWidthE() - CFG.PADD * 2 - (int)((float)IMGManager.getIMG(Images.time).getWidth() * ((float)this.getTextHeight() / (float)IMGManager.getIMG(Images.time).getHeight())) + iTranslateX, this.getPosY() + this.getHeightE() / 2 - IMGManager.getIMG(Images.time).getHeight() / 2 + iTranslateY, (int)((float)IMGManager.getIMG(Images.time).getWidth() * ((float)this.getTextHeight() / (float)IMGManager.getIMG(Images.time).getHeight())), (int)((float)IMGManager.getIMG(Images.time).getHeight() * ((float)this.getTextHeight() / (float)IMGManager.getIMG(Images.time).getHeight())));
-        Renderer.drawText(oSB, this.fontID, "" + this.getCurr(), this.getPosXE() + this.getWidthE() - CFG.PADD * 3 - (int)((float)IMGManager.getIMG(Images.time).getWidth() * ((float)this.getTextHeight() / (float)IMGManager.getIMG(Images.time).getHeight())) - (int)CFG.glyphLay.width + iTranslateX, this.getPosY() + this.getHeightE() / 2 - this.getTextHeight() / 2 + iTranslateY, new Color(0.16862746f, 0.3019608f, 0.5137255f, 1.0f));
+        CFG.glyphLay.setText(CFG.fontMain.get(this.fontID), "" + this.getCurr());
+        Renderer.drawText(oSB, this.fontID, "" + this.getCurr(), this.getPosXE() + this.getWidthE() - CFG.PADD * 2 - (int)CFG.glyphLay.width + iTranslateX, this.getPosY() + this.getHeightE() / 2 - this.getTextHeight() / 2 + iTranslateY, new Color(0.16862746f, 0.3019608f, 0.5137255f, 1.0f));
     }
 
     @Override
@@ -67,7 +67,6 @@ extends Slider_BG {
         ArrayList<ME_Hover_2Type> nData = new ArrayList<ME_Hover_2Type>();
         nData.add(new ME_Hover_2Type_Text(CFG.lang.get("Guarantee") + ": "));
         nData.add(new ME_Hover_2Type_Text("" + this.getCurr(), CFG.COLOR_BUTTON_GAME_TEXT_ACTIVE));
-        nData.add(new ME_Hover_2Type_Image(Images.time, CFG.PADD, 0));
         nElements.add(new MEHover_2E(nData));
         nData.clear();
         this.menuElemHover = new ME_Hover_v2(nElements);

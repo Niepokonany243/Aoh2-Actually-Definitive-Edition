@@ -315,6 +315,7 @@ extends Menu {
                 return CFG.settingsGD.DYNAMIC_MIN_ARMY;
             }
         });
+        menuElements.add(new Button_Classic(null, (int)(50.0f * CFG.GUI_SCALE), 0, tY += ((MenuElemUI)menuElements.get(menuElements.size() - 1)).getHeightE() + CFG.PADD, menuW, CFG.BUTTON_H, true));
         if (CFG.settingsGD.BETTER_UI) {
             this.initMenu(null, CFG.GAMEWIDTH / 2 - menuW / 2 + AoCGame.LEFT, CFG.BUTTON_H, menuW, CFG.GAMEHEIGHT - CFG.BUTTON_H * 2, menuElements);
         } else {
@@ -400,6 +401,7 @@ extends Menu {
         this.getMenuElem(92).setTextE("Bat+ Breakthrough: " + CFG.getPrecision2(CFG.settingsGD.BAT_PLUS_BREAKTHROUGH_RATIO, 2) + "x");
         this.getMenuElem(95).setTextE("Budget Slider Max: " + GameValues.gvInGame.getBudgetSpendingSliderMax() + "%");
         this.getMenuElem(97).setTextE("Dynamic Minimum Army: " + (CFG.settingsGD.DYNAMIC_MIN_ARMY ? CFG.lang.get("On") : CFG.lang.get("Off")));
+        this.getMenuElem(98).setTextE("UI Config");
     }
 
     public static String getSettingsText_Names() {
@@ -987,6 +989,10 @@ extends Menu {
                 CFG.settingsGD.DYNAMIC_MIN_ARMY = !CFG.settingsGD.DYNAMIC_MIN_ARMY;
                 this.getMenuElem(97).setTextE("Dynamic Minimum Army: " + (CFG.settingsGD.DYNAMIC_MIN_ARMY ? CFG.lang.get("On") : CFG.lang.get("Off")));
                 break;
+            }
+            case 98: {
+                CFG.menus.setMenuID(View.eSETTINGS_UI);
+                return;
             }
         }
         CFG.saveSettings();

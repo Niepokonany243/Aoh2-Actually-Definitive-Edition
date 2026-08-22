@@ -14,6 +14,7 @@ import age.of.civilizations2.jakowski.lukasz.MenuE_HoverP.ME_Hover_2Type_Flag_Bi
 import age.of.civilizations2.jakowski.lukasz.MenuE_HoverP.ME_Hover_2Type_Text;
 import age.of.civilizations2.jakowski.lukasz.MenuE_HoverP.ME_Hover_2Type_Text_Big;
 import age.of.civilizations2.jakowski.lukasz.MenuE_HoverP.ME_Hover_v2;
+import age.of.civilizations2.jakowski.lukasz.RenderProvince;
 import age.of.civilizations2.jakowski.lukasz.Sliders.InGame.Diplomacy.Slider_Relations;
 import age.of.civilizations2.jakowski.lukasz.Sliders.InGame.Diplomacy.Slider_Relations2;
 import com.badlogic.gdx.graphics.Color;
@@ -29,9 +30,15 @@ extends Menu {
             @Override
             public void drawTextE(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive) {
                 super.drawTextE(oSB, iTranslateX, iTranslateY, isActive);
+                int textLeft = this.getPosXE() + this.getWidthE() / 2 - this.getTextWidthU() / 2 + iTranslateX;
+                int textRight = this.getPosXE() + this.getWidthE() / 2 + this.getTextWidthU() / 2 + iTranslateX;
                 if (CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID > 0) {
-                    CFG.core.getCiv(CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID).getFlagC().drawO(oSB, this.getPosXE() + this.getWidthE() / 2 - this.getTextWidthU() / 2 - CFG.PADD - CFG.CIV_FLAG_WIDTH + iTranslateX, this.getPosY() + this.getHeightE() / 2 - CFG.CIV_FLAG_HEIGHT / 2 - CFG.core.getCiv(CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID).getFlagC().getHeight() + iTranslateY, CFG.CIV_FLAG_WIDTH, CFG.CIV_FLAG_HEIGHT);
-                    IMGManager.getIMG(Images.flagRectSmall).drawO(oSB, this.getPosXE() + this.getWidthE() / 2 - this.getTextWidthU() / 2 - CFG.PADD - CFG.CIV_FLAG_WIDTH + iTranslateX, this.getPosY() + this.getHeightE() / 2 - CFG.CIV_FLAG_HEIGHT / 2 + iTranslateY);
+                    CFG.core.getCiv(CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID).getFlagC().drawO(oSB, textLeft - CFG.PADD - CFG.CIV_FLAG_WIDTH, this.getPosY() + this.getHeightE() / 2 - CFG.CIV_FLAG_HEIGHT / 2 - CFG.core.getCiv(CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID).getFlagC().getHeight() + iTranslateY, CFG.CIV_FLAG_WIDTH, CFG.CIV_FLAG_HEIGHT);
+                    IMGManager.getIMG(Images.flagRectSmall).drawO(oSB, textLeft - CFG.PADD - CFG.CIV_FLAG_WIDTH, this.getPosY() + this.getHeightE() / 2 - CFG.CIV_FLAG_HEIGHT / 2 + iTranslateY);
+                }
+                if (CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID2 > 0) {
+                    CFG.core.getCiv(CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID2).getFlagC().drawO(oSB, textRight + CFG.PADD, this.getPosY() + this.getHeightE() / 2 - CFG.CIV_FLAG_HEIGHT / 2 - CFG.core.getCiv(CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID2).getFlagC().getHeight() + iTranslateY, CFG.CIV_FLAG_WIDTH, CFG.CIV_FLAG_HEIGHT);
+                    IMGManager.getIMG(Images.flagRectSmall).drawO(oSB, textRight + CFG.PADD, this.getPosY() + this.getHeightE() / 2 - CFG.CIV_FLAG_HEIGHT / 2 + iTranslateY);
                 }
             }
         });
@@ -163,6 +170,7 @@ extends Menu {
     private final void updateRelation() {
         CFG.core.setCivRelationOfCivB(CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID, CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID2, this.getMenuElem(2).getCurr());
         CFG.core.setCivRelationOfCivB(CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID2, CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID, this.getMenuElem(5).getCurr());
+        RenderProvince.updateDrawProvinces();
     }
 }
 

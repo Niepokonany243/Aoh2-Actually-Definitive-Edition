@@ -52,6 +52,10 @@ extends Menu {
     public final void onBackPressed() {
         CFG.core.checkAlliances();
         CFG.core.setActiveProvID(-1);
+        CFG.MANAGE_DIPLOMACY_HOLD_CIV_ID = 0;
+        CFG.MANAGE_DIPLOMACY_HOLD_PROV_ID = -1;
+        CFG.MANAGE_DIPLOMACY_PRESS_PROV_ID = -1;
+        CFG.menus.getDrawCivilization().setVisible(false);
         CFG.map.getMpC().setDisableMovingMap(false);
         CFG.menus.setMenuID(CFG.backToMenu);
         CFG.menus.setBackAnimation(true);

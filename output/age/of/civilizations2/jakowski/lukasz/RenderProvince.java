@@ -621,7 +621,7 @@ public class RenderProvince {
                                 if (tempRelation == 0) {
                                     oSB.setColor(CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getR(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getG(), CFG.diplomacyColors_GameData.COLOR_DIPLOMACY_NEUTRAL.getB(), CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f);
                                 } else {
-                                    oSB.setColor(CFG.getRelationColor(tempRelation, CFG.ALPHA_DIPLOMACY * 3.0f / 5.0f + CFG.ALPHA_DIPLOMACY * 2.0f / 5.0f * ((float)Math.abs(tempRelation) / 100.0f)));
+                                    oSB.setColor(CFG.getRelationColor(tempRelation, CFG.ALPHA_DIPLOMACY * 3.0f / 4.0f + CFG.ALPHA_DIPLOMACY * 1.0f / 4.0f * ((float)Math.abs(tempRelation) / 100.0f)));
                                 }
                             }
                             CFG.core.getProv(CFG.core.getPIV(i)).drawLandProv(oSB);

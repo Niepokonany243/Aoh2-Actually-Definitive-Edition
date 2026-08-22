@@ -85,8 +85,9 @@ public class Menu_InGame_WarDetails extends Menu {
                 int part = CFG.core.getWar(WAR_ID).getParticipation_AggressorID(i);
                 int provs = CFG.core.getWar(WAR_ID).getProvinces_Aggressor_Own(i);
                 int provsT = CFG.core.getWar(WAR_ID).getProvinces_Aggressor_OwnTotal(i);
+                boolean canPeaceOut = CFG.settingsGD.WAR_VIEW_CLICK_PEACE && CFG.core.getWarID(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId(), civID) >= 0;
                 
-                menuElements.add(new Button_Stats_WarDetails(civID, casualties, deaths, econ, part, provs, provsT, 2, tY, tempWidth / 2 - 4, false));
+                menuElements.add(new Button_Stats_WarDetails(civID, casualties, deaths, econ, part, provs, provsT, 2, tY, tempWidth / 2 - 4, canPeaceOut));
                 tY += elementH;
             }
         } catch (Exception e) {}
@@ -104,8 +105,9 @@ public class Menu_InGame_WarDetails extends Menu {
                 int part = CFG.core.getWar(WAR_ID).getParticipation_DefenderID(i);
                 int provs = CFG.core.getWar(WAR_ID).getProvinces_Defender_Own(i);
                 int provsT = CFG.core.getWar(WAR_ID).getProvinces_Defender_OwnTotal(i);
+                boolean canPeaceOut = CFG.settingsGD.WAR_VIEW_CLICK_PEACE && CFG.core.getWarID(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId(), civID) >= 0;
                 
-                menuElements.add(new Button_Stats_WarDetails_Right(civID, casualties, deaths, econ, part, provs, provsT, tempWidth / 2 + 2, tY, tempWidth / 2 - 4, false));
+                menuElements.add(new Button_Stats_WarDetails_Right(civID, casualties, deaths, econ, part, provs, provsT, tempWidth / 2 + 2, tY, tempWidth / 2 - 4, canPeaceOut));
                 tY += elementH;
             }
         } catch (Exception e) {}

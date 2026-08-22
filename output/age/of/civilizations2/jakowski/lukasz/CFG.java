@@ -734,6 +734,9 @@ public class CFG {
     public static boolean MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID_PICKED;
     public static int MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1;
     public static int MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2;
+    public static int MANAGE_DIPLOMACY_PRESS_PROV_ID = -1;
+    public static int MANAGE_DIPLOMACY_HOLD_CIV_ID = 0;
+    public static int MANAGE_DIPLOMACY_HOLD_PROV_ID = -1;
     public static String sAtWar;
     public static Report_Data reportData;
     public static FlagManager flagManager;
@@ -3374,6 +3377,9 @@ public class CFG {
     public static final void resetManageDiplomacyIDs() {
         MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 = -1;
         MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 = -1;
+        MANAGE_DIPLOMACY_PRESS_PROV_ID = -1;
+        MANAGE_DIPLOMACY_HOLD_CIV_ID = 0;
+        MANAGE_DIPLOMACY_HOLD_PROV_ID = -1;
         MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID = -1;
         MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID = 1;
         MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID2 = 0;
@@ -8151,6 +8157,9 @@ public class CFG {
         MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID_PICKED = false;
         MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 = -1;
         MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 = -1;
+        MANAGE_DIPLOMACY_PRESS_PROV_ID = -1;
+        MANAGE_DIPLOMACY_HOLD_CIV_ID = 0;
+        MANAGE_DIPLOMACY_HOLD_PROV_ID = -1;
         sAtWar = null;
         reportData = null;
         flagManager = new FlagManager();

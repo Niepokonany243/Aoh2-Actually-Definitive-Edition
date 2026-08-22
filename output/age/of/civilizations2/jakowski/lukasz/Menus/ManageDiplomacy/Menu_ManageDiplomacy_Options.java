@@ -82,6 +82,10 @@ extends Menu {
         CFG.menus.setVisible_ManageDiplomacy_MilitaryAccess(false);
         CFG.menus.setVisible_ManageDiplomacy_MilitaryAccess_List(false);
         CFG.menus.getColorPicker().setVisible(false, null);
+        CFG.MANAGE_DIPLOMACY_HOLD_CIV_ID = 0;
+        CFG.MANAGE_DIPLOMACY_HOLD_PROV_ID = -1;
+        CFG.MANAGE_DIPLOMACY_PRESS_PROV_ID = -1;
+        CFG.menus.getDrawCivilization().setVisible(false);
         for (int i = 0; i < this.getMenuElemsSize(); ++i) {
             this.getMenuElem(i).setCheckboxSt(false);
         }
@@ -114,7 +118,12 @@ extends Menu {
                 CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(0).setTextE(CFG.lang.get("CustomizeRelations") + " [" + CFG.core.getCiv(CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID).getCivName() + "]");
                 CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(1).setClickable(false);
                 CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(2).setClickable(false);
+                CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(2).setTextE("");
                 CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(3).setClickable(false);
+                CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(4).setClickable(false);
+                CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(5).setClickable(false);
+                CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(5).setTextE("");
+                CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(6).setClickable(false);
                 break;
             }
             case 2: {

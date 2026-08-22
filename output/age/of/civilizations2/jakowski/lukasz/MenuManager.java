@@ -654,6 +654,7 @@ import age.of.civilizations2.jakowski.lukasz.Menus.Settings.Menu_ScenarioSave;
 import age.of.civilizations2.jakowski.lukasz.Menus.Settings.Menu_Settings;
 import age.of.civilizations2.jakowski.lukasz.Menus.Settings.Menu_Settings_Options;
 import age.of.civilizations2.jakowski.lukasz.Menus.Settings.Menu_Settings_Province;
+import age.of.civilizations2.jakowski.lukasz.Menus.Settings.Menu_Settings_UI;
 import age.of.civilizations2.jakowski.lukasz.Menus.Settings.Res.Menu_Resolution;
 import age.of.civilizations2.jakowski.lukasz.Menus.Settings.Res.Menu_Resolution_Title;
 import age.of.civilizations2.jakowski.lukasz.Menus.ShowProvinces.Menu_InGame_ShowProvinces;
@@ -1299,6 +1300,7 @@ public class MenuManager {
     public int SELECT_LANGUAGE = -1;
     public int SETTINGS_PROVINCE = -1;
     public int SETTINGS_GAMEVALUES = -1;
+    public int SETTINGS_UI = -1;
     public int SELECT_CIVILIZATION = -1;
     public int SELECT_CIVILIZATION_CLASSIC = -1;
     public int CHOOSE_SCENARIO = -1;
@@ -1727,6 +1729,14 @@ public class MenuManager {
                         this.menus.get(this.SETTINGS_GAMEVALUES).set(0, new age.of.civilizations2.jakowski.lukasz.Menus.Settings.Menu_Settings_GameValues());
                     }
                     return this.SETTINGS_GAMEVALUES;
+                }
+                case eSETTINGS_UI: {
+                    if (this.SETTINGS_UI == -1) {
+                        this.SETTINGS_UI = this.addMenu(new Menu_Settings_UI());
+                    } else {
+                        this.menus.get(this.SETTINGS_UI).set(0, new Menu_Settings_UI());
+                    }
+                    return this.SETTINGS_UI;
                 }
                 case eHELP: {
                     if (this.HELP == -1) {
@@ -7341,6 +7351,19 @@ public class MenuManager {
             }
             if (this.dialogMenu.getVisibleM()) {
                 this.dialogMenu.draw(oSB, iTranslateX, true);
+            }
+            if (CFG.menus.getInManageDiplomacy() && CFG.MANAGE_DIPLOMACY_HOLD_CIV_ID > 0 && CFG.MANAGE_DIPLOMACY_HOLD_PROV_ID >= 0 && !CFG.map.getMpC().getDisableMovingMap()) {
+                try {
+                    int nHoldX = (int)((float)(CFG.core.getProv(CFG.MANAGE_DIPLOMACY_HOLD_PROV_ID).getCeX() + CFG.core.getProv(CFG.MANAGE_DIPLOMACY_HOLD_PROV_ID).getShPX() + CFG.core.getProv(CFG.MANAGE_DIPLOMACY_HOLD_PROV_ID).getTranslateProvPosX()) * CFG.map.getMpS().getCurrSc());
+                    int nHoldY = (int)((float)(CFG.core.getProv(CFG.MANAGE_DIPLOMACY_HOLD_PROV_ID).getCeY() + CFG.core.getProv(CFG.MANAGE_DIPLOMACY_HOLD_PROV_ID).getShPY() + CFG.map.getMpC().getPY()) * CFG.map.getMpS().getCurrSc());
+                    this.dragCiv.setCivID(CFG.MANAGE_DIPLOMACY_HOLD_CIV_ID);
+                    this.dragCiv.setPosX(nHoldX);
+                    this.dragCiv.setPosY(nHoldY);
+                    this.dragCiv.setVisible(true);
+                }
+                catch (Exception ex) {
+                    this.dragCiv.setVisible(false);
+                }
             }
             this.dragCiv.draw(oSB, iTranslateX);
             long overlaysTime = System.currentTimeMillis() - overlaysStart;

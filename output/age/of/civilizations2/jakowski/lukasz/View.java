@@ -8,6 +8,7 @@ public enum View {
     eHELP,
     eSETTINGS,
     eSETTINGS_GAMEVALUES,
+    eSETTINGS_UI,
     eSELECT_LANGUAGE,
     eSETTINGS_PROVINCE,
     eCREATE_NEW_GAME,

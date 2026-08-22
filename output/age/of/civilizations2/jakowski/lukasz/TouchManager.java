@@ -1765,100 +1765,12 @@ public class TouchManager {
                     CFG.setDialogType(DialogType.TRADE_REQUEST_SELECT_CIV);
                 }
             }
-        } : (CFG.menus.getInManageDiplomacy() ? (CFG.menus.getInManageDiplomacy_Relations_Interactive() ? new ExtraAction(){
-
-            @Override
-            public void extraAction(int nPX, int nPY) {
-                if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0) {
-                    int clickedCivID = CFG.core.getProv(CFG.core.getActiveProvID()).getCivId();
-                    if (!CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID_PICKED) {
-                        CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID = clickedCivID;
-                        CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID_PICKED = true;
-                        CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(0).setTextE(CFG.lang.get("CustomizeRelations") + " [" + CFG.core.getCiv(clickedCivID).getCivName() + "]");
-                    } else if (clickedCivID != CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID) {
-                        CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID2 = clickedCivID;
-                        CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(1).setClickable(true);
-                        CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(2).setClickable(true);
-                        CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(3).setClickable(true);
-                        CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(2).setCurr((int)CFG.core.getCivRelationOfCivB(CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID, CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID2));
-                        CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(4).setClickable(true);
-                        CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(5).setClickable(true);
-                        CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(6).setClickable(true);
-                        CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(5).setCurr((int)CFG.core.getCivRelationOfCivB(CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID2, CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID));
-                    } else {
-                        CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(1).setClickable(false);
-                        CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(2).setClickable(false);
-                        CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(3).setClickable(false);
-                        CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(2).setCurr(0);
-                        CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(4).setClickable(false);
-                        CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(5).setClickable(false);
-                        CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(6).setClickable(false);
-                        CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(5).setCurr(0);
-                        CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID2 = 0;
-                        CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID_PICKED = false;
-                    }
-                }
-            }
-        } : (CFG.menus.getInManageDiplomacy_Pacts3() ? new ExtraAction(){
-
-            @Override
-            public void extraAction(int nPX, int nPY) {
-                if (CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0 && CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID != CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) {
-                    CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID = CFG.core.getProv(CFG.core.getActiveProvID()).getCivId();
-                    CFG.menus.rebuildManageDiplomacy_Pacts_List();
-                }
-            }
-        } : (CFG.menus.getInManageDiplomacy_Truces() ? new ExtraAction(){
-
-            @Override
-            public void extraAction(int nPX, int nPY) {
-                if (CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0 && CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID != CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) {
-                    CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID = CFG.core.getProv(CFG.core.getActiveProvID()).getCivId();
-                    CFG.menus.rebuildManageDiplomacy_Trcues_List();
-                }
-            }
-        } : (CFG.menus.getInManageDiplomacy_Guarantee() ? new ExtraAction(){
-
-            @Override
-            public void extraAction(int nPX, int nPY) {
-                if (CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0 && CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID != CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) {
-                    CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID = CFG.core.getProv(CFG.core.getActiveProvID()).getCivId();
-                    CFG.menus.rebuildManageDiplomacy_Guarantee_List();
-                }
-            }
-        } : (CFG.menus.getInManageDiplomacy_DefensivePact() ? new ExtraAction(){
-
-            @Override
-            public void extraAction(int nPX, int nPY) {
-                if (CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0 && CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID != CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) {
-                    CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID = CFG.core.getProv(CFG.core.getActiveProvID()).getCivId();
-                    CFG.menus.rebuildManageDiplomacy_DefensivePacts_List();
-                }
-            }
-        } : (CFG.menus.getInManageDiplomacy_MilitaryAccess() ? new ExtraAction(){
-
-            @Override
-            public void extraAction(int nPX, int nPY) {
-                if (CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0 && CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID != CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) {
-                    CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID = CFG.core.getProv(CFG.core.getActiveProvID()).getCivId();
-                    CFG.menus.rebuildManageDiplomacy_MilitaryAccess_List();
-                }
-            }
-        } : (CFG.menus.getInManageDiplomacy_Vassals() ? new ExtraAction(){
-
-            @Override
-            public void extraAction(int nPX, int nPY) {
-                if (CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0 && CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID != CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) {
-                    CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID = CFG.core.getProv(CFG.core.getActiveProvID()).getCivId();
-                    CFG.menus.rebuildManageDiplomacy_Vassals_List();
-                }
-            }
-        } : new ExtraAction(){
+} : (CFG.menus.getInManageDiplomacy() ? new ExtraAction(){
 
             @Override
             public void extraAction(int nPX, int nPY) {
             }
-        }))))))) : (CFG.menus.getInCreateCity() ? new ExtraAction(){
+        } : (CFG.menus.getInCreateCity() ? new ExtraAction(){
 
             @Override
             public void extraAction(int nPX, int nPY) {
@@ -1963,8 +1875,10 @@ public class TouchManager {
             @Override
             public void extraAction(int nPX, int nPY) {
                 if (CFG.menus.getManageDiplomacy_Alliances().getVisibleM() || CFG.menus.getInManageDiplomacy_Relations_Interactive() || CFG.menus.getInManageDiplomacy_Pacts3() || CFG.menus.getInManageDiplomacy_Truces() || CFG.menus.getInManageDiplomacy_MilitaryAccess() || CFG.menus.getInManageDiplomacy_DefensivePact() || CFG.menus.getInManageDiplomacy_Guarantee() || CFG.menus.getInManageDiplomacy_Vassals()) {
-                    com.badlogic.gdx.math.Vector2 worldPos = MapTransform.screenToWorld(nPX, nPY); CFG.core.setProvinceID((int)worldPos.x, (int)worldPos.y);
-                    if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0) {
+                    com.badlogic.gdx.math.Vector2 worldPos = MapTransform.screenToWorld(nPX, nPY);
+                    CFG.core.setProvinceID((int)worldPos.x, (int)worldPos.y);
+                    CFG.MANAGE_DIPLOMACY_PRESS_PROV_ID = CFG.core.getActiveProvID();
+                    if (!CFG.menus.getInManageDiplomacy_Relations_Interactive() && CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0) {
                         CFG.map.getMpC().setDisableMovingMap(true);
                         CFG.menus.getDrawCivilization().setVisible(true);
                         CFG.menus.getDrawCivilization().setCivID(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId());
@@ -1993,347 +1907,134 @@ public class TouchManager {
             public void extraAction(int nPX, int nPY) {
             }
         };
-        this.mAcUEA = null;
-        this.mAcUEA = CFG.menus.getInManageDiplomacy_Vassals() ? new ExtraAction(){
+this.mAcUEA = null;
+        this.mAcUEA = CFG.menus.getInManageDiplomacy() ? new ExtraAction(){
 
             @Override
             public void extraAction(int nPX, int nPY) {
-                if (CFG.map.getMpC().getDisableMovingMap()) {
-                    if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0) {
-                        for (int i = 0; i < CFG.menus.getManageDiplomacy_Vassals().getMenuElemsSize() - 1; ++i) {
-                            if (nPX < CFG.menus.getManageDiplomacy_Vassals().getMenuElem(i).getPosXE() + CFG.menus.getManageDiplomacy_Vassals().getMenuPosX() || nPX > CFG.menus.getManageDiplomacy_Vassals().getMenuElem(i).getPosXE() + CFG.menus.getManageDiplomacy_Vassals().getMenuPosX() + CFG.menus.getManageDiplomacy_Vassals().getMenuElem(i).getWidthE() || nPY < CFG.menus.getManageDiplomacy_Vassals().getMenuElem(i).getPosY() + CFG.menus.getManageDiplomacy_Vassals().getMenuPosY() || nPY > CFG.menus.getManageDiplomacy_Vassals().getMenuElem(i).getPosY() + CFG.menus.getManageDiplomacy_Vassals().getMenuElem(i).getHeightE() + CFG.menus.getManageDiplomacy_Vassals().getMenuPosY()) continue;
-                            if (i == 0) {
-                                if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 != CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) {
-                                    CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 = CFG.core.getProv(CFG.core.getActiveProvID()).getCivId();
-                                } else {
-                                    int tempID = CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1;
-                                    CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 = CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2;
-                                    CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 = tempID;
-                                }
-                            } else if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 != CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) {
-                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 = CFG.core.getProv(CFG.core.getActiveProvID()).getCivId();
+                com.badlogic.gdx.math.Vector2 worldPos = MapTransform.screenToWorld(nPX, nPY);
+                CFG.core.setProvinceID((int)worldPos.x, (int)worldPos.y);
+                int releaseProv = CFG.core.getActiveProvID();
+                if (CFG.menus.getInManageDiplomacy_Relations_Interactive()) {
+                    if (releaseProv >= 0 && releaseProv == CFG.MANAGE_DIPLOMACY_PRESS_PROV_ID) {
+                        int clickedCivID = CFG.core.getProv(releaseProv).getCivId();
+                        if (clickedCivID > 0) {
+                            if (!CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID_PICKED) {
+                                CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID = clickedCivID;
+                                CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID_PICKED = true;
+                                CFG.MANAGE_DIPLOMACY_HOLD_CIV_ID = clickedCivID;
+                                CFG.MANAGE_DIPLOMACY_HOLD_PROV_ID = releaseProv;
+                                CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(0).setTextE(CFG.lang.get("CustomizeRelations") + " [" + CFG.core.getCiv(clickedCivID).getCivName() + "]");
+                            } else if (clickedCivID != CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID) {
+                                CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID2 = clickedCivID;
+                                CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(1).setClickable(true);
+                                CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(2).setClickable(true);
+                                CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(3).setClickable(true);
+                                CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(2).setTextE(CFG.core.getCiv(CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID).getCivName() + " -> " + CFG.core.getCiv(clickedCivID).getCivName());
+                                CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(2).setCurr((int)CFG.core.getCivRelationOfCivB(CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID, CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID2));
+                                CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(4).setClickable(true);
+                                CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(5).setClickable(true);
+                                CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(6).setClickable(true);
+                                CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(5).setTextE(CFG.core.getCiv(clickedCivID).getCivName() + " -> " + CFG.core.getCiv(CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID).getCivName());
+                                CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(5).setCurr((int)CFG.core.getCivRelationOfCivB(CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID2, CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID));
+                                RenderProvince.updateDrawProvinces();
                             } else {
-                                int tempID = CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1;
-                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 = CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2;
-                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 = tempID;
+                                CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID2 = 0;
+                                CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID_PICKED = false;
+                                CFG.MANAGE_DIPLOMACY_HOLD_CIV_ID = 0;
+                                CFG.MANAGE_DIPLOMACY_HOLD_PROV_ID = -1;
+                                CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(1).setClickable(false);
+                                CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(2).setClickable(false);
+                                CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(3).setClickable(false);
+                                CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(2).setTextE("");
+                                CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(2).setCurr(0);
+                                CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(4).setClickable(false);
+                                CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(5).setClickable(false);
+                                CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(6).setClickable(false);
+                                CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(5).setTextE("");
+                                CFG.menus.getManageDiplomacy_Relations_Interactive().getMenuElem(5).setCurr(0);
+                                RenderProvince.updateDrawProvinces();
                             }
-                            if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 > 0 && CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 > 0) {
-                                CFG.menus.getManageDiplomacy_Vassals().getMenuElem(CFG.menus.getManageDiplomacy_Vassals().getMenuElemsSize() - 1).setClickable(true);
-                            }
-                            if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 > 0) {
-                                CFG.menus.getManageDiplomacy_Vassals().getMenuElem(0).setTextE(CFG.core.getCiv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1).getCivName());
-                            } else {
-                                CFG.menus.getManageDiplomacy_Vassals().getMenuElem(0).setTextE("");
-                            }
-                            if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 > 0) {
-                                CFG.menus.getManageDiplomacy_Vassals().getMenuElem(1).setTextE(CFG.core.getCiv(CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2).getCivName());
-                                break;
-                            }
-                            CFG.menus.getManageDiplomacy_Vassals().getMenuElem(1).setTextE("");
-                            break;
                         }
                     }
-                    CFG.core.setActiveProvID(-1);
-                    CFG.menus.getDrawCivilization().setVisible(false);
-                    CFG.MANAGE_DIPLOMACY_DRAW_HELP_LINE = false;
-                }
-                CFG.map.getMpC().setDisableMovingMap(false);
-            }
-        } : (CFG.menus.getInManageDiplomacy() ? new ExtraAction(){
-
-            
-            @Override
-            public void extraAction(int nPX, int nPY) {
-                if (CFG.menus.getManageDiplomacy_Alliances().getVisibleM() && CFG.map.getMpC().getDisableMovingMap()) {
-                    if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0) {
-                        for (int i = 0; i < CFG.menus.getManageDiplomacy_Alliances().getMenuElemsSize(); ++i) {
-                            if (nPX < CFG.menus.getManageDiplomacy_Alliances().getMenuElem(i).getPosXE() + CFG.menus.getManageDiplomacy_Alliances().getMenuPosX() || nPX > CFG.menus.getManageDiplomacy_Alliances().getMenuElem(i).getPosXE() + CFG.menus.getManageDiplomacy_Alliances().getMenuPosX() + CFG.menus.getManageDiplomacy_Alliances().getMenuElem(i).getWidthE() || nPY < CFG.menus.getManageDiplomacy_Alliances().getMenuElem(i).getPosY() + CFG.menus.getManageDiplomacy_Alliances().getMenuPosY() || nPY > CFG.menus.getManageDiplomacy_Alliances().getMenuElem(i).getPosY() + CFG.menus.getManageDiplomacy_Alliances().getMenuElem(i).getHeightE() + CFG.menus.getManageDiplomacy_Alliances().getMenuPosY()) continue;
-                            if (i == 0) {
-                                CFG.core.addAlliance("");
-                                CFG.core.getAlliance(CFG.core.getAlliancesSize() - 1).addCivilization(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId());
-                                if (CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).getAlliance() != 0) {
-                                    CFG.core.getAlliance(CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).getAlliance()).removeCivilization(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId());
-                                }
-                                CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).setAlliance(CFG.core.getAlliancesSize() - 1);
-                                CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID = CFG.core.getAlliancesSize() - 1;
-                                CFG.menus.setMenuID(View.eCUSTOMIZE_ALLIANCE);
-                                CFG.core.disableDrawCivilizationRegions_ActiveProvince();
-                                CFG.menus.getDrawCivilization().setVisible(false);
-                                CFG.core.setActiveProvID(-1);
-                                CFG.MANAGE_DIPLOMACY_DRAW_HELP_LINE = false;
-                                return;
+                } else if (releaseProv >= 0 && CFG.MANAGE_DIPLOMACY_PRESS_PROV_ID >= 0) {
+                    int pressedCivID = CFG.core.getProv(CFG.MANAGE_DIPLOMACY_PRESS_PROV_ID).getCivId();
+                    if (releaseProv == CFG.MANAGE_DIPLOMACY_PRESS_PROV_ID) {
+                        if (pressedCivID > 0) {
+                            CFG.MANAGE_DIPLOMACY_HOLD_CIV_ID = pressedCivID;
+                            CFG.MANAGE_DIPLOMACY_HOLD_PROV_ID = releaseProv;
+                            if (!CFG.menus.getManageDiplomacy_Alliances().getVisibleM()) {
+                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 = pressedCivID;
+                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 = -1;
                             }
-                            if (CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).getAlliance() != 0) {
-                                if (i == CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).getAlliance()) break;
-                                CFG.core.getAlliance(CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).getAlliance()).removeCivilization(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId());
-                            }
-                            CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).setAlliance(i);
-                            CFG.core.getAlliance(i).addCivilization(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId());
-                            CFG.core.checkAlliances();
-                            CFG.menus.rebuildManageDiplomacy_Alliances();
-                            CFG.menus.getDrawCivilization().setVisible(false);
-                            CFG.core.setActiveProvID(-1);
-                            CFG.map.getMpC().setDisableMovingMap(false);
-                            CFG.MANAGE_DIPLOMACY_DRAW_HELP_LINE = false;
-                            return;
                         }
-                        int nProvinceBefore = CFG.core.getActiveProvID();
-                        com.badlogic.gdx.math.Vector2 worldPos = MapTransform.screenToWorld(nPX, nPY); CFG.core.setProvinceID((int)worldPos.x, (int)worldPos.y);
-                        if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0 && CFG.core.getProv(nProvinceBefore).getCivId() != CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) {
-                            if (CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).getAlliance() > 0) {
-                                if (CFG.core.getCiv(CFG.core.getProv(nProvinceBefore).getCivId()).getAlliance() != 0) {
-                                    CFG.core.getAlliance(CFG.core.getCiv(CFG.core.getProv(nProvinceBefore).getCivId()).getAlliance()).removeCivilization(CFG.core.getProv(nProvinceBefore).getCivId());
+                    } else {
+                        int targetCivID = CFG.core.getProv(releaseProv).getCivId();
+                        if (pressedCivID > 0 && targetCivID > 0 && pressedCivID != targetCivID) {
+                            if (CFG.menus.getManageDiplomacy_Alliances().getVisibleM()) {
+                                int aAlliance = CFG.core.getCiv(pressedCivID).getAlliance();
+                                int cAlliance = CFG.core.getCiv(targetCivID).getAlliance();
+                                if (aAlliance == 0 && cAlliance == 0) {
+                                    CFG.core.addAlliance("");
+                                    int newAll = CFG.core.getAlliancesSize() - 1;
+                                    CFG.core.getAlliance(newAll).addCivilization(pressedCivID);
+                                    CFG.core.getAlliance(newAll).addCivilization(targetCivID);
+                                    CFG.core.getCiv(pressedCivID).setAlliance(newAll);
+                                    CFG.core.getCiv(targetCivID).setAlliance(newAll);
+                                } else if (aAlliance == 0) {
+                                    CFG.core.getCiv(pressedCivID).setAlliance(cAlliance);
+                                    CFG.core.getAlliance(cAlliance).addCivilization(pressedCivID);
+                                } else if (cAlliance == 0) {
+                                    CFG.core.getCiv(targetCivID).setAlliance(aAlliance);
+                                    CFG.core.getAlliance(aAlliance).addCivilization(targetCivID);
+                                } else if (aAlliance != cAlliance) {
+                                    int size = CFG.core.getAlliance(cAlliance).getCivilizationsSize();
+                                    ArrayList<Integer> members = new ArrayList<Integer>();
+                                    for (int i = 0; i < size; ++i) {
+                                        members.add(CFG.core.getAlliance(cAlliance).getCivilization(i));
+                                    }
+                                    for (int i = 0; i < members.size(); ++i) {
+                                        int member = members.get(i);
+                                        CFG.core.getCiv(member).setAlliance(aAlliance);
+                                        CFG.core.getAlliance(aAlliance).addCivilization(member);
+                                    }
+                                    CFG.core.getAlliance(cAlliance).removeAllCivilizations();
                                 }
-                                CFG.core.getCiv(CFG.core.getProv(nProvinceBefore).getCivId()).setAlliance(CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).getAlliance());
-                                CFG.core.getAlliance(CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).getAlliance()).addCivilization(CFG.core.getProv(nProvinceBefore).getCivId());
                                 CFG.core.checkAlliances();
                                 CFG.menus.rebuildManageDiplomacy_Alliances();
-                            } else {
-                                CFG.core.addAlliance("");
-                                CFG.core.getAlliance(CFG.core.getAlliancesSize() - 1).addCivilization(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId());
-                                CFG.core.getAlliance(CFG.core.getAlliancesSize() - 1).addCivilization(CFG.core.getProv(nProvinceBefore).getCivId());
-                                if (CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).getAlliance() != 0) {
-                                    CFG.core.getAlliance(CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).getAlliance()).removeCivilization(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId());
-                                }
-                                if (CFG.core.getCiv(CFG.core.getProv(nProvinceBefore).getCivId()).getAlliance() != 0) {
-                                    CFG.core.getAlliance(CFG.core.getCiv(CFG.core.getProv(nProvinceBefore).getCivId()).getAlliance()).removeCivilization(CFG.core.getProv(nProvinceBefore).getCivId());
-                                }
-                                CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).setAlliance(CFG.core.getAlliancesSize() - 1);
-                                CFG.core.getCiv(CFG.core.getProv(nProvinceBefore).getCivId()).setAlliance(CFG.core.getAlliancesSize() - 1);
-                                CFG.core.checkAlliances();
-                                CFG.menus.rebuildManageDiplomacy_Alliances();
-                                CFG.core.disableDrawCivilizationRegions_ActiveProvince();
-                            }
-                        }
-                        CFG.menus.getDrawCivilization().setVisible(false);
-                        CFG.core.setActiveProvID(-1);
-                        CFG.MANAGE_DIPLOMACY_DRAW_HELP_LINE = false;
-                    }
-                } else if (CFG.menus.getInManageDiplomacy_Pacts3() && CFG.map.getMpC().getDisableMovingMap()) {
-                    if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0) {
-                        for (int i = 0; i < CFG.menus.getManageDiplomacy_Pacts3().getMenuElemsSize() - 1; ++i) {
-                            if (nPX < CFG.menus.getManageDiplomacy_Pacts3().getMenuElem(i).getPosXE() + CFG.menus.getManageDiplomacy_Pacts3().getMenuPosX() || nPX > CFG.menus.getManageDiplomacy_Pacts3().getMenuElem(i).getPosXE() + CFG.menus.getManageDiplomacy_Pacts3().getMenuPosX() + CFG.menus.getManageDiplomacy_Pacts3().getMenuElem(i).getWidthE() || nPY < CFG.menus.getManageDiplomacy_Pacts3().getMenuElem(i).getPosY() + CFG.menus.getManageDiplomacy_Pacts3().getMenuPosY() || nPY > CFG.menus.getManageDiplomacy_Pacts3().getMenuElem(i).getPosY() + CFG.menus.getManageDiplomacy_Pacts3().getMenuElem(i).getHeightE() + CFG.menus.getManageDiplomacy_Pacts3().getMenuPosY()) continue;
-                            if (i == 0) {
-                                if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 == CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) return;
-                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 = CFG.core.getProv(CFG.core.getActiveProvID()).getCivId();
-                            } else {
-                                if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 == CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) return;
-                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 = CFG.core.getProv(CFG.core.getActiveProvID()).getCivId();
-                            }
-                            if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 > 0 && CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 > 0) {
-                                CFG.menus.getManageDiplomacy_Pacts3().getMenuElem(CFG.menus.getManageDiplomacy_Pacts3().getMenuElemsSize() - 1).setClickable(true);
-                            }
-                            CFG.menus.getManageDiplomacy_Pacts3().getMenuElem(i).setTextE(CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).getCivName());
-                            CFG.core.setActiveProvID(-1);
-                            CFG.menus.getDrawCivilization().setVisible(false);
-                            CFG.MANAGE_DIPLOMACY_DRAW_HELP_LINE = false;
-                            CFG.map.getMpC().setDisableMovingMap(false);
-                            return;
-                        }
-                    }
-                    int nProvinceBefore = CFG.core.getActiveProvID();
-                    com.badlogic.gdx.math.Vector2 worldPos = MapTransform.screenToWorld(nPX, nPY); CFG.core.setProvinceID((int)worldPos.x, (int)worldPos.y);
-                    if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0) {
-                        if (CFG.core.getProv(nProvinceBefore).getCivId() != CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) {
-                            if (CFG.core.getCivNonAggressionPact(CFG.core.getProv(nProvinceBefore).getCivId(), CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) == 0) {
-                                CFG.core.setCivNonAggressionPact(CFG.core.getProv(nProvinceBefore).getCivId(), CFG.core.getProv(CFG.core.getActiveProvID()).getCivId(), 5);
-                                CFG.core.setActiveProvID(nProvinceBefore);
-                                if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0) {
-                                    CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID = CFG.core.getProv(CFG.core.getActiveProvID()).getCivId();
-                                }
+                            } else if (CFG.menus.getInManageDiplomacy_Pacts3()) {
+                                CFG.core.setCivNonAggressionPact(pressedCivID, targetCivID, 5);
                                 CFG.menus.rebuildManageDiplomacy_Pacts3();
-                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 = -1;
-                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 = -1;
-                            } else {
-                                CFG.core.setActiveProvID(nProvinceBefore);
-                            }
-                        } else {
-                            CFG.core.setActiveProvID(nProvinceBefore);
-                        }
-                    } else {
-                        CFG.core.setActiveProvID(nProvinceBefore);
-                    }
-                } else if (CFG.menus.getInManageDiplomacy_Truces() && CFG.map.getMpC().getDisableMovingMap()) {
-                    if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0) {
-                        for (int i = 0; i < CFG.menus.getManageDiplomacy_Truces().getMenuElemsSize() - 1; ++i) {
-                            if (nPX < CFG.menus.getManageDiplomacy_Truces().getMenuElem(i).getPosXE() + CFG.menus.getManageDiplomacy_Truces().getMenuPosX() || nPX > CFG.menus.getManageDiplomacy_Truces().getMenuElem(i).getPosXE() + CFG.menus.getManageDiplomacy_Truces().getMenuPosX() + CFG.menus.getManageDiplomacy_Truces().getMenuElem(i).getWidthE() || nPY < CFG.menus.getManageDiplomacy_Truces().getMenuElem(i).getPosY() + CFG.menus.getManageDiplomacy_Truces().getMenuPosY() || nPY > CFG.menus.getManageDiplomacy_Truces().getMenuElem(i).getPosY() + CFG.menus.getManageDiplomacy_Truces().getMenuElem(i).getHeightE() + CFG.menus.getManageDiplomacy_Truces().getMenuPosY()) continue;
-                            if (i == 0) {
-                                if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 == CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) return;
-                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 = CFG.core.getProv(CFG.core.getActiveProvID()).getCivId();
-                            } else {
-                                if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 == CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) return;
-                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 = CFG.core.getProv(CFG.core.getActiveProvID()).getCivId();
-                            }
-                            if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 > 0 && CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 > 0) {
-                                CFG.menus.getManageDiplomacy_Truces().getMenuElem(CFG.menus.getManageDiplomacy_Truces().getMenuElemsSize() - 1).setClickable(true);
-                            }
-                            CFG.menus.getManageDiplomacy_Truces().getMenuElem(i).setTextE(CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).getCivName());
-                            CFG.core.setActiveProvID(-1);
-                            CFG.menus.getDrawCivilization().setVisible(false);
-                            CFG.MANAGE_DIPLOMACY_DRAW_HELP_LINE = false;
-                            CFG.map.getMpC().setDisableMovingMap(false);
-                            return;
-                        }
-                    }
-                    int nProvinceBefore = CFG.core.getActiveProvID();
-                    com.badlogic.gdx.math.Vector2 worldPos = MapTransform.screenToWorld(nPX, nPY); CFG.core.setProvinceID((int)worldPos.x, (int)worldPos.y);
-                    if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0) {
-                        if (CFG.core.getProv(nProvinceBefore).getCivId() != CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) {
-                            if (CFG.core.getCivTruce(CFG.core.getProv(nProvinceBefore).getCivId(), CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) == 0) {
-                                CFG.core.setCivTruce(CFG.core.getProv(nProvinceBefore).getCivId(), CFG.core.getProv(CFG.core.getActiveProvID()).getCivId(), 5);
-                                CFG.core.setActiveProvID(nProvinceBefore);
-                                if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0) {
-                                    CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID = CFG.core.getProv(CFG.core.getActiveProvID()).getCivId();
-                                }
+                            } else if (CFG.menus.getInManageDiplomacy_Truces()) {
+                                CFG.core.setCivTruce(pressedCivID, targetCivID, 5);
                                 CFG.menus.rebuildManageDiplomacy_Truces();
-                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 = -1;
-                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 = -1;
-                            } else {
-                                CFG.core.setActiveProvID(nProvinceBefore);
-                            }
-                        } else {
-                            CFG.core.setActiveProvID(nProvinceBefore);
-                        }
-                    } else {
-                        CFG.core.setActiveProvID(nProvinceBefore);
-                    }
-                } else if (CFG.menus.getInManageDiplomacy_MilitaryAccess() && CFG.map.getMpC().getDisableMovingMap()) {
-                    if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0) {
-                        for (int i = 0; i < CFG.menus.getManageDiplomacy_MilitaryAccess().getMenuElemsSize() - 1; ++i) {
-                            if (nPX < CFG.menus.getManageDiplomacy_MilitaryAccess().getMenuElem(i).getPosXE() + CFG.menus.getManageDiplomacy_MilitaryAccess().getMenuPosX() || nPX > CFG.menus.getManageDiplomacy_MilitaryAccess().getMenuElem(i).getPosXE() + CFG.menus.getManageDiplomacy_MilitaryAccess().getMenuPosX() + CFG.menus.getManageDiplomacy_MilitaryAccess().getMenuElem(i).getWidthE() || nPY < CFG.menus.getManageDiplomacy_MilitaryAccess().getMenuElem(i).getPosY() + CFG.menus.getManageDiplomacy_MilitaryAccess().getMenuPosY() || nPY > CFG.menus.getManageDiplomacy_MilitaryAccess().getMenuElem(i).getPosY() + CFG.menus.getManageDiplomacy_MilitaryAccess().getMenuElem(i).getHeightE() + CFG.menus.getManageDiplomacy_MilitaryAccess().getMenuPosY()) continue;
-                            if (i == 0) {
-                                if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 == CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) return;
-                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 = CFG.core.getProv(CFG.core.getActiveProvID()).getCivId();
-                            } else {
-                                if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 == CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) return;
-                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 = CFG.core.getProv(CFG.core.getActiveProvID()).getCivId();
-                            }
-                            if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 > 0 && CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 > 0) {
-                                CFG.menus.getManageDiplomacy_MilitaryAccess().getMenuElem(CFG.menus.getManageDiplomacy_MilitaryAccess().getMenuElemsSize() - 1).setClickable(true);
-                            }
-                            CFG.menus.getManageDiplomacy_MilitaryAccess().getMenuElem(i).setTextE(CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).getCivName());
-                            CFG.core.setActiveProvID(-1);
-                            CFG.menus.getDrawCivilization().setVisible(false);
-                            CFG.MANAGE_DIPLOMACY_DRAW_HELP_LINE = false;
-                            CFG.map.getMpC().setDisableMovingMap(false);
-                            return;
-                        }
-                    }
-                    int nProvinceBefore = CFG.core.getActiveProvID();
-                    com.badlogic.gdx.math.Vector2 worldPos = MapTransform.screenToWorld(nPX, nPY); CFG.core.setProvinceID((int)worldPos.x, (int)worldPos.y);
-                    if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0) {
-                        if (CFG.core.getProv(nProvinceBefore).getCivId() != CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) {
-                            if (CFG.core.getMilitaryAccess(CFG.core.getProv(nProvinceBefore).getCivId(), CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) == 0) {
-                                CFG.core.setMilitaryAccess(CFG.core.getProv(nProvinceBefore).getCivId(), CFG.core.getProv(CFG.core.getActiveProvID()).getCivId(), 5);
-                                CFG.core.setActiveProvID(nProvinceBefore);
-                                if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0) {
-                                    CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID = CFG.core.getProv(CFG.core.getActiveProvID()).getCivId();
-                                }
-                                CFG.menus.rebuildManageDiplomacy_MilitaryAccess();
-                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 = -1;
-                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 = -1;
-                            } else {
-                                CFG.core.setActiveProvID(nProvinceBefore);
-                            }
-                        } else {
-                            CFG.core.setActiveProvID(nProvinceBefore);
-                        }
-                    } else {
-                        CFG.core.setActiveProvID(nProvinceBefore);
-                    }
-                } else if (CFG.menus.getInManageDiplomacy_Guarantee() && CFG.map.getMpC().getDisableMovingMap()) {
-                    if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0) {
-                        for (int i = 0; i < CFG.menus.getManageDiplomacy_Guarantee().getMenuElemsSize() - 1; ++i) {
-                            if (nPX < CFG.menus.getManageDiplomacy_Guarantee().getMenuElem(i).getPosXE() + CFG.menus.getManageDiplomacy_Guarantee().getMenuPosX() || nPX > CFG.menus.getManageDiplomacy_Guarantee().getMenuElem(i).getPosXE() + CFG.menus.getManageDiplomacy_Guarantee().getMenuPosX() + CFG.menus.getManageDiplomacy_Guarantee().getMenuElem(i).getWidthE() || nPY < CFG.menus.getManageDiplomacy_Guarantee().getMenuElem(i).getPosY() + CFG.menus.getManageDiplomacy_Guarantee().getMenuPosY() || nPY > CFG.menus.getManageDiplomacy_Guarantee().getMenuElem(i).getPosY() + CFG.menus.getManageDiplomacy_Guarantee().getMenuElem(i).getHeightE() + CFG.menus.getManageDiplomacy_Guarantee().getMenuPosY()) continue;
-                            if (i == 0) {
-                                if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 == CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) return;
-                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 = CFG.core.getProv(CFG.core.getActiveProvID()).getCivId();
-                            } else {
-                                if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 == CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) return;
-                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 = CFG.core.getProv(CFG.core.getActiveProvID()).getCivId();
-                            }
-                            if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 > 0 && CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 > 0) {
-                                CFG.menus.getManageDiplomacy_Guarantee().getMenuElem(CFG.menus.getManageDiplomacy_Guarantee().getMenuElemsSize() - 1).setClickable(true);
-                            }
-                            CFG.menus.getManageDiplomacy_Guarantee().getMenuElem(i).setTextE(CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).getCivName());
-                            CFG.core.setActiveProvID(-1);
-                            CFG.menus.getDrawCivilization().setVisible(false);
-                            CFG.MANAGE_DIPLOMACY_DRAW_HELP_LINE = false;
-                            CFG.map.getMpC().setDisableMovingMap(false);
-                            return;
-                        }
-                    }
-                    int nProvinceBefore = CFG.core.getActiveProvID();
-                    com.badlogic.gdx.math.Vector2 worldPos = MapTransform.screenToWorld(nPX, nPY); CFG.core.setProvinceID((int)worldPos.x, (int)worldPos.y);
-                    if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0) {
-                        if (CFG.core.getProv(nProvinceBefore).getCivId() != CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) {
-                            if (CFG.core.getGuarantee(CFG.core.getProv(nProvinceBefore).getCivId(), CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) == 0) {
-                                CFG.core.setGuarantee(CFG.core.getProv(nProvinceBefore).getCivId(), CFG.core.getProv(CFG.core.getActiveProvID()).getCivId(), 5);
-                                CFG.core.setActiveProvID(nProvinceBefore);
-                                if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0) {
-                                    CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID = CFG.core.getProv(CFG.core.getActiveProvID()).getCivId();
-                                }
+                            } else if (CFG.menus.getInManageDiplomacy_Guarantee()) {
+                                CFG.core.setGuarantee(pressedCivID, targetCivID, 5);
                                 CFG.menus.rebuildManageDiplomacy_Guarantee();
-                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 = -1;
-                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 = -1;
-                            } else {
-                                CFG.core.setActiveProvID(nProvinceBefore);
-                            }
-                        } else {
-                            CFG.core.setActiveProvID(nProvinceBefore);
-                        }
-                    } else {
-                        CFG.core.setActiveProvID(nProvinceBefore);
-                    }
-                } else if (CFG.menus.getInManageDiplomacy_DefensivePact() && CFG.map.getMpC().getDisableMovingMap()) {
-                    if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0) {
-                        for (int i = 0; i < CFG.menus.getManageDiplomacy_Defensive().getMenuElemsSize() - 1; ++i) {
-                            if (nPX < CFG.menus.getManageDiplomacy_Defensive().getMenuElem(i).getPosXE() + CFG.menus.getManageDiplomacy_Defensive().getMenuPosX() || nPX > CFG.menus.getManageDiplomacy_Defensive().getMenuElem(i).getPosXE() + CFG.menus.getManageDiplomacy_Defensive().getMenuPosX() + CFG.menus.getManageDiplomacy_Defensive().getMenuElem(i).getWidthE() || nPY < CFG.menus.getManageDiplomacy_Defensive().getMenuElem(i).getPosY() + CFG.menus.getManageDiplomacy_Defensive().getMenuPosY() || nPY > CFG.menus.getManageDiplomacy_Defensive().getMenuElem(i).getPosY() + CFG.menus.getManageDiplomacy_Defensive().getMenuElem(i).getHeightE() + CFG.menus.getManageDiplomacy_Defensive().getMenuPosY()) continue;
-                            if (i == 0) {
-                                if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 == CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) return;
-                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 = CFG.core.getProv(CFG.core.getActiveProvID()).getCivId();
-                            } else {
-                                if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 == CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) return;
-                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 = CFG.core.getProv(CFG.core.getActiveProvID()).getCivId();
-                            }
-                            if (CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 > 0 && CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 > 0) {
-                                CFG.menus.getManageDiplomacy_Defensive().getMenuElem(CFG.menus.getManageDiplomacy_Defensive().getMenuElemsSize() - 1).setClickable(true);
-                            }
-                            CFG.menus.getManageDiplomacy_Defensive().getMenuElem(i).setTextE(CFG.core.getCiv(CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()).getCivName());
-                            CFG.core.setActiveProvID(-1);
-                            CFG.menus.getDrawCivilization().setVisible(false);
-                            CFG.MANAGE_DIPLOMACY_DRAW_HELP_LINE = false;
-                            CFG.map.getMpC().setDisableMovingMap(false);
-                            return;
-                        }
-                    }
-                    int nProvinceBefore = CFG.core.getActiveProvID();
-                    com.badlogic.gdx.math.Vector2 worldPos = MapTransform.screenToWorld(nPX, nPY); CFG.core.setProvinceID((int)worldPos.x, (int)worldPos.y);
-                    if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0) {
-                        if (CFG.core.getProv(nProvinceBefore).getCivId() != CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) {
-                            if (CFG.core.getDefensivePact(CFG.core.getProv(nProvinceBefore).getCivId(), CFG.core.getProv(CFG.core.getActiveProvID()).getCivId()) == 0) {
-                                CFG.core.setDefensivePact(CFG.core.getProv(nProvinceBefore).getCivId(), CFG.core.getProv(CFG.core.getActiveProvID()).getCivId(), 5);
-                                CFG.core.setActiveProvID(nProvinceBefore);
-                                if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0) {
-                                    CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID = CFG.core.getProv(CFG.core.getActiveProvID()).getCivId();
-                                }
+                            } else if (CFG.menus.getInManageDiplomacy_DefensivePact()) {
+                                CFG.core.setDefensivePact(pressedCivID, targetCivID, 5);
                                 CFG.menus.rebuildManageDiplomacy_Defensive();
-                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 = -1;
-                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 = -1;
-                            } else {
-                                CFG.core.setActiveProvID(nProvinceBefore);
+                            } else if (CFG.menus.getInManageDiplomacy_MilitaryAccess()) {
+                                CFG.core.setMilitaryAccess(pressedCivID, targetCivID, 5);
+                                CFG.menus.rebuildManageDiplomacy_MilitaryAccess();
+                            } else if (CFG.menus.getInManageDiplomacy_Vassals()) {
+                                CFG.core.setVassal_OfCiv(pressedCivID, targetCivID);
+                                CFG.menus.rebuildManageDiplomacy_Vassals();
                             }
-                        } else {
-                            CFG.core.setActiveProvID(nProvinceBefore);
+                            CFG.core.setActiveProvID(CFG.MANAGE_DIPLOMACY_PRESS_PROV_ID);
+                            CFG.MANAGE_DIPLOMACY_HOLD_CIV_ID = pressedCivID;
+                            CFG.MANAGE_DIPLOMACY_HOLD_PROV_ID = CFG.MANAGE_DIPLOMACY_PRESS_PROV_ID;
+                            if (!CFG.menus.getManageDiplomacy_Alliances().getVisibleM()) {
+                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV1 = pressedCivID;
+                                CFG.MANAGE_DIPLOMACY_ADD_NEW_PACT_CIV2 = targetCivID;
+                            }
                         }
-                    } else {
-                        CFG.core.setActiveProvID(nProvinceBefore);
                     }
-                } else if (CFG.menus.getInManageDiplomacy_Relations_Interactive() && CFG.map.getMpC().getDisableMovingMap()) {
-                    CFG.menus.getDrawCivilization().setVisible(false);
-                    CFG.core.setActiveProvID(-1);
                 }
-                CFG.menus.getDrawCivilization().setVisible(false);
+                CFG.MANAGE_DIPLOMACY_PRESS_PROV_ID = -1;
+                if (CFG.MANAGE_DIPLOMACY_HOLD_CIV_ID <= 0) {
+                    CFG.menus.getDrawCivilization().setVisible(false);
+                }
                 CFG.map.getMpC().setDisableMovingMap(false);
             }
         } : (CFG.menus.getInCrScAs() ? new ExtraAction(){
@@ -2355,7 +2056,7 @@ public class TouchManager {
             @Override
             public void extraAction(int nPX, int nPY) {
             }
-        }));
+        });
     }
 
     public static final int getDetailsPosX(int nProvinceID) {

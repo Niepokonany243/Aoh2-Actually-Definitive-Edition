@@ -92,6 +92,7 @@ implements Serializable {
     public boolean DYNAMIC_MIN_ARMY = true;
     public int ARMY_VISIBILITY_RANGE = 3; 
     public int ARMY_ICON_SCALE = 1; 
+    public boolean WAR_VIEW_CLICK_PEACE = false; 
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
