@@ -167,7 +167,11 @@ extends Menu {
     public void updateLang() {
         this.sName = CFG.lang.get("AllianceName");
         this.sOptional = CFG.lang.get("Optional");
-        this.getMenuElem(0).setTextE("" + CFG.core.getAlliance(CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID).getAllianceName());
+        if (CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID >= 0 && CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID < CFG.core.getAlliancesSize()) {
+            this.getMenuElem(0).setTextE("" + CFG.core.getAlliance(CFG.MANAGE_DIPLOMACY_CUSTOMIZE_ALLIANCE_ID).getAllianceName());
+        } else {
+            this.getMenuElem(0).setTextE("");
+        }
         this.getMenuElem(2).setTextE(CFG.lang.get("ColorOfAlliance"));
         this.getMenuElem(3).setTextE(CFG.lang.get("AddCivilization"));
         this.getTitleM().setText(CFG.lang.get("CustomizeAlliance"));

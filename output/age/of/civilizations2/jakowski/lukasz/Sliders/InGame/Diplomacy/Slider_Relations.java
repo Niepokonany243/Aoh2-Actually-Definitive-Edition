@@ -59,10 +59,13 @@ extends Slider_BG_ZeroInMiddle {
     public void drawSliderText(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive, boolean scrollableY) {
         Renderer.drawText(oSB, this.fontID, this.getDrawText(), this.getPosXE() + CFG.PADD * 2 + iTranslateX, this.getPosY() + this.getHeightE() / 2 - this.getTextHeight() / 2 + iTranslateY, new Color(0.945f, 0.945f, 0.945f, 1.0f));
         if (this.getCurr() > 0L) {
+            CFG.glyphLay.setText(CFG.fontMain.get(this.fontID), "+" + this.getCurr());
             Renderer.drawText(oSB, this.fontID, "+" + this.getCurr(), this.getPosXE() + this.getWidthE() - CFG.PADD * 2 - (int)CFG.glyphLay.width + iTranslateX, this.getPosY() + this.getHeightE() / 2 - this.getTextHeight() / 2 + iTranslateY, new Color(0.16862746f, 0.3019608f, 0.5137255f, 1.0f));
         } else if (this.getCurr() < 0L) {
+            CFG.glyphLay.setText(CFG.fontMain.get(this.fontID), "" + this.getCurr());
             Renderer.drawText(oSB, this.fontID, "" + this.getCurr(), this.getPosXE() + this.getWidthE() - CFG.PADD * 2 - (int)CFG.glyphLay.width + iTranslateX, this.getPosY() + this.getHeightE() / 2 - this.getTextHeight() / 2 + iTranslateY, new Color(0.55f, 0.1f, 0.1f, 1.0f));
         } else {
+            CFG.glyphLay.setText(CFG.fontMain.get(this.fontID), "" + this.getCurr());
             Renderer.drawText(oSB, this.fontID, "" + this.getCurr(), this.getPosXE() + this.getWidthE() - CFG.PADD * 2 - (int)CFG.glyphLay.width + iTranslateX, this.getPosY() + this.getHeightE() / 2 - this.getTextHeight() / 2 + iTranslateY, new Color(0.82f, 0.82f, 0.82f, 1.0f));
         }
     }

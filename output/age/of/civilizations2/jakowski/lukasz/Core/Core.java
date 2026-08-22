@@ -199,7 +199,6 @@ public class Core {
     private RandomTurnOrder oRTO;
     public Wonders_Manager wondersMgr = new Wonders_Manager();
     private List<Province> lProvs = null;
-    private volatile Province[] provArr = null;
     private int iProvincesSize = 0;
     private static Province_GameData2[] provCache = null;
     private static boolean provCacheLoaded = false;
@@ -1370,7 +1369,6 @@ public class Core {
 
     public final void updateProvincesSize() {
         this.iProvincesSize = this.lProvs.size();
-        this.provArr = this.lProvs.toArray(new Province[0]);
     }
 
     public final void disposeMapData() {
@@ -1389,7 +1387,6 @@ public class Core {
         this.lRegions.clear();
         this.iRegionsSize = 0;
         this.lProvs = null;
-        this.provArr = null;
         this.lProvs = new ArrayList<Province>();
         this.iProvincesSize = 0;
         this.scenarioID = -1;
@@ -4443,7 +4440,6 @@ lbl94:
         CFG.NUM_OF_WASTELAND_PROVINCES_IN_VIEW = this.wPIV.size();
         
         if (this.updateSortedPIV || CFG.NUM_OF_PROVINCES_IN_VIEW != this.sortedPIV.size()) {
-            long tSort = CFG.LOGs ? System.nanoTime() : 0L;
             this.sortedPIV.clear();
             this.sortedPIV.addAll(this.prIV);
             int totalProv = CFG.core.getProvinSize();
@@ -4454,7 +4450,7 @@ lbl94:
                         com.badlogic.gdx.graphics.g2d.TextureRegion reg = ProvinceAtlas.getRegion(idx);
                         this.provinceTextureHash[idx] = (reg != null) ? reg.getTexture().hashCode() : 0;
                     }
-                } catch (Exception e) { if (CFG.LOGs) CFG.LOG("[sort]", "provinceTextureHash build failed: " + e.getMessage()); }
+                } catch (Exception e) { }
             }
             try {
                 this.sortedPIV.sort((a, b) -> {
@@ -4469,9 +4465,8 @@ lbl94:
                     if (metA != metB) return metA ? -1 : 1;
                     return Integer.compare(a, b);
                 });
-            } catch (Exception e) { if (CFG.LOGs) CFG.LOG("[sort]", "sortedPIV.sort failed: " + e.getMessage()); }
+            } catch (Exception e) { }
             this.updateSortedPIV = false;
-            if (CFG.LOGs) CFG.LOG("[sort]", "sortedPIV re-sort n=" + CFG.NUM_OF_PROVINCES_IN_VIEW + " time=" + ((System.nanoTime() - tSort) / 1000000L) + "ms");
         }
     }
 
@@ -13287,10 +13282,6 @@ lbl94:
     }
 
     public final Province getProv(int ID) {
-        Province[] arr = this.provArr;
-        if (arr != null) {
-            return arr[ID];
-        }
         return this.lProvs.get(ID);
     }
 

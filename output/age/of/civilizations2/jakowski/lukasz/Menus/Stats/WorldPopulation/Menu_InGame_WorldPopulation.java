@@ -238,7 +238,7 @@ extends Menu {
                 for (int j = 0; j < ((List)tCivilizations.get(CFG.core.getProv(i4).getContinent())).size(); ++j) {
                     if (((Integer)((List)tCivilizations.get(CFG.core.getProv(i4).getContinent())).get(j)).intValue() != CFG.core.getProv(i4).getCivId()) continue;
                     tAdd2 = false;
-                    ((List)tMostPopulous2.get(CFG.core.getProv(i4).getContinent())).set(j, (Integer)((List)tMostPopulous2.get(CFG.core.getProv(i4).getContinent())).get(j) + CFG.core.getProv(i4).getPop().getPops());
+                    ((List)tMostPopulous2.get(CFG.core.getProv(i4).getContinent())).set(j, (Long)((List)tMostPopulous2.get(CFG.core.getProv(i4).getContinent())).get(j) + CFG.core.getProv(i4).getPop().getPops());
                     break;
                 }
                 if (tAdd2) {
@@ -255,7 +255,7 @@ extends Menu {
         }
         for (i4 = 0; i4 < tMostPopulous2.size(); ++i4) {
             for (int j = 1; j < ((List)tMostPopulous2.get(i4)).size(); ++j) {
-                if ((Integer)((List)tMostPopulous2.get(i4)).get(j) <= (Integer)((List)tMostPopulous2.get(i4)).get((Integer)tMostPopulousID.get(i4))) continue;
+                if ((Long)((List)tMostPopulous2.get(i4)).get(j) <= (Long)((List)tMostPopulous2.get(i4)).get((Integer)tMostPopulousID.get(i4))) continue;
                 tMostPopulousID.set(i4, j);
             }
         }
@@ -535,7 +535,7 @@ extends Menu {
                 tAdd = 0;
                 for (i = 1; i < tempIDs.size(); ++i) {
                     try {
-                        if ((Integer)((List)tMostPopulous2.get((Integer)tempIDs.get(tAdd))).get((Integer)tMostPopulousID.get((Integer)tempIDs.get(tAdd))) >= (Integer)((List)tMostPopulous2.get((Integer)tempIDs.get(i))).get((Integer)tMostPopulousID.get((Integer)tempIDs.get(i)))) continue;
+                        if ((Long)((List)tMostPopulous2.get((Integer)tempIDs.get(tAdd))).get((Integer)tMostPopulousID.get((Integer)tempIDs.get(tAdd))) >= (Long)((List)tMostPopulous2.get((Integer)tempIDs.get(i))).get((Integer)tMostPopulousID.get((Integer)tempIDs.get(i)))) continue;
                         tAdd = i;
                         continue;
                     }

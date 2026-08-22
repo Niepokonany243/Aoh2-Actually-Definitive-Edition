@@ -453,9 +453,19 @@ public class AI {
         
         
         this.PLAYABLE_PROVINCES = 0;
+        int dbgSea = 0, dbgWast = 0, dbgLand = 0;
         for (int i4 = 0; i4 < CFG.core.getProvinSize(); ++i4) {
-            if (!CFG.core.getProv(i4).getSeaProv() && CFG.core.getProv(i4).getWastelandLvl() < 0) {
-                ++this.PLAYABLE_PROVINCES;
+            Province dbgP = CFG.core.getProv(i4);
+            if (dbgP.getSeaProv()) { ++dbgSea; continue; }
+            if (dbgP.getWastelandLvl() >= 0) { ++dbgWast; continue; }
+            ++dbgLand;
+            ++this.PLAYABLE_PROVINCES;
+        }
+        if (CFG.LOGs && (this.PLAYABLE_PROVINCES == 0 || dbgWast > 100)) {
+            CFG.LOG("AI", "[dbg] total=" + CFG.core.getProvinSize() + " sea=" + dbgSea + " wast=" + dbgWast + " land=" + dbgLand + " PLAYABLE=" + this.PLAYABLE_PROVINCES);
+            for (int dbgIdx = 0; dbgIdx < CFG.core.getProvinSize() && dbgIdx < 8; ++dbgIdx) {
+                Province dbgP2 = CFG.core.getProv(dbgIdx);
+                CFG.LOG("AI", "[dbg] prov[" + dbgIdx + "] sea=" + dbgP2.getSeaProv() + " wast=" + dbgP2.getWastelandLvl() + " civ=" + dbgP2.getCivId() + " id=" + dbgP2.getProvID() + " port=" + dbgP2.getLvlOfPort());
             }
         }
         nTime = System.nanoTime();
@@ -932,30 +942,30 @@ public class AI {
     }
 
     public final List<AI_NeighProvinces> getAllNeighboringProvincesInRange_OnlyOwn_Clear(int nProvinceID, int nCivID, int iRange, boolean onlyTrueOwner, boolean dontBreakIfNotFoundRecentlyProvince, List<AI_NeighProvinces> out, List<Integer> was) {
-        ArrayList<Integer> recentlyAdded = new ArrayList<Integer>();
+        com.badlogic.gdx.utils.IntArray recentlyAdded = new com.badlogic.gdx.utils.IntArray();
         recentlyAdded.add(nProvinceID);
         was.add(nProvinceID);
         CFG.core.getProv((int)nProvinceID).wasInProv = true;
-        ArrayList<Integer> currProvinces = new ArrayList<Integer>();
+        com.badlogic.gdx.utils.IntArray currProvinces = new com.badlogic.gdx.utils.IntArray();
         int nIteration_Distance = 0;
         int iFirstFoundRange = -1;
         while (iRange-- > 0) {
             int a;
             currProvinces.clear();
             ++nIteration_Distance;
-            for (a = recentlyAdded.size() - 1; a >= 0; --a) {
+            for (a = recentlyAdded.size - 1; a >= 0; --a) {
                 boolean wasntAdded = true;
-                for (int j = currProvinces.size() - 1; j >= 0; --j) {
+                for (int j = currProvinces.size - 1; j >= 0; --j) {
                     if (currProvinces.get(j) != recentlyAdded.get(a)) continue;
                     wasntAdded = false;
                     break;
                 }
                 if (!wasntAdded) continue;
-                currProvinces.add((Integer)recentlyAdded.get(a));
+                currProvinces.add(recentlyAdded.get(a));
             }
             recentlyAdded.clear();
-            for (a = currProvinces.size() - 1; a >= 0; --a) {
-                Province currProv = CFG.core.getProv((Integer)currProvinces.get(a));
+            for (a = currProvinces.size - 1; a >= 0; --a) {
+                Province currProv = CFG.core.getProv(currProvinces.get(a));
                 int nSize = currProv.getNeighProvincesSize();
                 for (int i = 0; i < nSize; ++i) {
                     int v = currProv.getNeighProvinces(i);
@@ -976,9 +986,7 @@ public class AI {
             CFG.core.getProv((int)was.get((int)j).intValue()).wasInProv = false;
         }
         recentlyAdded.clear();
-        recentlyAdded = null;
         was.clear();
-        was = null;
         return out;
     }
 

@@ -255,7 +255,7 @@ extends Menu {
         }
         for (i4 = 0; i4 < tMostEconomy2.size(); ++i4) {
             for (int j = 1; j < ((List)tMostEconomy2.get(i4)).size(); ++j) {
-                if ((Integer)((List)tMostEconomy2.get(i4)).get(j) <= (Integer)((List)tMostEconomy2.get(i4)).get((Integer)tMostEconomyID.get(i4))) continue;
+                if ((Long)((List)tMostEconomy2.get(i4)).get(j) <= (Long)((List)tMostEconomy2.get(i4)).get((Integer)tMostEconomyID.get(i4))) continue;
                 tMostEconomyID.set(i4, j);
             }
         }
@@ -569,7 +569,7 @@ extends Menu {
                 tAdd = 0;
                 for (i = 1; i < tempIDs.size(); ++i) {
                     try {
-                        if ((Integer)((List)tMostEconomy2.get((Integer)tempIDs.get(tAdd))).get((Integer)tMostEconomyID.get((Integer)tempIDs.get(tAdd))) >= (Integer)((List)tMostEconomy2.get((Integer)tempIDs.get(i))).get((Integer)tMostEconomyID.get((Integer)tempIDs.get(i)))) continue;
+                        if ((Long)((List)tMostEconomy2.get((Integer)tempIDs.get(tAdd))).get((Integer)tMostEconomyID.get((Integer)tempIDs.get(tAdd))) >= (Long)((List)tMostEconomy2.get((Integer)tempIDs.get(i))).get((Integer)tMostEconomyID.get((Integer)tempIDs.get(i)))) continue;
                         tAdd = i;
                         continue;
                     }

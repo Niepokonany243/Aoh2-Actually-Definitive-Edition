@@ -14,13 +14,23 @@ rem ============================================================
 setlocal
 cd /d "%~dp0"
 
-set "JAVA=%CD%\jre\bin\java.exe"
-if not exist "%JAVA%" set "JAVA=java"
+rem -- This game.jar is compiled for Java 17 (class file 61.0).
+rem    The bundled "jre" folder is Java 8 and CANNOT run it.
+rem    Prefer JAVA_HOME, then the PATH java, then the bundled jre.
+set "JAVA="
+if defined JAVA_HOME if exist "%JAVA_HOME%\bin\java.exe" set "JAVA=%JAVA_HOME%\bin\java.exe"
+if not defined JAVA set "JAVA=java"
+if not exist "%JAVA%" set "JAVA=%CD%\jre\bin\java.exe"
+if not exist "%JAVA%" echo WARNING: no java found in JAVA_HOME, PATH or .\jre & pause & exit /b 1
 
 rem -- Heap: pre-size to avoid ramp-up reallocation; keep a high max
 rem -- G1: cap pause target so the big per-turn GC spikes are softened
 rem -- AlwaysPreTouch: commit heap up-front for steadier frame timing
-set "GC_FLAGS=-Xms1024m -Xmx4096m -XX:+UseG1GC -XX:MaxGCPauseMillis=50 -XX:+AlwaysPreTouch"
+rem -- -XX:-OmitStackTraceInFastThrow: keep FULL stack traces on the
+rem    repeated NullPointerExceptions seen during AI turns (so we can
+rem    pinpoint the army-disappearing bug instead of a bare 'java.lang.
+rem    NullPointerException' line with no stack)
+set "GC_FLAGS=-Xms1024m -Xmx4096m -XX:+UseG1GC -XX:MaxGCPauseMillis=50 -XX:+AlwaysPreTouch -XX:-OmitStackTraceInFastThrow"
 
 rem -- Optional experiments (uncomment one at a time, re-profile):
 rem set "GC_FLAGS=-Xms1024m -Xmx8192m -XX:+UseZGC -XX:+AlwaysPreTouch"

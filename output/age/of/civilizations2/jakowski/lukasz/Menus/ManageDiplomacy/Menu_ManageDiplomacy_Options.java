@@ -93,6 +93,7 @@ extends Menu {
             }
             case 1: {
                 CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID2 = 0;
+                CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID_PICKED = false;
                 if (CFG.core.getActiveProvID() >= 0 && CFG.core.getProv(CFG.core.getActiveProvID()).getCivId() > 0) {
                     CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID = CFG.core.getProv(CFG.core.getActiveProvID()).getCivId();
                     if (!CFG.core.getProv(CFG.core.getCiv(CFG.MANAGE_DIPLOMACY_CUSTOMIZE_RELATIONS_CIV_ID).getCapitalProvID()).getDrawProv()) {

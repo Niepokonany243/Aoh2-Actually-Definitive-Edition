@@ -16,7 +16,13 @@ public class GlyphLayout_Game extends GlyphLayout {
         if (font == null || font.getData() == null) return;
         if (str == null) str = "";
         synchronized (lock) {
-            super.setText(font, str);
+            try {
+                super.setText(font, str);
+            } catch (Throwable th) {
+                this.width = 0.0f;
+                this.height = 0.0f;
+                this.runs.clear();
+            }
         }
     }
 
@@ -25,7 +31,13 @@ public class GlyphLayout_Game extends GlyphLayout {
         if (font == null || font.getData() == null) return;
         if (str == null) str = "";
         synchronized (lock) {
-            super.setText(font, str, color, targetWidth, halign, wrap);
+            try {
+                super.setText(font, str, color, targetWidth, halign, wrap);
+            } catch (Throwable th) {
+                this.width = 0.0f;
+                this.height = 0.0f;
+                this.runs.clear();
+            }
         }
     }
 
@@ -34,7 +46,13 @@ public class GlyphLayout_Game extends GlyphLayout {
         if (font == null || font.getData() == null) return;
         if (str == null) str = "";
         synchronized (lock) {
-            super.setText(font, str, start, end, color, targetWidth, halign, wrap, truncate);
+            try {
+                super.setText(font, str, start, end, color, targetWidth, halign, wrap, truncate);
+            } catch (Throwable th) {
+                this.width = 0.0f;
+                this.height = 0.0f;
+                this.runs.clear();
+            }
         }
     }
 }

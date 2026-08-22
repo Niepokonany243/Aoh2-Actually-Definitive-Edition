@@ -3491,7 +3491,17 @@ public class GameAction {
                     gameEnded = true;
                     continue;
                 }
-                if (CFG.oAI.PLAYABLE_PROVINCES <= numOfProvinces || (float)CFG.oAI.PLAYABLE_PROVINCES <= (float)numOfProvinces * ((float)VictoryManager.VICTORY_CONTROL_PROVINCES_PERC / 100.0f) || CFG.oAI.NUM_OF_CIVS_IN_THE_GAME < 2) {
+                boolean aliveCivsBelow2 = CFG.oAI.NUM_OF_CIVS_IN_THE_GAME < 2;
+                if (aliveCivsBelow2) {
+                    int realAlive = 0;
+                    for (int zz = 1; zz < CFG.core.getCivsSize(); ++zz) {
+                        if (CFG.core.getCiv(zz).getNumOfProvs() > 0) ++realAlive;
+                    }
+                    aliveCivsBelow2 = realAlive < 2;
+                }
+                boolean provDominates = CFG.oAI.PLAYABLE_PROVINCES > 0 && (CFG.oAI.PLAYABLE_PROVINCES <= numOfProvinces || (float)CFG.oAI.PLAYABLE_PROVINCES <= (float)numOfProvinces * ((float)VictoryManager.VICTORY_CONTROL_PROVINCES_PERC / 100.0f));
+                if (provDominates || aliveCivsBelow2) {
+                    CFG.LOG("WINCHECK", "player=" + CFG.core.getPlayer(i).getCivId() + " numOfProvs=" + numOfProvinces + " PLAYABLE=" + CFG.oAI.PLAYABLE_PROVINCES + " PERC=" + VictoryManager.VICTORY_CONTROL_PROVINCES_PERC + " NUM_CIVS=" + CFG.oAI.NUM_OF_CIVS_IN_THE_GAME + " aliveCount=" + CFG.core.getAliveCivCount() + " cond=" + provDominates + "/" + aliveCivsBelow2);
                     CFG.menus.setMenuID(View.eVICTORY);
                     CFG.map.getMpB().updateWorldMap_Shaders();
                     gameEnded = true;
@@ -3751,12 +3761,18 @@ public class GameAction {
                 if (nNumOfUnits <= 0) {
                     return false;
                 }
+                long armyBefore = fromProvince.getArmyCivID1((int)iCivID);
                 movementPayerCiv.setMovementPoints(movementPayerCiv.getMovemPoints() - this.costOfMoveArmy(fromProvinceID, toProvinceID, movementPayerCivID));
                 civ.newMove(fromProvinceID, toProvinceID, nNumOfUnits, buildLine);
-                fromProvince.updateArmy4(iCivID, fromProvince.getArmyCivID1((int)iCivID) - nNumOfUnits);
+                fromProvince.updateArmy4(iCivID, armyBefore - nNumOfUnits);
                 return true;
             }
             catch (Exception ex) {
+                try {
+                    Province restoreProv = CFG.core.getProv(fromProvinceID);
+                    restoreProv.updateArmy4(iCivID, restoreProv.getArmyCivID1((int)iCivID) + nNumOfUnits);
+                }
+                catch (Exception restoreEx) {}
                 CFG.exceptionStack(ex);
                 return false;
             }
@@ -4054,7 +4070,10 @@ public class GameAction {
             CFG.core.getCiv(nCivID).civGD.aiNoDisbandUntilTurnID = Integer.MAX_VALUE;
             return;
         }
-        if (CFG.settingsGD.EXPERIMENTAL_BATTLE_SYSTEM && !CFG.core.getCiv(nCivID).getIsPlayer() && GameCalendar.TURNID - CFG.core.getCiv(nCivID).civGD.iLastWarTurnID < 30) {
+        if (!CFG.core.getCiv(nCivID).getIsPlayer() && (CFG.core.getCiv(nCivID).isAtWarC() || CFG.core.getCiv(nCivID).civGD.civPlans.isPreparingForTheWar())) {
+            return;
+        }
+        if (CFG.settingsGD.EXPERIMENTAL_BATTLE_SYSTEM && !CFG.core.getCiv(nCivID).getIsPlayer() && GameCalendar.TURNID - CFG.core.getCiv(nCivID).civGD.iLastWarTurnID < 3) {
             return;
         }
         Province province = CFG.core.getProv(nProvinceID);

@@ -177,8 +177,8 @@ public class AIPlaystyle {
         }
 
         CFG.oAI.expandNeutral.expandToNeutralProvinces(nCivID);
-        if (this.isPeaceArmyAboveDisbandTarget(nCivID)) {
-            if (!(CFG.settingsGD.EXPERIMENTAL_BATTLE_SYSTEM && GameCalendar.TURNID - CFG.core.getCiv(nCivID).civGD.iLastWarTurnID < 30)) {
+if (this.isPeaceArmyAboveDisbandTarget(nCivID)) {
+            if (!(GameCalendar.TURNID - CFG.core.getCiv(nCivID).civGD.iLastWarTurnID < 3)) {
                 this.armyOverBudget_Disband(nCivID);
             }
             this.armyOverBudget = true;
@@ -5603,6 +5603,7 @@ public class AIPlaystyle {
             List<Integer> callToArms;
 
             block55: for (tLimit = 0; i >= 0 && tLimit < 100; --i, ++tLimit) {
+                if (i >= messageBox.getMessagesSize() || messageBox.lMessages.isEmpty()) break;
                 message = messageBox.getMessage(i);
                 var40_40 = message;
                 var4_5 = i;
@@ -7353,7 +7354,7 @@ public class AIPlaystyle {
     }
 
     public void armyOverBudget_Disband(int nCivID) {
-        if (CFG.core.getCiv(nCivID).isAtWarC() || CFG.core.getCiv(nCivID).civGD.civPlans.isPreparingForTheWar() || GameCalendar.TURNID - CFG.core.getCiv(nCivID).civGD.iLastWarTurnID < (CFG.settingsGD.EXPERIMENTAL_BATTLE_SYSTEM ? 30 : 4)) {
+        if (CFG.core.getCiv(nCivID).isAtWarC() || CFG.core.getCiv(nCivID).civGD.civPlans.isPreparingForTheWar() || GameCalendar.TURNID - CFG.core.getCiv(nCivID).civGD.iLastWarTurnID < 3) {
             return;
         }
         if (CFG.core.getCiv(nCivID).civGD.aiNoDisbandUntilTurnID >= GameCalendar.TURNID || CFG.core.getCiv(nCivID).getRegroupArmySize() > 0 || CFG.core.getCiv(nCivID).civGD.recruitArmySize > 0) {
