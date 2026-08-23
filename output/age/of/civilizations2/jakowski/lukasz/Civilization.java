@@ -1514,8 +1514,11 @@ public class Civilization {
         }
     }
 
-    public final void buildRegroupLines_AfterLoading() {
-        for (int j = 0; j < this.civGD.iRegroupArmySize; ++j) {
+    public final synchronized void buildRegroupLines_AfterLoading() {
+        if (this.civGD.lRegroupArmy == null) {
+            return;
+        }
+        for (int j = 0; j < this.civGD.lRegroupArmy.size(); ++j) {
             ArrayList<MoveUnits_Line> tMoveUnitsLine = new ArrayList<MoveUnits_Line>();
             tMoveUnitsLine.add(new MoveUnits_Line_Highlighted(this.civGD.lRegroupArmy.get(j).getFromProvinceID(), this.civGD.lRegroupArmy.get(j).getRoute(0)));
             for (int i = 0; i < this.civGD.lRegroupArmy.get(j).getRouteSize() - 1; ++i) {
@@ -1525,7 +1528,10 @@ public class Civilization {
         }
     }
 
-    public final void addRegroupArmy(RegroupArmy nData) {
+    public final synchronized void addRegroupArmy(RegroupArmy nData) {
+        if (this.civGD.lRegroupArmy == null) {
+            this.civGD.lRegroupArmy = new ArrayList<RegroupArmy>();
+        }
         this.civGD.lRegroupArmy.add(nData);
         this.civGD.iRegroupArmySize = this.civGD.lRegroupArmy.size();
         ArrayList<MoveUnits_Line> tMoveUnitsLine = new ArrayList<MoveUnits_Line>();
@@ -1837,7 +1843,10 @@ public class Civilization {
     }
 
     public final void moveRegroupArmy() {
-        for (int i = 0; i < this.civGD.iRegroupArmySize; ++i) {
+        if (this.civGD.lRegroupArmy == null) {
+            return;
+        }
+        for (int i = 0; i < this.civGD.lRegroupArmy.size(); ++i) {
             try {
                 if (!RegroupArmy.canBeUsedInPath(this.getCivId(), this.civGD.lRegroupArmy.get(i).getRoute(0), false, this.civGD.lRegroupArmy.get(i).getToProvinceID())) {
                     this.removeRegroupArmy(i);
@@ -1873,27 +1882,38 @@ public class Civilization {
                 continue;
             }
             catch (IndexOutOfBoundsException ex) {
-                this.removeRegroupArmy(i);
+                if (i < this.civGD.lRegroupArmy.size()) {
+                    this.removeRegroupArmy(i);
+                }
                 --i;
                 continue;
             }
             catch (NullPointerException ex) {
-                this.removeRegroupArmy(i);
+                if (i < this.civGD.lRegroupArmy.size()) {
+                    this.removeRegroupArmy(i);
+                }
                 --i;
             }
         }
     }
 
-    public final void removeRegroupArmy(int i) {
+    public final synchronized void removeRegroupArmy(int i) {
+        if (this.civGD.lRegroupArmy == null || i < 0 || i >= this.civGD.lRegroupArmy.size()) {
+            return;
+        }
         this.civGD.lRegroupArmy.remove(i);
-        this.currentRegroupArmyLine.remove(i);
+        if (i < this.currentRegroupArmyLine.size()) {
+            this.currentRegroupArmyLine.remove(i);
+        }
         this.civGD.iRegroupArmySize = this.civGD.lRegroupArmy.size();
     }
 
-    public final void clearRegroupArmy() {
-        this.civGD.lRegroupArmy.clear();
+    public final synchronized void clearRegroupArmy() {
+        if (this.civGD.lRegroupArmy != null) {
+            this.civGD.lRegroupArmy.clear();
+        }
         this.currentRegroupArmyLine.clear();
-        this.civGD.iRegroupArmySize = this.civGD.lRegroupArmy.size();
+        this.civGD.iRegroupArmySize = this.civGD.lRegroupArmy == null ? 0 : this.civGD.lRegroupArmy.size();
     }
 
     public final void addProv_Just(int nProvinceID) {
@@ -2901,24 +2921,30 @@ public class Civilization {
         return this.moveUnits_PlunderSize;
     }
 
-    public final List<MoveUnits_Line> getCurrentRegroupArmyLine(int i) {
+    public final synchronized List<MoveUnits_Line> getCurrentRegroupArmyLine(int i) {
         return this.currentRegroupArmyLine.get(i);
     }
 
-    public final RegroupArmy getRegroupArmy(int i) {
+    public final synchronized RegroupArmy getRegroupArmy(int i) {
+        if (this.civGD.lRegroupArmy == null) {
+            return null;
+        }
         return this.civGD.lRegroupArmy.get(i);
     }
 
-    public final long isRegroupingArmy_ToProvID(int toProvinceID) {
-        for (int i = 0; i < this.civGD.iRegroupArmySize; ++i) {
+    public final synchronized long isRegroupingArmy_ToProvID(int toProvinceID) {
+        if (this.civGD.lRegroupArmy == null) {
+            return 0;
+        }
+        for (int i = 0; i < this.civGD.lRegroupArmy.size(); ++i) {
             if (this.civGD.lRegroupArmy.get(i).getToProvinceID() != toProvinceID) continue;
             return this.civGD.lRegroupArmy.get(i).getNumOfUnits();
         }
         return 0;
     }
 
-    public final int getRegroupArmySize() {
-        return this.civGD.iRegroupArmySize;
+    public final synchronized int getRegroupArmySize() {
+        return this.civGD.lRegroupArmy == null ? 0 : this.civGD.lRegroupArmy.size();
     }
 
     public final int getAlliance() {

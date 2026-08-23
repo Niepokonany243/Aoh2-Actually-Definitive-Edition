@@ -50,7 +50,7 @@ extends Text {
 
     @Override
     public void drawE(SpriteBatch oSB, int iTranslateX, int iTranslateY, boolean isActive, boolean scrollableY) {
-        oSB.setColor(new Color(CFG.COLOR_GRADIENT_BLUE.r, CFG.COLOR_GRADIENT_BLUE.g, CFG.COLOR_GRADIENT_BLUE.b, 0.15f));
+        oSB.setColor(new Color(0.08f, 0.08f, 0.08f, 0.3f));
         IMGManager.getIMG(Images.pix255).drawO(oSB, this.getPosXE() - CFG.PADD + iTranslateX, this.getPosY() - IMGManager.getIMG(Images.pix255).getHeight() + iTranslateY, this.getWidthE() + CFG.PADD * 2, this.getHeightE());
         oSB.setColor(new Color(0.0f, 0.0f, 0.0f, 0.55f));
         IMGManager.getIMG(Images.gradient).drawO(oSB, this.getPosXE() - CFG.PADD + iTranslateX, this.getPosY() + this.getHeightE() - IMGManager.getIMG(Images.gradient).getHeight() + iTranslateY, this.getWidthE() + CFG.PADD * 2, this.getHeightE() * 2 / 5, false, false);
@@ -58,7 +58,7 @@ extends Text {
         oSB.setColor(new Color(0.0f, 0.0f, 0.0f, 0.275f));
         IMGManager.getIMG(Images.sliderGradient).drawO(oSB, this.getPosXE() - CFG.PADD + iTranslateX, this.getPosY() - IMGManager.getIMG(Images.sliderGradient).getHeight() + iTranslateY, this.getWidthE() / 4, this.getHeightE(), false, false);
         IMGManager.getIMG(Images.sliderGradient).drawO(oSB, this.getPosXE() - CFG.PADD + this.getWidthE() + CFG.PADD * 2 - this.getWidthE() / 4 + iTranslateX, this.getPosY() - IMGManager.getIMG(Images.sliderGradient).getHeight() + iTranslateY, this.getWidthE() / 4, this.getHeightE(), true, false);
-        oSB.setColor(new Color(CFG.COLOR_GRADIENT_BLUE.r, CFG.COLOR_GRADIENT_BLUE.g, CFG.COLOR_GRADIENT_BLUE.b, 0.65f));
+        oSB.setColor(new Color(CFG.COLOR_FLAG_FRAME.r, CFG.COLOR_FLAG_FRAME.g, CFG.COLOR_FLAG_FRAME.b, 0.5f));
         IMGManager.getIMG(Images.line32Off1).drawO(oSB, this.getPosXE() - CFG.PADD + iTranslateX, this.getPosY() + 1 - IMGManager.getIMG(Images.line32Off1).getHeight() + iTranslateY, this.getWidthE() + CFG.PADD * 2, 1);
         IMGManager.getIMG(Images.line32Off1).drawO(oSB, this.getPosXE() - CFG.PADD + iTranslateX, this.getPosY() + this.getHeightE() - 2 - IMGManager.getIMG(Images.line32Off1).getHeight() + iTranslateY, this.getWidthE() + CFG.PADD * 2, 1);
         float spendingsProgress = CFG.gameUpdate.getResearchSpending(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId(), CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).iBudget) / (float)TechManager.getResearchNextLevel(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId());
@@ -79,9 +79,9 @@ extends Text {
     }
 
     public void drawProgress(SpriteBatch oSB, int nX, int nY, int nW, int nH, float fProgress, float extraProgress) {
-        oSB.setColor(new Color(CFG.COLOR_GRADIENT_BLUE.r, CFG.COLOR_GRADIENT_BLUE.g, CFG.COLOR_GRADIENT_BLUE.b, 0.4f));
+        oSB.setColor(new Color(0.08f, 0.08f, 0.08f, 0.45f));
         IMGManager.getIMG(Images.pix255).draw(oSB, nX, nY, nW, nH);
-        oSB.setColor(new Color(CFG.COLOR_RESEARCH.r, CFG.COLOR_RESEARCH.g, CFG.COLOR_RESEARCH.b, 0.7f));
+        oSB.setColor(new Color(CFG.COLOR_NEUTRAL2.r, CFG.COLOR_NEUTRAL2.g, CFG.COLOR_NEUTRAL2.b, 0.7f));
         if ((int)((float)nW * extraProgress) > 0) {
             IMGManager.getIMG(Images.pix255).draw(oSB, nX, nY + 1, (int)((float)nW * extraProgress), nH - 2);
         }
@@ -111,7 +111,7 @@ extends Text {
             
         }
         this.sText_Spendings = " + " + CFG.getNumberWthSpaces("" + iMin) + percText;
-        this.colorSpendings = iMin <= 0 ? CFG.COLOR_NEUTRAL : CFG.COLOR_RESEARCH;
+        this.colorSpendings = iMin <= 0 ? CFG.COLOR_NEUTRAL : CFG.COLOR_NEUTRAL2;
         CFG.glyphLay.setText(CFG.fontMain.get(this.fontID), this.sText_Spendings);
         this.iText_SpendingsWidth = (int)CFG.glyphLay.width;
     }

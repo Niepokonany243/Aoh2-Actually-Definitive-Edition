@@ -32,21 +32,67 @@ public class Menu_InGame_Strategy extends Menu {
 
         if (MilitaryRealism.isEnabled()) {
             String currName = civ.civGD.mobilizationManualLevel <= 0 ? "Auto" : GameValues.gvMilitaryRealism.MOBILIZATION_NAME[civ.civGD.mobilizationManualLevel - 1];
-            menuElements.add(new Button_Game("Mobilisation: " + currName, -1, CFG.PADD, tY, fixedStrategyWidth - CFG.PADD * 2, CFG.BUTTON_H * 3 / 4, true) {
+            menuElements.add(new Button_Game_Checkbox("Mobilisation: " + currName, CFG.PADD, CFG.PADD, tY, fixedStrategyWidth - CFG.PADD * 2, true, Menu_InGame_Strategy.mobilizationExpanded) {
                 @Override
                 public void actionElem(int iID) {
                     Menu_InGame_Strategy.mobilizationExpanded = !Menu_InGame_Strategy.mobilizationExpanded;
                     CFG.menus.rebuildInGame_Strategy();
                 }
                 @Override
-                public Color getColorE(boolean isActive) {
-                    return Menu_InGame_Strategy.mobilizationExpanded ? CFG.COLOR_TEXT_GREEN : super.getColorE(isActive);
+                public void buildElemHover() {
+                    ArrayList<MEHover_2E> nElements = new ArrayList<MEHover_2E>();
+                    ArrayList<ME_Hover_2Type> nData = new ArrayList<ME_Hover_2Type>();
+                    try {
+                        int civID = civ.getCivId();
+                        nData.add(new ME_Hover_2Type_Text_Big("Mobilisation", CFG.COLOR_HOVER_TITLE));
+                        nData.add(new ME_Hover_2Type_Image_Big(Images.diploArmy, CFG.PADD, 0));
+                        nData.add(new ME_Hover_2Type_Flag_Big(civID, CFG.PADD, 0));
+                        nElements.add(new MEHover_2E(nData));
+                        nData.clear();
+                        nData.add(new ME_Hover_2Type_Space());
+                        nElements.add(new MEHover_2E(nData));
+                        nData.clear();
+                        nData.add(new ME_Hover_2Type_Text("Level: "));
+                        nData.add(new ME_Hover_2Type_Text(MilitaryRealism.getMobilizationName(civID), CFG.COLOR_TEXT_NUM_OF_PROVINCES));
+                        nElements.add(new MEHover_2E(nData));
+                        nData.clear();
+                        nData.add(new ME_Hover_2Type_Text("Mode: "));
+                        nData.add(new ME_Hover_2Type_Text(MilitaryRealism.getManualMobilizationName(civID), CFG.COLOR_TEXT_NUM_OF_PROVINCES));
+                        nElements.add(new MEHover_2E(nData));
+                        nData.clear();
+                        nData.add(new ME_Hover_2Type_Text("Recruit: "));
+                        nData.add(new ME_Hover_2Type_Text("" + (int)(MilitaryRealism.getRecruitCostFactor(civID) * 100.0f) + "%", CFG.COLOR_TEXT_NUM_OF_PROVINCES));
+                        nElements.add(new MEHover_2E(nData));
+                        nData.clear();
+                        nData.add(new ME_Hover_2Type_Text("Upkeep: "));
+                        nData.add(new ME_Hover_2Type_Text("" + (int)(MilitaryRealism.getMilitaryUpkeepFactor(civID) * 100.0f) + "%", CFG.COLOR_TEXT_NUM_OF_PROVINCES));
+                        nElements.add(new MEHover_2E(nData));
+                        nData.clear();
+                        float atk = MilitaryRealism.getAttackBonusPercent(civID);
+                        float def = MilitaryRealism.getDefenseBonusPercent(civID);
+                        nData.add(new ME_Hover_2Type_Text("Attack: "));
+                        nData.add(new ME_Hover_2Type_Text((atk >= 0.0f ? "+" : "") + CFG.getPrecision2(atk, 100) + "%", CFG.COLOR_TEXT_NUM_OF_PROVINCES));
+                        nElements.add(new MEHover_2E(nData));
+                        nData.clear();
+                        nData.add(new ME_Hover_2Type_Text("Defense: "));
+                        nData.add(new ME_Hover_2Type_Text((def >= 0.0f ? "+" : "") + CFG.getPrecision2(def, 100) + "%", CFG.COLOR_TEXT_NUM_OF_PROVINCES));
+                        nElements.add(new MEHover_2E(nData));
+                        nData.clear();
+                        nData.add(new ME_Hover_2Type_Text("Army: "));
+                        nData.add(new ME_Hover_2Type_Text("" + CFG.getNumberWthSpaces("" + CFG.core.getCiv(civID).getNumberOfUnits()), CFG.COLOR_TEXT_NUM_OF_PROVINCES));
+                        nData.add(new ME_Hover_2Type_Image(Images.diploArmy, CFG.PADD, 0));
+                        nElements.add(new MEHover_2E(nData));
+                        this.menuElemHover = new ME_Hover_v2(nElements);
+                    }
+                    catch (Exception ex) {
+                        CFG.exceptionStack(ex);
+                        this.menuElemHover = null;
+                    }
                 }
             });
-            tY += CFG.BUTTON_H * 3 / 4 + CFG.PADD;
+            tY += CFG.BUTTON_H + CFG.PADD;
 
             if (Menu_InGame_Strategy.mobilizationExpanded) {
-                int rowH = CFG.BUTTON_H * 3 / 5;
                 for (int mi = -1; mi < GameValues.gvMilitaryRealism.MOBILIZATION_NAME.length; ++mi) {
                     final int mobIdx = mi;
                     int currManual = civ.civGD.mobilizationManualLevel;
@@ -55,12 +101,8 @@ public class Menu_InGame_Strategy extends Menu {
                     float upkeep = mobIdx < 0 ? 1.0f : (mobIdx < GameValues.gvMilitaryRealism.MOBILIZATION_UPKEEP.length ? GameValues.gvMilitaryRealism.MOBILIZATION_UPKEEP[mobIdx] : 1.0f);
                     float atk = mobIdx < 0 ? 0.0f : (mobIdx < GameValues.gvMilitaryRealism.MOBILIZATION_ATTACK_BONUS.length ? GameValues.gvMilitaryRealism.MOBILIZATION_ATTACK_BONUS[mobIdx] : 0.0f);
                     float def = mobIdx < 0 ? 0.0f : (mobIdx < GameValues.gvMilitaryRealism.MOBILIZATION_DEFENSE_BONUS.length ? GameValues.gvMilitaryRealism.MOBILIZATION_DEFENSE_BONUS[mobIdx] : 0.0f);
-                    String label = (mobIdx < 0 ? "Auto" : GameValues.gvMilitaryRealism.MOBILIZATION_NAME[mobIdx])
-                        + "   Recruit: " + (int)(rCost * 100.0f) + "%"
-                        + "   Upkeep: " + (int)(upkeep * 100.0f) + "%"
-                        + "   Atk: " + (atk >= 0.0f ? "+" : "") + CFG.getPrecision2(atk, 100) + "%"
-                        + "   Def: " + (def >= 0.0f ? "+" : "") + CFG.getPrecision2(def, 100) + "%";
-                    menuElements.add(new Button_Game(label, -1, CFG.PADD, tY, fixedStrategyWidth - CFG.PADD * 2, rowH, true) {
+                    String label = mobIdx < 0 ? "Auto" : GameValues.gvMilitaryRealism.MOBILIZATION_NAME[mobIdx];
+                    menuElements.add(new Button_Game_Checkbox(label, CFG.PADD, CFG.PADD, tY, fixedStrategyWidth - CFG.PADD * 2, true, isSelected) {
                         @Override
                         public void actionElem(int iID) {
                             MilitaryRealism.setManualMobilization(civ.getCivId(), mobIdx);
@@ -68,11 +110,45 @@ public class Menu_InGame_Strategy extends Menu {
                             CFG.menus.rebuildInGame_Strategy();
                         }
                         @Override
-                        public Color getColorE(boolean isActive) {
-                            return isSelected ? CFG.COLOR_TEXT_GREEN : super.getColorE(isActive);
+                        public void buildElemHover() {
+                            ArrayList<MEHover_2E> nElements = new ArrayList<MEHover_2E>();
+                            ArrayList<ME_Hover_2Type> nData = new ArrayList<ME_Hover_2Type>();
+                            try {
+                                nData.add(new ME_Hover_2Type_Text_Big(label, CFG.COLOR_HOVER_TITLE));
+                                nData.add(new ME_Hover_2Type_Image_Big(Images.diploArmy, CFG.PADD, 0));
+                                nElements.add(new MEHover_2E(nData));
+                                nData.clear();
+                                nData.add(new ME_Hover_2Type_Space());
+                                nElements.add(new MEHover_2E(nData));
+                                nData.clear();
+                                nData.add(new ME_Hover_2Type_Text("Recruit: "));
+                                nData.add(new ME_Hover_2Type_Text("" + (int)(rCost * 100.0f) + "%", CFG.COLOR_TEXT_NUM_OF_PROVINCES));
+                                nElements.add(new MEHover_2E(nData));
+                                nData.clear();
+                                nData.add(new ME_Hover_2Type_Text("Upkeep: "));
+                                nData.add(new ME_Hover_2Type_Text("" + (int)(upkeep * 100.0f) + "%", CFG.COLOR_TEXT_NUM_OF_PROVINCES));
+                                nElements.add(new MEHover_2E(nData));
+                                nData.clear();
+                                nData.add(new ME_Hover_2Type_Text("Attack: "));
+                                nData.add(new ME_Hover_2Type_Text((atk >= 0.0f ? "+" : "") + CFG.getPrecision2(atk, 100) + "%", CFG.COLOR_TEXT_NUM_OF_PROVINCES));
+                                nElements.add(new MEHover_2E(nData));
+                                nData.clear();
+                                nData.add(new ME_Hover_2Type_Text("Defense: "));
+                                nData.add(new ME_Hover_2Type_Text((def >= 0.0f ? "+" : "") + CFG.getPrecision2(def, 100) + "%", CFG.COLOR_TEXT_NUM_OF_PROVINCES));
+                                nElements.add(new MEHover_2E(nData));
+                                nData.clear();
+                                nData.add(new ME_Hover_2Type_Text("Demobilization: "));
+                                nData.add(new ME_Hover_2Type_Text("" + GameValues.gvMilitaryRealism.DEMOBILIZATION_TURNS + " " + CFG.lang.get("Turns"), CFG.COLOR_TEXT_NUM_OF_PROVINCES));
+                                nElements.add(new MEHover_2E(nData));
+                                this.menuElemHover = new ME_Hover_v2(nElements);
+                            }
+                            catch (Exception ex) {
+                                CFG.exceptionStack(ex);
+                                this.menuElemHover = null;
+                            }
                         }
                     });
-                    tY += rowH + CFG.PADD / 2;
+                    tY += CFG.BUTTON_H + CFG.PADD / 2;
                 }
             }
         }

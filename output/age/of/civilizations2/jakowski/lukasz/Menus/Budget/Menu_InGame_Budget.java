@@ -717,7 +717,7 @@ extends Menu {
 
             @Override
             public Color getColorLEFT() {
-                return CFG.getColorStep(new Color(0.023529412f, 0.3254902f, 0.40392157f, 0.65f), new Color(CFG.COLOR_NEGATIVE_2.r, CFG.COLOR_NEGATIVE_2.g, CFG.COLOR_NEGATIVE_2.b, 0.65f), this.getCurr(), 100, 0.65f);
+                return CFG.getColorStep(new Color(0.45f, 0.36f, 0.10f, 0.65f), new Color(CFG.COLOR_NEGATIVE_2.r, CFG.COLOR_NEGATIVE_2.g, CFG.COLOR_NEGATIVE_2.b, 0.65f), this.getCurr(), 100, 0.65f);
             }
 
             @Override
@@ -867,7 +867,7 @@ extends Menu {
 
             @Override
             public Color getColorLEFT() {
-                return CFG.getColorStep(new Color(0.07058824f, 0.18431373f, 0.3882353f, 0.65f), new Color(0.105882354f, 0.27450982f, 0.57254905f, 0.65f), this.getCurr(), 100, 0.65f);
+                return CFG.getColorStep(new Color(0.45f, 0.35f, 0.08f, 0.65f), new Color(0.72f, 0.58f, 0.16f, 0.65f), this.getCurr(), 100, 0.65f);
             }
 
             @Override
@@ -937,7 +937,7 @@ extends Menu {
 
             @Override
             public Color getColorLEFT() {
-                return this.getCurr() < (int)(CFG.ideologiesMgr.getInvestments(CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getIdeology(), CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()) * 100.0f) ? CFG.getColorStep(new Color(0.54901963f, 0.078431375f, 0.078431375f, 0.65f), new Color(0.7058824f, 0.078431375f, 0.078431375f, 0.65f), (int)(CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).getIdeology()).MIN_INVESTMENTS * 100.0f) - this.getCurr(), (int)(CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).getIdeology()).MIN_INVESTMENTS * 100.0f), 0.65f) : CFG.getColorStep(new Color(0.105882354f, 0.16078432f, 0.2901961f, 0.65f), new Color(0.20392157f, 0.2784314f, 0.45490196f, 0.65f), this.getCurr(), 100, 0.65f);
+                return this.getCurr() < (int)(CFG.ideologiesMgr.getInvestments(CFG.core.getCiv(CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()).getIdeology(), CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getCivId()) * 100.0f) ? CFG.getColorStep(new Color(0.54901963f, 0.078431375f, 0.078431375f, 0.65f), new Color(0.7058824f, 0.078431375f, 0.078431375f, 0.65f), (int)(CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).getIdeology()).MIN_INVESTMENTS * 100.0f) - this.getCurr(), (int)(CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)CFG.core.getPlayer((int)CFG.PLAYER_TURN_ID).getCivId()).getIdeology()).MIN_INVESTMENTS * 100.0f), 0.65f) : CFG.getColorStep(new Color(0.45f, 0.35f, 0.08f, 0.65f), new Color(0.72f, 0.58f, 0.16f, 0.65f), this.getCurr(), 100, 0.65f);
             }
 
             @Override

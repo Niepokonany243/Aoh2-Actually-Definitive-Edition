@@ -79,7 +79,7 @@ public class GameAction {
     public List<Report_Data> battleReports = new ArrayList<Report_Data>();
     public Report_Data battleReportSave = new Report_Data();
     public TurnStates activeTurnAction = TurnStates.INPUT_ORDERS;
-    private MoveUnits_TurnData currentMoveUnits = null;
+    private volatile MoveUnits_TurnData currentMoveUnits = null;
     private boolean retryFailedNavalInvasionNow = false;
     private int retryFailedNavalInvasionFromProvinceID = -1;
     private int retryFailedNavalInvasionToProvinceID = -1;
@@ -1151,30 +1151,34 @@ public class GameAction {
                                 }
                             }
                         }
-                        int attackingArmy = 0;
-                        for (o = 0; o < this.currentMoveUnits.getMoveUnitsSize(); ++o) {
-                            attackingArmy += this.currentMoveUnits.getMoveUnits(o).getNumberOfUnits();
+                        MoveUnits_TurnData curMoveUnits = this.currentMoveUnits;
+                        if (curMoveUnits == null) {
+                            continue;
                         }
-                        if (attackingArmy < CFG.MIN_ARMY_REQUIRED_TO_ATTACK && CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId() > 0 && CFG.core.getCivsAtWar(civRTO, CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId())) {
+                        long attackingArmy = 0L;
+                        for (o = 0; o < curMoveUnits.getMoveUnitsSize(); ++o) {
+                            attackingArmy += curMoveUnits.getMoveUnits(o).getNumberOfUnits();
+                        }
+                        if (attackingArmy < CFG.MIN_ARMY_REQUIRED_TO_ATTACK && CFG.core.getProv(curMoveUnits.getMoveUnits(0).getToProvID()).getCivId() > 0 && CFG.core.getCivsAtWar(civRTO, CFG.core.getProv(curMoveUnits.getMoveUnits(0).getToProvID()).getCivId())) {
                             this.currentMoveUnits = null;
                             continue;
                         }
-                        for (o = 0; o < this.currentMoveUnits.getMoveUnitsSize(); ++o) {
-                            this.currentMoveUnits.getMoveUnits(o).getMoveUnits_Line().updateMoveTime();
+                        for (o = 0; o < curMoveUnits.getMoveUnitsSize(); ++o) {
+                            curMoveUnits.getMoveUnits(o).getMoveUnits_Line().updateMoveTime();
                         }
                         this.rollDices();
-                        this.SAVE_REPORT = CFG.core.getCiv(this.currentMoveUnits.getCivID(0)).getIsPlayer() || CFG.core.getCiv(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId()).getIsPlayer() ? CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getSeaProv() && CFG.core.getSeaProvinceAttack(this.currentMoveUnits.getCivID(0), this.currentMoveUnits.getMoveUnits(0).getToProvID()) || !CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getSeaProv() && this.turnMoves_IsACombatMove(this.currentMoveUnits.getCivID(0), this.currentMoveUnits.getMoveUnits(0).getToProvID()) : false;
-                        if ((CFG.SHOW_ALL_MOVES || CFG.core.getCiv(this.currentMoveUnits.getCivID(0)).getIsPlayer() || CFG.core.getCiv(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId()).getIsPlayer()) && CFG.settingsGD.SHOW_COMBAT_MOVEMENT && !SKIP_ALL_COMBAT_MOVEMENT_ONCE) {
+                        this.SAVE_REPORT = CFG.core.getCiv(curMoveUnits.getCivID(0)).getIsPlayer() || CFG.core.getCiv(CFG.core.getProv(curMoveUnits.getMoveUnits(0).getToProvID()).getCivId()).getIsPlayer() ? CFG.core.getProv(curMoveUnits.getMoveUnits(0).getToProvID()).getSeaProv() && CFG.core.getSeaProvinceAttack(curMoveUnits.getCivID(0), curMoveUnits.getMoveUnits(0).getToProvID()) || !CFG.core.getProv(curMoveUnits.getMoveUnits(0).getToProvID()).getSeaProv() && this.turnMoves_IsACombatMove(curMoveUnits.getCivID(0), curMoveUnits.getMoveUnits(0).getToProvID()) : false;
+                        if ((CFG.SHOW_ALL_MOVES || CFG.core.getCiv(curMoveUnits.getCivID(0)).getIsPlayer() || CFG.core.getCiv(CFG.core.getProv(curMoveUnits.getMoveUnits(0).getToProvID()).getCivId()).getIsPlayer()) && CFG.settingsGD.SHOW_COMBAT_MOVEMENT && !SKIP_ALL_COMBAT_MOVEMENT_ONCE) {
                             if (CFG.SHOW_ONLY_COMBAT_MOVES) {
-                                if ((CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getSeaProv() && CFG.core.getSeaProvinceAttack(this.currentMoveUnits.getCivID(0), this.currentMoveUnits.getMoveUnits(0).getToProvID()) || !CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getSeaProv() && this.turnMoves_IsACombatMove(this.currentMoveUnits.getCivID(0), this.currentMoveUnits.getMoveUnits(0).getToProvID())) && (!RTS.isEnabled() || !RTS.PAUSE && RTS.showReport() || RTS.PAUSE)) {
+                                if ((CFG.core.getProv(curMoveUnits.getMoveUnits(0).getToProvID()).getSeaProv() && CFG.core.getSeaProvinceAttack(curMoveUnits.getCivID(0), curMoveUnits.getMoveUnits(0).getToProvID()) || !CFG.core.getProv(curMoveUnits.getMoveUnits(0).getToProvID()).getSeaProv() && this.turnMoves_IsACombatMove(curMoveUnits.getCivID(0), curMoveUnits.getMoveUnits(0).getToProvID())) && (!RTS.isEnabled() || !RTS.PAUSE && RTS.showReport() || RTS.PAUSE)) {
                                     this.SHOW_REPORT = CFG.settingsGD.SHOW_BATTLE_REPORT;
-                                    this.iPlayerAttack_ShowArmyInProvinceID = this.currentMoveUnits.getMoveUnits(0).getToProvID();
-                                    CFG.core.getPlayer(CFG.PLAYER_TURN_ID).setFogOfWar(this.currentMoveUnits.getMoveUnits(0).getToProvID(), true);
-                                    CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateDrawArmyInProv();
-                                    this.diceDefendersCivID = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId();
-                                    this.diceAggressorsCivID = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getFromProviID()).getCivId();
-                                    CFG.menus.setVisible_InGame_Dices(!CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getSeaProv());
-                                    CFG.map.getMpC().centerToProvID(this.currentMoveUnits.getMoveUnits(0).getToProvID());
+                                    this.iPlayerAttack_ShowArmyInProvinceID = curMoveUnits.getMoveUnits(0).getToProvID();
+                                    CFG.core.getPlayer(CFG.PLAYER_TURN_ID).setFogOfWar(curMoveUnits.getMoveUnits(0).getToProvID(), true);
+                                    CFG.core.getProv(curMoveUnits.getMoveUnits(0).getToProvID()).updateDrawArmyInProv();
+                                    this.diceDefendersCivID = CFG.core.getProv(curMoveUnits.getMoveUnits(0).getToProvID()).getCivId();
+                                    this.diceAggressorsCivID = CFG.core.getProv(curMoveUnits.getMoveUnits(0).getFromProviID()).getCivId();
+                                    CFG.menus.setVisible_InGame_Dices(!CFG.core.getProv(curMoveUnits.getMoveUnits(0).getToProvID()).getSeaProv());
+                                    CFG.map.getMpC().centerToProvID(curMoveUnits.getMoveUnits(0).getToProvID());
                                     if (CFG.mapModesManager.getActiveMapModeID() >= 0) {
                                         CFG.mapModesManager.disableAllViews();
                                     }
@@ -1255,9 +1259,13 @@ public class GameAction {
                                     }
                                 }
                             }
-                            int attackingArmy = 0;
-                            for (o = 0; o < this.currentMoveUnits.getMoveUnitsSize(); ++o) {
-                                attackingArmy += this.currentMoveUnits.getMoveUnits(o).getNumberOfUnits();
+                            MoveUnits_TurnData curMoveUnits2 = this.currentMoveUnits;
+                            if (curMoveUnits2 == null) {
+                                continue;
+                            }
+                            long attackingArmy = 0L;
+                            for (o = 0; o < curMoveUnits2.getMoveUnitsSize(); ++o) {
+                                attackingArmy += curMoveUnits2.getMoveUnits(o).getNumberOfUnits();
                             }
                         long required;
                         if (GameValues.gvCombat.DYNAMIC_MIN_ARMY_ENABLED && CFG.settingsGD.DYNAMIC_MIN_ARMY) {
@@ -1277,8 +1285,8 @@ public class GameAction {
                                 this.currentMoveUnits = null;
                                 continue;
                             }
-                            for (o = 0; o < this.currentMoveUnits.getMoveUnitsSize(); ++o) {
-                                this.currentMoveUnits.getMoveUnits(o).getMoveUnits_Line().updateMoveTime();
+                            for (o = 0; o < curMoveUnits2.getMoveUnitsSize(); ++o) {
+                                curMoveUnits2.getMoveUnits(o).getMoveUnits_Line().updateMoveTime();
                             }
                             this.rollDices();
                             this.SAVE_REPORT = this.currentMoveUnits.isPlayerMoving() || CFG.core.getCiv(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId()).getIsPlayer() ? CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getSeaProv() && CFG.core.getSeaProvinceAttack(this.currentMoveUnits.getCivID(0), this.currentMoveUnits.getMoveUnits(0).getToProvID()) || !CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getSeaProv() && this.turnMoves_IsACombatMove(this.currentMoveUnits.getCivID(0), this.currentMoveUnits.getMoveUnits(0).getToProvID()) : false;
@@ -1887,10 +1895,14 @@ public class GameAction {
     }
 
     private final void turnMoves_MoveCurrentArmy() {
+        MoveUnits_TurnData moveUnits = this.currentMoveUnits;
+        if (moveUnits == null) {
+            return;
+        }
         try {
-            int toProvID = this.currentMoveUnits.getMoveUnits(0).getToProvID();
-            int fromProvID = this.currentMoveUnits.getMoveUnits(0).getFromProviID();
-            int currentCivID = this.currentMoveUnits.getCivID(0);
+            int toProvID = moveUnits.getMoveUnits(0).getToProvID();
+            int fromProvID = moveUnits.getMoveUnits(0).getFromProviID();
+            int currentCivID = moveUnits.getCivID(0);
             Province toProv = CFG.core.getProv(toProvID);
             Province fromProv = CFG.core.getProv(fromProvID);
             long tArmy = 0L;
@@ -1900,42 +1912,42 @@ public class GameAction {
             long tArmyTrueOwner = 0L;
 
             CFG.menus.setVisible_InGame_Dices(false);
-            if (this.currentMoveUnits.getCivID(0) != CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId() && this.currentMoveUnits.getCivID(0) != CFG.core.getCiv(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId()).getPuppetOfCiv() && CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId() != CFG.core.getCiv(this.currentMoveUnits.getCivID(0)).getPuppetOfCiv() && !CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getSeaProv()) {
-                if (CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId() > 0 && (CFG.core.getCivsInAlliance(this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId()) || CFG.core.getMilitaryAccess(this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId()) > 0)) {
-                    block41: for (int i = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivsSize() - 1; i > 0; --i) {
+            if (moveUnits.getCivID(0) != CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId() && moveUnits.getCivID(0) != CFG.core.getCiv(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId()).getPuppetOfCiv() && CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId() != CFG.core.getCiv(moveUnits.getCivID(0)).getPuppetOfCiv() && !CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getSeaProv()) {
+                if (CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId() > 0 && (CFG.core.getCivsInAlliance(moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId()) || CFG.core.getMilitaryAccess(moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId()) > 0)) {
+                    block41: for (int i = CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivsSize() - 1; i > 0; --i) {
                         long losses;
-                        if (!CFG.core.getCivsAtWar(this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i)) || (losses = Math.min(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i), this.currentMoveUnits.getMoveUnits_TotalNumOfUnits())) <= 0) continue;
-                        int tWarID = CFG.core.getWarID(this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
-                        long tempArmy = Math.min(losses, CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i));
+                        if (!CFG.core.getCivsAtWar(moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i)) || (losses = Math.min(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i), moveUnits.getMoveUnits_TotalNumOfUnits())) <= 0) continue;
+                        int tWarID = CFG.core.getWarID(moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
+                        long tempArmy = Math.min(losses, CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i));
                         if (tWarID >= 0) {
                             try {
-                                CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += tempArmy;
-                                CFG.core.getWar(tWarID).addCasualties(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i), tempArmy);
+                                CFG.core.getProv((int)moveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += tempArmy;
+                                CFG.core.getWar(tWarID).addCasualties(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i), tempArmy);
                             }
                             catch (Exception exception) {
                                 
                             }
                         }
-                        CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) - losses);
-                        for (int j = 0; j < this.currentMoveUnits.getMoveUnitsSize(); ++j) {
-                            if (this.currentMoveUnits.getMoveUnits(j).getNumberOfUnits() <= 0) continue;
-                            tempArmy = Math.min(this.currentMoveUnits.getMoveUnits(j).getNumberOfUnits(), losses);
+                        CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) - losses);
+                        for (int j = 0; j < moveUnits.getMoveUnitsSize(); ++j) {
+                            if (moveUnits.getMoveUnits(j).getNumberOfUnits() <= 0) continue;
+                            tempArmy = Math.min(moveUnits.getMoveUnits(j).getNumberOfUnits(), losses);
                             if (tWarID >= 0) {
-                                CFG.core.getWar(tWarID).addCasualties(this.currentMoveUnits.getCivID(j), tempArmy);
+                                CFG.core.getWar(tWarID).addCasualties(moveUnits.getCivID(j), tempArmy);
                             }
-                            CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)j).getToProvID()).provGD.totalCasualtiesInProvince += tempArmy;
-                            this.currentMoveUnits.getMoveUnits(j).setNumberOfUnits(Math.max(this.currentMoveUnits.getMoveUnits(j).getNumberOfUnits() - losses, 0));
-                            CFG.core.getProv(this.currentMoveUnits.getMoveUnits(j).getFromProviID()).updateArmy4(this.currentMoveUnits.getCivID(j), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(j).getFromProviID()).getArmyCivID1(this.currentMoveUnits.getCivID(j)) - losses);
+                            CFG.core.getProv((int)moveUnits.getMoveUnits((int)j).getToProvID()).provGD.totalCasualtiesInProvince += tempArmy;
+                            moveUnits.getMoveUnits(j).setNumberOfUnits(Math.max(moveUnits.getMoveUnits(j).getNumberOfUnits() - losses, 0));
+                            CFG.core.getProv(moveUnits.getMoveUnits(j).getFromProviID()).updateArmy4(moveUnits.getCivID(j), CFG.core.getProv(moveUnits.getMoveUnits(j).getFromProviID()).getArmyCivID1(moveUnits.getCivID(j)) - losses);
                             if ((losses -= tempArmy) <= 0) continue block41;
                         }
                     }
                     this.turnMoves_MoveCurrentArmy_JustMove();
                 } else {
                     try {
-                        if (CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId() != 0 && !CFG.core.getCivsAtWar(this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId())) {
+                        if (CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId() != 0 && !CFG.core.getCivsAtWar(moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId())) {
                             int tNumOfCivs = 1;
-                            for (int c = 1; c < this.currentMoveUnits.getMoveUnitsSize(); ++c) {
-                                if (this.currentMoveUnits.getCivID(0) == this.currentMoveUnits.getCivID(c)) continue;
+                            for (int c = 1; c < moveUnits.getMoveUnitsSize(); ++c) {
+                                if (moveUnits.getCivID(0) == moveUnits.getCivID(c)) continue;
                                 ++tNumOfCivs;
                                 break;
                             }
@@ -1944,145 +1956,145 @@ public class GameAction {
                                 this.currentMoveUnits = null;
                                 return;
                             }
-                            if (!CFG.core.isAlly(this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId())) {
-                                CFG.core.declareWar(this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(), false);
+                            if (!CFG.core.isAlly(moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId())) {
+                                CFG.core.declareWar(moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(), false);
                             }
                         }
                         if (this.SHOW_REPORT) {
                             CFG.reportData = new Report_Data();
-                            CFG.reportData.iBattleOfProvinceID = this.currentMoveUnits.getMoveUnits(0).getToProvID();
+                            CFG.reportData.iBattleOfProvinceID = moveUnits.getMoveUnits(0).getToProvID();
                         }
                         if (this.SAVE_REPORT) {
                             this.battleReportSave = new Report_Data();
-                            this.battleReportSave.iBattleOfProvinceID = this.currentMoveUnits.getMoveUnits(0).getToProvID();
+                            this.battleReportSave.iBattleOfProvinceID = moveUnits.getMoveUnits(0).getToProvID();
                         }
                         long tempNumOfUnits = 0;
-                        for (int i = 0; i < this.currentMoveUnits.getMoveUnitsSize(); ++i) {
-                            tempNumOfUnits += this.currentMoveUnits.getMoveUnits(i).getNumberOfUnits();
+                        for (int i = 0; i < moveUnits.getMoveUnitsSize(); ++i) {
+                            tempNumOfUnits += moveUnits.getMoveUnits(i).getNumberOfUnits();
                         }
-                        long tempPopulationBefore = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getPop().getPops();
-                        long tempEconomyBefore = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getEco();
-                        if (CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId() == 0) {
-                            this.updatePopulationLosses(this.currentMoveUnits.getMoveUnits(0).getToProvID(), (int)Math.min((float)tempNumOfUnits * GameValues.gvBattle.BATTLE_PROVINCE_POPULATION_LOSSES_BASE, (float)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getPop().getPops() * GameValues.gvBattle.BATTLE_PROVINCE_POPULATION_LOSSES_OR_BASED_ON_POPULATION_PERC));
-                            CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateProvinceEconomyLosses(tempNumOfUnits, GameValues.gvBattle.BATTLE_PROVINCE_ECONOMY_LOSSES_UNITS);
+                        long tempPopulationBefore = CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getPop().getPops();
+                        long tempEconomyBefore = CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getEco();
+                        if (CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId() == 0) {
+                            this.updatePopulationLosses(moveUnits.getMoveUnits(0).getToProvID(), (int)Math.min((float)tempNumOfUnits * GameValues.gvBattle.BATTLE_PROVINCE_POPULATION_LOSSES_BASE, (float)CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getPop().getPops() * GameValues.gvBattle.BATTLE_PROVINCE_POPULATION_LOSSES_OR_BASED_ON_POPULATION_PERC));
+                            CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateProvinceEconomyLosses(tempNumOfUnits, GameValues.gvBattle.BATTLE_PROVINCE_ECONOMY_LOSSES_UNITS);
                         } else {
-                            this.updatePopulationLosses(this.currentMoveUnits.getMoveUnits(0).getToProvID(), (int)Math.min((float)tempNumOfUnits * (GameValues.gvBattle.BATTLE_PROVINCE_POPULATION_LOSSES_BASE + GameValues.gvBattle.BATTLE_PROVINCE_POPULATION_LOSSES_TECH_LEVEL_MODIFIER * CFG.core.getCiv(this.currentMoveUnits.getCivID(0)).getTechLevel()), (float)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getPop().getPops() * GameValues.gvBattle.BATTLE_PROVINCE_POPULATION_LOSSES_OR_BASED_ON_POPULATION_PERC));
-                            CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateProvinceEconomyLosses(tempNumOfUnits, GameValues.gvBattle.BATTLE_PROVINCE_ECONOMY_LOSSES_UNITS);
+                            this.updatePopulationLosses(moveUnits.getMoveUnits(0).getToProvID(), (int)Math.min((float)tempNumOfUnits * (GameValues.gvBattle.BATTLE_PROVINCE_POPULATION_LOSSES_BASE + GameValues.gvBattle.BATTLE_PROVINCE_POPULATION_LOSSES_TECH_LEVEL_MODIFIER * CFG.core.getCiv(moveUnits.getCivID(0)).getTechLevel()), (float)CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getPop().getPops() * GameValues.gvBattle.BATTLE_PROVINCE_POPULATION_LOSSES_OR_BASED_ON_POPULATION_PERC));
+                            CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateProvinceEconomyLosses(tempNumOfUnits, GameValues.gvBattle.BATTLE_PROVINCE_ECONOMY_LOSSES_UNITS);
                         }
                         if (this.SHOW_REPORT) {
-                            CFG.reportData.iPopulationLosses = tempPopulationBefore - CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getPop().getPops();
-                            CFG.reportData.iEconomyLosses = tempEconomyBefore - CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getEco();
+                            CFG.reportData.iPopulationLosses = tempPopulationBefore - CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getPop().getPops();
+                            CFG.reportData.iEconomyLosses = tempEconomyBefore - CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getEco();
                         }
                         if (this.SAVE_REPORT) {
-                            this.battleReportSave.iPopulationLosses = tempPopulationBefore - CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getPop().getPops();
-                            this.battleReportSave.iEconomyLosses = tempEconomyBefore - CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getEco();
+                            this.battleReportSave.iPopulationLosses = tempPopulationBefore - CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getPop().getPops();
+                            this.battleReportSave.iEconomyLosses = tempEconomyBefore - CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getEco();
                         }
-                        int tempWarID = CFG.core.getWarID(this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId());
-                        CFG.core.updateWarStatistics(tempWarID, this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(), tempPopulationBefore - CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getPop().getPops(), tempEconomyBefore - CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getEco());
-                        CFG.core.addArmyExperience(this.currentMoveUnits.getCivID(0), 1.0f);
-                        CFG.core.addArmyExperience(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0), 1.0f);
-                        if (this.turnMoves_MoveCurrentArmy_AttackResult(this.currentMoveUnits.getMoveUnits(0).getToProvID(), tempNumOfUnits)) {
+                        int tempWarID = CFG.core.getWarID(moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId());
+                        CFG.core.updateWarStatistics(tempWarID, moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(), tempPopulationBefore - CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getPop().getPops(), tempEconomyBefore - CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getEco());
+                        CFG.core.addArmyExperience(moveUnits.getCivID(0), 1.0f);
+                        CFG.core.addArmyExperience(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0), 1.0f);
+                        if (this.turnMoves_MoveCurrentArmy_AttackResult(moveUnits.getMoveUnits(0).getToProvID(), tempNumOfUnits)) {
                             int i;
                         long attackersArmy = tempNumOfUnits;
-                        long defendersArmy = this.turnMoves_MoveCurrentArmy_Attack_NumOfDefeningUnits(this.currentMoveUnits.getMoveUnits(0).getToProvID());
-                            CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).setWasAttacked(GameValues.gvAiProvince.PROVINCE_WAS_ATTACKED_TURNS);
+                        long defendersArmy = this.turnMoves_MoveCurrentArmy_Attack_NumOfDefeningUnits(moveUnits.getMoveUnits(0).getToProvID());
+                            CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).setWasAttacked(GameValues.gvAiProvince.PROVINCE_WAS_ATTACKED_TURNS);
                             attackersArmy = (long)Math.ceil(attackersArmy);
-                            defendersArmy = (long)Math.ceil((float)defendersArmy * (1.0f - this.turnMoves_MoveCurrentArmy_Attack_DefensiveModifiers(this.currentMoveUnits.getMoveUnits(0).getToProvID()) + this.turnMoves_MoveCurrentArmy_Attack_OffensiveModifiers(this.currentMoveUnits.getMoveUnits(0).getToProvID())));
+                            defendersArmy = (long)Math.ceil((float)defendersArmy * (1.0f - this.turnMoves_MoveCurrentArmy_Attack_DefensiveModifiers(moveUnits.getMoveUnits(0).getToProvID()) + this.turnMoves_MoveCurrentArmy_Attack_OffensiveModifiers(moveUnits.getMoveUnits(0).getToProvID())));
                             if (CFG.settingsGD.EXPERIMENTAL_BATTLE_SYSTEM && attackersArmy > 0 && defendersArmy > 0) {
                                 float ratio = (float)attackersArmy / (float)defendersArmy;
                                 defendersArmy = (int)((float)defendersArmy / Math.max(1.0f, ratio));
                             }
-                            CFG.core.updateWarStatistics_Casualties(tempWarID, this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0));
+                            CFG.core.updateWarStatistics_Casualties(tempWarID, moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0));
                             try {
-                                CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0);
+                                CFG.core.getProv((int)moveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0);
                             }
                             catch (Exception exception) {
                                 
                             }
                             if (this.SHOW_REPORT) {
                                 CFG.reportData.attackersWon = true;
-                                CFG.reportData.lDefenders_IDs.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
-                                CFG.reportData.lDefenders_Armies.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0));
-                                CFG.reportData.lDefenders_ArmiesLost.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0));
+                                CFG.reportData.lDefenders_IDs.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
+                                CFG.reportData.lDefenders_Armies.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0));
+                                CFG.reportData.lDefenders_ArmiesLost.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0));
                                 CFG.SFXManager.playSound(CFG.SFXManager.playMoveArmy());
                             }
                             if (this.SAVE_REPORT) {
                                 this.battleReportSave.attackersWon = true;
-                                this.battleReportSave.lDefenders_IDs.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
-                                this.battleReportSave.lDefenders_Armies.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0));
-                                this.battleReportSave.lDefenders_ArmiesLost.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0));
+                                this.battleReportSave.lDefenders_IDs.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
+                                this.battleReportSave.lDefenders_Armies.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0));
+                                this.battleReportSave.lDefenders_ArmiesLost.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0));
                             }
                             if (CFG.settingsGD.BAT_PLUS) {
-                                long defCivID = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0);
-                                long defArmy = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0);
+                                long defCivID = CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0);
+                                long defArmy = CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0);
                                 float ratio = (float)defArmy / Math.max(1.0f, (float)attackersArmy);
                                 float lossRate = Math.min(0.60f, 0.30f / Math.max(0.3f, ratio));
                                 long defenderCasualties = Math.max(1L, Math.min(defArmy, (long)Math.ceil((double)defArmy * (double)lossRate)));
                                 long defenderSurvivors = defArmy - defenderCasualties;
                                 CFG.core.getCiv((int)defCivID).setNumberOfUnits(CFG.core.getCiv((int)defCivID).getNumberOfUnits() - defArmy);
                                 if (defenderSurvivors > 0) {
-                                    this.armyRetreat_Strategic(this.currentMoveUnits.getMoveUnits(0).getToProvID(), (int)defCivID, defenderSurvivors);
+                                    this.armyRetreat_Strategic(moveUnits.getMoveUnits(0).getToProvID(), (int)defCivID, defenderSurvivors);
                                 }
                             } else {
-                                this.armyRetreat(this.currentMoveUnits.getMoveUnits(0).getToProvID(), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0));
-                                CFG.core.getCiv(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0)).setNumberOfUnits(CFG.core.getCiv(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0)).getNumberOfUnits() - CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0));
+                                this.armyRetreat(moveUnits.getMoveUnits(0).getToProvID(), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0));
+                                CFG.core.getCiv(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0)).setNumberOfUnits(CFG.core.getCiv(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0)).getNumberOfUnits() - CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0));
                             }
-                            CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(0);
+                            CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(0);
                             int i2 = 1;
-                            for (int iBreak = 0; i2 < CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivsSize() && iBreak < 50; ++iBreak) {
-                                if (this.shouldDeclareWarForDefenderArmy(this.currentMoveUnits.getMoveUnits(0).getToProvID(), this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i2))) {
-                                    CFG.core.declareWar(this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i2), false);
+                            for (int iBreak = 0; i2 < CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivsSize() && iBreak < 50; ++iBreak) {
+                                if (this.shouldDeclareWarForDefenderArmy(moveUnits.getMoveUnits(0).getToProvID(), moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i2))) {
+                                    CFG.core.declareWar(moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i2), false);
                                 }
-                                CFG.core.updateWarStatistics_Casualties(tempWarID, this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i2), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i2));
+                                CFG.core.updateWarStatistics_Casualties(tempWarID, moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i2), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i2));
                                 try {
-                                    CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i2);
+                                    CFG.core.getProv((int)moveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i2);
                                 }
                                 catch (Exception exception) {
                                     
                                 }
-                                if (this.SHOW_REPORT && (CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i2) > 0 || CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivsSize() == 1)) {
-                                    CFG.reportData.lDefenders_IDs.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i2));
-                                    CFG.reportData.lDefenders_Armies.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i2));
-                                    CFG.reportData.lDefenders_ArmiesLost.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i2));
+                                if (this.SHOW_REPORT && (CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i2) > 0 || CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivsSize() == 1)) {
+                                    CFG.reportData.lDefenders_IDs.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i2));
+                                    CFG.reportData.lDefenders_Armies.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i2));
+                                    CFG.reportData.lDefenders_ArmiesLost.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i2));
                                 }
-                                if (this.SAVE_REPORT && (CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i2) > 0 || CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivsSize() == 1)) {
-                                    this.battleReportSave.lDefenders_IDs.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i2));
-                                    this.battleReportSave.lDefenders_Armies.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i2));
-                                    this.battleReportSave.lDefenders_ArmiesLost.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i2));
+                                if (this.SAVE_REPORT && (CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i2) > 0 || CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivsSize() == 1)) {
+                                    this.battleReportSave.lDefenders_IDs.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i2));
+                                    this.battleReportSave.lDefenders_Armies.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i2));
+                                    this.battleReportSave.lDefenders_ArmiesLost.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i2));
                                 }
                                 if (CFG.settingsGD.BAT_PLUS) {
-                                    long allyDefCivID = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i2);
-                                    long allyDefArmy = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i2);
+                                    long allyDefCivID = CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i2);
+                                    long allyDefArmy = CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i2);
                                     float ratio = (float)allyDefArmy / Math.max(1.0f, (float)attackersArmy);
                                     float lossRate = Math.min(0.60f, 0.30f / Math.max(0.3f, ratio));
                                     long allyDefenderCasualties = Math.max(1L, Math.min(allyDefArmy, (long)Math.ceil((double)allyDefArmy * (double)lossRate)));
                                     long allyDefenderSurvivors = allyDefArmy - allyDefenderCasualties;
                                     CFG.core.getCiv((int)allyDefCivID).setNumberOfUnits(CFG.core.getCiv((int)allyDefCivID).getNumberOfUnits() - allyDefArmy);
                                     if (allyDefenderSurvivors > 0) {
-                                        this.armyRetreat_Strategic(this.currentMoveUnits.getMoveUnits(0).getToProvID(), (int)allyDefCivID, allyDefenderSurvivors);
+                                        this.armyRetreat_Strategic(moveUnits.getMoveUnits(0).getToProvID(), (int)allyDefCivID, allyDefenderSurvivors);
                                     }
                                 } else {
-                                    this.armyRetreat(this.currentMoveUnits.getMoveUnits(0).getToProvID(), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i2), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i2));
-                                    CFG.core.getCiv(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i2)).setNumberOfUnits(CFG.core.getCiv(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i2)).getNumberOfUnits() - CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i2));
+                                    this.armyRetreat(moveUnits.getMoveUnits(0).getToProvID(), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i2), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i2));
+                                    CFG.core.getCiv(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i2)).setNumberOfUnits(CFG.core.getCiv(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i2)).getNumberOfUnits() - CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i2));
                                 }
-                                CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i2), 0);
+                                CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i2), 0);
                             }
                             ArrayList<Integer> tempAttackersCivID = new ArrayList<Integer>();
                             ArrayList<Long> tempAttackersArmy = new ArrayList<Long>();
-                            for (i = 0; i < this.currentMoveUnits.getMoveUnitsSize(); ++i) {
+                            for (i = 0; i < moveUnits.getMoveUnitsSize(); ++i) {
                                 boolean tempAdd = true;
                                 for (int j = 0; j < tempAttackersCivID.size(); ++j) {
-                                    if (tempAttackersCivID.get(j).equals(this.currentMoveUnits.getCivID(i))) {
+                                    if (tempAttackersCivID.get(j).equals(moveUnits.getCivID(i))) {
                                         tempAdd = false;
-                                        tempAttackersArmy.set(j, (Long)tempAttackersArmy.get(j) + (long)this.currentMoveUnits.getMoveUnits(i).getNumberOfUnits());
+                                        tempAttackersArmy.set(j, (Long)tempAttackersArmy.get(j) + (long)moveUnits.getMoveUnits(i).getNumberOfUnits());
                                         break;
                                     }
                                 }
                                 if (tempAdd) {
-                                    tempAttackersCivID.add(this.currentMoveUnits.getCivID(i));
-                                    tempAttackersArmy.add((long)this.currentMoveUnits.getMoveUnits(i).getNumberOfUnits());
+                                    tempAttackersCivID.add(moveUnits.getCivID(i));
+                                    tempAttackersArmy.add((long)moveUnits.getMoveUnits(i).getNumberOfUnits());
                                 }
-                                CFG.core.getProv(this.currentMoveUnits.getMoveUnits(i).getFromProviID()).updateArmy4(this.currentMoveUnits.getCivID(i), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(i).getFromProviID()).getArmyCivID1(this.currentMoveUnits.getCivID(i)) - this.currentMoveUnits.getMoveUnits(i).getNumberOfUnits());
+                                CFG.core.getProv(moveUnits.getMoveUnits(i).getFromProviID()).updateArmy4(moveUnits.getCivID(i), CFG.core.getProv(moveUnits.getMoveUnits(i).getFromProviID()).getArmyCivID1(moveUnits.getCivID(i)) - moveUnits.getMoveUnits(i).getNumberOfUnits());
                             }
                             if (tempAttackersCivID.size() > 1) {
                                 int iSize2 = tempAttackersCivID.size();
@@ -2100,9 +2112,9 @@ public class GameAction {
                                     tempAttackersCivID.set(tempBiggestArmyID, tempC);
                                     tempAttackersArmy.set(tempBiggestArmyID, tempA);
                                 }
-                                CFG.core.updateWarStatistics_Casualties(tempWarID, CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0), ((Number)tempAttackersCivID.get(0)).intValue(), Math.max(0L, ((Number)tempAttackersArmy.get(0)).longValue() - (long)Math.ceil((double)((Long)tempAttackersArmy.get(0)).longValue() / (double)tempNumOfUnits * (double)(attackersArmy - defendersArmy))));
+                                CFG.core.updateWarStatistics_Casualties(tempWarID, CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0), ((Number)tempAttackersCivID.get(0)).intValue(), Math.max(0L, ((Number)tempAttackersArmy.get(0)).longValue() - (long)Math.ceil((double)((Long)tempAttackersArmy.get(0)).longValue() / (double)tempNumOfUnits * (double)(attackersArmy - defendersArmy))));
                                 try {
-                                    CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += Math.max(0L, ((Number)tempAttackersArmy.get(0)).longValue() - (long)Math.ceil((double)((Long)tempAttackersArmy.get(0)).longValue() / (double)tempNumOfUnits * (double)(attackersArmy - defendersArmy)));
+                                    CFG.core.getProv((int)moveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += Math.max(0L, ((Number)tempAttackersArmy.get(0)).longValue() - (long)Math.ceil((double)((Long)tempAttackersArmy.get(0)).longValue() / (double)tempNumOfUnits * (double)(attackersArmy - defendersArmy)));
                                 }
                                 catch (Exception ex) {
                                     
@@ -2117,16 +2129,16 @@ public class GameAction {
                                     this.battleReportSave.lAttackers_Armies.add((Long)tempAttackersArmy.get(0));
                                     this.battleReportSave.lAttackers_Armies_Lost.add((Long)tempAttackersArmy.get(0) - (long)Math.ceil((double)((Long)tempAttackersArmy.get(0)).longValue() / (double)tempNumOfUnits * (double)(attackersArmy - defendersArmy)));
                                 }
-                                this.armyRetreat(this.currentMoveUnits.getMoveUnits(0).getToProvID(), (Integer)tempAttackersCivID.get(0), (Long)tempAttackersArmy.get(0) - (long)Math.ceil((double)((Long)tempAttackersArmy.get(0)).longValue() / (double)tempNumOfUnits * (double)(attackersArmy - defendersArmy)));
-                                CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4((long)Math.ceil((double)((Long)tempAttackersArmy.get(0)).longValue() / (double)tempNumOfUnits * (double)(attackersArmy - defendersArmy)));
+                                this.armyRetreat(moveUnits.getMoveUnits(0).getToProvID(), (Integer)tempAttackersCivID.get(0), (Long)tempAttackersArmy.get(0) - (long)Math.ceil((double)((Long)tempAttackersArmy.get(0)).longValue() / (double)tempNumOfUnits * (double)(attackersArmy - defendersArmy)));
+                                // survivors deferred to after setCivId (multi)
                                 CFG.core.getCiv((Integer)tempAttackersCivID.get(0)).setNumberOfUnits(CFG.core.getCiv((Integer)tempAttackersCivID.get(0)).getNumberOfUnits() - Math.min((Long)tempAttackersArmy.get(0), (Long)tempAttackersArmy.get(0) - (long)Math.ceil((double)((Long)tempAttackersArmy.get(0)).longValue() / (double)tempNumOfUnits * (double)(attackersArmy - defendersArmy))));
                                 for (int i4 = 1; i4 < tempAttackersCivID.size(); ++i4) {
-                                    if ((int)CFG.core.getCivRelationOfCivB((Integer)tempAttackersCivID.get(i4), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0)) != GameValues.gvDiplomacy.RELATION_AT_WAR && !CFG.core.isAlly((Integer)tempAttackersCivID.get(i4), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0))) {
-                                        CFG.core.declareWar((Integer)tempAttackersCivID.get(i4), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0), false);
+                                    if ((int)CFG.core.getCivRelationOfCivB((Integer)tempAttackersCivID.get(i4), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0)) != GameValues.gvDiplomacy.RELATION_AT_WAR && !CFG.core.isAlly((Integer)tempAttackersCivID.get(i4), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0))) {
+                                        CFG.core.declareWar((Integer)tempAttackersCivID.get(i4), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0), false);
                                     }
-                                    CFG.core.updateWarStatistics_Casualties(tempWarID, CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0), (Integer)tempAttackersCivID.get(i4), Math.max(0, (Long)tempAttackersArmy.get(i4) - (long)Math.floor((double)((Long)tempAttackersArmy.get(i4)).longValue() / (double)tempNumOfUnits * (double)(attackersArmy - defendersArmy))));
+                                    CFG.core.updateWarStatistics_Casualties(tempWarID, CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0), (Integer)tempAttackersCivID.get(i4), Math.max(0, (Long)tempAttackersArmy.get(i4) - (long)Math.floor((double)((Long)tempAttackersArmy.get(i4)).longValue() / (double)tempNumOfUnits * (double)(attackersArmy - defendersArmy))));
                                     try {
-                                        CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += Math.max(0, (Long)tempAttackersArmy.get(i4) - (long)Math.floor((double)((Long)tempAttackersArmy.get(i4)).longValue() / (double)tempNumOfUnits * (double)(attackersArmy - defendersArmy)));
+                                        CFG.core.getProv((int)moveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += Math.max(0, (Long)tempAttackersArmy.get(i4) - (long)Math.floor((double)((Long)tempAttackersArmy.get(i4)).longValue() / (double)tempNumOfUnits * (double)(attackersArmy - defendersArmy)));
                                     }
                                     catch (Exception ex3) {
                                         
@@ -2141,90 +2153,91 @@ public class GameAction {
                                         this.battleReportSave.lAttackers_Armies.add((Long)tempAttackersArmy.get(i4));
                                         this.battleReportSave.lAttackers_Armies_Lost.add(tempAttackersArmy.get(i4) - (long)Math.floor((double)tempAttackersArmy.get(i4) / (double)tempNumOfUnits * (double)(attackersArmy - defendersArmy)));
                                     }
-                                    this.armyRetreat(this.currentMoveUnits.getMoveUnits(0).getToProvID(), tempAttackersCivID.get(i4), tempAttackersArmy.get(i4) - (long)Math.floor((double)tempAttackersArmy.get(i4) / (double)tempNumOfUnits * (double)(attackersArmy - defendersArmy)));
-                                    CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(tempAttackersCivID.get(i4), (long)Math.floor((double)tempAttackersArmy.get(i4) / (double)tempNumOfUnits * (double)(attackersArmy - defendersArmy)));
+                                    this.armyRetreat(moveUnits.getMoveUnits(0).getToProvID(), tempAttackersCivID.get(i4), tempAttackersArmy.get(i4) - (long)Math.floor((double)tempAttackersArmy.get(i4) / (double)tempNumOfUnits * (double)(attackersArmy - defendersArmy)));
+                                    CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(tempAttackersCivID.get(i4), (long)Math.floor((double)tempAttackersArmy.get(i4) / (double)tempNumOfUnits * (double)(attackersArmy - defendersArmy)));
                                     CFG.core.getCiv(tempAttackersCivID.get(i4)).setNumberOfUnits(CFG.core.getCiv(tempAttackersCivID.get(i4)).getNumberOfUnits() - Math.min(tempAttackersArmy.get(i4), tempAttackersArmy.get(i4) - (long)Math.floor((double)tempAttackersArmy.get(i4) / (double)tempNumOfUnits * (double)(attackersArmy - defendersArmy))));
                                 }
-                                int battleProvID = this.currentMoveUnits.getMoveUnits(0).getToProvID();
+                                int battleProvID = moveUnits.getMoveUnits(0).getToProvID();
                                 long mainAttackerRemaining = (long)Math.ceil((double)((Long)tempAttackersArmy.get(0)).longValue() / (double)tempNumOfUnits * (double)(attackersArmy - defendersArmy));
                                 int mainAttackerCivID = ((Integer)tempAttackersCivID.get(0)).intValue();
                                 if (!checkDynamicMinArmy(battleProvID, mainAttackerCivID, mainAttackerRemaining)) {
-                                    fromProvID = this.currentMoveUnits.getMoveUnits(0).getFromProviID();
+                                    fromProvID = moveUnits.getMoveUnits(0).getFromProviID();
                                     CFG.core.getProv(battleProvID).updateArmy4(0L);
                                     CFG.core.getProv(fromProvID).updateArmy4(mainAttackerCivID,
                                         CFG.core.getProv(fromProvID).getArmyCivID1(mainAttackerCivID) + mainAttackerRemaining);
                                     if (battleProvID == CFG.core.getActiveProvID()) this.updateInGame_ProvinceInfo();
-                                } else if (CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() > 0 && CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).getCivId()).getIdeology()).REVOLUTIONARY) {
-                                    if (CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() != this.currentMoveUnits.getCivID(0) && !CFG.core.getCivsAtWar(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), this.currentMoveUnits.getCivID(0))) {
-                                        tArmy = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0);
-                                        tArmyTrueOwner = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyCivID1(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv());
-                                        int tTrueOwner = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv();
-                                        CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
-                                        CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).setCivId(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), true);
-                                        CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(0);
-                                        CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(tTrueOwner, tArmyTrueOwner);
-                                        CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(this.currentMoveUnits.getCivID(0), tArmy);
-                                        if (this.currentMoveUnits.getMoveUnits(0).getToProvID() == CFG.core.getActiveProvID()) {
+                                } else if (CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() > 0 && CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)CFG.core.getProv((int)moveUnits.getMoveUnits((int)0).getToProvID()).getCivId()).getIdeology()).REVOLUTIONARY) {
+                                    if (CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() != moveUnits.getCivID(0) && !CFG.core.getCivsAtWar(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), moveUnits.getCivID(0))) {
+                                        tArmy = CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0);
+                                        tArmyTrueOwner = CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyCivID1(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv());
+                                        int tTrueOwner = CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv();
+                                        CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
+                                        CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).setCivId(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), true);
+                                        CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(0);
+                                        CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(tTrueOwner, tArmyTrueOwner);
+                                        CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(moveUnits.getCivID(0), tArmy);
+                                        if (moveUnits.getMoveUnits(0).getToProvID() == CFG.core.getActiveProvID()) {
                                             this.updateInGame_ProvinceInfo();
                                         }
                                     } else {
-                                        CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
-                                        CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).setCivId(this.currentMoveUnits.getCivID(0), true);
-                                        if (this.currentMoveUnits.getMoveUnits(0).getToProvID() == CFG.core.getActiveProvID()) {
+                                        CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
+                                        CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).setCivId(moveUnits.getCivID(0), true);
+                                        CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(mainAttackerCivID, mainAttackerRemaining);
+                                        if (moveUnits.getMoveUnits(0).getToProvID() == CFG.core.getActiveProvID()) {
                                             this.updateInGame_ProvinceInfo();
                                         }
                                     }
-                                } else if (CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() < 1 || CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() == ((Integer)tempAttackersCivID.get(0)).intValue()) {
-                                    CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, (Integer)tempAttackersCivID.get(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
-                                    CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).setCivId((Integer)tempAttackersCivID.get(0), true);
-                                    if (this.currentMoveUnits.getMoveUnits(0).getToProvID() == CFG.core.getActiveProvID()) {
+                                } else if (CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() < 1 || CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() == ((Integer)tempAttackersCivID.get(0)).intValue()) {
+                                    CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, (Integer)tempAttackersCivID.get(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
+                                    CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).setCivId((Integer)tempAttackersCivID.get(0), true);
+                                    if (moveUnits.getMoveUnits(0).getToProvID() == CFG.core.getActiveProvID()) {
                                         this.updateInGame_ProvinceInfo();
                                     }
-                                } else if (CFG.core.getCivsAtWar(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId()) && (CFG.core.getCivsAreAllied((Integer)tempAttackersCivID.get(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv()) || CFG.core.getCiv(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv()).getPuppetOfCiv() == ((Integer)tempAttackersCivID.get(0)).intValue() || CFG.core.getCivsAreAllied(CFG.core.getCiv(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv()).getPuppetOfCiv(), (Integer)tempAttackersCivID.get(0)) || CFG.core.getCiv((Integer)tempAttackersCivID.get(0)).getPuppetOfCiv() == CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() || CFG.core.getCivsAreAllied(CFG.core.getCiv((Integer)tempAttackersCivID.get(0)).getPuppetOfCiv(), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv()))) {
-                                    tArmy = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0);
-                                    tArmyTrue = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyCivID1(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv());
-                                    CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(0);
-                                    CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), 0);
-                                    CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
-                                    CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).setCivId(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), true);
-                                    CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), tArmyTrue);
-                                    CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(this.currentMoveUnits.getCivID(0), tArmy);
-                                    if (this.currentMoveUnits.getMoveUnits(0).getToProvID() == CFG.core.getActiveProvID()) {
+                                } else if (CFG.core.getCivsAtWar(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId()) && (CFG.core.getCivsAreAllied((Integer)tempAttackersCivID.get(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv()) || CFG.core.getCiv(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv()).getPuppetOfCiv() == ((Integer)tempAttackersCivID.get(0)).intValue() || CFG.core.getCivsAreAllied(CFG.core.getCiv(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv()).getPuppetOfCiv(), (Integer)tempAttackersCivID.get(0)) || CFG.core.getCiv((Integer)tempAttackersCivID.get(0)).getPuppetOfCiv() == CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() || CFG.core.getCivsAreAllied(CFG.core.getCiv((Integer)tempAttackersCivID.get(0)).getPuppetOfCiv(), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv()))) {
+                                    tArmy = CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0);
+                                    tArmyTrue = CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyCivID1(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv());
+                                    CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(0);
+                                    CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), 0);
+                                    CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
+                                    CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).setCivId(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), true);
+                                    CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), tArmyTrue);
+                                    CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(moveUnits.getCivID(0), tArmy);
+                                    if (moveUnits.getMoveUnits(0).getToProvID() == CFG.core.getActiveProvID()) {
                                         this.updateInGame_ProvinceInfo();
                                     }
                                 } else {
                                     int i5;
                                     boolean ownerChanged = false;
-                                    for (i5 = 0; i5 < CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCores().getCivsSize(); ++i5) {
-                                        if (CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i5) != ((Integer)tempAttackersCivID.get(0)).intValue()) continue;
-                                        CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, (Integer)tempAttackersCivID.get(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
-                                        CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).setCivId((Integer)tempAttackersCivID.get(0), true);
+                                    for (i5 = 0; i5 < CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCores().getCivsSize(); ++i5) {
+                                        if (CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i5) != ((Integer)tempAttackersCivID.get(0)).intValue()) continue;
+                                        CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, (Integer)tempAttackersCivID.get(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
+                                        CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).setCivId((Integer)tempAttackersCivID.get(0), true);
                                         ownerChanged = true;
-                                        if (this.currentMoveUnits.getMoveUnits(0).getToProvID() != CFG.core.getActiveProvID()) break;
+                                        if (moveUnits.getMoveUnits(0).getToProvID() != CFG.core.getActiveProvID()) break;
                                         this.updateInGame_ProvinceInfo();
                                         break;
                                     }
                                     if (!ownerChanged) {
-                                        for (i5 = 0; i5 < CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCores().getCivsSize(); ++i5) {
-                                            if (!CFG.core.getCivsAtWar(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i5), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId()) || !CFG.core.getCivsAreAllied((Integer)tempAttackersCivID.get(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i5)) && CFG.core.getCiv(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i5)).getPuppetOfCiv() != ((Integer)tempAttackersCivID.get(0)).intValue() && !CFG.core.getCivsAreAllied(CFG.core.getCiv(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i5)).getPuppetOfCiv(), (Integer)tempAttackersCivID.get(0)) && CFG.core.getCiv((Integer)tempAttackersCivID.get(0)).getPuppetOfCiv() != CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i5) && !CFG.core.getCivsAreAllied(CFG.core.getCiv((Integer)tempAttackersCivID.get(0)).getPuppetOfCiv(), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i5))) continue;
-                                            tArmy2 = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0);
-                                            tArmyTrue = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyCivID1(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv());
-                                            CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(0);
-                                            CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), 0);
-                                            CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i5), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
-                                            CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).setCivId(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i5), true);
-                                            CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), tArmyTrue);
-                                            CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(this.currentMoveUnits.getCivID(0), tArmy2);
+                                        for (i5 = 0; i5 < CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCores().getCivsSize(); ++i5) {
+                                            if (!CFG.core.getCivsAtWar(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i5), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId()) || !CFG.core.getCivsAreAllied((Integer)tempAttackersCivID.get(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i5)) && CFG.core.getCiv(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i5)).getPuppetOfCiv() != ((Integer)tempAttackersCivID.get(0)).intValue() && !CFG.core.getCivsAreAllied(CFG.core.getCiv(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i5)).getPuppetOfCiv(), (Integer)tempAttackersCivID.get(0)) && CFG.core.getCiv((Integer)tempAttackersCivID.get(0)).getPuppetOfCiv() != CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i5) && !CFG.core.getCivsAreAllied(CFG.core.getCiv((Integer)tempAttackersCivID.get(0)).getPuppetOfCiv(), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i5))) continue;
+                                            tArmy2 = CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0);
+                                            tArmyTrue = CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyCivID1(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv());
+                                            CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(0);
+                                            CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), 0);
+                                            CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i5), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
+                                            CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).setCivId(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i5), true);
+                                            CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), tArmyTrue);
+                                            CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(moveUnits.getCivID(0), tArmy2);
                                             ownerChanged = true;
-                                            if (this.currentMoveUnits.getMoveUnits(0).getToProvID() != CFG.core.getActiveProvID()) break;
+                                            if (moveUnits.getMoveUnits(0).getToProvID() != CFG.core.getActiveProvID()) break;
                                             this.updateInGame_ProvinceInfo();
                                             break;
                                         }
                                     }
                                     if (!ownerChanged) {
-                                        CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, (Integer)tempAttackersCivID.get(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
-                                        CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).setCivId((Integer)tempAttackersCivID.get(0), true);
-                                        if (this.currentMoveUnits.getMoveUnits(0).getToProvID() == CFG.core.getActiveProvID()) {
+                                        CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, (Integer)tempAttackersCivID.get(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
+                                        CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).setCivId((Integer)tempAttackersCivID.get(0), true);
+                                        if (moveUnits.getMoveUnits(0).getToProvID() == CFG.core.getActiveProvID()) {
                                             this.updateInGame_ProvinceInfo();
                                         }
                                     }
@@ -2232,114 +2245,117 @@ public class GameAction {
                             } else {
                                 int i6;
                                 long tempDefendersArmyLeft = defendersArmy;
-                                for (i6 = 0; i6 < this.currentMoveUnits.getMoveUnitsSize(); ++i6) {
-                                    CFG.core.updateWarStatistics_Casualties(tempWarID, CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0), this.currentMoveUnits.getCivID(i6), this.currentMoveUnits.getMoveUnits(i6).getNumberOfUnits() > tempDefendersArmyLeft ? tempDefendersArmyLeft : this.currentMoveUnits.getMoveUnits(i6).getNumberOfUnits());
+                                for (i6 = 0; i6 < moveUnits.getMoveUnitsSize(); ++i6) {
+                                    CFG.core.updateWarStatistics_Casualties(tempWarID, CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0), moveUnits.getCivID(i6), moveUnits.getMoveUnits(i6).getNumberOfUnits() > tempDefendersArmyLeft ? tempDefendersArmyLeft : moveUnits.getMoveUnits(i6).getNumberOfUnits());
                                     try {
-                                        CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince = CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince + Math.max(0, this.currentMoveUnits.getMoveUnits(i6).getNumberOfUnits() > tempDefendersArmyLeft ? tempDefendersArmyLeft : this.currentMoveUnits.getMoveUnits(i6).getNumberOfUnits());
+                                        CFG.core.getProv((int)moveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince = CFG.core.getProv((int)moveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince + Math.max(0, moveUnits.getMoveUnits(i6).getNumberOfUnits() > tempDefendersArmyLeft ? tempDefendersArmyLeft : moveUnits.getMoveUnits(i6).getNumberOfUnits());
                                     }
                                     catch (Exception ex) {
                                         
                                     }
-                                    if ((tempDefendersArmyLeft -= this.currentMoveUnits.getMoveUnits(i6).getNumberOfUnits()) >= 0) continue;
+                                    if ((tempDefendersArmyLeft -= moveUnits.getMoveUnits(i6).getNumberOfUnits()) >= 0) continue;
                                     tempDefendersArmyLeft = 0;
                                 }
                                 if (this.SHOW_REPORT) {
                                     tempDefendersArmyLeft = defendersArmy;
-                                    for (i6 = 0; i6 < this.currentMoveUnits.getMoveUnitsSize(); ++i6) {
-                                        CFG.reportData.lAttackers_IDs.add(this.currentMoveUnits.getCivID(i6));
-                                        CFG.reportData.lAttackers_Armies.add(this.currentMoveUnits.getMoveUnits(i6).getNumberOfUnits());
-                                        CFG.reportData.lAttackers_Armies_Lost.add(this.currentMoveUnits.getMoveUnits(i6).getNumberOfUnits() > tempDefendersArmyLeft ? tempDefendersArmyLeft : this.currentMoveUnits.getMoveUnits(i6).getNumberOfUnits());
-                                        if ((tempDefendersArmyLeft -= this.currentMoveUnits.getMoveUnits(i6).getNumberOfUnits()) >= 0) continue;
+                                    for (i6 = 0; i6 < moveUnits.getMoveUnitsSize(); ++i6) {
+                                        CFG.reportData.lAttackers_IDs.add(moveUnits.getCivID(i6));
+                                        CFG.reportData.lAttackers_Armies.add(moveUnits.getMoveUnits(i6).getNumberOfUnits());
+                                        CFG.reportData.lAttackers_Armies_Lost.add(moveUnits.getMoveUnits(i6).getNumberOfUnits() > tempDefendersArmyLeft ? tempDefendersArmyLeft : moveUnits.getMoveUnits(i6).getNumberOfUnits());
+                                        if ((tempDefendersArmyLeft -= moveUnits.getMoveUnits(i6).getNumberOfUnits()) >= 0) continue;
                                         tempDefendersArmyLeft = 0;
                                     }
                                 }
                                 if (this.SAVE_REPORT) {
                                     tempDefendersArmyLeft = defendersArmy;
-                                    for (i6 = 0; i6 < this.currentMoveUnits.getMoveUnitsSize(); ++i6) {
-                                        this.battleReportSave.lAttackers_IDs.add(this.currentMoveUnits.getCivID(i6));
-                                        this.battleReportSave.lAttackers_Armies.add(this.currentMoveUnits.getMoveUnits(i6).getNumberOfUnits());
-                                        this.battleReportSave.lAttackers_Armies_Lost.add(this.currentMoveUnits.getMoveUnits(i6).getNumberOfUnits() > tempDefendersArmyLeft ? tempDefendersArmyLeft : this.currentMoveUnits.getMoveUnits(i6).getNumberOfUnits());
-                                        if ((tempDefendersArmyLeft -= this.currentMoveUnits.getMoveUnits(i6).getNumberOfUnits()) >= 0) continue;
+                                    for (i6 = 0; i6 < moveUnits.getMoveUnitsSize(); ++i6) {
+                                        this.battleReportSave.lAttackers_IDs.add(moveUnits.getCivID(i6));
+                                        this.battleReportSave.lAttackers_Armies.add(moveUnits.getMoveUnits(i6).getNumberOfUnits());
+                                        this.battleReportSave.lAttackers_Armies_Lost.add(moveUnits.getMoveUnits(i6).getNumberOfUnits() > tempDefendersArmyLeft ? tempDefendersArmyLeft : moveUnits.getMoveUnits(i6).getNumberOfUnits());
+                                        if ((tempDefendersArmyLeft -= moveUnits.getMoveUnits(i6).getNumberOfUnits()) >= 0) continue;
                                         tempDefendersArmyLeft = 0;
                                     }
                                 }
-                                this.armyRetreat(this.currentMoveUnits.getMoveUnits(0).getToProvID(), this.currentMoveUnits.getCivID(0), defendersArmy);
-                                CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(attackersArmy - defendersArmy);
-                                CFG.core.getCiv(this.currentMoveUnits.getCivID(0)).setNumberOfUnits(CFG.core.getCiv(this.currentMoveUnits.getCivID(0)).getNumberOfUnits() - defendersArmy);
-                                int battleProvID = this.currentMoveUnits.getMoveUnits(0).getToProvID();
+                                this.armyRetreat(moveUnits.getMoveUnits(0).getToProvID(), moveUnits.getCivID(0), defendersArmy);
+                                // survivors deferred to after setCivId
+                                CFG.core.getCiv(moveUnits.getCivID(0)).setNumberOfUnits(CFG.core.getCiv(moveUnits.getCivID(0)).getNumberOfUnits() - defendersArmy);
+                                int battleProvID = moveUnits.getMoveUnits(0).getToProvID();
                                 long attackerRemainingAfterBattle = Math.max(0L, attackersArmy - defendersArmy);
-                                int attackerCivID = this.currentMoveUnits.getCivID(0);
+                                int attackerCivID = moveUnits.getCivID(0);
                                 if (!checkDynamicMinArmy(battleProvID, attackerCivID, attackerRemainingAfterBattle)) {
-                                    fromProvID = this.currentMoveUnits.getMoveUnits(0).getFromProviID();
+                                    fromProvID = moveUnits.getMoveUnits(0).getFromProviID();
                                     CFG.core.getProv(battleProvID).updateArmy4(0L);
                                     CFG.core.getProv(fromProvID).updateArmy4(attackerCivID,
                                         CFG.core.getProv(fromProvID).getArmyCivID1(attackerCivID) + attackerRemainingAfterBattle);
                                     if (battleProvID == CFG.core.getActiveProvID()) {
                                         this.updateInGame_ProvinceInfo();
                                     }
-                                } else if (CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() > 0 && CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).getCivId()).getIdeology()).REVOLUTIONARY) {
-                                    if (CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() != this.currentMoveUnits.getCivID(0) && !CFG.core.getCivsAtWar(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), this.currentMoveUnits.getCivID(0))) {
-                                        tArmy = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0);
-                                        tArmyTrueOwner = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyCivID1(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv());
-                                        CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
-                                        CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).setCivId(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), true);
-                                        CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(tArmyTrueOwner);
-                                        CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(this.currentMoveUnits.getCivID(0), tArmy);
-                                        if (this.currentMoveUnits.getMoveUnits(0).getToProvID() == CFG.core.getActiveProvID()) {
+                                } else if (CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() > 0 && CFG.ideologiesMgr.getIdeologyID((int)CFG.core.getCiv((int)CFG.core.getProv((int)moveUnits.getMoveUnits((int)0).getToProvID()).getCivId()).getIdeology()).REVOLUTIONARY) {
+                                    if (CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() != moveUnits.getCivID(0) && !CFG.core.getCivsAtWar(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), moveUnits.getCivID(0))) {
+                                        tArmy = CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0);
+                                        tArmyTrueOwner = CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyCivID1(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv());
+                                        CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
+                                        CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).setCivId(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), true);
+                                        CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(tArmyTrueOwner);
+                                        CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(moveUnits.getCivID(0), tArmy);
+                                        if (moveUnits.getMoveUnits(0).getToProvID() == CFG.core.getActiveProvID()) {
                                             this.updateInGame_ProvinceInfo();
                                         }
                                     } else {
-                                        CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
-                                        CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).setCivId(this.currentMoveUnits.getCivID(0), true);
-                                        if (this.currentMoveUnits.getMoveUnits(0).getToProvID() == CFG.core.getActiveProvID()) {
+                                        CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
+                                        CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).setCivId(moveUnits.getCivID(0), true);
+                                        CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(moveUnits.getCivID(0), attackerRemainingAfterBattle);
+                                        if (moveUnits.getMoveUnits(0).getToProvID() == CFG.core.getActiveProvID()) {
                                             this.updateInGame_ProvinceInfo();
                                         }
                                     }
-                                } else if (CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() < 1 || CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() == this.currentMoveUnits.getCivID(0)) {
-                                    CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
-                                    CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).setCivId(this.currentMoveUnits.getCivID(0), true);
-                                    if (this.currentMoveUnits.getMoveUnits(0).getToProvID() == CFG.core.getActiveProvID()) {
+                                } else if (CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() < 1 || CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() == moveUnits.getCivID(0)) {
+                                    CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
+                                    CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).setCivId(moveUnits.getCivID(0), true);
+                                    CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(moveUnits.getCivID(0), attackerRemainingAfterBattle);
+                                    if (moveUnits.getMoveUnits(0).getToProvID() == CFG.core.getActiveProvID()) {
                                         this.updateInGame_ProvinceInfo();
                                     }
-                                } else if (CFG.core.getCivsAtWar(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId()) && (CFG.core.getCivsAreAllied(this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv()) || CFG.core.getCiv(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv()).getPuppetOfCiv() == this.currentMoveUnits.getCivID(0) || CFG.core.getCivsAreAllied(CFG.core.getCiv(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv()).getPuppetOfCiv(), this.currentMoveUnits.getCivID(0)) || CFG.core.getCiv(this.currentMoveUnits.getCivID(0)).getPuppetOfCiv() == CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() || CFG.core.getCivsAreAllied(CFG.core.getCiv(this.currentMoveUnits.getCivID(0)).getPuppetOfCiv(), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv()))) {
-                                    tArmy = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0);
-                                    CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
-                                    CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).setCivId(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), true);
-                                    CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(0);
-                                    CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(this.currentMoveUnits.getCivID(0), tArmy);
-                                    if (this.currentMoveUnits.getMoveUnits(0).getToProvID() == CFG.core.getActiveProvID()) {
+                                } else if (CFG.core.getCivsAtWar(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId()) && (CFG.core.getCivsAreAllied(moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv()) || CFG.core.getCiv(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv()).getPuppetOfCiv() == moveUnits.getCivID(0) || CFG.core.getCivsAreAllied(CFG.core.getCiv(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv()).getPuppetOfCiv(), moveUnits.getCivID(0)) || CFG.core.getCiv(moveUnits.getCivID(0)).getPuppetOfCiv() == CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv() || CFG.core.getCivsAreAllied(CFG.core.getCiv(moveUnits.getCivID(0)).getPuppetOfCiv(), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv()))) {
+                                    tArmy = CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0);
+                                    CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
+                                    CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).setCivId(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getTrueOwnerOfProv(), true);
+                                    CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(0);
+                                    CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(moveUnits.getCivID(0), tArmy);
+                                    if (moveUnits.getMoveUnits(0).getToProvID() == CFG.core.getActiveProvID()) {
                                         this.updateInGame_ProvinceInfo();
                                     }
                                 } else {
                                     int i7;
                                     boolean ownerChanged = false;
-                                    for (i7 = 0; i7 < CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCores().getCivsSize(); ++i7) {
-                                        if (CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i7) != this.currentMoveUnits.getCivID(0)) continue;
-                                        CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
-                                        CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).setCivId(this.currentMoveUnits.getCivID(0), true);
+                                    for (i7 = 0; i7 < CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCores().getCivsSize(); ++i7) {
+                                        if (CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i7) != moveUnits.getCivID(0)) continue;
+                                        CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
+                                        CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).setCivId(moveUnits.getCivID(0), true);
                                         ownerChanged = true;
-                                        if (this.currentMoveUnits.getMoveUnits(0).getToProvID() != CFG.core.getActiveProvID()) break;
+                                        if (moveUnits.getMoveUnits(0).getToProvID() != CFG.core.getActiveProvID()) break;
                                         this.updateInGame_ProvinceInfo();
                                         break;
                                     }
                                     if (!ownerChanged) {
-                                        for (i7 = 0; i7 < CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCores().getCivsSize(); ++i7) {
-                                            if (!CFG.core.getCivsAtWar(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i7), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId()) || !CFG.core.getCivsAreAllied(this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i7)) && CFG.core.getCiv(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i7)).getPuppetOfCiv() != this.currentMoveUnits.getCivID(0) && !CFG.core.getCivsAreAllied(CFG.core.getCiv(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i7)).getPuppetOfCiv(), this.currentMoveUnits.getCivID(0)) && CFG.core.getCiv(this.currentMoveUnits.getCivID(0)).getPuppetOfCiv() != CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i7) && !CFG.core.getCivsAreAllied(CFG.core.getCiv(this.currentMoveUnits.getCivID(0)).getPuppetOfCiv(), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i7))) continue;
-                                            tArmy3 = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0);
-                                            CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i7), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
-                                            CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).setCivId(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i7), true);
-                                            CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(0);
-                                            CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(this.currentMoveUnits.getCivID(0), tArmy3);
+                                        for (i7 = 0; i7 < CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCores().getCivsSize(); ++i7) {
+                                            if (!CFG.core.getCivsAtWar(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i7), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId()) || !CFG.core.getCivsAreAllied(moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i7)) && CFG.core.getCiv(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i7)).getPuppetOfCiv() != moveUnits.getCivID(0) && !CFG.core.getCivsAreAllied(CFG.core.getCiv(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i7)).getPuppetOfCiv(), moveUnits.getCivID(0)) && CFG.core.getCiv(moveUnits.getCivID(0)).getPuppetOfCiv() != CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i7) && !CFG.core.getCivsAreAllied(CFG.core.getCiv(moveUnits.getCivID(0)).getPuppetOfCiv(), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i7))) continue;
+                                            tArmy3 = CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0);
+                                            CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i7), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
+                                            CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).setCivId(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCores().getCivID(i7), true);
+                                            CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(0);
+                                            CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(moveUnits.getCivID(0), tArmy3);
                                             ownerChanged = true;
-                                            if (this.currentMoveUnits.getMoveUnits(0).getToProvID() != CFG.core.getActiveProvID()) break;
+                                            if (moveUnits.getMoveUnits(0).getToProvID() != CFG.core.getActiveProvID()) break;
                                             this.updateInGame_ProvinceInfo();
                                             break;
                                         }
                                     }
                                     if (!ownerChanged) {
-                                        CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
-                                        CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).setCivId(this.currentMoveUnits.getCivID(0), true);
-                                        if (this.currentMoveUnits.getMoveUnits(0).getToProvID() == CFG.core.getActiveProvID()) {
+                                        CFG.core.updateWarStatistics_ConqueredProvinces(tempWarID, moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
+                                        CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).setCivId(moveUnits.getCivID(0), true);
+                                        CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(moveUnits.getCivID(0), attackerRemainingAfterBattle);
+                                        if (moveUnits.getMoveUnits(0).getToProvID() == CFG.core.getActiveProvID()) {
                                             this.updateInGame_ProvinceInfo();
                                         }
                                     }
@@ -2352,11 +2368,11 @@ public class GameAction {
                                 if (this.SAVE_REPORT) {
                                     this.battleReportSave.attackersWon = false;
                                 }
-                                CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).setWasAttacked(GameValues.gvAiProvince.PROVINCE_WAS_ATTACKED_TURNS);
+                                CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).setWasAttacked(GameValues.gvAiProvince.PROVINCE_WAS_ATTACKED_TURNS);
                         long attackersArmy = tempNumOfUnits;
-                        long defendersArmy2 = this.turnMoves_MoveCurrentArmy_Attack_NumOfDefeningUnits(this.currentMoveUnits.getMoveUnits(0).getToProvID());
-                            int numOfDefenders = this.turnMoves_MoveCurrentArmy_Attack_NumOfDefenders(this.currentMoveUnits.getMoveUnits(0).getToProvID());
-                            attackersArmy = (long)Math.ceil((float)attackersArmy * (1.0f - this.turnMoves_MoveCurrentArmy_Attack_OffensiveModifiers(this.currentMoveUnits.getMoveUnits(0).getToProvID()) + this.turnMoves_MoveCurrentArmy_Attack_DefensiveModifiers(this.currentMoveUnits.getMoveUnits(0).getToProvID())));
+                        long defendersArmy2 = this.turnMoves_MoveCurrentArmy_Attack_NumOfDefeningUnits(moveUnits.getMoveUnits(0).getToProvID());
+                            int numOfDefenders = this.turnMoves_MoveCurrentArmy_Attack_NumOfDefenders(moveUnits.getMoveUnits(0).getToProvID());
+                            attackersArmy = (long)Math.ceil((float)attackersArmy * (1.0f - this.turnMoves_MoveCurrentArmy_Attack_OffensiveModifiers(moveUnits.getMoveUnits(0).getToProvID()) + this.turnMoves_MoveCurrentArmy_Attack_DefensiveModifiers(moveUnits.getMoveUnits(0).getToProvID())));
                             if (CFG.settingsGD.EXPERIMENTAL_BATTLE_SYSTEM && defendersArmy2 > 0 && attackersArmy > 0) {
                                 float ratio = (float)defendersArmy2 / (float)attackersArmy;
                                 attackersArmy = (long)((float)attackersArmy / Math.max(1.0f, ratio));
@@ -2367,53 +2383,53 @@ public class GameAction {
                                 float attackerLossRate = Math.min(0.85f, Math.max(0.025f, 0.22f / (float)Math.sqrt(Math.max(0.05f, effectiveRatio)))) * diceMod;
                                 float defenderLossRate = Math.min(0.50f, Math.max(0.05f, 0.12f * Math.min(3.0f, effectiveRatio)));
                                 long totalAttackerCasualties = Math.max(1L, Math.min(tempNumOfUnits, (long)Math.ceil((double)defendersArmy2 * (double)attackerLossRate)));
-                                for (int i8 = 0; i8 < this.currentMoveUnits.getMoveUnitsSize(); ++i8) {
-                                    long unitArmy = this.currentMoveUnits.getMoveUnits(i8).getNumberOfUnits();
+                                for (int i8 = 0; i8 < moveUnits.getMoveUnitsSize(); ++i8) {
+                                    long unitArmy = moveUnits.getMoveUnits(i8).getNumberOfUnits();
                                     long unitLosses = Math.max(1L, Math.min(unitArmy, (long)Math.ceil((double)unitArmy / (double)tempNumOfUnits * (double)totalAttackerCasualties)));
-                                    CFG.core.updateWarStatistics_Casualties(tempWarID, CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0), this.currentMoveUnits.getCivID(i8), unitLosses);
+                                    CFG.core.updateWarStatistics_Casualties(tempWarID, CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0), moveUnits.getCivID(i8), unitLosses);
                                     try {
-                                        CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += unitLosses;
+                                        CFG.core.getProv((int)moveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += unitLosses;
                                     }
                                     catch (Exception ex) {
                                         
                                     }
                                     if (this.SHOW_REPORT) {
-                                        CFG.reportData.lAttackers_IDs.add(this.currentMoveUnits.getCivID(i8));
+                                        CFG.reportData.lAttackers_IDs.add(moveUnits.getCivID(i8));
                                         CFG.reportData.lAttackers_Armies.add(unitArmy);
                                         CFG.reportData.lAttackers_Armies_Lost.add(unitLosses);
                                     }
                                     if (this.SAVE_REPORT) {
-                                        this.battleReportSave.lAttackers_IDs.add(this.currentMoveUnits.getCivID(i8));
+                                        this.battleReportSave.lAttackers_IDs.add(moveUnits.getCivID(i8));
                                         this.battleReportSave.lAttackers_Armies.add(unitArmy);
                                         this.battleReportSave.lAttackers_Armies_Lost.add(unitLosses);
                                     }
-                                    this.armyRetreat(this.currentMoveUnits.getMoveUnits(i8).getToProvID(), this.currentMoveUnits.getCivID(i8), unitLosses);
-                                    CFG.core.getProv(this.currentMoveUnits.getMoveUnits(i8).getFromProviID()).updateArmy4(this.currentMoveUnits.getCivID(i8), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(i8).getFromProviID()).getArmyCivID1(this.currentMoveUnits.getCivID(i8)) - unitLosses);
-                                    CFG.core.getCiv(this.currentMoveUnits.getCivID(i8)).setNumberOfUnits(CFG.core.getCiv(this.currentMoveUnits.getCivID(i8)).getNumberOfUnits() - unitLosses);
-                                    this.retryFailedNavalInvasion(this.currentMoveUnits.getMoveUnits(i8).getFromProviID(), this.currentMoveUnits.getMoveUnits(i8).getToProvID(), this.currentMoveUnits.getCivID(i8), unitArmy - unitLosses);
+                                    this.armyRetreat(moveUnits.getMoveUnits(i8).getToProvID(), moveUnits.getCivID(i8), unitLosses);
+                                    CFG.core.getProv(moveUnits.getMoveUnits(i8).getFromProviID()).updateArmy4(moveUnits.getCivID(i8), CFG.core.getProv(moveUnits.getMoveUnits(i8).getFromProviID()).getArmyCivID1(moveUnits.getCivID(i8)) - unitLosses);
+                                    CFG.core.getCiv(moveUnits.getCivID(i8)).setNumberOfUnits(CFG.core.getCiv(moveUnits.getCivID(i8)).getNumberOfUnits() - unitLosses);
+                                    this.retryFailedNavalInvasion(moveUnits.getMoveUnits(i8).getFromProviID(), moveUnits.getMoveUnits(i8).getToProvID(), moveUnits.getCivID(i8), unitArmy - unitLosses);
                                 }
                             } else {
-                                for (int i8 = 0; i8 < this.currentMoveUnits.getMoveUnitsSize(); ++i8) {
-                                    CFG.core.updateWarStatistics_Casualties(tempWarID, CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0), this.currentMoveUnits.getCivID(i8), this.currentMoveUnits.getMoveUnits(i8).getNumberOfUnits());
+                                for (int i8 = 0; i8 < moveUnits.getMoveUnitsSize(); ++i8) {
+                                    CFG.core.updateWarStatistics_Casualties(tempWarID, CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0), moveUnits.getCivID(i8), moveUnits.getMoveUnits(i8).getNumberOfUnits());
                                     try {
-                                        CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += this.currentMoveUnits.getMoveUnits(i8).getNumberOfUnits();
+                                        CFG.core.getProv((int)moveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += moveUnits.getMoveUnits(i8).getNumberOfUnits();
                                     }
                                     catch (Exception ex) {
                                         
                                     }
                                     if (this.SHOW_REPORT) {
-                                        CFG.reportData.lAttackers_IDs.add(this.currentMoveUnits.getCivID(i8));
-                                        CFG.reportData.lAttackers_Armies.add(this.currentMoveUnits.getMoveUnits(i8).getNumberOfUnits());
-                                        CFG.reportData.lAttackers_Armies_Lost.add(this.currentMoveUnits.getMoveUnits(i8).getNumberOfUnits());
+                                        CFG.reportData.lAttackers_IDs.add(moveUnits.getCivID(i8));
+                                        CFG.reportData.lAttackers_Armies.add(moveUnits.getMoveUnits(i8).getNumberOfUnits());
+                                        CFG.reportData.lAttackers_Armies_Lost.add(moveUnits.getMoveUnits(i8).getNumberOfUnits());
                                     }
                                     if (this.SAVE_REPORT) {
-                                        this.battleReportSave.lAttackers_IDs.add(this.currentMoveUnits.getCivID(i8));
-                                        this.battleReportSave.lAttackers_Armies.add(this.currentMoveUnits.getMoveUnits(i8).getNumberOfUnits());
-                                        this.battleReportSave.lAttackers_Armies_Lost.add(this.currentMoveUnits.getMoveUnits(i8).getNumberOfUnits());
+                                        this.battleReportSave.lAttackers_IDs.add(moveUnits.getCivID(i8));
+                                        this.battleReportSave.lAttackers_Armies.add(moveUnits.getMoveUnits(i8).getNumberOfUnits());
+                                        this.battleReportSave.lAttackers_Armies_Lost.add(moveUnits.getMoveUnits(i8).getNumberOfUnits());
                                     }
-                                    this.armyRetreat(this.currentMoveUnits.getMoveUnits(i8).getToProvID(), this.currentMoveUnits.getCivID(i8), this.currentMoveUnits.getMoveUnits(i8).getNumberOfUnits());
-                                    CFG.core.getProv(this.currentMoveUnits.getMoveUnits(i8).getFromProviID()).updateArmy4(this.currentMoveUnits.getCivID(i8), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(i8).getFromProviID()).getArmyCivID1(this.currentMoveUnits.getCivID(i8)) - this.currentMoveUnits.getMoveUnits(i8).getNumberOfUnits());
-                                    CFG.core.getCiv(this.currentMoveUnits.getCivID(i8)).setNumberOfUnits(CFG.core.getCiv(this.currentMoveUnits.getCivID(i8)).getNumberOfUnits() - this.currentMoveUnits.getMoveUnits(i8).getNumberOfUnits());
+                                    this.armyRetreat(moveUnits.getMoveUnits(i8).getToProvID(), moveUnits.getCivID(i8), moveUnits.getMoveUnits(i8).getNumberOfUnits());
+                                    CFG.core.getProv(moveUnits.getMoveUnits(i8).getFromProviID()).updateArmy4(moveUnits.getCivID(i8), CFG.core.getProv(moveUnits.getMoveUnits(i8).getFromProviID()).getArmyCivID1(moveUnits.getCivID(i8)) - moveUnits.getMoveUnits(i8).getNumberOfUnits());
+                                    CFG.core.getCiv(moveUnits.getCivID(i8)).setNumberOfUnits(CFG.core.getCiv(moveUnits.getCivID(i8)).getNumberOfUnits() - moveUnits.getMoveUnits(i8).getNumberOfUnits());
                                 }
                             }
                             if (CFG.settingsGD.BAT_PLUS && defendersArmy2 > 0 && attackersArmy > 0) {
@@ -2424,110 +2440,110 @@ public class GameAction {
                             }
                             if (numOfDefenders > 1) {
                                 int i;
-                                CFG.core.updateWarStatistics_Casualties(tempWarID, this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0), (long)Math.ceil((float)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0) / (float)defendersArmy2 * (float)attackersArmy));
+                                CFG.core.updateWarStatistics_Casualties(tempWarID, moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0), (long)Math.ceil((float)CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0) / (float)defendersArmy2 * (float)attackersArmy));
                                 try {
-                                    CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += (long)Math.ceil((float)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0) / (float)defendersArmy2 * (float)attackersArmy);
+                                    CFG.core.getProv((int)moveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += (long)Math.ceil((float)CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0) / (float)defendersArmy2 * (float)attackersArmy);
                                 }
                                 catch (Exception ex) {
                                     
                                 }
                                 if (this.SHOW_REPORT) {
-                                    CFG.reportData.lDefenders_IDs.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
-                                    CFG.reportData.lDefenders_Armies.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0));
-                                    CFG.reportData.lDefenders_ArmiesLost.add((long)Math.ceil((float)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0) / (float)defendersArmy2 * (float)attackersArmy));
+                                    CFG.reportData.lDefenders_IDs.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
+                                    CFG.reportData.lDefenders_Armies.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0));
+                                    CFG.reportData.lDefenders_ArmiesLost.add((long)Math.ceil((float)CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0) / (float)defendersArmy2 * (float)attackersArmy));
                                 }
                                 if (this.SAVE_REPORT) {
-                                    this.battleReportSave.lDefenders_IDs.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
-                                    this.battleReportSave.lDefenders_Armies.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0));
-                                    this.battleReportSave.lDefenders_ArmiesLost.add((long)Math.ceil((float)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0) / (float)defendersArmy2 * (float)attackersArmy));
+                                    this.battleReportSave.lDefenders_IDs.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0));
+                                    this.battleReportSave.lDefenders_Armies.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0));
+                                    this.battleReportSave.lDefenders_ArmiesLost.add((long)Math.ceil((float)CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0) / (float)defendersArmy2 * (float)attackersArmy));
                                 }
-                                this.armyRetreat(this.currentMoveUnits.getMoveUnits(0).getToProvID(), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0), (long)Math.ceil((float)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0) / (float)defendersArmy2 * (float)attackersArmy));
-                                CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4((long)((double)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0) - Math.ceil((float)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0) / (float)defendersArmy2 * (float)attackersArmy)));
-                                CFG.core.getCiv(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0)).setNumberOfUnits(CFG.core.getCiv(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0)).getNumberOfUnits() - (long)Math.ceil((float)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0) / (float)defendersArmy2 * (float)attackersArmy));
+                                this.armyRetreat(moveUnits.getMoveUnits(0).getToProvID(), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0), (long)Math.ceil((float)CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0) / (float)defendersArmy2 * (float)attackersArmy));
+                                CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4((long)((double)CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0) - Math.ceil((float)CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0) / (float)defendersArmy2 * (float)attackersArmy)));
+                                CFG.core.getCiv(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0)).setNumberOfUnits(CFG.core.getCiv(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0)).getNumberOfUnits() - (long)Math.ceil((float)CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0) / (float)defendersArmy2 * (float)attackersArmy));
                                 ArrayList<Integer> tempIDs = new ArrayList<Integer>();
                                 ArrayList<Long> tempArmies = new ArrayList<Long>();
                                 ArrayList<Long> tempArmies_Lost = new ArrayList<Long>();
-                                for (i = 1; i < CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivsSize(); ++i) {
-                                    if (!this.turnMoves_MoveCurrentArmy_Attack_NumOfDefendingUnits_IsDefender(this.currentMoveUnits.getMoveUnits(0).getToProvID(), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i))) continue;
-                                    if (this.shouldDeclareWarForDefenderArmy(this.currentMoveUnits.getMoveUnits(0).getToProvID(), this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i))) {
-                                        CFG.core.declareWar(this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i), false);
+                                for (i = 1; i < CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivsSize(); ++i) {
+                                    if (!this.turnMoves_MoveCurrentArmy_Attack_NumOfDefendingUnits_IsDefender(moveUnits.getMoveUnits(0).getToProvID(), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i))) continue;
+                                    if (this.shouldDeclareWarForDefenderArmy(moveUnits.getMoveUnits(0).getToProvID(), moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i))) {
+                                        CFG.core.declareWar(moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i), false);
                                     }
-                                    CFG.core.updateWarStatistics_Casualties(tempWarID, this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i), (long)Math.floor((float)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy));
+                                    CFG.core.updateWarStatistics_Casualties(tempWarID, moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i), (long)Math.floor((float)CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy));
                                     try {
-                                        CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += (long)Math.floor((float)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy);
+                                        CFG.core.getProv((int)moveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += (long)Math.floor((float)CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy);
                                     }
                                     catch (Exception exception) {
                                         
                                     }
                                     if (this.SHOW_REPORT) {
-                                        CFG.reportData.lDefenders_IDs.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
-                                        CFG.reportData.lDefenders_Armies.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i));
-                                        CFG.reportData.lDefenders_ArmiesLost.add((long)Math.floor((float)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy));
+                                        CFG.reportData.lDefenders_IDs.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
+                                        CFG.reportData.lDefenders_Armies.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i));
+                                        CFG.reportData.lDefenders_ArmiesLost.add((long)Math.floor((float)CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy));
                                     }
                                     if (this.SAVE_REPORT) {
-                                        this.battleReportSave.lDefenders_IDs.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
-                                        this.battleReportSave.lDefenders_Armies.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i));
-                                        this.battleReportSave.lDefenders_ArmiesLost.add((long)Math.floor((float)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy));
+                                        this.battleReportSave.lDefenders_IDs.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
+                                        this.battleReportSave.lDefenders_Armies.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i));
+                                        this.battleReportSave.lDefenders_ArmiesLost.add((long)Math.floor((float)CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy));
                                     }
-                                    tempIDs.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
-                                    tempArmies.add((long)((double)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) - Math.floor((float)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy)));
-                                    tempArmies_Lost.add((long)Math.floor((float)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy));
+                                    tempIDs.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
+                                    tempArmies.add((long)((double)CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) - Math.floor((float)CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy)));
+                                    tempArmies_Lost.add((long)Math.floor((float)CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy));
                                 }
                                 for (i = 0; i < tempIDs.size(); ++i) {
-                                    CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4((Integer)tempIDs.get(i), (Long)tempArmies.get(i));
+                                    CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4((Integer)tempIDs.get(i), (Long)tempArmies.get(i));
                                     CFG.core.getCiv((Integer)tempIDs.get(i)).setNumberOfUnits(CFG.core.getCiv((Integer)tempIDs.get(i)).getNumberOfUnits() - (Long)tempArmies_Lost.get(i));
                                 }
                                 try {
-                                    for (i = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivsSize() - 1; i >= 1; --i) {
-                                        if (!this.turnMoves_MoveCurrentArmy_Attack_NumOfDefendingUnits_IsDefender(this.currentMoveUnits.getMoveUnits(0).getToProvID(), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i))) continue;
-                                        if (this.shouldDeclareWarForDefenderArmy(this.currentMoveUnits.getMoveUnits(0).getToProvID(), this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i))) {
-                                            CFG.core.declareWar(this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i), false);
+                                    for (i = CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivsSize() - 1; i >= 1; --i) {
+                                        if (!this.turnMoves_MoveCurrentArmy_Attack_NumOfDefendingUnits_IsDefender(moveUnits.getMoveUnits(0).getToProvID(), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i))) continue;
+                                        if (this.shouldDeclareWarForDefenderArmy(moveUnits.getMoveUnits(0).getToProvID(), moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i))) {
+                                            CFG.core.declareWar(moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i), false);
                                         }
-                                        CFG.core.updateWarStatistics_Casualties(tempWarID, this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i), (long)Math.floor((float)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy));
+                                        CFG.core.updateWarStatistics_Casualties(tempWarID, moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i), (long)Math.floor((float)CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy));
                                         try {
-                                            CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += (long)Math.floor((float)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy);
+                                            CFG.core.getProv((int)moveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += (long)Math.floor((float)CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy);
                                         }
                                         catch (Exception exception) {
                                             
                                         }
                                         if (this.SHOW_REPORT) {
-                                            CFG.reportData.lDefenders_IDs.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
-                                            CFG.reportData.lDefenders_Armies.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i));
-                                            CFG.reportData.lDefenders_ArmiesLost.add((long)Math.floor((float)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy));
+                                            CFG.reportData.lDefenders_IDs.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
+                                            CFG.reportData.lDefenders_Armies.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i));
+                                            CFG.reportData.lDefenders_ArmiesLost.add((long)Math.floor((float)CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy));
                                         }
                                         if (this.SAVE_REPORT) {
-                                            this.battleReportSave.lDefenders_IDs.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
-                                            this.battleReportSave.lDefenders_Armies.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i));
-                                            this.battleReportSave.lDefenders_ArmiesLost.add((long)Math.floor((float)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy));
+                                            this.battleReportSave.lDefenders_IDs.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
+                                            this.battleReportSave.lDefenders_Armies.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i));
+                                            this.battleReportSave.lDefenders_ArmiesLost.add((long)Math.floor((float)CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy));
                                         }
-                                        this.armyRetreat(this.currentMoveUnits.getMoveUnits(0).getToProvID(), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i), (long)Math.floor((float)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy));
-                                        CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i), (int)((double)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) - Math.floor((float)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy)));
-                                        CFG.core.getCiv(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i)).setNumberOfUnits(CFG.core.getCiv(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i)).getNumberOfUnits() - (long)Math.floor((float)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy));
+                                        this.armyRetreat(moveUnits.getMoveUnits(0).getToProvID(), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i), (long)Math.floor((float)CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy));
+                                        CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i), (int)((double)CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) - Math.floor((float)CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy)));
+                                        CFG.core.getCiv(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i)).setNumberOfUnits(CFG.core.getCiv(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i)).getNumberOfUnits() - (long)Math.floor((float)CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy2 * (float)attackersArmy));
                                     }
                                 }
                                 catch (Exception exr) {
                                     CFG.exceptionStack(exr);
                                 }
                             } else {
-                                CFG.core.updateWarStatistics_Casualties(tempWarID, this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(), attackersArmy);
+                                CFG.core.updateWarStatistics_Casualties(tempWarID, moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(), attackersArmy);
                                 try {
-                                    CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += attackersArmy;
+                                    CFG.core.getProv((int)moveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += attackersArmy;
                                 }
                                 catch (Exception tempIDs) {
                                     
                                 }
                                 if (this.SHOW_REPORT) {
-                                    CFG.reportData.lDefenders_IDs.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId());
-                                    CFG.reportData.lDefenders_Armies.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0));
+                                    CFG.reportData.lDefenders_IDs.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId());
+                                    CFG.reportData.lDefenders_Armies.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0));
                                     CFG.reportData.lDefenders_ArmiesLost.add(attackersArmy);
                                 }
                                 if (this.SAVE_REPORT) {
-                                    this.battleReportSave.lDefenders_IDs.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId());
-                                    this.battleReportSave.lDefenders_Armies.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0));
+                                    this.battleReportSave.lDefenders_IDs.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId());
+                                    this.battleReportSave.lDefenders_Armies.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0));
                                     this.battleReportSave.lDefenders_ArmiesLost.add(attackersArmy);
                                 }
-                                CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(0) - attackersArmy);
-                                CFG.core.getCiv(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId()).setNumberOfUnits(CFG.core.getCiv(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId()).getNumberOfUnits() - attackersArmy);
+                                CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(0) - attackersArmy);
+                                CFG.core.getCiv(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId()).setNumberOfUnits(CFG.core.getCiv(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId()).getNumberOfUnits() - attackersArmy);
                             }
                         }
                         if (this.SHOW_REPORT) {
@@ -2549,19 +2565,19 @@ public class GameAction {
                         CFG.exceptionStack(ex);
                     }
                 }
-            } else if (CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getSeaProv() && CFG.core.getSeaProvinceAttack(this.currentMoveUnits.getCivID(0), this.currentMoveUnits.getMoveUnits(0).getToProvID())) {
+            } else if (CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getSeaProv() && CFG.core.getSeaProvinceAttack(moveUnits.getCivID(0), moveUnits.getMoveUnits(0).getToProvID())) {
                 try {
                     if (this.SHOW_REPORT) {
                         CFG.reportData = new Report_Data();
-                        CFG.reportData.iBattleOfProvinceID = this.currentMoveUnits.getMoveUnits(0).getToProvID();
+                        CFG.reportData.iBattleOfProvinceID = moveUnits.getMoveUnits(0).getToProvID();
                     }
                     if (this.SAVE_REPORT) {
                         this.battleReportSave = new Report_Data();
-                        this.battleReportSave.iBattleOfProvinceID = this.currentMoveUnits.getMoveUnits(0).getToProvID();
+                        this.battleReportSave.iBattleOfProvinceID = moveUnits.getMoveUnits(0).getToProvID();
                     }
                     long tempNumOfUnits = 0;
-                    for (int i = 0; i < this.currentMoveUnits.getMoveUnitsSize(); ++i) {
-                        tempNumOfUnits += this.currentMoveUnits.getMoveUnits(i).getNumberOfUnits();
+                    for (int i = 0; i < moveUnits.getMoveUnitsSize(); ++i) {
+                        tempNumOfUnits += moveUnits.getMoveUnits(i).getNumberOfUnits();
                     }
                     if (this.SHOW_REPORT) {
                         CFG.reportData.iPopulationLosses = 0;
@@ -2571,12 +2587,12 @@ public class GameAction {
                         this.battleReportSave.iPopulationLosses = 0;
                         this.battleReportSave.iEconomyLosses = 0;
                     }
-                    int tempWarID = CFG.core.getWarID(this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId());
-                    CFG.core.addArmyExperience(this.currentMoveUnits.getCivID(0), 1.0f);
-                    CFG.core.addArmyExperience(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(0), 1.0f);
-                    if (this.turnMoves_MoveCurrentArmy_AttackResult_SEA(this.currentMoveUnits.getMoveUnits(0).getToProvID(), tempNumOfUnits, this.currentMoveUnits.getCivID(0))) {
-                        long defendersArmy = this.turnMoves_MoveCurrentArmy_Attack_NumOfDefeningUnits_SEA(this.currentMoveUnits.getMoveUnits(0).getToProvID(), this.currentMoveUnits.getCivID(0));
-                        long attackersArmy = this.currentMoveUnits.getMoveUnits(0).getNumberOfUnits();
+                    int tempWarID = CFG.core.getWarID(moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId());
+                    CFG.core.addArmyExperience(moveUnits.getCivID(0), 1.0f);
+                    CFG.core.addArmyExperience(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(0), 1.0f);
+                    if (this.turnMoves_MoveCurrentArmy_AttackResult_SEA(moveUnits.getMoveUnits(0).getToProvID(), tempNumOfUnits, moveUnits.getCivID(0))) {
+                        long defendersArmy = this.turnMoves_MoveCurrentArmy_Attack_NumOfDefeningUnits_SEA(moveUnits.getMoveUnits(0).getToProvID(), moveUnits.getCivID(0));
+                        long attackersArmy = moveUnits.getMoveUnits(0).getNumberOfUnits();
                         if (this.SHOW_REPORT) {
                             CFG.reportData.attackersWon = true;
                             CFG.SFXManager.playSound(CFG.SFXManager.playMoveArmy());
@@ -2588,78 +2604,78 @@ public class GameAction {
                         if (CFG.settingsGD.EXPERIMENTAL_BATTLE_SYSTEM && attackersArmy > 0 && defendersArmy > 0) {
                             seaRatio = (float)attackersArmy / (float)defendersArmy;
                         }
-                        for (int i = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivsSize() - 1; i >= 1; --i) {
-                            if (!CFG.core.getCivsAtWar(this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i))) continue;
-                            long tempArmySize = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i);
+                        for (int i = CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivsSize() - 1; i >= 1; --i) {
+                            if (!CFG.core.getCivsAtWar(moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i))) continue;
+                            long tempArmySize = CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i);
                             long tempArmyLoss = tempArmySize;
                             if (CFG.settingsGD.EXPERIMENTAL_BATTLE_SYSTEM && attackersArmy > 0 && defendersArmy > 0) {
                                 tempArmyLoss = Math.max(1L, (long)((float)tempArmySize / Math.max(1.0f, seaRatio)));
                             }
                             if (this.SHOW_REPORT) {
-                                tempWarID = CFG.core.getWarID(this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
+                                tempWarID = CFG.core.getWarID(moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
                                 if (tempWarID >= 0) {
-                                    CFG.core.updateWarStatistics_Casualties(tempWarID, this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i), tempArmyLoss);
-                                    CFG.core.updateWarStatistics_Casualties(tempWarID, CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i), this.currentMoveUnits.getCivID(0), tempArmyLoss);
+                                    CFG.core.updateWarStatistics_Casualties(tempWarID, moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i), tempArmyLoss);
+                                    CFG.core.updateWarStatistics_Casualties(tempWarID, CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i), moveUnits.getCivID(0), tempArmyLoss);
                                 }
                                 try {
-                                    CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += tempArmyLoss;
+                                    CFG.core.getProv((int)moveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += tempArmyLoss;
                                 }
                                 catch (Exception defendersArmy2) {
                                     
                                 }
-                                CFG.reportData.lDefenders_IDs.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
+                                CFG.reportData.lDefenders_IDs.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
                                 CFG.reportData.lDefenders_Armies.add(tempArmySize);
                                 CFG.reportData.lDefenders_ArmiesLost.add(tempArmyLoss);
                             }
                             if (this.SAVE_REPORT) {
                                 if (!this.SHOW_REPORT) {
-                                    tempWarID = CFG.core.getWarID(this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
+                                    tempWarID = CFG.core.getWarID(moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
                                     if (tempWarID >= 0) {
-                                        CFG.core.updateWarStatistics_Casualties(tempWarID, this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i), tempArmyLoss);
-                                        CFG.core.updateWarStatistics_Casualties(tempWarID, CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i), this.currentMoveUnits.getCivID(0), tempArmyLoss);
+                                        CFG.core.updateWarStatistics_Casualties(tempWarID, moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i), tempArmyLoss);
+                                        CFG.core.updateWarStatistics_Casualties(tempWarID, CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i), moveUnits.getCivID(0), tempArmyLoss);
                                     }
                                     try {
-                                        CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += tempArmyLoss;
+                                        CFG.core.getProv((int)moveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += tempArmyLoss;
                                     }
                                     catch (Exception defendersArmy2) {
                                         
                                     }
                                 }
-                                this.battleReportSave.lDefenders_IDs.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
+                                this.battleReportSave.lDefenders_IDs.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
                                 this.battleReportSave.lDefenders_Armies.add(tempArmySize);
                                 this.battleReportSave.lDefenders_ArmiesLost.add(tempArmyLoss);
                             }
-                            CFG.core.getCiv(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i)).setNumberOfUnits(CFG.core.getCiv(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i)).getNumberOfUnits() - tempArmyLoss);
-                            CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i), tempArmySize - tempArmyLoss);
+                            CFG.core.getCiv(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i)).setNumberOfUnits(CFG.core.getCiv(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i)).getNumberOfUnits() - tempArmyLoss);
+                            CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i), tempArmySize - tempArmyLoss);
                         }
                         long tempDefendersArmyLeft = defendersArmy;
                         if (this.SHOW_REPORT) {
                             tempDefendersArmyLeft = defendersArmy;
-                            for (int i = 0; i < this.currentMoveUnits.getMoveUnitsSize(); ++i) {
-                                CFG.reportData.lAttackers_IDs.add(this.currentMoveUnits.getCivID(i));
-                                CFG.reportData.lAttackers_Armies.add(this.currentMoveUnits.getMoveUnits(i).getNumberOfUnits());
-                                CFG.reportData.lAttackers_Armies_Lost.add(this.currentMoveUnits.getMoveUnits(i).getNumberOfUnits() > tempDefendersArmyLeft ? tempDefendersArmyLeft : this.currentMoveUnits.getMoveUnits(i).getNumberOfUnits());
-                                if ((tempDefendersArmyLeft -= this.currentMoveUnits.getMoveUnits(i).getNumberOfUnits()) >= 0) continue;
+                            for (int i = 0; i < moveUnits.getMoveUnitsSize(); ++i) {
+                                CFG.reportData.lAttackers_IDs.add(moveUnits.getCivID(i));
+                                CFG.reportData.lAttackers_Armies.add(moveUnits.getMoveUnits(i).getNumberOfUnits());
+                                CFG.reportData.lAttackers_Armies_Lost.add(moveUnits.getMoveUnits(i).getNumberOfUnits() > tempDefendersArmyLeft ? tempDefendersArmyLeft : moveUnits.getMoveUnits(i).getNumberOfUnits());
+                                if ((tempDefendersArmyLeft -= moveUnits.getMoveUnits(i).getNumberOfUnits()) >= 0) continue;
                                 tempDefendersArmyLeft = 0;
                             }
                         }
                         if (this.SAVE_REPORT) {
                             tempDefendersArmyLeft = defendersArmy;
-                            for (int i = 0; i < this.currentMoveUnits.getMoveUnitsSize(); ++i) {
-                                this.battleReportSave.lAttackers_IDs.add(this.currentMoveUnits.getCivID(i));
-                                this.battleReportSave.lAttackers_Armies.add(this.currentMoveUnits.getMoveUnits(i).getNumberOfUnits());
-                                this.battleReportSave.lAttackers_Armies_Lost.add(this.currentMoveUnits.getMoveUnits(i).getNumberOfUnits() > tempDefendersArmyLeft ? tempDefendersArmyLeft : this.currentMoveUnits.getMoveUnits(i).getNumberOfUnits());
-                                if ((tempDefendersArmyLeft -= this.currentMoveUnits.getMoveUnits(i).getNumberOfUnits()) >= 0) continue;
+                            for (int i = 0; i < moveUnits.getMoveUnitsSize(); ++i) {
+                                this.battleReportSave.lAttackers_IDs.add(moveUnits.getCivID(i));
+                                this.battleReportSave.lAttackers_Armies.add(moveUnits.getMoveUnits(i).getNumberOfUnits());
+                                this.battleReportSave.lAttackers_Armies_Lost.add(moveUnits.getMoveUnits(i).getNumberOfUnits() > tempDefendersArmyLeft ? tempDefendersArmyLeft : moveUnits.getMoveUnits(i).getNumberOfUnits());
+                                if ((tempDefendersArmyLeft -= moveUnits.getMoveUnits(i).getNumberOfUnits()) >= 0) continue;
                                 tempDefendersArmyLeft = 0;
                             }
                         }
-                        CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getFromProviID()).updateArmy4(this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getFromProviID()).getArmyCivID1(this.currentMoveUnits.getCivID(0)) - this.currentMoveUnits.getMoveUnits(0).getNumberOfUnits());
-                        CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(this.currentMoveUnits.getCivID(0), attackersArmy - defendersArmy);
-                        CFG.core.getCiv(this.currentMoveUnits.getCivID(0)).setNumberOfUnits(CFG.core.getCiv(this.currentMoveUnits.getCivID(0)).getNumberOfUnits() - defendersArmy);
+                        CFG.core.getProv(moveUnits.getMoveUnits(0).getFromProviID()).updateArmy4(moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getFromProviID()).getArmyCivID1(moveUnits.getCivID(0)) - moveUnits.getMoveUnits(0).getNumberOfUnits());
+                        CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(moveUnits.getCivID(0), attackersArmy - defendersArmy);
+                        CFG.core.getCiv(moveUnits.getCivID(0)).setNumberOfUnits(CFG.core.getCiv(moveUnits.getCivID(0)).getNumberOfUnits() - defendersArmy);
                     } else {
                         int i;
-                        long defendersArmy = this.turnMoves_MoveCurrentArmy_Attack_NumOfDefeningUnits_SEA(this.currentMoveUnits.getMoveUnits(0).getToProvID(), this.currentMoveUnits.getCivID(0));
-                        long attackersArmy = this.currentMoveUnits.getMoveUnits(0).getNumberOfUnits();
+                        long defendersArmy = this.turnMoves_MoveCurrentArmy_Attack_NumOfDefeningUnits_SEA(moveUnits.getMoveUnits(0).getToProvID(), moveUnits.getCivID(0));
+                        long attackersArmy = moveUnits.getMoveUnits(0).getNumberOfUnits();
                         if (this.SHOW_REPORT) {
                             CFG.reportData.attackersWon = false;
                             CFG.SFXManager.playSound(CFG.SFXManager.playMoveArmy());
@@ -2674,9 +2690,9 @@ public class GameAction {
                             seaRatioDef = (float)defendersArmy / (float)attackersArmy;
                         }
                         boolean firstAttackerLossApplied = false;
-                        for (i = CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivsSize() - 1; i >= 1; --i) {
-                            if (!CFG.core.getCivsAtWar(this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i))) continue;
-                            float tempCurrentLosses = (float)attackersArmy * ((float)CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy);
+                        for (i = CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivsSize() - 1; i >= 1; --i) {
+                            if (!CFG.core.getCivsAtWar(moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i))) continue;
+                            float tempCurrentLosses = (float)attackersArmy * ((float)CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) / (float)defendersArmy);
                             long currentLosses = (long)(firstCeil ? Math.ceil(tempCurrentLosses) : Math.floor(tempCurrentLosses));
                             firstCeil = false;
                             if (CFG.settingsGD.EXPERIMENTAL_BATTLE_SYSTEM && attackersArmy > 0 && defendersArmy > 0) {
@@ -2689,66 +2705,66 @@ public class GameAction {
                                 }
                             }
                             if (this.SHOW_REPORT) {
-                                tempWarID = CFG.core.getWarID(this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
+                                tempWarID = CFG.core.getWarID(moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
                                 if (tempWarID >= 0) {
-                                    CFG.core.updateWarStatistics_Casualties(tempWarID, this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i), currentLosses);
-                                    CFG.core.updateWarStatistics_Casualties(tempWarID, CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i), this.currentMoveUnits.getCivID(0), currentLosses);
+                                    CFG.core.updateWarStatistics_Casualties(tempWarID, moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i), currentLosses);
+                                    CFG.core.updateWarStatistics_Casualties(tempWarID, CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i), moveUnits.getCivID(0), currentLosses);
                                 }
                                 try {
-                                    CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += currentLosses;
+                                    CFG.core.getProv((int)moveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += currentLosses;
                                 }
                                 catch (Exception exception) {
                                     
                                 }
-                                CFG.reportData.lDefenders_IDs.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
-                                CFG.reportData.lDefenders_Armies.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i));
+                                CFG.reportData.lDefenders_IDs.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
+                                CFG.reportData.lDefenders_Armies.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i));
                                 CFG.reportData.lDefenders_ArmiesLost.add(currentLosses);
                             }
                             if (this.SAVE_REPORT) {
                                 if (!this.SHOW_REPORT) {
-                                    tempWarID = CFG.core.getWarID(this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
+                                    tempWarID = CFG.core.getWarID(moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
                                     if (tempWarID >= 0) {
-                                        CFG.core.updateWarStatistics_Casualties(tempWarID, this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i), currentLosses);
-                                        CFG.core.updateWarStatistics_Casualties(tempWarID, CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i), this.currentMoveUnits.getCivID(0), currentLosses);
+                                        CFG.core.updateWarStatistics_Casualties(tempWarID, moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i), currentLosses);
+                                        CFG.core.updateWarStatistics_Casualties(tempWarID, CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i), moveUnits.getCivID(0), currentLosses);
                                     }
                                     try {
-                                        CFG.core.getProv((int)this.currentMoveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += currentLosses;
+                                        CFG.core.getProv((int)moveUnits.getMoveUnits((int)0).getToProvID()).provGD.totalCasualtiesInProvince += currentLosses;
                                     }
                                     catch (Exception exception) {
                                         
                                     }
                                 }
-                                this.battleReportSave.lDefenders_IDs.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
-                                this.battleReportSave.lDefenders_Armies.add(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i));
+                                this.battleReportSave.lDefenders_IDs.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i));
+                                this.battleReportSave.lDefenders_Armies.add(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i));
                                 this.battleReportSave.lDefenders_ArmiesLost.add(currentLosses);
                             }
-                            CFG.core.getCiv(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i)).setNumberOfUnits(CFG.core.getCiv(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i)).getNumberOfUnits() - currentLosses);
-                            CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).updateArmy4(CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getCivId(i), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) - currentLosses);
+                            CFG.core.getCiv(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i)).setNumberOfUnits(CFG.core.getCiv(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i)).getNumberOfUnits() - currentLosses);
+                            CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).updateArmy4(CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getCivId(i), CFG.core.getProv(moveUnits.getMoveUnits(0).getToProvID()).getArmyID(i) - currentLosses);
                             if ((tempDefendersArmyLeft -= currentLosses) >= 0) continue;
                             tempDefendersArmyLeft = 0;
                         }
                         if (this.SHOW_REPORT) {
                             tempDefendersArmyLeft = defendersArmy;
-                            for (i = 0; i < this.currentMoveUnits.getMoveUnitsSize(); ++i) {
-                                CFG.reportData.lAttackers_IDs.add(this.currentMoveUnits.getCivID(i));
-                                CFG.reportData.lAttackers_Armies.add(this.currentMoveUnits.getMoveUnits(i).getNumberOfUnits());
-                                CFG.reportData.lAttackers_Armies_Lost.add(this.currentMoveUnits.getMoveUnits(i).getNumberOfUnits());
-                                if ((tempDefendersArmyLeft -= this.currentMoveUnits.getMoveUnits(i).getNumberOfUnits()) >= 0) continue;
+                            for (i = 0; i < moveUnits.getMoveUnitsSize(); ++i) {
+                                CFG.reportData.lAttackers_IDs.add(moveUnits.getCivID(i));
+                                CFG.reportData.lAttackers_Armies.add(moveUnits.getMoveUnits(i).getNumberOfUnits());
+                                CFG.reportData.lAttackers_Armies_Lost.add(moveUnits.getMoveUnits(i).getNumberOfUnits());
+                                if ((tempDefendersArmyLeft -= moveUnits.getMoveUnits(i).getNumberOfUnits()) >= 0) continue;
                                 tempDefendersArmyLeft = 0;
                             }
                         }
                         if (this.SAVE_REPORT) {
                             tempDefendersArmyLeft = defendersArmy;
-                            for (i = 0; i < this.currentMoveUnits.getMoveUnitsSize(); ++i) {
-                                this.battleReportSave.lAttackers_IDs.add(this.currentMoveUnits.getCivID(i));
-                                this.battleReportSave.lAttackers_Armies.add(this.currentMoveUnits.getMoveUnits(i).getNumberOfUnits());
-                                this.battleReportSave.lAttackers_Armies_Lost.add(this.currentMoveUnits.getMoveUnits(i).getNumberOfUnits());
-                                if ((tempDefendersArmyLeft -= this.currentMoveUnits.getMoveUnits(i).getNumberOfUnits()) >= 0) continue;
+                            for (i = 0; i < moveUnits.getMoveUnitsSize(); ++i) {
+                                this.battleReportSave.lAttackers_IDs.add(moveUnits.getCivID(i));
+                                this.battleReportSave.lAttackers_Armies.add(moveUnits.getMoveUnits(i).getNumberOfUnits());
+                                this.battleReportSave.lAttackers_Armies_Lost.add(moveUnits.getMoveUnits(i).getNumberOfUnits());
+                                if ((tempDefendersArmyLeft -= moveUnits.getMoveUnits(i).getNumberOfUnits()) >= 0) continue;
                                 tempDefendersArmyLeft = 0;
                             }
                         }
-                        CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getFromProviID()).updateArmy4(this.currentMoveUnits.getCivID(0), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(0).getFromProviID()).getArmyCivID1(this.currentMoveUnits.getCivID(0)) - this.currentMoveUnits.getMoveUnits(0).getNumberOfUnits());
-                        CFG.core.getCiv(this.currentMoveUnits.getCivID(0)).setNumberOfUnits(CFG.core.getCiv(this.currentMoveUnits.getCivID(0)).getNumberOfUnits() - attackersArmy);
+                        CFG.core.getProv(moveUnits.getMoveUnits(0).getFromProviID()).updateArmy4(moveUnits.getCivID(0), CFG.core.getProv(moveUnits.getMoveUnits(0).getFromProviID()).getArmyCivID1(moveUnits.getCivID(0)) - moveUnits.getMoveUnits(0).getNumberOfUnits());
+                        CFG.core.getCiv(moveUnits.getCivID(0)).setNumberOfUnits(CFG.core.getCiv(moveUnits.getCivID(0)).getNumberOfUnits() - attackersArmy);
                     }
                     if (this.SHOW_REPORT) {
                         if (CFG.reportData.getAttackersArmy() > 0 && CFG.reportData.getDefendersArmy() > 0) {
@@ -2935,7 +2951,10 @@ public class GameAction {
     }
 
     public final void nextTurn() {
-        if (this.actionsTask != null && this.actionsTask.isDone()) {
+        if (this.actionsTask != null) {
+            if (!this.actionsTask.isDone()) {
+                return;
+            }
             Future<?> completedTask = this.actionsTask;
             this.actionsTask = null;
             if (!this.taskCompletedSuccessfully(completedTask, "Turn actions")) {
@@ -3321,10 +3340,14 @@ public class GameAction {
     }
 
     private final void turnMoves_MoveCurrentArmy_JustMove() {
+        MoveUnits_TurnData moveUnits = this.currentMoveUnits;
+        if (moveUnits == null) {
+            return;
+        }
         try {
-            for (int i = 0; i < this.currentMoveUnits.getMoveUnitsSize(); ++i) {
-                CFG.core.getProv(this.currentMoveUnits.getMoveUnits(i).getFromProviID()).updateArmy4(this.currentMoveUnits.getCivID(i), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(i).getFromProviID()).getArmyCivID1(this.currentMoveUnits.getCivID(i)) - this.currentMoveUnits.getMoveUnits(i).getNumberOfUnits());
-                CFG.core.getProv(this.currentMoveUnits.getMoveUnits(i).getToProvID()).updateArmy4(this.currentMoveUnits.getCivID(i), CFG.core.getProv(this.currentMoveUnits.getMoveUnits(i).getToProvID()).getArmyCivID1(this.currentMoveUnits.getCivID(i)) + this.currentMoveUnits.getMoveUnits(i).getNumberOfUnits());
+            for (int i = 0; i < moveUnits.getMoveUnitsSize(); ++i) {
+                CFG.core.getProv(moveUnits.getMoveUnits(i).getFromProviID()).updateArmy4(moveUnits.getCivID(i), CFG.core.getProv(moveUnits.getMoveUnits(i).getFromProviID()).getArmyCivID1(moveUnits.getCivID(i)) - moveUnits.getMoveUnits(i).getNumberOfUnits());
+                CFG.core.getProv(moveUnits.getMoveUnits(i).getToProvID()).updateArmy4(moveUnits.getCivID(i), CFG.core.getProv(moveUnits.getMoveUnits(i).getToProvID()).getArmyCivID1(moveUnits.getCivID(i)) + moveUnits.getMoveUnits(i).getNumberOfUnits());
             }
         }
         catch (Exception ex) {

@@ -129,6 +129,7 @@ public class Menu_InGame_Civ_Decisions extends Menu {
                 @Override
                 public void actionElem(int iID) {
                     CFG.core.setActiveProvID(-1);
+                    CFG.backToMenu = View.eINGAME;
                     CFG.menus.rebuildManageDiplomacy_Alliances();
                     CFG.menus.setMenuID(View.eMANAGE_DIPLOMACY);
                 }
@@ -184,6 +185,7 @@ public class Menu_InGame_Civ_Decisions extends Menu {
             @Override
             public void actionElem(int iID) {
                 CFG.core.setActiveProvID(-1);
+                CFG.backToMenu = View.eINGAME;
                 CFG.menus.rebuildManageDiplomacy_Vassals();
                 CFG.menus.setMenuID(View.eMANAGE_DIPLOMACY);
             }

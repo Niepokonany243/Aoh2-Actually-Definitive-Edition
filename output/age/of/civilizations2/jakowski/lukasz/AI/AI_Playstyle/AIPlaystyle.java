@@ -2384,7 +2384,7 @@ if (this.isPeaceArmyAboveDisbandTarget(nCivID)) {
                         n4 += n2;
                         continue;
                     }
-                    arrayList4.add(new AI_RegoupArmyData(CFG.core.getCiv((int)n).armiesPosition.get(n3), n2));
+                    arrayList4.add(new AI_RegoupArmyData(CFG.core.getCiv(n).getArmyInAnotherProviP(n3), n2));
                 }
                 if (arrayList.size() == CFG.core.getCiv(n).getNumOfProvs()) {
                     arrayList.clear();
@@ -2981,7 +2981,14 @@ if (this.isPeaceArmyAboveDisbandTarget(nCivID)) {
     }
 
     public final long getRegroupArmy_NumOfUnits(int n, int n2) {
-        long n3 = CFG.core.getProv(n2).getArmyCivID1(n);
+        if (n2 < 0 || n2 >= CFG.core.getProvinSize()) {
+            return 0L;
+        }
+        Province tProv = CFG.core.getProv(n2);
+        if (tProv == null) {
+            return 0L;
+        }
+        long n3 = tProv.getArmyCivID1(n);
         for (int i = CFG.core.getCiv((int)n).civGD.civPlans.armiesMissions.size() - 1; i >= 0; --i) {
             if (CFG.core.getCiv((int)n).civGD.civPlans.armiesMissions.get((int)i).iProvinceID != n2) continue;
             n3 -= CFG.core.getCiv((int)n).civGD.civPlans.armiesMissions.get((int)i).iArmy;
@@ -5605,6 +5612,13 @@ if (this.isPeaceArmyAboveDisbandTarget(nCivID)) {
             block55: for (tLimit = 0; i >= 0 && tLimit < 100; --i, ++tLimit) {
                 if (i >= messageBox.getMessagesSize() || messageBox.lMessages.isEmpty()) break;
                 message = messageBox.getMessage(i);
+                if (message == null) {
+                    try {
+                        var3_4.removeMessage(i);
+                    }
+                    catch (Exception ex) {}
+                    continue block55;
+                }
                 var40_40 = message;
                 var4_5 = i;
                 switch (message.messageType) {
@@ -6915,8 +6929,15 @@ if (this.isPeaceArmyAboveDisbandTarget(nCivID)) {
             out += CFG.core.getCiv((int)nCivID).civGD.civPlans.armiesMissions.get((int)i).iArmy;
         }
         for (int j = 0; j < CFG.core.getCiv(nCivID).getRegroupArmySize(); ++j) {
-            if (CFG.core.getCiv(nCivID).getRegroupArmy(j).getToProvinceID() != nProvinceID) continue;
-            out += CFG.core.getCiv(nCivID).getRegroupArmy(j).getNumOfUnits();
+            try {
+                RegroupArmy tRegroupArmy = CFG.core.getCiv(nCivID).getRegroupArmy(j);
+                if (tRegroupArmy == null) continue;
+                if (tRegroupArmy.getToProvinceID() != nProvinceID) continue;
+                out += tRegroupArmy.getNumOfUnits();
+            }
+            catch (IndexOutOfBoundsException ex) {
+                continue;
+            }
         }
         for (int j = 0; j < CFG.core.getCiv(nCivID).moveUnitsSize(); ++j) {
             if (CFG.core.getCiv(nCivID).getMoveUnits(j).getToProvID() != nProvinceID) continue;

@@ -108,15 +108,25 @@ public class Actions {
                     Civilization civLambda = CFG.core.getCiv(civIndex);
                     int moveUnitsSize = civLambda.moveUnitsSize();
                     for (int jIndex = 0; jIndex < moveUnitsSize; ++jIndex) {
-                        MoveUnits moveUnit = civLambda.getMoveUnits(jIndex);
-                        Province fromProv = CFG.core.getProv(moveUnit.getFromProviID());
-                        fromProv.updateArmy4(civIndex, fromProv.getArmyCivID1(civIndex) + moveUnit.getNumberOfUnits());
+                        try {
+                            MoveUnits moveUnit = civLambda.getMoveUnits(jIndex);
+                            if (moveUnit == null) continue;
+                            Province fromProv = CFG.core.getProv(moveUnit.getFromProviID());
+                            if (fromProv == null) continue;
+                            fromProv.updateArmy4(civIndex, fromProv.getArmyCivID1(civIndex) + moveUnit.getNumberOfUnits());
+                        }
+                        catch (Exception ex) {}
                     }
                     int moveUnitsPlunderSize = civLambda.getMoveUnitsPlunderSize();
                     for (int jIndex = 0; jIndex < moveUnitsPlunderSize; ++jIndex) {
-                        MoveUnits_Plunder plunderUnit = civLambda.getMoveUnitsPlunder(jIndex);
-                        Province fromProv = CFG.core.getProv(plunderUnit.getFromProvinceID());
-                        fromProv.updateArmy4(civIndex, fromProv.getArmyCivID1(civIndex) + plunderUnit.getNumOfUnits());
+                        try {
+                            MoveUnits_Plunder plunderUnit = civLambda.getMoveUnitsPlunder(jIndex);
+                            if (plunderUnit == null) continue;
+                            Province fromProv = CFG.core.getProv(plunderUnit.getFromProvinceID());
+                            if (fromProv == null) continue;
+                            fromProv.updateArmy4(civIndex, fromProv.getArmyCivID1(civIndex) + plunderUnit.getNumOfUnits());
+                        }
+                        catch (Exception ex) {}
                     }
                 }
                 catch (Exception ex) {}

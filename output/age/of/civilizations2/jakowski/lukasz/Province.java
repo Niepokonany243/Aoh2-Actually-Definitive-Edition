@@ -2726,7 +2726,9 @@ public class Province {
     }
 
     public final void drawArmy(SpriteBatch oSB, float nScale) {
-        this.drawArmyInProv.drawArmyProvince(oSB, nScale);
+        if (this.drawArmyInProv != null) {
+            this.drawArmyInProv.drawArmyProvince(oSB, nScale);
+        }
     }
 
     public final void drawDanger(SpriteBatch oSB, float nScale) {
