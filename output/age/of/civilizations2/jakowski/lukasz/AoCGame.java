@@ -206,7 +206,12 @@ public class AoCGame {
             CFG.LOG_PERF_VERBOSE = false;
             AndroidPerfTracer.setEnabled(true);
             AndroidPerfTracer.setVerbose(false);
+            MobileRenderBudget.setEnabled(true);
+            MobileRenderBudget.reset();
         }
+        // Global clear perf folder on every restart (desktop + mobile)
+        try { PerfAnalyzer.clearReportsOnStartup(); } catch (Throwable ignore) {}
+        try { GameLogger.clearPerformanceFolderOnStartup(); } catch (Throwable ignore) {}
         CFG.LANDSCAPE = ConfigINI.landscape;
         if (CFG.isAndroid()) {
             if (CFG.LANDSCAPE) {
@@ -418,7 +423,10 @@ public class AoCGame {
 
     public void render() {
         long renderStart = System.currentTimeMillis();
-        if (CFG.isAndroid()) AndroidPerfTracer.beginFrame();
+        if (CFG.isAndroid()) {
+            AndroidPerfTracer.beginFrame();
+            MobileRenderBudget.update();
+        }
         if (CFG.core != null && CFG.menus != null && CFG.menus.getInGameView()) {
             PerfAnalyzer.maybeStart(30000L, 30000L);
         }

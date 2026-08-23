@@ -181,6 +181,17 @@ public class Core {
     private final Color tmpCityNameColor = new Color();
     private static final Color CIV_NAME_TEXT_ACTIVE = new Color(0.12156863f, 0.12156863f, 0.12156863f, 1.0f);
     private static final Color CIV_NAME_TEXT = new Color(0.9843137f, 0.9843137f, 0.9843137f, 1.0f);
+    // Throttled flag rendering logs: per-15s summary instead of per-frame spam
+    private static long lastFlagCapLogNano = 0L;
+    private static int flagCapLogAccumN = 0;
+    private static int flagCapLogAccumCapped = 0;
+    private static int flagCapLogFrames = 0;
+    private static int flagCapLogMaxN = 0;
+    private static float flagCapLogLastZoom = 0f;
+    private static long lastFlagDrawLogNano = 0L;
+    private static int flagDrawLogAccumCapped = 0;
+    private static int flagDrawLogAccumN = 0;
+    private static int flagDrawLogFrames = 0;
 
     private int scenarioID = -1;
     private List<Player> lPlayers = new ArrayList<Player>();
@@ -7173,15 +7184,62 @@ lbl94:
             int n = VisibleProvinceCache.getVisibleCapitalCount();
             if (n > 0) {
                 java.util.List<Integer> caps = VisibleProvinceCache.getVisibleCapitals();
+                // 120fps budget: same cap as CapitalFlagRenderer (48 max, 24 while moving, tighter when zoomed far)
+                int budgetCap = 48;
+                float _zoom = CFG.map.getMpS().getCurrSc();
+                if (_zoom < 0.35f) budgetCap = 24;
+                else if (_zoom < 0.6f) budgetCap = 32;
+                else if (_zoom < 1.0f) budgetCap = 48;
+                else budgetCap = 36;
+                boolean isMoving = false;
+                try {
+                    Class<?> mrb = Class.forName("age.of.civilizations2.jakowski.lukasz.MobileRenderBudget");
+                    boolean en = (Boolean) mrb.getMethod("isEnabled").invoke(null);
+                    boolean mv = (Boolean) mrb.getMethod("isMoving").invoke(null);
+                    isMoving = en && mv;
+                } catch (Throwable ignore) {}
+                if (isMoving) budgetCap = Math.min(budgetCap, 24);
+                int cappedN = Math.min(n, budgetCap);
+                // Throttle capped log to per-15s summary
+                if (n > cappedN && CFG.LOG_PERF) {
+                    long now = System.nanoTime();
+                    flagCapLogAccumN += n;
+                    flagCapLogAccumCapped += cappedN;
+                    flagCapLogFrames++;
+                    if (n > flagCapLogMaxN) flagCapLogMaxN = n;
+                    flagCapLogLastZoom = _zoom;
+                    if (lastFlagCapLogNano == 0L) lastFlagCapLogNano = now;
+                    if (now - lastFlagCapLogNano >= 15000000000L) {
+                        int avgN = flagCapLogAccumN / flagCapLogFrames;
+                        int avgCapped = flagCapLogAccumCapped / flagCapLogFrames;
+                        CFG.LOG("[PERF]", "[flags] capped avg " + avgN + "->" + avgCapped + " max=" + flagCapLogMaxN + " zoom=" + String.format("%.2f", flagCapLogLastZoom) + " frames=" + flagCapLogFrames);
+                        lastFlagCapLogNano = now;
+                        flagCapLogAccumN = 0; flagCapLogAccumCapped = 0; flagCapLogFrames = 0; flagCapLogMaxN = 0;
+                    }
+                }
                 if (CapitalFlagRenderer.isInitialized() && nScale >= 0.3f) {
-                    if (CFG.LOGs && CFG.LOG_PERF) CFG.LOG("[PERF]", "[flags] drawing " + n + " capitals flags");
+                    // Throttle drawing log to per-15s detailed summary (was per-frame spam 100/sec). Ensures logging after game start.
+                    if (CFG.LOGs && CFG.LOG_PERF) {
+                        long now2 = System.nanoTime();
+                        flagDrawLogAccumCapped += cappedN;
+                        flagDrawLogAccumN += n;
+                        flagDrawLogFrames++;
+                        if (lastFlagDrawLogNano == 0L) lastFlagDrawLogNano = now2;
+                        if (now2 - lastFlagDrawLogNano >= 15000000000L) {
+                            int avgC = flagDrawLogAccumCapped / Math.max(1, flagDrawLogFrames);
+                            int avgN2 = flagDrawLogAccumN / Math.max(1, flagDrawLogFrames);
+                            CFG.LOG("[PERF]", "[flags] drawing summary " + avgC + "/" + avgN2 + " capitals flags frames=" + flagDrawLogFrames + " zoom=" + String.format("%.2f", _zoom));
+                            lastFlagDrawLogNano = now2;
+                            flagDrawLogAccumCapped = 0; flagDrawLogAccumN = 0; flagDrawLogFrames = 0;
+                        }
+                    }
                     CapitalFlagRenderer.drawFlags(oSB);
                     if (CFG.map.getMpS().getCurrSc() >= 0.7f) {
                         Image frameImg = IMGManager.getIMG(Images.army_capital_frame);
                         int fw = frameImg.getWidth();
                         int fh = frameImg.getHeight();
                         int afh = CFG.ARMY_HEIGHT + CFG.ARMY_BG_EXTRA_HEIGHT * 2;
-                        for (int j = 0; j < n; j++) {
+                        for (int j = 0; j < cappedN; j++) {
                             int pid = caps.get(j);
                             if (pid < 0) continue;
                             Province p = this.getProv(pid);
@@ -7198,7 +7256,7 @@ lbl94:
                             frameImg.draw2(oSB, fx2, fy + afh - fh, fw, fh, true, true);
                             oSB.setColor(Color.WHITE);
                         }
-                        for (int j = 0; j < n; j++) {
+                        for (int j = 0; j < cappedN; j++) {
                             int pid = caps.get(j);
                             if (pid < 0) continue;
                             Province p = this.getProv(pid);
@@ -7210,7 +7268,7 @@ lbl94:
                         }
                     }
                 } else {
-                    for (int j = 0; j < n; j++) {
+                    for (int j = 0; j < cappedN; j++) {
                         int pid = caps.get(j);
                         if (pid >= 0) this.drawProvinceFlag_Capital(oSB, pid, CFG.COLOR_ARMYBG, CFG.COLOR_ARMY_TEXT, nScale);
                     }

@@ -15,6 +15,7 @@ extends ApplicationAdapter {
     @Override
     public void create() {
         age.of.civilizations2.jakowski.lukasz.GameLogger.init();
+        try { age.of.civilizations2.jakowski.lukasz.PerfAnalyzer.clearReportsOnStartup(); } catch (Throwable ignore) {}
         aocGame.create();
         this.initInput();
     }

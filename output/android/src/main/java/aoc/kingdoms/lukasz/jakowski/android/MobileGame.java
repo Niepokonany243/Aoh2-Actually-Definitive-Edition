@@ -12,6 +12,9 @@ public final class MobileGame extends ApplicationAdapter {
     @Override
     public void create() {
         GameLogger.init();
+        // Requirement: every game restart clears perf folder (global + Download)
+        try { age.of.civilizations2.jakowski.lukasz.PerfAnalyzer.clearReportsOnStartup(); } catch (Throwable ignore) {}
+        try { age.of.civilizations2.jakowski.lukasz.GameLogger.clearPerformanceFolderOnStartup(); } catch (Throwable ignore) {}
         runtime.create();
     }
 

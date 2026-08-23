@@ -11,15 +11,19 @@ project(':mobile-port') {
                     def path = details.file.absolutePath.replace('\\', '/')
                     def legacyRoot = rootProject.file('output/age/of/civilizations2/jakowski/lukasz').absolutePath.replace('\\', '/')
                     path == "${legacyRoot}/Platform.java" ||
-                    path == "${legacyRoot}/UGCCallback.java" ||
-                    path == "${legacyRoot}/SteamGame.java" ||
-                    path == "${legacyRoot}/Steam_Game.java" ||
-                    path == "${legacyRoot}/Z_Other/ST/sUM.java" ||
-                    path == "${legacyRoot}/OverlayTextCache.java" ||
-                    path == "${legacyRoot}/MobileRenderBudget.java" ||
-                    path == "${legacyRoot}/FrameWorkScheduler.java" ||
-                    path == "${legacyRoot}/ProvinceMesh.java" ||
-                    path.startsWith("${legacyRoot}/TurnThreads/")
+                            path == "${legacyRoot}/UGCCallback.java" ||
+                            path == "${legacyRoot}/SteamGame.java" ||
+                            path == "${legacyRoot}/Steam_Game.java" ||
+                            path == "${legacyRoot}/Z_Other/ST/sUM.java" ||
+                            path == "${legacyRoot}/CapitalFlagRenderer.java" ||
+                            path == "${legacyRoot}/FlagAtlas.java" ||
+                            path == "${legacyRoot}/OverlayTextCache.java" ||
+                            path == "${legacyRoot}/MobileRenderBudget.java" ||
+                            path == "${legacyRoot}/FrameWorkScheduler.java" ||
+                            path == "${legacyRoot}/ProvinceMesh.java" ||
+                            path == "${legacyRoot}/PerfAnalyzer.java" ||
+                            path == "${legacyRoot}/GameLogger.java" ||
+                            path.startsWith("${legacyRoot}/TurnThreads/")
                 }
             }
         }

@@ -1,7 +1,9 @@
 package aoc.kingdoms.lukasz.jakowski.android;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.os.Build;
 import android.os.Bundle;
@@ -39,9 +41,17 @@ public class AndroidLauncher extends AndroidApplication {
             "UI/interface/XXH/game_logo.png"
     };
 
+    private static final int REQ_STORAGE = 9001;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Runtime storage permission (Android 9 API 23-28 only; 29+ uses MediaStore/app-specific no permission needed)
+        requestStoragePermissionIfNeeded();
+
+        // Requirement: globally clear perf report content on every game restart (including Android Download folder)
+        clearPerformanceReportsOnRestart();
 
         try {
             extractBundledAssets();
@@ -51,7 +61,12 @@ public class AndroidLauncher extends AndroidApplication {
 
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         Process.setThreadPriority(Process.THREAD_PRIORITY_DISPLAY);
-        GameTaskScheduler.install(2, 64, "aoh2-mobile");
+        // Dynamic workers: S24 Ultra 8 cores => 4 workers, budget for load + AI
+        int cores = Runtime.getRuntime().availableProcessors();
+        int workers = Math.max(2, Math.min(4, cores >= 8 ? 4 : cores >= 4 ? 3 : 2));
+        int queueCap = 128;
+        if (cores >= 8) queueCap = 256;
+        GameTaskScheduler.install(workers, queueCap, "aoh2-mobile");
         configureDisplayForSmoothRendering();
         logRuntimeLimits();
 
@@ -97,6 +112,14 @@ public class AndroidLauncher extends AndroidApplication {
                 bestMode = mode;
             }
         }
+        // Prefer 120Hz if available (S24 Ultra, etc.), otherwise highest refresh
+        Display.Mode mode120 = null;
+        for (Display.Mode m : modes) {
+            if (Math.abs(m.getRefreshRate() - 120f) < 0.5f) {
+                if (mode120 == null || m.getPhysicalWidth() > mode120.getPhysicalWidth()) mode120 = m;
+            }
+        }
+        if (mode120 != null) bestMode = mode120;
 
         WindowManager.LayoutParams params = window.getAttributes();
         params.preferredDisplayModeId = bestMode.getModeId();
@@ -104,6 +127,127 @@ public class AndroidLauncher extends AndroidApplication {
         window.setAttributes(params);
         Log.i(TAG, "Preferred display mode " + bestMode.getPhysicalWidth() + "x"
                 + bestMode.getPhysicalHeight() + "@" + bestMode.getRefreshRate() + "Hz");
+
+        // Android 15+ explicit 120Hz request via Window.setFrameRate (One UI 6-9, Android 9-17 compatible via reflection)
+        try {
+            if (Build.VERSION.SDK_INT >= 30) {
+                // Use preferredRefreshRate already, plus try setFrameRate for precise 120
+                window.getAttributes().preferredRefreshRate = bestMode.getRefreshRate();
+                // Reflective call for compatibility: window.setFrameRate(120, FRAME_RATE_COMPATIBILITY_FIXED_SOURCE, CHANGE_FRAME_RATE_ALWAYS)
+                // Constants: FRAME_RATE_COMPATIBILITY_FIXED_SOURCE=2, CHANGE_FRAME_RATE_ALWAYS=1
+                try {
+                    java.lang.reflect.Method m = Window.class.getMethod("setFrameRate", float.class, int.class, int.class);
+                    m.invoke(window, bestMode.getRefreshRate(), 2, 1);
+                } catch (Throwable ignore) {}
+                // Also via WindowManager.LayoutParams preferredRefreshRate fallback already set
+                if (Build.VERSION.SDK_INT >= 31) {
+                    try {
+                        java.lang.reflect.Method m2 = Window.class.getMethod("setFrameRate", float.class, int.class);
+                        m2.invoke(window, bestMode.getRefreshRate(), 1);
+                    } catch (Throwable ignore) {}
+                }
+            }
+        } catch (Throwable t) {
+            Log.w(TAG, "setFrameRate failed: " + t.getMessage());
+        }
+    }
+
+    private void requestStoragePermissionIfNeeded() {
+        try {
+            if (Build.VERSION.SDK_INT < 23) return;
+            // Scoped storage API 29+ : MediaStore/app-specific needs no permission (targetSdk 35)
+            if (Build.VERSION.SDK_INT >= 29) {
+                Log.i(TAG, "Scoped storage API " + Build.VERSION.SDK_INT + " - no legacy storage permission needed (MediaStore)");
+                return;
+            }
+            // API 23-28 (Android 6-9): need WRITE_EXTERNAL_STORAGE for public Download via File
+            String perm = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+            if (checkSelfPermission(perm) == PackageManager.PERMISSION_GRANTED) {
+                Log.i(TAG, "Storage permission already granted");
+                return;
+            }
+            Log.i(TAG, "Requesting storage permission WRITE_EXTERNAL_STORAGE for Download reports (API " + Build.VERSION.SDK_INT + ")");
+            requestPermissions(new String[]{ perm }, REQ_STORAGE);
+        } catch (Throwable t) {
+            Log.w(TAG, "requestStoragePermission failed: " + t.getMessage());
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQ_STORAGE) {
+            boolean granted = grantResults != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
+            Log.i(TAG, "Storage permission result: " + (granted ? "GRANTED" : "DENIED") + " perms=" + java.util.Arrays.toString(permissions));
+        }
+    }
+
+    private void clearPerformanceReportsOnRestart() {
+        // Try MediaStore delete for public Download on API 29+ (scoped storage)
+        if (Build.VERSION.SDK_INT >= 29) {
+            try {
+                android.content.ContentResolver resolver = getContentResolver();
+                android.net.Uri downloadsUri = android.provider.MediaStore.Downloads.EXTERNAL_CONTENT_URI;
+                String colRelative = android.provider.MediaStore.MediaColumns.RELATIVE_PATH;
+                int deleted = resolver.delete(downloadsUri, colRelative + "=?", new String[]{ "Download/AoH2/performance/" });
+                if (deleted > 0) Log.i(TAG, "Cleared Download perf reports via MediaStore: deleted=" + deleted);
+            } catch (Throwable t) {
+                Log.w(TAG, "MediaStore clear failed (will try File): " + t.getMessage());
+            }
+        }
+        // Legacy File path (works on API 23-28 and as best-effort on 29+ if permission granted)
+        try {
+            java.io.File downloadPerf = null;
+            if (Build.VERSION.SDK_INT >= 29) {
+                // Try File path as fallback but may be sandboxed
+                try {
+                    java.io.File extPub = android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS);
+                    downloadPerf = new java.io.File(extPub, "AoH2/performance");
+                } catch (Throwable ignore) {}
+            } else {
+                downloadPerf = new java.io.File(android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS), "AoH2/performance");
+            }
+            if (downloadPerf != null && downloadPerf.exists() && downloadPerf.isDirectory()) {
+                java.io.File[] files = downloadPerf.listFiles();
+                if (files != null) {
+                    for (java.io.File f : files) {
+                        try {
+                            if (f.isDirectory()) deleteRecursive(f);
+                            else f.delete();
+                        } catch (Throwable ignore) {}
+                    }
+                }
+                Log.i(TAG, "Cleared Download perf reports via File: " + downloadPerf.getAbsolutePath());
+            }
+            // Also clear app-scoped external fallback: /Android/data/.../files/Download/AoH2/performance
+            try {
+                java.io.File scoped = new java.io.File(getExternalFilesDir(null), "Download/AoH2/performance");
+                // Gdx.external maps to getExternalFilesDir parent; try parent of files
+                java.io.File extRoot = getExternalFilesDir(null);
+                if (extRoot != null) {
+                    java.io.File alt = new java.io.File(extRoot.getParentFile(), "files/Download/AoH2/performance");
+                    // Actually Gdx.external("Download/AoH2/performance") => /storage/emulated/0/Android/data/<pkg>/files/Download/AoH2/performance
+                    java.io.File gdxExt = new java.io.File(extRoot, "Download/AoH2/performance");
+                    for (java.io.File cand : new java.io.File[]{ scoped, gdxExt, alt }) {
+                        if (cand != null && cand.exists() && cand.isDirectory()) {
+                            java.io.File[] files = cand.listFiles();
+                            if (files != null) for (java.io.File f : files) { try { if (f.isDirectory()) deleteRecursive(f); else f.delete(); } catch (Throwable ignore) {} }
+                            Log.i(TAG, "Cleared scoped perf reports: " + cand.getAbsolutePath());
+                        }
+                    }
+                }
+            } catch (Throwable ignore) {}
+        } catch (Throwable t) {
+            Log.w(TAG, "clearPerformanceReports File failed: " + t.getMessage());
+        }
+    }
+
+    private static void deleteRecursive(java.io.File f) {
+        if (f.isDirectory()) {
+            java.io.File[] children = f.listFiles();
+            if (children != null) for (java.io.File c : children) deleteRecursive(c);
+        }
+        f.delete();
     }
 
     private void logRuntimeLimits() {

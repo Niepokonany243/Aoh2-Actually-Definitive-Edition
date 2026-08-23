@@ -160,6 +160,8 @@ project(':mobile-core') {
                             path == "${legacyRoot}/OverlayTextCache.java" ||
                             path == "${legacyRoot}/MobileRenderBudget.java" ||
                             path == "${legacyRoot}/FrameWorkScheduler.java" ||
+                            path == "${legacyRoot}/PerfAnalyzer.java" ||
+                            path == "${legacyRoot}/GameLogger.java" ||
                             path.startsWith("${legacyRoot}/TurnThreads/")
                 }
             }
