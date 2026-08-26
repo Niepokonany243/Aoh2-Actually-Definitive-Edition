@@ -114,6 +114,8 @@ public class FlagAtlas {
         outUV[3] = region.y * invH;
     }
 
+    public static boolean isDirty() { return atlasDirty; }
+
     public static void flush() {
         if (!initialized || !atlasDirty || atlasTexture == null || atlasPixmap == null) return;
         atlasTexture.draw(atlasPixmap, 0, 0);

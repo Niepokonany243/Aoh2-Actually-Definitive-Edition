@@ -86,7 +86,8 @@ public class CapitalFlagRenderer {
         int py = CFG.map.getMpC().getPY();
         float zoom = CFG.map.getMpS().getCurrSc();
         currentScale = zoom < 1.0f ? zoom : 1.0f;
-        if (zoom < 0.25f) { valid = true; return; }
+        // Keep flags even when far-zoomed for menu overview; previously returned 0 flags <0.25 causing flash
+        if (zoom < 0.15f) { valid = true; flagCount = 0; return; }
 
         int visibleProvCount = VisibleProvinceCache.getVisibleCapitalCount();
         List<Integer> capitals = VisibleProvinceCache.getVisibleCapitals();
@@ -162,7 +163,7 @@ public class CapitalFlagRenderer {
 
         int flagW = (int)(CFG.CIV_FLAG_WIDTH * currentScale);
         int flagH = (int)(CFG.CIV_FLAG_HEIGHT * currentScale);
-        if (flagW < 4 || flagH < 2) return;
+        if (flagW < 2 || flagH < 1) return;
 
         // Dynamic cap: hard 48 max proven from S24 Ultra logs (227 flags = 56ms/20fps, 48 flags ~ 8ms/120fps)
         // Research: libGDX SpriteBatch flush per texture change + CpuSpriteBatch 8191 limit; 48 draws = 1 flush, 227 = 2-3 flushes + UV math
@@ -233,8 +234,7 @@ public class CapitalFlagRenderer {
 
     private static boolean isAtlasClean() {
         try {
-            // FlagAtlas has no isDirty public, approximate via texture null check; flush is cheap if not dirty
-            return true;
+            return !FlagAtlas.isDirty();
         } catch (Throwable t) { return true; }
     }
 

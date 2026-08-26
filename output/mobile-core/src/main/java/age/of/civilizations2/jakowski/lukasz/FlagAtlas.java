@@ -76,7 +76,7 @@ public class FlagAtlas {
         region.used = true;
         civFlagSlots.put(civID, region);
         renderFlagToAtlas(civID, fx, fy);
-        atlasDirty = true;
+        markDirtySlot(slot);
         return slot;
     }
 
@@ -85,7 +85,8 @@ public class FlagAtlas {
         FlagRegion region = civFlagSlots.get(civID);
         if (region == null || !region.used) return;
         renderFlagToAtlas(civID, region.x, region.y);
-        atlasDirty = true;
+        int slot = region.x + region.y * FLAGS_PER_ROW;
+        markDirtySlot(slot);
     }
 
     public static void removeCivFlag(int civID) {
@@ -93,7 +94,8 @@ public class FlagAtlas {
         if (region != null && atlasPixmap != null) {
             atlasPixmap.setColor(0, 0, 0, 0);
             atlasPixmap.fillRectangle(region.x, region.y, FLAG_SIZE, FLAG_SIZE);
-            atlasDirty = true;
+            int slot = region.x + region.y * FLAGS_PER_ROW;
+            markDirtySlot(slot);
         }
     }
 
@@ -114,10 +116,48 @@ public class FlagAtlas {
         outUV[3] = region.y * invH;
     }
 
+    public static boolean isDirty() { return atlasDirty; }
+
+    // Incremental dirty tracking: only upload changed slots, not full 4MB
+    private static final java.util.List<Integer> dirtySlots = new java.util.ArrayList<Integer>(32);
+    private static final java.util.Set<Integer> dirtySlotSet = new java.util.HashSet<Integer>(64);
+
     public static void flush() {
         if (!initialized || !atlasDirty || atlasTexture == null || atlasPixmap == null) return;
-        atlasTexture.draw(atlasPixmap, 0, 0);
+        if (dirtySlots.isEmpty()) {
+            atlasTexture.draw(atlasPixmap, 0, 0);
+        } else {
+            // Upload only dirty 64x64 tiles via PixmapTextureData sub-uploads (fast path: glTexSubImage2D per slot avoids 4MB copy)
+            atlasTexture.bind();
+            java.util.List<Integer> copy = new java.util.ArrayList<Integer>(dirtySlots);
+            dirtySlots.clear();
+            dirtySlotSet.clear();
+            boolean usedFallback = false;
+            for (int slot : copy) {
+                int fx = (slot % FLAGS_PER_ROW) * FLAG_SIZE;
+                int fy = (slot / FLAGS_PER_ROW) * FLAG_SIZE;
+                try {
+                    // Texture.draw(Pixmap,x,y) only supports full pixmap; for incremental we use Pixmap copy to temp 64x64
+                    com.badlogic.gdx.graphics.Pixmap tmp = new com.badlogic.gdx.graphics.Pixmap(FLAG_SIZE, FLAG_SIZE, com.badlogic.gdx.graphics.Pixmap.Format.RGBA8888);
+                    tmp.drawPixmap(atlasPixmap, 0, 0, fx, fy, FLAG_SIZE, FLAG_SIZE);
+                    atlasTexture.draw(tmp, fx, fy);
+                    tmp.dispose();
+                } catch (Throwable t) {
+                    usedFallback = true;
+                    break;
+                }
+            }
+            if (usedFallback) {
+                atlasTexture.draw(atlasPixmap, 0, 0);
+            }
+        }
         atlasDirty = false;
+    }
+
+    private static void markDirtySlot(int slot) {
+        if (slot < 0 || slot >= MAX_FLAGS) return;
+        if (dirtySlotSet.add(slot)) dirtySlots.add(slot);
+        atlasDirty = true;
     }
 
     private static void renderFlagToAtlas(int civID, int dstX, int dstY) {
@@ -179,10 +219,15 @@ public class FlagAtlas {
     public static void clear() {
         civFlagSlots.clear();
         nextSlot = 0;
+        dirtySlots.clear();
+        dirtySlotSet.clear();
         if (atlasPixmap != null) {
             atlasPixmap.setColor(0, 0, 0, 0);
             atlasPixmap.fill();
             atlasDirty = true;
+            dirtySlots.clear();
+            dirtySlotSet.clear();
+            // full clear needs full upload next flush
         }
     }
 }

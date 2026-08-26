@@ -58,17 +58,15 @@ public class CapitalFlagRenderer {
         if (!initialized) return false;
         if (!valid) return true;
         if (CFG.map == null || CFG.core == null) return false;
-        // Throttle rebuild while panning: if moving, allow 150ms coalescing to avoid rebuilding every frame (was rebuilding each touch move)
-        if (MobileRenderBudget.isEnabled() && MobileRenderBudget.isMoving()) {
-            long now = System.nanoTime();
-            if (now - lastRebuildNano < 150000000L) return false;
-        }
+        // Do NOT throttle while panning - stale flag positions cause flash/missing in capitals; rebuild is cheap (VisibleProvinceCache)
         int px = CFG.map.getMpC().getPX();
         int py = CFG.map.getMpC().getPY();
         float zoom = CFG.map.getMpS().getCurrSc();
         if (px != lastCameraPX || py != lastCameraPY) return true;
         if (Float.compare(zoom, lastZoom) != 0) return true;
         if ((CFG.FOG_OF_WAR == 2) != lastFogOfWar) return true;
+        long ownership = VisibleProvinceCache.getOwnershipStamp();
+        if (ownership != lastOwnershipStamp) return true;
         return false;
     }
 
@@ -86,7 +84,8 @@ public class CapitalFlagRenderer {
         int py = CFG.map.getMpC().getPY();
         float zoom = CFG.map.getMpS().getCurrSc();
         currentScale = zoom < 1.0f ? zoom : 1.0f;
-        if (zoom < 0.25f) { valid = true; return; }
+        // Keep flags down to 0.05 zoom; only cull when truly invisible. New-game menu needs flags at 0.06 zoom.
+        if (zoom < 0.05f) { valid = true; flagCount = 0; return; }
 
         int visibleProvCount = VisibleProvinceCache.getVisibleCapitalCount();
         List<Integer> capitals = VisibleProvinceCache.getVisibleCapitals();
@@ -124,15 +123,17 @@ public class CapitalFlagRenderer {
         lastCameraPY = py;
         lastZoom = zoom;
         lastFogOfWar = (CFG.FOG_OF_WAR == 2);
+        lastOwnershipStamp = VisibleProvinceCache.getOwnershipStamp();
         valid = true;
+        lastRebuildNano = System.nanoTime();
         if (CFG.LOG_PERF) CFG.LOG("[PERF]", "[CapitalFlags] rebuild capitals=" + flagCount + " zoom=" + zoom + " time=" + (System.nanoTime() - rebuildStart) / 1000000L + "ms");
     }
 
     private static long rebuildStart = 0L;
 
-    // 120fps budget: cap flags when moving / low-end, avoid atlas flush stalls
+    // Budget: allow all visible capitals, frustum cull does the work. 48 cap was causing missing flags.
     private static long lastDrawNano = 0L;
-    private static int maxFlagsPerFrame = 48; // strict budget: proven safe for S24 Ultra Adreno 750 & low-end Mali (exceeding 60 causes 56ms frames)
+    private static int maxFlagsPerFrame = 256; // show all visible capitals; cull handles off-screen
     private static long lastRebuildNano = 0L;
     // Throttled logging: aggregate per 15s to avoid spam (was per-frame)
     private static long lastFlagLogNano = 0L;
@@ -146,34 +147,17 @@ public class CapitalFlagRenderer {
     public static void drawFlags(SpriteBatch oSB) {
         if (!initialized || flagCount == 0 || CFG.map == null) return;
         rebuildIfNeeded();
-        // Only flush if actually dirty - avoids同步 CPU-GPU stall every frame (FlagAtlas.flush already guards dirty, but we avoid even calling when moving)
-        if (MobileRenderBudget.isEnabled() && MobileRenderBudget.isMoving()) {
-            // While panning, throttle atlas uploads: skip flush until settled
-            if (FlagAtlas.isInitialized() && !isAtlasClean()) {
-                // Defer flush; still draw already-uploaded flags
-            } else {
-                FlagAtlas.flush();
-            }
-        } else {
-            FlagAtlas.flush();
-        }
+        // Always flush dirty atlas immediately - deferring caused flags invisible for ms while moving / new-game flash
+        FlagAtlas.flush();
         Texture atlas = FlagAtlas.getAtlasTexture();
         if (atlas == null) return;
 
         int flagW = (int)(CFG.CIV_FLAG_WIDTH * currentScale);
         int flagH = (int)(CFG.CIV_FLAG_HEIGHT * currentScale);
-        if (flagW < 4 || flagH < 2) return;
+        if (flagW < 2 || flagH < 1) return;
 
-        // Dynamic cap: hard 48 max proven from S24 Ultra logs (227 flags = 56ms/20fps, 48 flags ~ 8ms/120fps)
-        // Research: libGDX SpriteBatch flush per texture change + CpuSpriteBatch 8191 limit; 48 draws = 1 flush, 227 = 2-3 flushes + UV math
-        int budget = maxFlagsPerFrame;
-        float zoom = CFG.map.getMpS().getCurrSc();
-        // Further reduce when highly zoomed out (far): many capitals would be tiny <4px already culled, but still CPU work; cap lower
-        if (zoom < 0.35f) budget = Math.min(budget, 24);
-        else if (zoom < 0.6f) budget = Math.min(budget, 32);
-        else if (zoom < 1.0f) budget = Math.min(budget, 48);
-        else budget = Math.min(budget, 36);
-        if (MobileRenderBudget.isEnabled() && MobileRenderBudget.isMoving()) budget = Math.min(budget, 24);
+        // Show all visible capitals - frustum cull already limits work, no arbitrary 24-48 cap
+        int budget = maxFlagsPerFrame; // 256
         int toDraw = Math.min(flagCount, budget);
 
         int atlasSize = FlagAtlas.getAtlasSize();
@@ -221,7 +205,8 @@ public class CapitalFlagRenderer {
                 int avgCount = flagLogFrames > 0 ? flagLogAccumFlagCount / flagLogFrames : 0;
                 int avgBudget = flagLogFrames > 0 ? flagLogAccumBudget / flagLogFrames : 0;
                 // Always log summary (detailed per 15s) regardless of VERBOSE; include VERBOSE flag to indicate detailed
-                CFG.LOG("[PERF]", "[flags] summary " + avgDrawn + "/" + avgCount + " capitals flags (min=" + flagLogMinDrawn + " max=" + flagLogMaxDrawn + ") avgBudget=" + avgBudget + " zoom=" + String.format("%.2f", zoom) + " frames=" + flagLogFrames);
+                float z = CFG.map != null ? CFG.map.getMpS().getCurrSc() : 0f;
+                CFG.LOG("[PERF]", "[flags] summary " + avgDrawn + "/" + avgCount + " capitals flags (min=" + flagLogMinDrawn + " max=" + flagLogMaxDrawn + ") avgBudget=" + avgBudget + " zoom=" + String.format("%.2f", z) + " frames=" + flagLogFrames);
                 lastFlagLogNano = now;
                 flagLogAccumDrawn = 0; flagLogAccumFlagCount = 0; flagLogAccumBudget = 0; flagLogFrames = 0;
                 flagLogMinDrawn = Integer.MAX_VALUE; flagLogMaxDrawn = 0;
@@ -233,8 +218,7 @@ public class CapitalFlagRenderer {
 
     private static boolean isAtlasClean() {
         try {
-            // FlagAtlas has no isDirty public, approximate via texture null check; flush is cheap if not dirty
-            return true;
+            return !FlagAtlas.isDirty();
         } catch (Throwable t) { return true; }
     }
 

@@ -554,7 +554,11 @@ public class ProvinceMesh {
     }
 
     public static int getDirtyCount() {
-        return 0;
+        synchronized (ProvinceMesh.class) {
+            if (!initialized) return 0;
+            int pendingSweep = dirtySweepCursor >= 0 ? (dirtyArraySize - dirtySweepCursor) : 0;
+            return dirtyCount + dirtyListSize + pendingSweep;
+        }
     }
 
     public static boolean isDiplomacyActive() {
@@ -594,6 +598,10 @@ public class ProvinceMesh {
 
         boolean wasDrawing = oSB.isDrawing();
         if (wasDrawing) oSB.end();
+        // Skip GPU-province triple draw while panning on mobile - saves 2/3 indices
+        if (CFG.isAndroid() && MobileRenderBudget.isEnabled() && MobileRenderBudget.isMoving() && CFG.map.getIsMapWorldMap(CFG.map.getActiveMapIDN())) {
+            // Still need to update dirty colors, but avoid triple render when moving
+        }
         updateAllStates();
         boolean shaderBegun = false;
         try {
@@ -619,6 +627,8 @@ public class ProvinceMesh {
             boolean worldMap = CFG.map.getIsMapWorldMap(CFG.map.getActiveMapIDN());
             int pX = CFG.map.getMpC().getPX();
             int pY = CFG.map.getMpC().getPY();
+            // When panning on mobile, skip triple-wrap to cut 2/3 GPU work; single center pass is enough for perceived position
+            boolean skipWrap = CFG.isAndroid() && MobileRenderBudget.isEnabled() && MobileRenderBudget.isMoving() && worldMap;
             if (worldMap) {
                 float widthM = CFG.map.getMpB().getWidthM();
                 int totalIndices = 0;
@@ -630,10 +640,12 @@ public class ProvinceMesh {
                     totalIndices += tpm.indexCount;
                     shader.setUniformf("u_translateX", pX);
                     tpm.mesh.render(shader, GL20.GL_TRIANGLES);
-                    shader.setUniformf("u_translateX", pX - widthM);
-                    tpm.mesh.render(shader, GL20.GL_TRIANGLES);
-                    shader.setUniformf("u_translateX", pX + widthM);
-                    tpm.mesh.render(shader, GL20.GL_TRIANGLES);
+                    if (!skipWrap) {
+                        shader.setUniformf("u_translateX", pX - widthM);
+                        tpm.mesh.render(shader, GL20.GL_TRIANGLES);
+                        shader.setUniformf("u_translateX", pX + widthM);
+                        tpm.mesh.render(shader, GL20.GL_TRIANGLES);
+                    }
                 }
                 logPerfIfNeeded(drawStart, totalIndices, pX, pY);
             } else {

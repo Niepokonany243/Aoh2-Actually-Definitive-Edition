@@ -115,6 +115,21 @@ public class VisibleProvinceCache {
                     visibleCityIcons.add(provID);
                 }
             }
+        } else if (CFG.core != null && CFG.core.getCivsSize() > 0) {
+            // Fallback for new-game / menu views where NUM_OF_PROVINCES_IN_VIEW==0 but we still need capitals for flags
+            for (int civID = 1; civID < CFG.core.getCivsSize(); civID++) {
+                try {
+                    Civilization civ = CFG.core.getCiv(civID);
+                    if (civ == null) continue;
+                    int cap = civ.getCapitalProvID();
+                    if (cap < 0 || cap >= CFG.core.getProvinSize()) continue;
+                    if (CFG.FOG_OF_WAR == 2 && !CFG.getMetProv(cap)) continue;
+                    Province p = CFG.core.getProv(cap);
+                    if (p == null) continue;
+                    visibleCapitals.add(cap);
+                    visibleProvinces.add(cap);
+                } catch (Exception ignore) {}
+            }
         }
 
         visibleProvinceCount = visibleProvinces.size();
@@ -181,5 +196,9 @@ public class VisibleProvinceCache {
 
     public static boolean hasVisibleArmies() {
         return visibleArmyCount > 0;
+    }
+
+    public static long getOwnershipStamp() {
+        return ownershipModCount;
     }
 }

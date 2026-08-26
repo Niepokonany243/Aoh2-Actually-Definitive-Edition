@@ -48,9 +48,11 @@ public final class PerfAnalyzer {
     private static final long MAX_REPORT_BYTES = 8L * 1024L * 1024L;
 
     private static final String[] TARGET_PREFIXES = {
-        "LWJGL",      // main game thread (render/update/AI driver)
+        "LWJGL",      // main game thread (render/update/AI driver) desktop
         "aoh2-",      // GameTaskScheduler workers (loading + simulation)
-        "Turn"        // Turn_ThreadNewTurn / Turn_ThreadActions
+        "Turn",       // Turn_ThreadNewTurn / Turn_ThreadActions
+        "GLThread",   // Android GLSurfaceView GLThread (render thread)
+        "main"        // Android main UI thread fallback
     };
 
     private static boolean isAndroid() {

@@ -119,20 +119,25 @@ public class Render {
     }
 
     public static final void drawWithoutScale(SpriteBatch oSB, SpriteBatch oSBNames) {
-        CFG.unionFlagsToGenerate_Manager.generateFlags(oSB);
-        CFG.core.updateLoadArmiesWidth_ErrorIDs(oSB);
+        // Throttle dirty flag work while moving: generateFlags does Atlas ensure; batch it
+        if (!CFG.isAndroid() || !MobileRenderBudget.isEnabled() || !MobileRenderBudget.isMoving()) {
+            CFG.unionFlagsToGenerate_Manager.generateFlags(oSB);
+            CFG.core.updateLoadArmiesWidth_ErrorIDs(oSB);
+        }
         boolean mobileLowDetail = Render.mobileFullMapLowDetail();
-        if (!mobileLowDetail && (!CFG.menus.getIn_InitMenu() || !CFG.menus.getIn_SaveTheGame())) {
+        boolean allowSecondary = !CFG.isAndroid() || !MobileRenderBudget.isEnabled() || MobileRenderBudget.shouldRenderSecondaryOverlays();
+        boolean allowLabels = !CFG.isAndroid() || !MobileRenderBudget.isEnabled() || MobileRenderBudget.shouldRenderLabels();
+        if (allowLabels && !mobileLowDetail && (!CFG.menus.getIn_InitMenu() || !CFG.menus.getIn_SaveTheGame())) {
             if (CFG.map.getMapProvinceNames(CFG.map.getActiveMapIDN())) {
                 PNM.dPN.dPNA(oSBNames);
             } else {
                 PNM.uDPNA();
             }
-        } else if (mobileLowDetail) {
+        } else if (mobileLowDetail || !allowLabels) {
             PNM.uDPNA();
         }
         try {
-            if (!mobileLowDetail) {
+            if (allowSecondary && !mobileLowDetail) {
                 Core.drawDiplomacyLines_Just(oSB, CFG.map.getMpS().getCurrSc());
                 Core.drawProvinceDots_Just(oSB, CFG.map.getMpS().getCurrSc());
             }
@@ -142,10 +147,12 @@ public class Render {
         if (CFG.menus.getInGameView() && CFG.map.getMpS().getCurrSc() >= 1.0f) {
             ShipManager.draw(oSB);
         }
-        age.of.civilizations2.jakowski.lukasz.Renderer.dNAI(oSB);
-        Render.drawDiploAnimation(oSB);
+        if (allowSecondary) {
+            age.of.civilizations2.jakowski.lukasz.Renderer.dNAI(oSB);
+            Render.drawDiploAnimation(oSB);
+        }
         oRenderer.drawRendererWithoutScale(oSB);
-        if (Render.drawInGame_ZoomOutArmyDetails()) {
+        if (Render.drawInGame_ZoomOutArmyDetails() && allowSecondary) {
             CFG.core.drawProvincesArmy(oSB, CFG.map.getMpS().getCurrSc());
         }
         CFG.map.getTouchMgr().dSMD(oSB);

@@ -37,6 +37,7 @@ public class ProvinceMesh {
     private static final int COMPONENTS_PER_VERTEX = 5;
     private static final int VERTEX_LIMIT = 32767;
     private static final int ANDROID_DIRTY_BATCH = 2048;
+    private static final int ANDROID_DIRTY_BATCH_DIPLOMACY = 8192;
     public static boolean needsUpdate = true;
     private static int totalProvincesRendered = 0;
     private static int logFrameCounter = 0;
@@ -485,24 +486,42 @@ public class ProvinceMesh {
             int lim = Math.min(numProv, dirtyArraySize);
             int processed = 0;
             if (dirtyCount == dirtyArraySize) {
-                int toProcess = Math.min(lim, ANDROID_DIRTY_BATCH);
-                int uploadStart = -1;
-                int uploadEnd = -1;
-                for (int i = 0; i < toProcess; i++) {
-                    if (dirtyFlags[i]) {
-                        dirtyFlags[i] = false;
-                        updateProvinceColor(i);
-                        ++processed;
-                        if (uploadStart < 0) uploadStart = i;
-                        uploadEnd = i;
+                // Diplomacy or full-map change: use larger batch and single upload to reduce 7-frame stall
+                int batch = diplomacyActive ? ANDROID_DIRTY_BATCH_DIPLOMACY : ANDROID_DIRTY_BATCH;
+                // If diplomacy colors were already computed in parallel (setDiplomacyMode), just upload full row
+                boolean alreadyColored = diplomacyActive && processed == 0 && dirtySweepCursor == -1;
+                if (alreadyColored) {
+                    // Colors already up to date via parallelRange in setDiplomacyMode, just upload
+                    uploadDirtyTextures(0, colorPixmap.getWidth() - 1);
+                    java.util.Arrays.fill(dirtyFlags, false);
+                    processed = lim;
+                    dirtySweepCursor = -1;
+                    dirtyListSize = 0;
+                } else {
+                    int toProcess = Math.min(lim, batch);
+                    int uploadStart = -1;
+                    int uploadEnd = -1;
+                    for (int i = 0; i < toProcess; i++) {
+                        if (dirtyFlags[i]) {
+                            dirtyFlags[i] = false;
+                            updateProvinceColor(i);
+                            ++processed;
+                            if (uploadStart < 0) uploadStart = i;
+                            uploadEnd = i;
+                        }
                     }
+                    if (uploadStart >= 0) {
+                        // For diplomacy, upload full width in one call to avoid many small glTexSubImage2D
+                        if (diplomacyActive && toProcess >= 4096) uploadDirtyTextures(0, colorPixmap.getWidth() - 1);
+                        else uploadDirtyTextures(uploadStart, uploadEnd);
+                    }
+                    dirtySweepCursor = toProcess >= lim ? -1 : toProcess;
+                    dirtyListSize = 0;
                 }
-                if (uploadStart >= 0) uploadDirtyTextures(uploadStart, uploadEnd);
-                dirtySweepCursor = toProcess >= lim ? -1 : toProcess;
-                dirtyListSize = 0;
             } else if (dirtySweepCursor >= 0 || dirtyCount == dirtyArraySize || dirtyListSize == 0) {
+                int batch = diplomacyActive ? ANDROID_DIRTY_BATCH_DIPLOMACY : ANDROID_DIRTY_BATCH;
                 int start = dirtySweepCursor >= 0 ? dirtySweepCursor : 0;
-                int end = (dirtySweepCursor >= 0 || dirtyCount == dirtyArraySize) ? Math.min(lim, start + ANDROID_DIRTY_BATCH) : lim;
+                int end = (dirtySweepCursor >= 0 || dirtyCount == dirtyArraySize) ? Math.min(lim, start + batch) : lim;
                 int uploadStart = -1;
                 int uploadEnd = -1;
                 for (int i = start; i < end; i++) {
@@ -620,7 +639,11 @@ public class ProvinceMesh {
     }
 
     public static int getDirtyCount() {
-        return dirtyCount;
+        synchronized (ProvinceMesh.class) {
+            if (!initialized) return 0;
+            int pendingSweep = dirtySweepCursor >= 0 ? (dirtyArraySize - dirtySweepCursor) : 0;
+            return dirtyCount + dirtyListSize + pendingSweep;
+        }
     }
 
     public static boolean canRender() {
@@ -741,6 +764,33 @@ public class ProvinceMesh {
                     if (CFG.LOGs) CFG.LOG("[dip]", "setDiplomacyMode: failed to read diplomacy colors: " + e.getMessage());
                 }
                 if (CFG.LOGs) CFG.LOG("[dip]", "setDiplomacyMode: cached civsAtWar[" + nCiv + "] in " + ((System.nanoTime() - t0) / 1000000L) + "ms");
+                // Diplomacy: compute colors off-GL thread in parallel, then single upload
+                try {
+                    int nProv = CFG.core.getProvinSize();
+                    // Parallel color recompute (Pixmap ByteBuffer writes are thread-safe if partitioned)
+                    GameTaskScheduler.parallelRange(0, nProv, 1024, pid -> {
+                        if (pid < 0 || pid >= nProv) return;
+                        // Only compute, not mark dirty separately
+                        updateProvinceColor(pid);
+                    });
+                    // Mark all dirty for single full-row upload on next draw
+                    synchronized (ProvinceMesh.class) {
+                        java.util.Arrays.fill(dirtyFlags, true);
+                        dirtyListSize = 0;
+                        dirtyCount = dirtyArraySize;
+                        dirtyMin = 0;
+                        dirtyMax = dirtyArraySize - 1;
+                        dirtySweepCursor = -1;
+                        needsUpdate = true;
+                    }
+                    VisibleProvinceCache.markOwnershipChanged();
+                    CapitalFlagRenderer.invalidate();
+                    if (CFG.LOGs) CFG.LOG("[dip]", "setDiplomacyMode: active=" + active + " playerCivID=" + playerCivID + " total=" + ((System.nanoTime() - t0) / 1000000L) + "ms (parallel colors, single upload)");
+                    return;
+                } catch (Throwable e) {
+                    // Fallback to immediate dirty if parallel fails
+                    if (CFG.LOGs) CFG.LOG("[dip]", "setDiplomacyMode: parallel fallback: " + e.getMessage());
+                }
             } else {
                 civsAtWarCache = null;
             }
@@ -786,6 +836,7 @@ public class ProvinceMesh {
             boolean worldMap = CFG.map.getIsMapWorldMap(CFG.map.getActiveMapIDN());
             int pX = CFG.map.getMpC().getPX();
             int pY = CFG.map.getMpC().getPY();
+            boolean skipWrap = CFG.isAndroid() && MobileRenderBudget.isEnabled() && MobileRenderBudget.isMoving() && worldMap;
             if (worldMap) {
                 float widthM = CFG.map.getMpB().getWidthM();
                 int totalIndices = 0;
@@ -797,10 +848,12 @@ public class ProvinceMesh {
                     totalIndices += tpm.indexCount;
                     shader.setUniformf("u_translateX", pX);
                     tpm.mesh.render(shader, GL20.GL_TRIANGLES);
-                    shader.setUniformf("u_translateX", pX - widthM);
-                    tpm.mesh.render(shader, GL20.GL_TRIANGLES);
-                    shader.setUniformf("u_translateX", pX + widthM);
-                    tpm.mesh.render(shader, GL20.GL_TRIANGLES);
+                    if (!skipWrap) {
+                        shader.setUniformf("u_translateX", pX - widthM);
+                        tpm.mesh.render(shader, GL20.GL_TRIANGLES);
+                        shader.setUniformf("u_translateX", pX + widthM);
+                        tpm.mesh.render(shader, GL20.GL_TRIANGLES);
+                    }
                 }
                 logPerfIfNeeded(drawStart, totalIndices, pX, pY);
             } else {

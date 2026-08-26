@@ -7171,6 +7171,33 @@ lbl94:
     }
 
     public final void drawAllCivilizations_Flag_InCapitals(SpriteBatch oSB, float nScale) {
+        if (CFG.isAndroid()) {
+            // Capped mobile path: use VisibleProvinceCache budget to avoid 211 draws -> 71ms overlay
+            VisibleProvinceCache.rebuildIfNeeded();
+            int n = VisibleProvinceCache.getVisibleCapitalCount();
+            if (n <= 0) return;
+            java.util.List<Integer> caps = VisibleProvinceCache.getVisibleCapitals();
+            int budgetCap = 48;
+            float _zoom = CFG.map != null ? CFG.map.getMpS().getCurrSc() : 1.0f;
+            if (_zoom < 0.35f) budgetCap = 24;
+            else if (_zoom < 0.6f) budgetCap = 32;
+            else if (_zoom < 1.0f) budgetCap = 48;
+            else budgetCap = 36;
+            try {
+                Class<?> mrb = Class.forName("age.of.civilizations2.jakowski.lukasz.MobileRenderBudget");
+                boolean en = (Boolean) mrb.getMethod("isEnabled").invoke(null);
+                boolean mv = (Boolean) mrb.getMethod("isMoving").invoke(null);
+                if (en && mv) budgetCap = Math.min(budgetCap, 24);
+            } catch (Throwable ignore) {}
+            int cappedN = Math.min(n, budgetCap);
+            for (int j = 0; j < cappedN; j++) {
+                int pid = caps.get(j);
+                if (pid < 0 || pid >= this.getProvinSize()) continue;
+                if (!this.getProv(pid).getDrawProv()) continue;
+                this.drawCivilization_Flag(oSB, pid, nScale);
+            }
+            return;
+        }
         for (int i = 1; i < this.getCivsSize(); ++i) {
             if (this.getCiv(i).getCapitalProvID() < 0 || this.getProv(this.getCiv(i).getCapitalProvID()).getCivId() != i || !this.getProv(this.getCiv(i).getCapitalProvID()).getDrawProv()) continue;
             this.drawCivilization_Flag(oSB, this.getCiv(i).getCapitalProvID(), nScale);
@@ -7234,7 +7261,10 @@ lbl94:
                         }
                     }
                     CapitalFlagRenderer.drawFlags(oSB);
-                    if (CFG.map.getMpS().getCurrSc() >= 0.7f) {
+                    // Mobile: skip heavy frame drawing when moving or zoomed out (saves 4 draws per flag)
+                    boolean skipFrame = isMoving;
+                    if (!skipFrame && CFG.isAndroid() && CFG.map.getMpS().getCurrSc() < 1.0f) skipFrame = true;
+                    if (!skipFrame && CFG.map.getMpS().getCurrSc() >= 0.7f) {
                         Image frameImg = IMGManager.getIMG(Images.army_capital_frame);
                         int fw = frameImg.getWidth();
                         int fh = frameImg.getHeight();
