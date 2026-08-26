@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FlagAtlas {
-    private static final int ATLAS_SIZE = 1024;
+    private static final int ATLAS_SIZE = 2048;
     private static final int FLAG_SIZE = 64;
     private static final int FLAGS_PER_ROW = ATLAS_SIZE / FLAG_SIZE;
     private static final int MAX_FLAGS = FLAGS_PER_ROW * FLAGS_PER_ROW;
@@ -17,8 +17,9 @@ public class FlagAtlas {
     private static boolean initialized = false;
     private static boolean atlasDirty = false;
 
-    private static final Map<Integer, FlagRegion> civFlagSlots = new HashMap<Integer, FlagRegion>(128);
-
+    // Fast int[] lookup to avoid HashMap boxing per flag (200* get per frame -> HashMap hit)
+    private static int[] civToSlot;
+    private static final Map<Integer, FlagRegion> civFlagSlots = new HashMap<Integer, FlagRegion>(1024);
     private static int nextSlot = 0;
 
     private static class FlagRegion {
@@ -38,6 +39,37 @@ public class FlagAtlas {
         atlasDirty = true;
         nextSlot = 0;
         civFlagSlots.clear();
+        int maxCivs = 4096;
+        try { if (CFG.core != null) maxCivs = Math.max(4096, CFG.core.getCivsSize() + 16); } catch (Throwable ignore) {}
+        civToSlot = new int[maxCivs];
+        for (int i = 0; i < civToSlot.length; i++) civToSlot[i] = -1;
+        preloadAllFlags();
+    }
+
+    private static void preloadAllFlags() {
+        if (CFG.core == null) return;
+        int civs = CFG.core.getCivsSize();
+        if (civs <= 1) return;
+        for (int civID = 1; civID < civs && nextSlot < MAX_FLAGS; civID++) {
+            try {
+                Civilization civ = CFG.core.getCiv(civID);
+                if (civ == null) continue;
+                if (civToSlot != null && civID < civToSlot.length && civToSlot[civID] >= 0) continue;
+                int slot = nextSlot++;
+                int fx = (slot % FLAGS_PER_ROW) * FLAG_SIZE;
+                int fy = (slot / FLAGS_PER_ROW) * FLAG_SIZE;
+                FlagRegion region = new FlagRegion();
+                region.x = fx;
+                region.y = fy;
+                region.civID = civID;
+                region.used = true;
+                civFlagSlots.put(civID, region);
+                if (civID < civToSlot.length) civToSlot[civID] = slot;
+                renderFlagToAtlas(civID, fx, fy);
+            } catch (Throwable t) { }
+        }
+        atlasDirty = true;
+        flush();
     }
 
     public static void dispose() {
@@ -48,33 +80,37 @@ public class FlagAtlas {
         initialized = false;
         civFlagSlots.clear();
         nextSlot = 0;
+        atlasDirty = false;
+        civToSlot = null;
     }
 
-    public static Texture getAtlasTexture() {
-        return atlasTexture;
-    }
-
-    public static boolean isInitialized() {
-        return initialized;
-    }
+    public static Texture getAtlasTexture() { return atlasTexture; }
+    public static boolean isInitialized() { return initialized; }
 
     public static int ensureCivFlag(int civID) {
-        if (!initialized || civID <= 0 || civID >= CFG.core.getCivsSize()) return -1;
-        FlagRegion region = civFlagSlots.get(civID);
-        if (region != null && region.used) return region.x + region.y * FLAGS_PER_ROW;
+        if (!initialized || civID <= 0) return -1;
+        if (civToSlot != null && civID < civToSlot.length) {
+            int s = civToSlot[civID];
+            if (s >= 0) return s;
+        } else {
+            FlagRegion r = civFlagSlots.get(civID);
+            if (r != null && r.used) return r.x / FLAG_SIZE + (r.y / FLAG_SIZE) * FLAGS_PER_ROW;
+        }
+        if (CFG.core != null && civID >= CFG.core.getCivsSize()) return -1;
         if (nextSlot >= MAX_FLAGS) {
-            Gdx.app.log("FlagAtlas", "Atlas full, cannot add civ " + civID);
+            Gdx.app.log("FlagAtlas", "Atlas full, cannot add civ " + civID + " MAX=" + MAX_FLAGS);
             return -1;
         }
         int slot = nextSlot++;
         int fx = (slot % FLAGS_PER_ROW) * FLAG_SIZE;
         int fy = (slot / FLAGS_PER_ROW) * FLAG_SIZE;
-        region = new FlagRegion();
+        FlagRegion region = new FlagRegion();
         region.x = fx;
         region.y = fy;
         region.civID = civID;
         region.used = true;
         civFlagSlots.put(civID, region);
+        if (civID < civToSlot.length) civToSlot[civID] = slot;
         renderFlagToAtlas(civID, fx, fy);
         atlasDirty = true;
         return slot;
@@ -82,14 +118,22 @@ public class FlagAtlas {
 
     public static void updateCivFlag(int civID) {
         if (!initialized) return;
+        int slot = -1;
+        if (civToSlot != null && civID < civToSlot.length) slot = civToSlot[civID];
+        if (slot < 0) {
+            FlagRegion region = civFlagSlots.get(civID);
+            if (region == null || !region.used) return;
+            slot = region.x / FLAG_SIZE + (region.y / FLAG_SIZE) * FLAGS_PER_ROW;
+        }
         FlagRegion region = civFlagSlots.get(civID);
-        if (region == null || !region.used) return;
+        if (region == null) return;
         renderFlagToAtlas(civID, region.x, region.y);
         atlasDirty = true;
     }
 
     public static void removeCivFlag(int civID) {
         FlagRegion region = civFlagSlots.remove(civID);
+        if (civID < civToSlot.length && civID >= 0) civToSlot[civID] = -1;
         if (region != null && atlasPixmap != null) {
             atlasPixmap.setColor(0, 0, 0, 0);
             atlasPixmap.fillRectangle(region.x, region.y, FLAG_SIZE, FLAG_SIZE);
@@ -98,20 +142,26 @@ public class FlagAtlas {
     }
 
     public static int getFlagSlot(int civID) {
+        if (civToSlot != null && civID >= 0 && civID < civToSlot.length) {
+            int s = civToSlot[civID];
+            if (s >= 0) return s;
+        }
         FlagRegion region = civFlagSlots.get(civID);
         if (region == null || !region.used) return -1;
-        return region.x + region.y * FLAGS_PER_ROW;
+        return region.x / FLAG_SIZE + (region.y / FLAG_SIZE) * FLAGS_PER_ROW;
     }
 
     public static void getFlagUV(int civID, float[] outUV) {
-        FlagRegion region = civFlagSlots.get(civID);
-        if (region == null || !region.used || outUV == null || outUV.length < 4) return;
+        int slot = getFlagSlot(civID);
+        if (slot < 0 || outUV == null || outUV.length < 4) return;
+        int fx = (slot % FLAGS_PER_ROW) * FLAG_SIZE;
+        int fy = (slot / FLAGS_PER_ROW) * FLAG_SIZE;
         float invW = 1.0f / ATLAS_SIZE;
         float invH = 1.0f / ATLAS_SIZE;
-        outUV[0] = region.x * invW;
-        outUV[1] = (region.y + FLAG_SIZE) * invH;
-        outUV[2] = (region.x + FLAG_SIZE) * invW;
-        outUV[3] = region.y * invH;
+        outUV[0] = fx * invW;
+        outUV[1] = (fy + FLAG_SIZE) * invH;
+        outUV[2] = (fx + FLAG_SIZE) * invW;
+        outUV[3] = fy * invH;
     }
 
     public static boolean isDirty() { return atlasDirty; }
@@ -132,54 +182,44 @@ public class FlagAtlas {
                 atlasPixmap.fillRectangle(dstX, dstY, FLAG_SIZE, FLAG_SIZE);
                 return;
             }
-            if (!flagImg.getTexture().getTextureData().isPrepared()) {
-                flagImg.getTexture().getTextureData().prepare();
+            Pixmap flagPixmap = null;
+            boolean needsDispose = false;
+            try {
+                // Try direct pixmap from Image if already a Pixmap-backed texture
+                com.badlogic.gdx.graphics.Texture tex = flagImg.getTexture();
+                if (tex.getTextureData() != null && tex.getTextureData().isPrepared()) {
+                    // For PixmapTextureData this would be fast, but for FileTextureData prepare decodes
+                    flagPixmap = tex.getTextureData().consumePixmap();
+                    needsDispose = true;
+                } else {
+                    // Fallback: load from file handle cache if available – try to get path from flag
+                    // Last resort: prepare then consume
+                    if (!tex.getTextureData().isPrepared()) tex.getTextureData().prepare();
+                    flagPixmap = tex.getTextureData().consumePixmap();
+                    needsDispose = true;
+                }
+            } catch (Throwable t) {
+                flagPixmap = null;
             }
-            Pixmap flagPixmap = flagImg.getTexture().getTextureData().consumePixmap();
             if (flagPixmap == null) return;
             try {
                 int fw = Math.min(flagPixmap.getWidth(), FLAG_SIZE);
                 int fh = Math.min(flagPixmap.getHeight(), FLAG_SIZE);
-                // Use linear filtering via Pixmap scaling if needed; draw with proper dispose
                 atlasPixmap.drawPixmap(flagPixmap, dstX, dstY, 0, 0, fw, fh);
             } finally {
-                // consumePixmap returns same pixmap instance unless disposed; dispose only if we own copy
-                // The API docs: consumePixmap returns the pixmap and marks data as consumed; subsequent call creates new
-                // So we must NOT dispose the original texture pixmap if texture is still in use - only dispose temporary copy
-                // We obtained one pixmap; if textureData will reuse it, do not dispose
-                // Heuristic: dispose only if not same as texture's current pixmap data
-                try {
-                    if (!flagImg.getTexture().getTextureData().isPrepared()) {
-                        // data was consumed, safe to dispose our copy
-                        flagPixmap.dispose();
-                    } else {
-                        // Still prepared means we got a copy, dispose
-                        // avoid double-dispose by checking
-                    }
-                } catch (Throwable ignore) {
-                    try { flagPixmap.dispose(); } catch (Throwable ig2) {}
-                }
+                if (needsDispose) try { flagPixmap.dispose(); } catch (Throwable ignore) {}
             }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Gdx.app.log("FlagAtlas", "Error rendering flag for civ " + civID + ": " + ex.getMessage());
         }
     }
 
-    public static int getAtlasSize() {
-        return ATLAS_SIZE;
-    }
-
-    public static int getFlagSize() {
-        return FLAG_SIZE;
-    }
-
-    public static int getFlagsPerRow() {
-        return FLAGS_PER_ROW;
-    }
-
+    public static int getAtlasSize() { return ATLAS_SIZE; }
+    public static int getFlagSize() { return FLAG_SIZE; }
+    public static int getFlagsPerRow() { return FLAGS_PER_ROW; }
     public static void clear() {
         civFlagSlots.clear();
+        if (civToSlot != null) for (int i=0;i<civToSlot.length;i++) civToSlot[i]=-1;
         nextSlot = 0;
         if (atlasPixmap != null) {
             atlasPixmap.setColor(0, 0, 0, 0);

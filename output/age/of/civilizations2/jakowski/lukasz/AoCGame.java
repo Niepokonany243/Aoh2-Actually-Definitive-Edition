@@ -366,11 +366,11 @@ public class AoCGame {
         Menu_InGame_2.initTopBox();
         if (CFG.isAndroid()) {
             VisibleProvinceCache.init();
-            String renderer = Gdx.gl.glGetString(GL20.GL_RENDERER);
-            if (renderer == null || !renderer.contains("Mali")) {
-                FlagAtlas.init();
-                CapitalFlagRenderer.init();
-            }
+            try { CFG.settingsGD.CAPITAL_FLAGS_HIGH = false; } catch (Throwable ignore) {}
+            FlagAtlas.init();
+            CapitalFlagRenderer.init();
+            try { Class.forName("age.of.civilizations2.jakowski.lukasz.MobileCapitalFlagRenderer").getMethod("init").invoke(null); } catch (Throwable ignore) {}
+            try { age.of.civilizations2.jakowski.lukasz.Core.Core.updateDrawCapitalFlagMap(); } catch (Throwable ignore) {}
         }
     }
 
@@ -667,6 +667,11 @@ public class AoCGame {
             }
             try {
                 FlagAtlas.dispose();
+            }
+            catch (Exception ex) {
+            }
+            try {
+                try { Class.forName("age.of.civilizations2.jakowski.lukasz.MobileCapitalFlagRenderer").getMethod("dispose").invoke(null); } catch (Throwable ignore2) {}
             }
             catch (Exception ex) {
             }

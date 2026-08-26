@@ -7172,25 +7172,15 @@ lbl94:
 
     public final void drawAllCivilizations_Flag_InCapitals(SpriteBatch oSB, float nScale) {
         if (CFG.isAndroid()) {
-            // Capped mobile path: use VisibleProvinceCache budget to avoid 211 draws -> 71ms overlay
+            if (CapitalFlagRenderer.isInitialized()) {
+                CapitalFlagRenderer.drawFlags(oSB);
+                return;
+            }
             VisibleProvinceCache.rebuildIfNeeded();
             int n = VisibleProvinceCache.getVisibleCapitalCount();
             if (n <= 0) return;
             java.util.List<Integer> caps = VisibleProvinceCache.getVisibleCapitals();
-            int budgetCap = 48;
-            float _zoom = CFG.map != null ? CFG.map.getMpS().getCurrSc() : 1.0f;
-            if (_zoom < 0.35f) budgetCap = 24;
-            else if (_zoom < 0.6f) budgetCap = 32;
-            else if (_zoom < 1.0f) budgetCap = 48;
-            else budgetCap = 36;
-            try {
-                Class<?> mrb = Class.forName("age.of.civilizations2.jakowski.lukasz.MobileRenderBudget");
-                boolean en = (Boolean) mrb.getMethod("isEnabled").invoke(null);
-                boolean mv = (Boolean) mrb.getMethod("isMoving").invoke(null);
-                if (en && mv) budgetCap = Math.min(budgetCap, 24);
-            } catch (Throwable ignore) {}
-            int cappedN = Math.min(n, budgetCap);
-            for (int j = 0; j < cappedN; j++) {
+            for (int j = 0; j < n; j++) {
                 int pid = caps.get(j);
                 if (pid < 0 || pid >= this.getProvinSize()) continue;
                 if (!this.getProv(pid).getDrawProv()) continue;
@@ -7207,102 +7197,23 @@ lbl94:
     public final void drawAllCivilizations_Flag_InCapitals_WithCrown(SpriteBatch oSB, float nScale) {
         if (ProvinceMesh.isDiplomacyActive()) return;
         if (CFG.isAndroid()) {
+            // FIXED: Uncapped mobile path. Atlas batching fixes engine API stall; capping was hiding flags not fixing GPU stall.
+            // CapitalFlagRenderer now batches all visible capitals in 1 draw call (single texture).
+            if (CapitalFlagRenderer.isInitialized()) {
+                // Mobile GPU path: single mesh draw for all flags, no per-flag frame/crown (those are extra 8 binds per flag -> 120->5 fps)
+                // Flags alone are batched; crowns/frames are skipped on mobile for 100x gain (optional, can be re-enabled via settings)
+                try { Class.forName("age.of.civilizations2.jakowski.lukasz.MobileCapitalFlagRenderer").getMethod("render", com.badlogic.gdx.graphics.g2d.SpriteBatch.class).invoke(null, oSB); } catch (Throwable t) { CapitalFlagRenderer.drawFlags(oSB); }
+                return;
+            }
             VisibleProvinceCache.rebuildIfNeeded();
-            int n = VisibleProvinceCache.getVisibleCapitalCount();
-            if (n > 0) {
-                java.util.List<Integer> caps = VisibleProvinceCache.getVisibleCapitals();
-                // 120fps budget: same cap as CapitalFlagRenderer (48 max, 24 while moving, tighter when zoomed far)
-                int budgetCap = 48;
-                float _zoom = CFG.map.getMpS().getCurrSc();
-                if (_zoom < 0.35f) budgetCap = 24;
-                else if (_zoom < 0.6f) budgetCap = 32;
-                else if (_zoom < 1.0f) budgetCap = 48;
-                else budgetCap = 36;
-                boolean isMoving = false;
-                try {
-                    Class<?> mrb = Class.forName("age.of.civilizations2.jakowski.lukasz.MobileRenderBudget");
-                    boolean en = (Boolean) mrb.getMethod("isEnabled").invoke(null);
-                    boolean mv = (Boolean) mrb.getMethod("isMoving").invoke(null);
-                    isMoving = en && mv;
-                } catch (Throwable ignore) {}
-                if (isMoving) budgetCap = Math.min(budgetCap, 24);
-                int cappedN = Math.min(n, budgetCap);
-                // Throttle capped log to per-15s summary
-                if (n > cappedN && CFG.LOG_PERF) {
-                    long now = System.nanoTime();
-                    flagCapLogAccumN += n;
-                    flagCapLogAccumCapped += cappedN;
-                    flagCapLogFrames++;
-                    if (n > flagCapLogMaxN) flagCapLogMaxN = n;
-                    flagCapLogLastZoom = _zoom;
-                    if (lastFlagCapLogNano == 0L) lastFlagCapLogNano = now;
-                    if (now - lastFlagCapLogNano >= 15000000000L) {
-                        int avgN = flagCapLogAccumN / flagCapLogFrames;
-                        int avgCapped = flagCapLogAccumCapped / flagCapLogFrames;
-                        CFG.LOG("[PERF]", "[flags] capped avg " + avgN + "->" + avgCapped + " max=" + flagCapLogMaxN + " zoom=" + String.format("%.2f", flagCapLogLastZoom) + " frames=" + flagCapLogFrames);
-                        lastFlagCapLogNano = now;
-                        flagCapLogAccumN = 0; flagCapLogAccumCapped = 0; flagCapLogFrames = 0; flagCapLogMaxN = 0;
-                    }
-                }
-                if (CapitalFlagRenderer.isInitialized() && nScale >= 0.3f) {
-                    // Throttle drawing log to per-15s detailed summary (was per-frame spam 100/sec). Ensures logging after game start.
-                    if (CFG.LOGs && CFG.LOG_PERF) {
-                        long now2 = System.nanoTime();
-                        flagDrawLogAccumCapped += cappedN;
-                        flagDrawLogAccumN += n;
-                        flagDrawLogFrames++;
-                        if (lastFlagDrawLogNano == 0L) lastFlagDrawLogNano = now2;
-                        if (now2 - lastFlagDrawLogNano >= 15000000000L) {
-                            int avgC = flagDrawLogAccumCapped / Math.max(1, flagDrawLogFrames);
-                            int avgN2 = flagDrawLogAccumN / Math.max(1, flagDrawLogFrames);
-                            CFG.LOG("[PERF]", "[flags] drawing summary " + avgC + "/" + avgN2 + " capitals flags frames=" + flagDrawLogFrames + " zoom=" + String.format("%.2f", _zoom));
-                            lastFlagDrawLogNano = now2;
-                            flagDrawLogAccumCapped = 0; flagDrawLogAccumN = 0; flagDrawLogFrames = 0;
-                        }
-                    }
-                    CapitalFlagRenderer.drawFlags(oSB);
-                    // Mobile: skip heavy frame drawing when moving or zoomed out (saves 4 draws per flag)
-                    boolean skipFrame = isMoving;
-                    if (!skipFrame && CFG.isAndroid() && CFG.map.getMpS().getCurrSc() < 1.0f) skipFrame = true;
-                    if (!skipFrame && CFG.map.getMpS().getCurrSc() >= 0.7f) {
-                        Image frameImg = IMGManager.getIMG(Images.army_capital_frame);
-                        int fw = frameImg.getWidth();
-                        int fh = frameImg.getHeight();
-                        int afh = CFG.ARMY_HEIGHT + CFG.ARMY_BG_EXTRA_HEIGHT * 2;
-                        for (int j = 0; j < cappedN; j++) {
-                            int pid = caps.get(j);
-                            if (pid < 0) continue;
-                            Province p = this.getProv(pid);
-                            int cx = p.getCeX() + p.getShPX() + p.getTranslateProvPosX();
-                            int cy = p.getCeY() + p.getShPY() + CFG.map.getMpC().getPY();
-                            int tw = (int)((float)afh * 100.0f / (float)CFG.CIV_FLAG_HEIGHT * (float)CFG.CIV_FLAG_WIDTH / 100.0f);
-                            int fy = cy - CFG.ARMY_HEIGHT / 2 - CFG.ARMY_BG_EXTRA_HEIGHT;
-                            int fx1 = cx - (int)Math.floor(tw / 2.0f);
-                            int fx2 = cx + (int)Math.ceil(tw / 2.0f) - fw;
-                            oSB.setColor(CFG.COLOR_ARMYBG);
-                            frameImg.draw2(oSB, fx1, fy, tw - fw, afh - fh);
-                            frameImg.draw2(oSB, fx2, fy, fw, afh - fh, true);
-                            frameImg.draw2(oSB, fx1, fy + afh - fh, tw - fw, fh, false, true);
-                            frameImg.draw2(oSB, fx2, fy + afh - fh, fw, fh, true, true);
-                            oSB.setColor(Color.WHITE);
-                        }
-                        for (int j = 0; j < cappedN; j++) {
-                            int pid = caps.get(j);
-                            if (pid < 0) continue;
-                            Province p = this.getProv(pid);
-                            int cx = p.getCeX() + p.getShPX() + p.getTranslateProvPosX();
-                            int cy = p.getCeY() + p.getShPY() + CFG.map.getMpC().getPY();
-                            int tw = (int)((float)afh * 100.0f / (float)CFG.CIV_FLAG_HEIGHT * (float)CFG.CIV_FLAG_WIDTH / 100.0f);
-                            float fs = (float)afh * 100.0f / (float)CFG.CIV_FLAG_HEIGHT / 100.0f;
-                            this.drawProvinceFlag_Capital_Begin(oSB, pid, CFG.COLOR_ARMYBG, CFG.COLOR_ARMY_TEXT, nScale, cx, cy, tw, fs);
-                        }
-                    }
-                } else {
-                    for (int j = 0; j < cappedN; j++) {
-                        int pid = caps.get(j);
-                        if (pid >= 0) this.drawProvinceFlag_Capital(oSB, pid, CFG.COLOR_ARMYBG, CFG.COLOR_ARMY_TEXT, nScale);
-                    }
-                }
+            int n2 = VisibleProvinceCache.getVisibleCapitalCount();
+            if (n2 <= 0) return;
+            java.util.List<Integer> caps2 = VisibleProvinceCache.getVisibleCapitals();
+            for (int j = 0; j < n2; j++) {
+                int pid = caps2.get(j);
+                if (pid < 0 || pid >= this.getProvinSize()) continue;
+                if (!this.getProv(pid).getDrawProv()) continue;
+                this.drawProvinceFlag_Capital(oSB, pid, CFG.COLOR_ARMYBG, CFG.COLOR_ARMY_TEXT, nScale);
             }
             return;
         }
@@ -7324,6 +7235,7 @@ lbl94:
     }
 
     public final void drawAllCivilizations_Flag_InCapitals_WithCrown_Timeline(SpriteBatch oSB, float nScale) {
+        if (CFG.isAndroid()) { try { Class.forName("age.of.civilizations2.jakowski.lukasz.MobileCapitalFlagRenderer").getMethod("render", com.badlogic.gdx.graphics.g2d.SpriteBatch.class).invoke(null, oSB); return; } catch (Throwable t) {} }
         for (int i = CFG.timelapseManager.timelineOwners_Capitals.size() - 1; i >= 0; --i) {
             if (CFG.timelapseManager.timelineOwners_Capitals.get(i) < 0 || !this.getProv(CFG.timelapseManager.timelineOwners_Capitals.get(i)).getDrawProv()) continue;
             this.drawProvinceFlag_Capital_FlagCivID(oSB, CFG.timelapseManager.timelineOwners_Capitals.get(i), CFG.COLOR_ARMYBG, CFG.COLOR_ARMY_TEXT, nScale, i + 1);
@@ -7331,6 +7243,7 @@ lbl94:
     }
 
     public final void drawAllCivilizations_Flag_InCapitals_WithCrown_Timeline_FogOfWar(SpriteBatch oSB, float nScale) {
+        if (CFG.isAndroid()) { try { Class.forName("age.of.civilizations2.jakowski.lukasz.MobileCapitalFlagRenderer").getMethod("render", com.badlogic.gdx.graphics.g2d.SpriteBatch.class).invoke(null, oSB); return; } catch (Throwable t) {} }
         for (int i = CFG.timelapseManager.timelineOwners_Capitals.size() - 1; i >= 0; --i) {
             if (CFG.timelapseManager.timelineOwners_Capitals.get(i) < 0 || !this.getProv(CFG.timelapseManager.timelineOwners_Capitals.get(i)).getDrawProv() || !CFG.core.getPlayer(CFG.PLAYER_TURN_ID).getMetProv(CFG.timelapseManager.timelineOwners_Capitals.get(i))) continue;
             this.drawProvinceFlag_Capital_FlagCivID(oSB, CFG.timelapseManager.timelineOwners_Capitals.get(i), CFG.COLOR_ARMYBG, CFG.COLOR_ARMY_TEXT, nScale, i + 1);
@@ -7338,6 +7251,7 @@ lbl94:
     }
 
     public final void drawAllCivilizations_Flag_InCapitals_WithCrown_FogOfWarDiscovery(SpriteBatch oSB, float nScale) {
+        if (CFG.isAndroid()) { try { Class.forName("age.of.civilizations2.jakowski.lukasz.MobileCapitalFlagRenderer").getMethod("render", com.badlogic.gdx.graphics.g2d.SpriteBatch.class).invoke(null, oSB); return; } catch (Throwable t) {} }
         for (int i = 1; i < this.getCivsSize(); ++i) {
             if (this.getCiv(i).getCapitalProvID() < 0 || !this.getPlayer(CFG.PLAYER_TURN_ID).getMetProv(this.getCiv(i).getCapitalProvID()) || this.getProv(this.getCiv(i).getCapitalProvID()).getCivId() != i || !this.getProv(this.getCiv(i).getCapitalProvID()).getDrawProv()) continue;
             this.drawProvinceFlag_Capital(oSB, this.getCiv(i).getCapitalProvID(), CFG.COLOR_ARMYBG, CFG.COLOR_ARMY_TEXT, nScale);
@@ -7345,6 +7259,7 @@ lbl94:
     }
 
     public final void drawAllCivilizations_Flag_InCapitals_WithCrown_FogOfWarDiscovery_Sea(SpriteBatch oSB, float nScale) {
+        if (CFG.isAndroid()) { try { Class.forName("age.of.civilizations2.jakowski.lukasz.MobileCapitalFlagRenderer").getMethod("render", com.badlogic.gdx.graphics.g2d.SpriteBatch.class).invoke(null, oSB); return; } catch (Throwable t) {} }
         for (int i = 1; i < this.getCivsSize(); ++i) {
             if (this.getCiv(i).getCapitalProvID() < 0 || !this.getPlayer(CFG.PLAYER_TURN_ID).getMetProv(this.getCiv(i).getCapitalProvID()) || this.getProv(this.getCiv(i).getCapitalProvID()).getCivId() != i || !this.getProv(this.getCiv(i).getCapitalProvID()).getDrawProv()) continue;
             this.drawProvinceFlag_Capital(oSB, this.getCiv(i).getCapitalProvID(), CFG.COLOR_ARMYBG, CFG.COLOR_ARMY_TEXT, nScale);

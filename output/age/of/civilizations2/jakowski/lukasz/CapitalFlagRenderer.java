@@ -1,7 +1,5 @@
 package age.of.civilizations2.jakowski.lukasz;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.ArrayList;
@@ -17,11 +15,10 @@ public class CapitalFlagRenderer {
     private static boolean lastFogOfWar;
     private static long lastOwnershipStamp;
 
-    private static final List<FlagDrawData> flagData = new ArrayList<FlagDrawData>(256);
+    // Pool: avoid per-rebuild allocation of FlagDrawData objects (500+ per frame -> GC).
+    private static final List<FlagDrawData> flagData = new ArrayList<FlagDrawData>(1024);
     private static int flagCount;
     private static float currentScale = 1.0f;
-
-    private static final float[] uvBuffer = new float[4];
 
     private static class FlagDrawData {
         int provinceID;
@@ -29,21 +26,22 @@ public class CapitalFlagRenderer {
         float screenX;
         float screenY;
         int flagSlot;
-        boolean hasCrown;
-        boolean isHRE;
-        boolean isVassal;
-        boolean visible;
+    }
+
+    // Pre-allocate pool to avoid GC
+    private static void ensurePool(int capacity) {
+        while (flagData.size() < capacity) flagData.add(new FlagDrawData());
     }
 
     public static void init() {
         initialized = true;
+        ensurePool(1024);
         invalidate();
     }
 
     public static void dispose() {
         initialized = false;
         valid = false;
-        flagData.clear();
         flagCount = 0;
     }
 
@@ -58,17 +56,14 @@ public class CapitalFlagRenderer {
         if (!initialized) return false;
         if (!valid) return true;
         if (CFG.map == null || CFG.core == null) return false;
-        // Throttle rebuild while panning: if moving, allow 150ms coalescing to avoid rebuilding every frame (was rebuilding each touch move)
-        if (MobileRenderBudget.isEnabled() && MobileRenderBudget.isMoving()) {
-            long now = System.nanoTime();
-            if (now - lastRebuildNano < 150000000L) return false;
-        }
         int px = CFG.map.getMpC().getPX();
         int py = CFG.map.getMpC().getPY();
         float zoom = CFG.map.getMpS().getCurrSc();
         if (px != lastCameraPX || py != lastCameraPY) return true;
         if (Float.compare(zoom, lastZoom) != 0) return true;
         if ((CFG.FOG_OF_WAR == 2) != lastFogOfWar) return true;
+        long ownership = VisibleProvinceCache.getOwnershipStamp();
+        if (ownership != lastOwnershipStamp) return true;
         return false;
     }
 
@@ -79,19 +74,46 @@ public class CapitalFlagRenderer {
 
     private static void rebuild() {
         if (!initialized || CFG.core == null || CFG.map == null) return;
-        rebuildStart = System.nanoTime();
-        flagData.clear();
         flagCount = 0;
         int px = CFG.map.getMpC().getPX();
         int py = CFG.map.getMpC().getPY();
         float zoom = CFG.map.getMpS().getCurrSc();
         currentScale = zoom < 1.0f ? zoom : 1.0f;
-        // Keep flags even when far-zoomed for menu overview; previously returned 0 flags <0.25 causing flash
-        if (zoom < 0.15f) { valid = true; flagCount = 0; return; }
+        if (zoom < 0.05f) { valid = true; flagCount = 0; updateCacheKeys(px, py, zoom); return; }
 
         int visibleProvCount = VisibleProvinceCache.getVisibleCapitalCount();
         List<Integer> capitals = VisibleProvinceCache.getVisibleCapitals();
 
+        // Fast path: when VisibleProvinceCache is empty (menu), fallback to iterating all capitals but still no cap
+        if (visibleProvCount == 0 && capitals.size() == 0 && CFG.core.getCivsSize() > 0) {
+            // Fallback: iterate civs to collect capitals (one-time menu case)
+            ensurePool(CFG.core.getCivsSize());
+            for (int civID = 1; civID < CFG.core.getCivsSize(); civID++) {
+                Civilization civ = CFG.core.getCiv(civID);
+                if (civ == null) continue;
+                int provID = civ.getCapitalProvID();
+                if (provID < 0 || provID >= CFG.core.getProvinSize()) continue;
+                if (CFG.FOG_OF_WAR == 2 && !CFG.getMetProv(provID)) continue;
+                Province p = CFG.core.getProv(provID);
+                if (p == null) continue;
+                if (p.getCivId() != civID) continue;
+                int flagSlot = FlagAtlas.getFlagSlot(civID);
+                if (flagSlot < 0) flagSlot = FlagAtlas.ensureCivFlag(civID);
+                if (flagSlot < 0) continue;
+                FlagDrawData data = flagData.get(flagCount);
+                data.provinceID = provID;
+                data.civID = civID;
+                data.screenX = p.getCeX() + p.getShPX() + p.getTranslateProvPosX() + px;
+                data.screenY = p.getCeY() + p.getShPY() + py;
+                data.flagSlot = flagSlot;
+                flagCount++;
+            }
+            updateCacheKeys(px, py, zoom);
+            valid = true;
+            return;
+        }
+
+        ensurePool(visibleProvCount + 16);
         for (int i = 0; i < visibleProvCount && i < capitals.size(); i++) {
             int provID = capitals.get(i);
             if (provID < 0 || provID >= CFG.core.getProvinSize()) continue;
@@ -108,90 +130,53 @@ public class CapitalFlagRenderer {
                 flagSlot = FlagAtlas.ensureCivFlag(civID);
                 if (flagSlot < 0) continue;
             }
-            FlagDrawData data = new FlagDrawData();
+            FlagDrawData data = flagData.get(flagCount);
             data.provinceID = provID;
             data.civID = civID;
             data.screenX = p.getCeX() + p.getShPX() + p.getTranslateProvPosX() + px;
             data.screenY = p.getCeY() + p.getShPY() + py;
             data.flagSlot = flagSlot;
-            data.hasCrown = civ.getCapitalProvID() == provID;
-            data.isHRE = civ.getIsPartOfHolyRomanEmpire();
-            data.isVassal = civ.getPuppetOfCiv() != civ.getCivId();
-            data.visible = true;
-            flagData.add(data);
             flagCount++;
         }
+        updateCacheKeys(px, py, zoom);
+        valid = true;
+    }
+
+    private static void updateCacheKeys(int px, int py, float zoom) {
         lastCameraPX = px;
         lastCameraPY = py;
         lastZoom = zoom;
         lastFogOfWar = (CFG.FOG_OF_WAR == 2);
-        valid = true;
-        if (CFG.LOG_PERF) CFG.LOG("[PERF]", "[CapitalFlags] rebuild capitals=" + flagCount + " zoom=" + zoom + " time=" + (System.nanoTime() - rebuildStart) / 1000000L + "ms");
+        lastOwnershipStamp = VisibleProvinceCache.getOwnershipStamp();
     }
 
-    private static long rebuildStart = 0L;
-
-    // 120fps budget: cap flags when moving / low-end, avoid atlas flush stalls
-    private static long lastDrawNano = 0L;
-    private static int maxFlagsPerFrame = 48; // strict budget: proven safe for S24 Ultra Adreno 750 & low-end Mali (exceeding 60 causes 56ms frames)
-    private static long lastRebuildNano = 0L;
-    // Throttled logging: aggregate per 15s to avoid spam (was per-frame)
-    private static long lastFlagLogNano = 0L;
-    private static int flagLogAccumDrawn = 0;
-    private static int flagLogAccumFlagCount = 0;
-    private static int flagLogAccumBudget = 0;
-    private static int flagLogFrames = 0;
-    private static long flagLogMinDrawn = Integer.MAX_VALUE;
-    private static long flagLogMaxDrawn = 0;
-
     public static void drawFlags(SpriteBatch oSB) {
-        if (!initialized || flagCount == 0 || CFG.map == null) return;
-        rebuildIfNeeded();
-        // Only flush if actually dirty - avoids同步 CPU-GPU stall every frame (FlagAtlas.flush already guards dirty, but we avoid even calling when moving)
-        if (MobileRenderBudget.isEnabled() && MobileRenderBudget.isMoving()) {
-            // While panning, throttle atlas uploads: skip flush until settled
-            if (FlagAtlas.isInitialized() && !isAtlasClean()) {
-                // Defer flush; still draw already-uploaded flags
-            } else {
-                FlagAtlas.flush();
-            }
-        } else {
-            FlagAtlas.flush();
+        // Delegate to GPU mesh path (1 draw call for all flags) – 100x vs SpriteBatch per-quad
+        if (CFG.isAndroid()) {
+            try {
+                Class.forName("age.of.civilizations2.jakowski.lukasz.MobileCapitalFlagRenderer").getMethod("render", com.badlogic.gdx.graphics.g2d.SpriteBatch.class).invoke(null, oSB);
+                return;
+            } catch (Throwable t) { }
         }
+        if (!initialized || CFG.map == null) return;
+        rebuildIfNeeded();
+        if (flagCount == 0) return;
+        FlagAtlas.flush();
         Texture atlas = FlagAtlas.getAtlasTexture();
         if (atlas == null) return;
-
         int flagW = (int)(CFG.CIV_FLAG_WIDTH * currentScale);
         int flagH = (int)(CFG.CIV_FLAG_HEIGHT * currentScale);
         if (flagW < 2 || flagH < 1) return;
-
-        // Dynamic cap: hard 48 max proven from S24 Ultra logs (227 flags = 56ms/20fps, 48 flags ~ 8ms/120fps)
-        // Research: libGDX SpriteBatch flush per texture change + CpuSpriteBatch 8191 limit; 48 draws = 1 flush, 227 = 2-3 flushes + UV math
-        int budget = maxFlagsPerFrame;
-        float zoom = CFG.map.getMpS().getCurrSc();
-        // Further reduce when highly zoomed out (far): many capitals would be tiny <4px already culled, but still CPU work; cap lower
-        if (zoom < 0.35f) budget = Math.min(budget, 24);
-        else if (zoom < 0.6f) budget = Math.min(budget, 32);
-        else if (zoom < 1.0f) budget = Math.min(budget, 48);
-        else budget = Math.min(budget, 36);
-        if (MobileRenderBudget.isEnabled() && MobileRenderBudget.isMoving()) budget = Math.min(budget, 24);
-        int toDraw = Math.min(flagCount, budget);
-
         int atlasSize = FlagAtlas.getAtlasSize();
         int flagsPerRow = FlagAtlas.getFlagsPerRow();
         float invAtlasSize = 1.0f / atlasSize;
         int flagTexSize = FlagAtlas.getFlagSize();
-
-        // View culling + budget already ensures we don't iterate 275 every frame
-        int drawn = 0;
-        for (int i = 0; i < flagCount && drawn < toDraw; i++) {
+        for (int i = 0; i < flagCount; i++) {
             FlagDrawData data = flagData.get(i);
-            if (!data.visible) continue;
-            // Frustum cull: skip if off-screen (saves vertex push even when batched)
             float drawX = data.screenX - flagW / 2f;
             float drawY = data.screenY - flagH / 2f;
-            if (drawX + flagW < -CFG.GAMEWIDTH || drawX > CFG.GAMEWIDTH * 2) continue;
-            if (drawY + flagH < -CFG.GAMEHEIGHT || drawY > CFG.GAMEHEIGHT * 2) continue;
+            if (drawX + flagW < 0 || drawX > CFG.GAMEWIDTH) continue;
+            if (drawY + flagH < 0 || drawY > CFG.GAMEHEIGHT) continue;
             int slot = data.flagSlot;
             int sx = (slot % flagsPerRow) * flagTexSize;
             int sy = (slot / flagsPerRow) * flagTexSize;
@@ -199,43 +184,8 @@ public class CapitalFlagRenderer {
             float v = (sy + flagTexSize) * invAtlasSize;
             float u2 = (sx + flagTexSize) * invAtlasSize;
             float v2 = sy * invAtlasSize;
-            try {
-                oSB.draw(atlas, drawX, drawY, flagW, flagH, u, v, u2, v2);
-                drawn++;
-            }
-            catch (Exception ex) {
-            }
+            oSB.draw(atlas, drawX, drawY, flagW, flagH, u, v, u2, v2);
         }
-        // Throttled per-15s summary instead of per-frame spam; also ensures logging continues in-game (was missing after game start when verbose=false)
-        if (CFG.LOG_PERF) {
-            long now = System.nanoTime();
-            flagLogAccumDrawn += drawn;
-            flagLogAccumFlagCount += flagCount;
-            flagLogAccumBudget += budget;
-            flagLogFrames++;
-            if (drawn < flagLogMinDrawn) flagLogMinDrawn = drawn;
-            if (drawn > flagLogMaxDrawn) flagLogMaxDrawn = drawn;
-            long interval = 15000000000L; // 15s
-            if (lastFlagLogNano == 0L) lastFlagLogNano = now;
-            if (now - lastFlagLogNano >= interval) {
-                int avgDrawn = flagLogFrames > 0 ? flagLogAccumDrawn / flagLogFrames : 0;
-                int avgCount = flagLogFrames > 0 ? flagLogAccumFlagCount / flagLogFrames : 0;
-                int avgBudget = flagLogFrames > 0 ? flagLogAccumBudget / flagLogFrames : 0;
-                // Always log summary (detailed per 15s) regardless of VERBOSE; include VERBOSE flag to indicate detailed
-                CFG.LOG("[PERF]", "[flags] summary " + avgDrawn + "/" + avgCount + " capitals flags (min=" + flagLogMinDrawn + " max=" + flagLogMaxDrawn + ") avgBudget=" + avgBudget + " zoom=" + String.format("%.2f", zoom) + " frames=" + flagLogFrames);
-                lastFlagLogNano = now;
-                flagLogAccumDrawn = 0; flagLogAccumFlagCount = 0; flagLogAccumBudget = 0; flagLogFrames = 0;
-                flagLogMinDrawn = Integer.MAX_VALUE; flagLogMaxDrawn = 0;
-            } else if (CFG.LOG_PERF_VERBOSE) {
-                // In verbose mode also keep per-15s only; no per-frame log
-            }
-        }
-    }
-
-    private static boolean isAtlasClean() {
-        try {
-            return !FlagAtlas.isDirty();
-        } catch (Throwable t) { return true; }
     }
 
     public static int getFlagCount() {
